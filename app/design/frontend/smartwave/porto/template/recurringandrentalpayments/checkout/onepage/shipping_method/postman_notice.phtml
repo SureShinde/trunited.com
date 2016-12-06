@@ -1,0 +1,25 @@
+<?php 
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+if (Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_DELIVERY_NOTICE_AT_CHECKOUT)): ?>
+    <dl>
+        <dt class="input-box">
+            <strong><?php echo $this->__("Delivery Notice");?></strong>
+        </dt>
+        <dd><textarea name="indies_recurringandrentalpayments_postman_notice" cols="64" rows="10"><?php //echo Mage::getSingleton('customer/session')->getPostmanNotice()?></textarea></dd>
+    </dl>
+<?php endif; ?>
+

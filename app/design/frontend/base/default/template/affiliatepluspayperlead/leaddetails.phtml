@@ -1,0 +1,123 @@
+<?php 
+	/**
+	 * affiliatepluspayperlead template
+	 */
+	
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+ if($check_responsvie)
+     $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
+ else
+     $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+?>
+<div class="aff-main-content <?php echo $class_name; ?>">
+<div class="aff-title">
+	<h1><?php echo $this->__('Welcome To Our Pay-per-lead Program!')?></h1>
+</div>
+<p><?php echo $this->getPayperleadDescription()?></p>
+<form id="payperlead-url-form" method="post" action="<?php echo $this->getUrl('*/*/personal') ?>">
+<div class="fieldset">
+    <div class="lable-title">
+	<h2 class="legend"><?php echo $this->__('Affiliate Link') ?></h2>
+    </div>
+	<ul class="form-list">
+		<li><label><?php echo $this->__('Your personal affiliate link') ?></label></li>
+		<li class="control">
+			<input type="checkbox"<?php if ($this->getPayperleadCustomUrl()): ?> checked="true"<?php endif ?> id="use-personal-url" value="1" class="required-entry" onclick="changePersonalUrl(this);" />
+			<label for="use-personal-url"><?php echo $this->__('Custom URL') ?></label>
+			<div class="input-box" id="input-personal-url" style="display:none">
+				<input type="text" id="payperlead_url" name="payperlead_url" onchange="changeCustomUrl();" onkeyup="changeCustomUrl();" value="<?php echo $this->getPayperleadCustomUrl() ?>" class=" form-control input-text<?php if ($this->getCustomUrl()): ?> required-entry<?php endif ?>"<?php if (!$this->getPayperleadCustomUrl()): ?> disabled="true"<?php endif ?>/>
+			</div>
+		</li>
+	</ul>
+	<div class="actions">
+            <div class="aff-link-over">
+		<a id="payperlead_affiliate_url" href="<?php echo $this->getPayperleadPersonalUrl()?>" title="<?php echo $this->__('Your personal affiliate url') ?>">
+			<?php echo $this->getPayperleadPersonalUrl() ?>
+		</a>
+            </div>
+	</div>
+	<div class="buttons-set-aff" id="button-save-url" style="display:none">
+		<button class="button button-config" title="<?php echo $this->__('Save') ?>" type="submit">
+			<span><span><?php echo $this->__('Save') ?></span></span>
+		</button>
+	</div>
+</div>
+</form>
+<div class="box-head">
+    <div class="lable-title">
+	<h2 class="legend"><?php echo $this->__('Pay-per-lead Program') ?></h2>
+        </div>
+</div>
+<div class="table-responsive">
+<table data-toggle="table" class="table table-condensed table-striped table-bordered table-hover no-margin"   id="pay-per-lead-commission">
+    <colgroup><col width="1">
+    <col width="1">
+    <col>
+    <col width="1">
+    <col width="1">
+    <col width="1">
+        </colgroup><thead>
+            <tr>
+                <th><?php echo $this->__('No') ?></th>
+                <th style="width:40%"><?php echo $this->__('Consumer action') ?></th>
+                <th><?php echo $this->__('Commission') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        	<tr>
+            	<td><?php echo $this->__('1') ?></td>
+           		<td><span><?php echo $this->__('Sign up for an account') ?></span></td>
+           		<td><?php echo Mage::helper('core')->currency($this->_getHelper()->getPayperleadConfig('signup_account_commission'))?></td>
+        	</tr>
+            <tr>
+            	<td><?php echo $this->__('2') ?></td>
+           		<td><span><?php echo $this->__('Subscribe to newsletters') ?></span></td>
+           		<td><?php echo Mage::helper('core')->currency($this->_getHelper()->getPayperleadConfig('subscribe_newsletter_commission'))?></td>
+        	</tr>             
+		</tbody>
+    </table>
+</div>
+    <script type="text/javascript">decorateTable('pay-per-lead-commission')</script>
+<script type="text/javascript">
+	var personalUrlForm = new VarienForm('payperlead-url-form',true);
+	function changePersonalUrl(el){
+		if (el.checked){
+			$('input-personal-url').style.display='block';
+			$('button-save-url').style.display='block';
+			$('payperlead_url').disabled = false;
+			$('payperlead_url').addClassName('required-entry');
+			changeCustomUrl();
+		} else {
+			$('input-personal-url').style.display='none';
+			$('button-save-url').style.display='none';
+			$('payperlead_url').disabled = true;
+			$('payperlead_url').removeClassName('required-entry');
+			$('payperlead_url').removeClassName('validation-failed');
+			if ($('advice-required-entry-personal_url')) $('advice-required-entry-personal_url').hide();
+			var personalUrl = '<?php echo $this->getPayperleadPersonalUrl() ?>';
+			var urlEl = $('payperlead_affiliate_url');
+			if (urlEl.href != personalUrl){
+				urlEl.href = personalUrl;
+				urlEl.innerHTML = personalUrl;
+			}
+		}
+	}
+	function changeCustomUrl(){
+		var customUrl = $('payperlead_url').value;
+		var personalUrl = '<?php echo $this->getPayperleadBaseUrl() ?>';
+		if (customUrl == ''){
+			personalUrl = '<?php echo $this->getPayperleadPersonalUrl()?>';
+		} else {
+			personalUrl  = personalUrl + customUrl;
+		}
+		var urlEl = $('payperlead_affiliate_url');
+		if (urlEl.href != personalUrl){
+			urlEl.href = personalUrl;
+			urlEl.innerHTML = personalUrl;
+		}
+	}
+</script>
+</div>

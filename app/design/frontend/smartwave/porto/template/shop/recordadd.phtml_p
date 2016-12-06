@@ -1,0 +1,54 @@
+<?php
+
+
+
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email
+}
+
+echo 'Thank you for accept Terms and Conditions you will be redirected on my account page...';
+
+$servername = "localhost";
+$username = "root";
+$password = "CpEUQD3f";
+$dbname = "trunited_mage";
+
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "INSERT INTO popup_click(email)
+VALUES ('$custEmail')";
+
+
+if ($custEmail == '' || $custEmail == 'NULL')
+{
+	
+?>
+<script type="text/javascript">
+window.location = "https://trunited.com/customer/account/";
+</script><?php
+	
+}
+else {
+if ($conn->query($sql) === TRUE) { ?>
+<script type="text/javascript">
+window.location = "https://trunited.com/customer/account/";
+</script>
+<?php	
+} else { ?>
+<script type="text/javascript">
+window.location = "https://trunited.com/customer/account/";
+</script>
+<?php	
+}
+}
+$conn->close();
+
+?>

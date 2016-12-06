@@ -1,0 +1,95 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints All Transactions
+ *
+ * @see Magestore_RewardPoints_Block_Account_Transactions
+ */
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Share truWallet Money') ?></h1>
+</div>
+
+<div class="info-summary">
+    <p><strong>
+            <?php echo $this->__('Your truWallet balance is') ?>
+            <strong class="rewardpoints-money">
+                <?php if ($_pointMoney = $this->getProductCreditMoney()): ?>
+                    <?php echo $_pointMoney ?>
+                <?php endif ?>
+            </strong>
+            <img src="https://trunited.com/skin/frontend/base/default/images/rewardpoints/truwallet.png" alt="truWallet" style="display: inline-block;">
+        </strong>
+        <br/>
+        <?php if ($_holdingBalance = $this->getHoldingBalance()): ?>
+            <span>
+            <?php echo $this->__('You have %s that are pending for approval.',
+                '<span class="rewardpoints-money">' . $_holdingBalance . '</span>'
+            ) ?>
+        </span>
+        <?php endif ?>
+    </p>
+</div>
+
+<div class="page-description">
+    <?php
+        echo Mage::getModel('cms/block')->load('desc_sharing_truWallet')->getContent();
+    ?>
+
+</div>
+
+<hr class="share_separate" />
+<h2 id="share_form_header"><?php echo $this->__('Share truWallet');?></h2>
+<form id="rewardpoints_share_truWallet" action="<?php echo $this->getActionForm();?>" method="post">
+    <div class="rewardpoints_form_request">
+        <div class="input_fields_form form-inline col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input-blance">
+                <input id="share_amount" name="share_amount" value=""
+                       class="required-entry form-control validate-greater-than-zero validate-number" type="text"
+                       placeholder="<?php echo $this->__('Enter amount');?>" />
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <input id="share_email" name="share_email" value="" type="text"
+                       class="required-entry form-control validate-email"
+                       placeholder="<?php echo $this->__('Enter email');?>" />
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                <button class="button button-config" title="<?php echo $this->__('Send');?>" type="submit">
+                    <span><span><?php echo $this->__('Send truWallet Money');?></span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<hr class="share_separate" style="clear: both; margin-top: 100px;"/>
+<h2 id="share_form_header"><?php echo $this->__('History Transactions');?></h2>
+<?php echo $this->getGridHtml() ?>
+<script type="text/javascript">
+    var shareTruWalletForm = new VarienForm('rewardpoints_share_truWallet', true);
+    /* $j = jQuery.noConflict();
+    $j( function() {
+        var availableEmails = [<?php echo $this->getAllEmail();?>];
+        $j( "#share_email" ).autocomplete({
+            source: availableEmails
+        });
+    }); */
+</script>

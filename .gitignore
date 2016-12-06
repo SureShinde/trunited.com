@@ -1,3 +1,4 @@
+.idea
 .htaccess.sample
 .modgit/
 .modman/
@@ -5,7 +6,7 @@ app/code/community/Phoenix/Moneybookers/
 app/code/community/Cm/RedisSession/
 app/code/core/
 app/design/adminhtml/default/default/
-app/design/frontend/base/
+
 app/design/frontend/rwd/
 app/design/frontend/default/blank/
 app/design/frontend/default/default/
@@ -90,7 +91,9 @@ shell/log.php
 sitemap.xml
 skin/adminhtml/default/default/
 skin/adminhtml/default/enterprise
-skin/frontend/base/
+skin/frontend/base/default/fonts/
+skin/frontend/base/default/js/
+skin/frontend/base/default/lib/
 skin/frontend/rwd/
 skin/frontend/default/blank/
 skin/frontend/default/blue/

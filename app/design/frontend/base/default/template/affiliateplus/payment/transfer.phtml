@@ -1,0 +1,16 @@
+<?php
+/**
+ * Payments history template
+ */
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+$class_name = 'col-lg-12 col-md-12 col-sm-12 col-xs-12';
+?>
+
+<div class="aff-main-content-transfer">
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php echo $this->getGridHtml() ?>
+</div>

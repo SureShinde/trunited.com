@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusCostPerMille
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <!-- update layout for all frontend page -->
+    </default>
+    <!--affiliateplus_default>
+    <reference name="account_navigator">
+            <action method="addLink" translate="label" module="affiliateplusstatistic">
+                            <name>report</name>
+            <path>affiliateplusstatistic/report/index</path>
+            <label><![CDATA[Reports]]></label>
+            <disabled helper="affiliateplus/account/accountNotLogin" />
+            <order>190</order>
+                    </action>
+    </reference>
+    </affiliateplus_default-->
+    <affiliatepluscostpermille_index_index>
+        <reference name="content">
+            <block type="affiliatepluscostpermille/affiliatepluscostpermille" name="affiliatepluscostpermille" template="affiliatepluscostpermille/affiliatepluscostpermille.phtml" />
+        </reference>
+    </affiliatepluscostpermille_index_index>
+    <!--affiliateplus_transaction>
+            <reference name="sales_statistic">
+                    <action method="addTransactionBlock" translate="label" module="affiliatepluscostpermille">
+                            <name>costpermille</name>
+                            <label>Impressions Commissions</label>
+                            <link>affiliatepluscostpermille/index/listImpressionTransaction</link>
+                            <type>affiliatepluscostpermille/commissions</type>
+                            <template>affiliatepluscostpermille/commissions.phtml</template>
+                    </action>
+            </reference>
+    </affiliateplus_transaction-->
+    <affiliateplus_transaction>
+        <reference name="sales_statistic">
+            <block type="affiliatepluscostpermille/impression" name="impression_block" />
+        </reference>
+    </affiliateplus_transaction>
+    <affiliatepluscostpermille_index_listcpmtransaction>
+        <update handle="affiliateplus_transaction" />
+        <reference name="affiliateplus_sales">
+            <action method="activeTransactionBlock">
+                <name>costpermille</name>
+            </action>
+        </reference>
+    </affiliatepluscostpermille_index_listcpmtransaction>
+</layout>

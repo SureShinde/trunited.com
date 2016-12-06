@@ -1,0 +1,92 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusBanner
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Affiliateplusbanner template
+ * 
+ * @see Magestore_AffiliateplusBanner_Block_Form
+ */
+?>
+
+<form id="direct-link-form-popup" action="<?php echo $this->getUrl('*/*/addDirectLink') ?>" method="post">
+    <?php $directlink = $this->getDirectlink(); ?>
+    <?php $domain = $this->getDomain(); ?>
+    <input  type="hidden" name="directlink" value="<?php echo $directlink->getId() ?>" >
+    <div class="lable-title">
+        <?php
+        if ($directlink->getId()) {
+            $title = 'Edit Direct Link';
+        } else {
+            $title = 'Add Direct Link';
+        }
+        ?>
+        <h2 class="legend"><?php echo $this->__($title) ?></h2>
+        </div>
+    <div class="input-text-add-directlinks">
+        <ul class="form-list form-popup-list-directlinks">
+            <li class="form-group li-input">
+                <label class="required" for="directlink"><?php echo $this->__('Direct Link') ?><em>*</em></label>
+                <input id="form-input-directlink" title="Direct Link" value="<?php
+        if ($directlink->getLink()) {
+            echo $directlink->getLink();
+        } else {
+            echo $this->getUrl();
+        }
+        ?>" class="input-text required-entry form-control"  name="link" type="text">                    
+            </li>
+            <div class="use-link-banner form-group">
+                        <input id="use-link-banner-poup" class="checkbox" type="checkbox" style="float: left;" title="Use Link of Banner" onclick="setUseBannerLinkPopup(this.checked)" value="1" name="use_link_banner">
+                        <span style="float: left">
+                            <?php echo $this->__('Use Link of Banner') ?>
+                        </span>  
+            </div>
+            <div class="" style="float: left"><?php echo $this->__('The link that visitors see when they click on our banner on your site') ?></div>
+            <li class="li-input form-group">
+                <label class="required" for="banner"><?php echo $this->__('Banner') ?><em>*</em></label>
+                    <select id="form_banner_id" title="Banner" class="input-text required-entry form-control" onchange="changeBannerLinkPopup()" name="banner_id">
+                        <?php
+                        foreach ($this->getBannerArr() as $banner) {
+                            ?>
+                            <option <?php if ($directlink->getBannerId() == $banner->getId()) echo 'selected="selected"'; ?> value="<?php echo $banner->getId() ?>"><?php echo $banner->getTitle() ?></option>
+                        <?php } ?>
+                    </select>
+            </li>
+            <li class="li-input form-group">
+                <label class="required" for="sourcepage"><?php echo $this->__('Page to show banner') ?><em>*</em></label>
+                    <?php
+                    $source = $domain . '/' . $directlink->getSourcePage();
+                    ?>
+                    <a href="adddirectlink.phtml"></a>
+                    <input title="Page to show banner" value="<?php echo $source; ?>" class="input-text required-entry form-control"  name="source_page"  type="text">
+                <div class="" style="float: left"><?php echo $this->__('The URL of the web-page on which you place our banner') ?></div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="buttons-set">
+        <p class="required">* <?php echo $this->__('Required Fields') ?></p>
+        <button id="button-notnow" type="button" style="margin-top: 0px;"class="button button-config" title="<?php echo $this->__('Cancel') ?>" onclick="notNow()">
+            <span><span><?php echo $this->__('Cancel') ?></span></span>
+        </button>
+        <button id="banner-button-customlink" type="button" class="button button-config" style="float: right; clear: right;" title="<?php echo $this->__('Save') ?>" onclick="submitDirectLinkForm()">
+            <span><span><?php echo $this->__('Save') ?></span></span>
+        </button>
+    </div>
+</form>

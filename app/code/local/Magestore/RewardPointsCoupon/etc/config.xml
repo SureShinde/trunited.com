@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsCoupon
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_RewardPointsCoupon>
+            <version>0.2.5</version>
+        </Magestore_RewardPointsCoupon>
+    </modules>
+    <frontend>
+        <routers>
+            <rewardpointscoupon>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_RewardPointsCoupon</module>
+                    <frontName>rewardpointscoupon</frontName>
+                </args>
+            </rewardpointscoupon>
+        </routers>
+        <layout>
+            <updates>
+                <rewardpointscoupon>
+                    <file>rewardpointscoupon.xml</file>
+                </rewardpointscoupon>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsCoupon>
+                    <files>
+                        <default>Magestore_RewardPointsCoupon.csv</default>
+                    </files>
+                </Magestore_RewardPointsCoupon>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <!-- <rewardpointscouponadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_RewardPointsCoupon</module>
+                    <frontName>rewardpointscouponadmin</frontName>
+                </args>
+            </rewardpointscouponadmin> -->
+			<adminhtml>
+                <args>
+                    <modules>
+                        <Magestore_RewardPointsCoupon before="Mage_Adminhtml">Magestore_RewardPointsCoupon_Adminhtml</Magestore_RewardPointsCoupon>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <rewardpointscoupon>
+                    <file>rewardpointscoupon.xml</file>
+                </rewardpointscoupon>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsCoupon>
+                    <files>
+                        <default>Magestore_RewardPointsCoupon.csv</default>
+                    </files>
+                </Magestore_RewardPointsCoupon>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <rewardpointscoupon>
+                <class>Magestore_RewardPointsCoupon_Model</class>
+                <resourceModel>rewardpointscoupon_mysql4</resourceModel>
+            </rewardpointscoupon>
+            <rewardpointscoupon_mysql4>
+                <class>Magestore_RewardPointsCoupon_Model_Mysql4</class>
+                <entities>
+                    <template>
+                        <table>rewardpoints_coupon_template</table>
+                    </template>
+                    <coupon>
+                        <table>rewardpoints_coupon</table>
+                    </coupon>
+                    <coupon_usage>
+                        <table>rewardpoints_coupon_usage</table>
+                    </coupon_usage>
+                    <coupon_customer>
+                        <table>rewardpoints_coupon_customer</table>
+                    </coupon_customer>
+                </entities>
+            </rewardpointscoupon_mysql4>
+        </models>
+        <resources>
+            <rewardpointscoupon_setup>
+                <setup>
+                    <module>Magestore_RewardPointsCoupon</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </rewardpointscoupon_setup>
+            <rewardpointscoupon_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </rewardpointscoupon_write>
+            <rewardpointscoupon_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </rewardpointscoupon_read>
+        </resources>
+        <blocks>
+            <rewardpointscoupon>
+                <class>Magestore_RewardPointsCoupon_Block</class>
+            </rewardpointscoupon>
+        </blocks>
+        <helpers>
+            <rewardpointscoupon>
+                <class>Magestore_RewardPointsCoupon_Helper</class>
+            </rewardpointscoupon>
+        </helpers>
+        <!-- <events>
+            <controller_action_predispatch>
+                <observers>
+                    <rewardpointscoupon_observers>
+                        <class>rewardpointscoupon/observer</class>
+                        <method>controllerActionPredispatch</method>
+                    </rewardpointscoupon_observers>
+                </observers>
+            </controller_action_predispatch>
+        </events> -->
+        <rewardpoints>
+            <actions>
+            <coupon>rewardpointscoupon/actions_coupon</coupon>
+            </actions>
+        </rewardpoints>
+    </global>
+    <default>
+        <rewardpoints>
+            <couponplugin>
+                <enable>1</enable>
+                <logo>default/logo_print.png</logo>
+                <background>default/background.jpg</background>
+                <note><![CDATA[The coupon cope is only valid at our store. You can either redeem the coupon code to points to pay for your orders at {store_url}]]></note>
+                <style_color>FF0000</style_color>
+                <coupon_color>fe2b34</coupon_color>
+                <caption>Points</caption>
+                <background_coupon>fee8ea</background_coupon>
+            </couponplugin>
+        </rewardpoints>
+    </default>
+</config>

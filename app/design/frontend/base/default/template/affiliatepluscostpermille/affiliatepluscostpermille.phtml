@@ -1,0 +1,35 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusCostPerMille
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Affiliatepluscostpermille template
+ * 
+ * @see Magestore_AffiliateplusCostPerMille_Block_Affiliatepluscostpermille
+ */
+?>
+<?php if($this->getCommission()): ?>
+<tr>
+    <td><strong><?php echo $this->__('Pay Per Mille'); ?></strong></td>
+    <td><strong><?php echo $this->__('Commission Type'); ?></strong></td>
+    <td colspan="2">
+        <?php echo $this->__('Default commission: '.Mage::helper('core')->currency($this->getCommission())); ?>
+    </td>
+</tr>
+<?php endif;?>

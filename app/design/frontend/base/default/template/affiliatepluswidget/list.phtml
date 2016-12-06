@@ -1,0 +1,49 @@
+<?php
+/**
+ * List Widget Template
+ */
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+ if($check_responsvie)
+     $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
+ else
+     $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="aff-main-content <?php echo $class_name; ?>">
+<div class="aff-title">
+	<h2><?php echo $this->__('My Widgets') ?></h2>
+</div>
+
+<?php if ($this->getCollection()->getSize()): ?>
+    <div class = "affiliate-list-widgets">
+	<?php echo $this->getPagerHtml() ?>
+	<?php echo $this->getGridHtml() ?>
+	<?php echo $this->getPagerHtml() ?>
+    </div>
+<?php else: ?>
+    <div style="float: left; width: 100%;">
+	<p class="note-msg">
+		<?php echo $this->__('There are no widgets on this section.') ?>
+	</p>
+</div>
+<?php endif ?>
+
+<div class="buttons-set">
+    <button type="button" class="button button-config" onclick='setLocation("<?php echo $this->getUrl('affiliatepluswidget/index/new') ?>")'>
+        <span>
+            <span><?php echo $this->__('New Widget') ?></span>
+        </span>
+    </button>    
+</div>
+</div>
+<script type="text/javascript">
+    function deleteWidget() {
+        if (confirm('<?php echo $this->__('Are you sure?') ?>')) {
+            return true;
+        }
+        return false;
+    }
+</script>

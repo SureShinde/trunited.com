@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsTransfer
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_RewardPointsTransfer>
+            <version>0.2.5</version>
+        </Magestore_RewardPointsTransfer>
+    </modules>
+    <frontend>
+        <routers>
+            <rewardpointstransfer>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_RewardPointsTransfer</module>
+                    <frontName>rewardpointstransfer</frontName>
+                </args>
+            </rewardpointstransfer>
+<!--            <rewardpoints>
+                <args>
+                    <modules>
+                        <Magestore_RewardPointsTransfer before="Magestore_Rewardpoints">Magestore_RewardPointsTransfer_Setting</Magestore_RewardPointsTransfer>
+                    </modules>
+                </args>
+            </rewardpoints>-->
+        </routers>
+        <layout>
+            <updates>
+                <rewardpointstransfer>
+                    <file>rewardpointstransfer.xml</file>
+                </rewardpointstransfer>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsTransfer>
+                    <files>
+                        <default>Magestore_RewardPointsTransfer.csv</default>
+                    </files>
+                </Magestore_RewardPointsTransfer>
+            </modules>
+        </translate>
+        <events>
+            <customer_register_success>
+                <observers>
+                    <rewardpointstransfer_observers>
+                        <class>rewardpointstransfer/observer</class>
+                        <method>customerRegisterSuccess</method>
+                    </rewardpointstransfer_observers>
+                </observers>
+            </customer_register_success>
+            <customer_save_commit_after>
+                <observers>
+                    <rewardpointstransfer_observers>
+                        <class>rewardpointstransfer/observer</class>
+                        <method>customerRegisterSuccessForLow</method>
+                    </rewardpointstransfer_observers>
+                </observers>
+            </customer_save_commit_after>
+        </events>
+    </frontend>
+    <admin>
+        <routers>
+            <!-- <rewardpointstransferadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_RewardPointsTransfer</module>
+                    <frontName>rewardpointstransferadmin</frontName>
+                </args>
+            </rewardpointstransferadmin> -->
+			<adminhtml>
+                <args>
+                    <modules>
+                        <Magestore_RewardPointsTransfer before="Mage_Adminhtml">Magestore_RewardPointsTransfer_Adminhtml</Magestore_RewardPointsTransfer>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <rewardpointstransfer>
+                    <file>rewardpointstransfer.xml</file>
+                </rewardpointstransfer>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsTransfer>
+                    <files>
+                        <default>Magestore_RewardPointsTransfer.csv</default>
+                    </files>
+                </Magestore_RewardPointsTransfer>
+            </modules>
+        </translate>
+         <events>
+            <rewardpoints_transaction_view_detail>
+                <observers>
+                    <rewardpoints_transaction_view_detail>
+                        <class>rewardpointstransfer/observer</class>
+                        <method>rewardpoints_transaction_view_detail</method>
+                    </rewardpoints_transaction_view_detail>
+                </observers>
+            </rewardpoints_transaction_view_detail>
+        </events> 
+    </adminhtml>   
+    <global>
+        <models>
+            <rewardpointstransfer>
+                <class>Magestore_RewardPointsTransfer_Model</class>
+                <resourceModel>rewardpointstransfer_mysql4</resourceModel>
+            </rewardpointstransfer>
+            <rewardpointstransfer_mysql4>
+                <class>Magestore_RewardPointsTransfer_Model_Mysql4</class>
+                <entities>
+                    <rewardpointstransfer>
+                        <table>rewardpoints_transfer</table>
+                    </rewardpointstransfer>
+                </entities>
+            </rewardpointstransfer_mysql4>
+        </models>
+        <resources>
+            <rewardpointstransfer_setup>
+                <setup>
+                    <module>Magestore_RewardPointsTransfer</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </rewardpointstransfer_setup>
+            <rewardpointstransfer_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </rewardpointstransfer_write>
+            <rewardpointstransfer_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </rewardpointstransfer_read>
+        </resources>
+        <blocks>
+            <rewardpointstransfer>
+                <class>Magestore_RewardPointsTransfer_Block</class>
+            </rewardpointstransfer>
+        </blocks>
+        <helpers>
+            <rewardpointstransfer>
+                <class>Magestore_RewardPointsTransfer_Helper</class>
+            </rewardpointstransfer>
+        </helpers>
+         <events>
+            <controller_action_predispatch_rewardpoints_index_settingsPost>
+                <observers>
+                    <rewardpointsloyaltylevel_observers>
+                        <class>rewardpointstransfer/observer</class>
+                        <method>settingsPost</method>
+                    </rewardpointsloyaltylevel_observers>
+                </observers>
+            </controller_action_predispatch_rewardpoints_index_settingsPost>
+        </events> 
+        <rewardpoints>
+            <actions>
+                <sendpoint>rewardpointstransfer/actions_sendpoint</sendpoint>
+                <receivepoint>rewardpointstransfer/actions_receivepoint</receivepoint>
+                <refundpoint>rewardpointstransfer/actions_refundpoint</refundpoint>
+            </actions>
+        </rewardpoints>
+        <template>
+            <email>
+                <rewardpoints_transferplugin_email_template_have_account translate="label" module="rewardpointstransfer">
+                    <label>Customer having an account</label>
+                    <file>rewardpointstransfer/have_account.html</file>
+                    <type>html</type>
+                </rewardpoints_transferplugin_email_template_have_account>
+                <rewardpoints_transferplugin_email_template_no_account translate="label" module="rewardpointstransfer">
+                    <label>Customer not having an account</label>
+                    <file>rewardpointstransfer/not_account.html</file>
+                    <type>html</type>
+                </rewardpoints_transferplugin_email_template_no_account>
+                <rewardpoints_transferplugin_email_template_cancel_transfer translate="label" module="rewardpointstransfer">
+                    <label>Transfer cancellation</label>
+                    <file>rewardpointstransfer/cancel_transfer.html</file>
+                    <type>html</type>
+                </rewardpoints_transferplugin_email_template_cancel_transfer>
+            </email>
+        </template>
+    </global>
+    <default>
+        <rewardpoints>
+            <transferplugin>
+                <enable>1</enable>
+                <customer_group>1</customer_group>
+                <maximum_point>100</maximum_point>
+                <minimum_point>0</minimum_point>
+                <email_notification>1</email_notification>
+                <email_template_have_account>rewardpoints_transferplugin_email_template_have_account</email_template_have_account>
+                <email_template_no_account>rewardpoints_transferplugin_email_template_no_account</email_template_no_account>
+                <email_template_cancel_transfer>rewardpoints_transferplugin_email_template_cancel_transfer</email_template_cancel_transfer>
+                <allow_cancel>1</allow_cancel>
+                <email_cancel_transfer>1</email_cancel_transfer>
+            </transferplugin>
+        </rewardpoints>
+    </default>
+    <crontab>
+        <jobs>
+            <rewardpointstransfer>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>rewardpointstransfer/cron::checkPendingTransferTransaction</model>
+                </run>
+            </rewardpointstransfer>
+        </jobs>
+    </crontab>
+</config>

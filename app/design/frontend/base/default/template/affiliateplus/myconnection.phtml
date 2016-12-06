@@ -1,0 +1,22 @@
+<?php
+
+
+
+$session=Mage::getSingleton('customer/session', array('name'=>'frontend') );
+
+if ($session->isLoggedIn()) {
+   
+
+
+$id = Mage::getSingleton('customer/session')->getId();
+
+
+
+?>
+
+<iframe src="<?php echo "https://trunited.com/tree/getOrgChart.php?id=".$id;?>" id="mycon" style="width: 100%; height: 500px; border: 0px !important;">
+
+<?php
+
+} 
+?>

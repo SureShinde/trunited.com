@@ -1,0 +1,72 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusBanner
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Affiliateplusbanner template
+ * 
+ * @see Magestore_AffiliateplusBanner_Block_Form
+ */
+?>
+
+<form id="verify-domain-form" action="<?php echo $this->getUrl('*/*/verify') ?>" method="post">
+    <input  type="hidden" name="domainId" value="<?php echo $this->getDomainId() ?>" >
+    <div class="">
+        <div class = "lable-title" >
+        <h2 class="legend"><?php echo $this->__('Verify Domain') ?></h2>
+        </div>
+        <ul class="form-list">
+            <li class="wide">
+                <label style="text-align:left;"><?php echo $this->__('Verify your ownership of %s.', '<a rel="nofollow" href="http://' . $this->getDomain() . '">' . $this->getDomain() . '</a>') ?></label>
+            </li>
+            <li class="wide">
+                <label style="text-align:left;"><?php echo $this->__('Upload an HTML file to your site.') ?></label>
+            </li>
+            <li class="wide">
+                <label style="text-align:left;"><?php echo $this->__('1. Download %s this HTML verification file %s', '<a href="' . $this->getUrl('affiliateplusdirectlink/index/downloadFile', array('domain' => $this->getDomain())). '">','</a>.<div class = "link-domain">[' . $this->getFile() . ']<div>') ?></label>
+            </li>
+            <li class="wide">
+                <label ><?php echo $this->__('2. Upload the file to %s', '<a href="http://' . $this->getDomain() . '">' . $this->getDomain() . '</a>') ?></label>
+            </li>
+            <li class="wide">
+                <?php $url = $this->getDomain() . '/' . $this->getFile(); ?>
+                <label style="text-align:left;"><?php echo $this->__('3. Confirm successful upload by visiting %s in your browser.', '<div class = "link-domain"><a href="http://' . $url . '">' . $url . '</a></div>') ?></label>
+            </li>
+            <li class="wide">
+                <label style="text-align:left;"><?php echo $this->__('4. Click Verify below.') ?></label>
+            </li>
+            <li class="wide">
+                <label style="text-align:left;"><?php echo $this->__('To stay verified, don%st remove the HTML file, even after verification succeeds.', '\'') ?></label>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+
+        <button id="button-notnow" type="button" class="button button-config" title="<?php echo $this->__('Not Now') ?>" onclick="notNow()">
+            <span>
+                <span><?php echo $this->__('Not Now') ?></span>
+            </span>
+        </button>
+        <button id="domain-button-verify" type="submit" class="button button-config" title="<?php echo $this->__('Verify Domain') ?>">
+            <span>
+                <span><?php echo $this->__('Verify') ?></span>
+            </span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <magestore translate="label">
+            <label>Magestore Extension</label>
+            <sort_order>400</sort_order>
+        </magestore>
+    </tabs>
+    <sections>
+        <affiliateplus translate="label" module="affiliateplus">
+            <groups>
+                            
+                <!--Changed By Adam 13/09/2014: Add User Guide to Configuration page-->
+                <document_help translate="label" module="affiliatepluspayperlead">
+                    <fields>
+                        <affiliatepluspayperlead_user_guide translate="label">
+                            <label>Affiliate Plus Pay-Per-Lead User Guide</label>
+                            <frontend_type>label</frontend_type>  
+                            <frontend_model>affiliatepluspayperlead/adminhtml_field_affiliatepluspayperlead</frontend_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment></comment>
+                        </affiliatepluspayperlead_user_guide>
+                    </fields>
+                </document_help>
+                
+                <payperlead translate="label">
+                    <label>Pay per Lead Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable Pay per Lead Program</label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <page_separator translate="label">
+                            <label>Lead Details Page</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>10px</comment>
+                        </page_separator>
+                        <description translate="label">
+                            <label>Pay per Lead Description</label>
+                            <frontend_type>textarea</frontend_type>                   
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The details or introduction of the Pay per Lead program which will be shown on Affiliate home page, Lead Details page and My Program page.</comment>
+                        </description>
+                        <base_link translate="label comment">
+                            <label>Pay per Lead base link</label>
+                            <frontend_type>text</frontend_type>                   
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Eg: If you fill in abc.com, affiliate can custom the affiliate link to abc.com/affiliatename</comment>
+                        </base_link>
+                        <calculate_separator translate="label">
+                            <label>Pay-per-lead Commission</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>10px</comment>
+                        </calculate_separator>
+                        <signup_account_commission translate="label comment">
+                            <label>Commission per account signed up</label>
+                            <frontend_type>text</frontend_type>                   
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Commission paid for affiliates when new customers register via affiliate's link.</comment>
+                        </signup_account_commission>
+                        <subscribe_newsletter_commission translate="label comment">
+                            <label>Commission per newsletter subscription</label>
+                            <frontend_type>text</frontend_type>                   
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Commission paid for affiliate when new users subscribe to newsletters.</comment>
+                        </subscribe_newsletter_commission>
+                        <deduct_commission_account_disable translate="label">
+                            <label>Deduct commission when customer’s account is deleted or disabled </label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </deduct_commission_account_disable>
+                        <deduct_commission_customer_unsubscribes translate="label">
+                            <label>Deduct commission when customer unsubscribes</label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </deduct_commission_customer_unsubscribes>	
+                        <add_commission_twice translate="label">
+                            <label>Add commission twice when customer registers and subscribes</label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </add_commission_twice>				
+                    </fields>				
+                </payperlead>
+<!--                <commission>
+                    <fields>
+                        <payperlead_separator translate="label">
+                            <label>Pay-per-lead Commission</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>710</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>10px</comment>
+                        </payperlead_separator>
+                        <signup_account_commission translate="label comment">
+                            <label>Commission per account signed up</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_clone</frontend_model>
+                            <clone_path>affiliateplus/payperlead/signup_account_commission</clone_path>
+                            <sort_order>720</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Commission paid for affiliates when new customers register via affiliate's link.</comment>
+                        </signup_account_commission>
+                        <subscribe_newsletter_commission translate="label comment">
+                            <label>Commission per newsletter subscription</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_clone</frontend_model>
+                            <clone_path>affiliateplus/payperlead/subscribe_newsletter_commission</clone_path>
+                            <sort_order>730</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Commission paid for affiliate when new users subscribe to newsletters.</comment>
+                        </subscribe_newsletter_commission>
+                        <deduct_commission_account_disable translate="label">
+                            <label>Deduct commission when customer’s account is deleted or disabled </label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_clone</frontend_model>
+                            <clone_path>affiliateplus/payperlead/deduct_commission_account_disable</clone_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>740</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </deduct_commission_account_disable>
+                        <deduct_commission_customer_unsubscribes translate="label">
+                            <label>Deduct commission when customer unsubscribes</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_clone</frontend_model>
+                            <clone_path>affiliateplus/payperlead/deduct_commission_customer_unsubscribes</clone_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>750</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </deduct_commission_customer_unsubscribes>	
+                        <add_commission_twice translate="label">
+                            <label>Add commission twice when customer registers and subscribes</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_clone</frontend_model>
+                            <clone_path>affiliateplus/payperlead/add_commission_twice</clone_path>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>760</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </add_commission_twice>
+                    </fields>
+                </commission>-->
+            </groups>
+        </affiliateplus>
+    </sections>
+</config>

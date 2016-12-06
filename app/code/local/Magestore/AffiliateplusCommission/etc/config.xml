@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusCommission
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_AffiliateplusCommission>
+            <!--Changed By Adam 04/11/2014: accepted by Blanka-->
+            <version>0.4.3</version>
+        </Magestore_AffiliateplusCommission>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <affiliatepluscommission>
+                    <file>affiliatepluscommission.xml</file>
+                </affiliatepluscommission>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_AffiliateplusCommission>
+                    <files>
+                        <default>Magestore_AffiliateplusCommission.csv</default>
+                    </files>
+                </Magestore_AffiliateplusCommission>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Magestore_AffiliateplusCommission>
+                    <files>
+                        <default>Magestore_AffiliateplusCommission.csv</default>
+                    </files>
+                </Magestore_AffiliateplusCommission>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <affiliatepluscommission>
+                <class>Magestore_AffiliateplusCommission_Model</class>
+                <resourceModel>affiliatepluscommission_mysql4</resourceModel>
+            </affiliatepluscommission>
+            <affiliatepluscommission_mysql4>
+                <class>Magestore_AffiliateplusCommission_Model_Mysql4</class>
+            </affiliatepluscommission_mysql4>
+        </models>
+        <resources>
+            <affiliatepluscommission_setup>
+                <setup>
+                    <module>Magestore_AffiliateplusCommission</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </affiliatepluscommission_setup>
+            <affiliatepluscommission_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </affiliatepluscommission_write>
+            <affiliatepluscommission_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </affiliatepluscommission_read>
+        </resources>
+        <blocks>
+            <affiliatepluscommission>
+                <class>Magestore_AffiliateplusCommission_Block</class>
+            </affiliatepluscommission>
+        </blocks>
+        <helpers>
+            <affiliatepluscommission>
+                <class>Magestore_AffiliateplusCommission_Helper</class>
+            </affiliatepluscommission>
+        </helpers>
+        <events>
+            <affiliateplus_calculate_commission_after>
+                <observers>
+                    <affiliatepluscommission_observers>
+                        <class>affiliatepluscommission/observer</class>
+                        <method>calculateCommissionAfter</method>
+                    </affiliatepluscommission_observers>
+                </observers>
+            </affiliateplus_calculate_commission_after>
+            
+            <affiliateplus_prepare_sales_columns_plus>
+                <observers>
+                    <affiliatepluscommission_observers>
+                        <class>affiliatepluscommission/observer</class>
+                        <method>prepareSalesColumnsPlus</method>
+                    </affiliatepluscommission_observers>
+                </observers>
+            </affiliateplus_prepare_sales_columns_plus>
+            <affiliatepluslevel_prepare_sales_columns_plus>
+                <observers>
+                    <affiliatepluscommission_observers>
+                        <class>affiliatepluscommission/observer</class>
+                        <method>levelPrepareSalesColumnsPlus</method>
+                    </affiliatepluscommission_observers>
+                </observers>
+            </affiliatepluslevel_prepare_sales_columns_plus>
+            <affiliatepluslevel_transaction_prepare_columns>
+                <observers>
+                    <affiliatepluscommission_observers>
+                        <class>affiliatepluscommission/observer</class>
+                        <method>levelTransactionPrepareColumns</method>
+                    </affiliatepluscommission_observers>
+                </observers>
+            </affiliatepluslevel_transaction_prepare_columns>
+        </events>
+    </global>
+    <default>
+        <affiliateplus>
+            <!--Changed By Adam 30/07/2014-->
+            <commissionbylevel>
+                <enable>1</enable>
+            </commissionbylevel>
+            <commission>
+                <type>sales</type>
+                <add_commission_type>fixed</add_commission_type>
+                <month>0</month>
+                <year>0</year>
+                <show>1</show>
+            </commission>
+        </affiliateplus>
+    </default>
+</config>

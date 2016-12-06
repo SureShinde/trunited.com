@@ -1,0 +1,49 @@
+/* 
+    Document   : rewardpointstransfer
+    Created on : Sep 18, 2013, 10:37:21 AM
+    Author     : haitv_000
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+#transfer-point-error{clear:both;}
+.transfer-send-point-left{
+    float:left;
+    width: 260px;
+    margin-right: 2.5%;
+}
+/*xuanbinh*/
+.transfer-send-point-right{
+    float: right;
+    width:50%;
+    min-height:285px;
+    overflow: hidden;
+}
+.transfer-send-transaction,
+.transfer-receive-transaction{
+    clear: both;
+}
+#transfer-textarea{
+    resize: none;
+    height: 7em !important;
+	width: 254px;
+}
+#transfer-button{
+    float: right;
+}
+.transfer-strong{
+    color: #3182be;
+}
+/*.color-error-transfer{
+    color: #eb340a;
+    font-weight: bold;
+    font-size: 11px;
+}*/
+.color-success-transfer{
+    clear:both; min-height:13px; margin:3px 0 0; font-size:11px; font-weight:bold; line-height:13px; color:green;
+}
+.color-error-transfer { clear:both; min-height:13px; margin:3px 0 0; padding-left:17px; font-size:11px; font-weight:bold; line-height:13px; background:url(images/validation_advice_bg.gif) 2px 0 no-repeat; color:#eb340a; }
+

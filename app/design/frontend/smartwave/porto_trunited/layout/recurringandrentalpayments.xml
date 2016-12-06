@@ -1,0 +1,921 @@
+<?xml version="1.0"?>
+<!--
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+-->
+<layout version="0.1.0">
+   <!--customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="recurringandrentalpayments">
+                <name>recurringandrentalpayments</name>
+                <path>recurringandrentalpayments/customer</path>
+                <label>My Subscriptions</label>
+            </action>
+        </reference>
+    </customer_account-->
+	<recurringandrentalpayments_customer_index>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="recurringandrentalpayments/customer_subscription_list" name="recurringandrentalpayments_subscription_list"
+                   template="recurringandrentalpayments/customer/subscription/list.phtml">
+              <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                    <title>My Subscriptions</title>
+                </action>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                <title>My Subscriptions</title>
+            </action>
+        </reference>
+    </recurringandrentalpayments_customer_index>
+	<recurringandrentalpayments_customer_history>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="recurringandrentalpayments/customer_subscription_payments_history" name="recurringandrentalpayments_subscription_payments_history"
+                   template="recurringandrentalpayments/customer/subscription/payments/history.phtml">
+                <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                    <title>Subscription Payments</title>
+                </action>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                <title>Subscription Payments</title>
+            </action>
+        </reference>
+    </recurringandrentalpayments_customer_history>
+	<recurringandrentalpayments_customer_view>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="recurringandrentalpayments/customer_subscription_summary" name="recurringandrentalpayments_subscription_summary"
+                   template="recurringandrentalpayments/customer/subscription/summary.phtml">
+                <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                    <title>Subscription Information</title>
+                </action>
+                <block type="recurringandrentalpayments/customer_subscription_payments_pending" name="recurringandrentalpayments_subscription_payments_pending"
+                       template="recurringandrentalpayments/customer/subscription/payments/pending.phtml"/>
+            </block>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                <title>My Subscriptions - Subscription Details</title>
+            </action>
+        </reference>
+    </recurringandrentalpayments_customer_view>
+	<recurringandrentalpayments_customer_change>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="recurringandrentalpayments/customer_subscription_edit" name="recurringandrentalpayments_subscription_edit"
+                   template="recurringandrentalpayments/customer/subscription/edit.phtml"></block>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="recurringandrentalpayments">
+                <title>My Subscriptions - Subscription Details</title>
+            </action>
+        </reference>
+    </recurringandrentalpayments_customer_change>
+   
+   <PRODUCT_TYPE_simple>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>recurringandrentalpayments/css/main.css</stylesheet>
+            </action>
+			<action method="addJs"><script>jquery/jquery.min.js</script></action>
+        </reference>
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_simple" name="product.info.recurringandrentalpayments" as="product_type_data"
+                   template="recurringandrentalpayments/product/view/type/simple.phtml">
+             <!--   <action method="addPriceBlockType">
+                    <type>simple</type>
+                    <block>recurringandrentalpayments/product_price</block>
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+                </action>-->
+                <block type="recurringandrentalpayments/product_view_type_simple" name="product.info.recurringandrentalpayments.subscription.selector" as="subscription_selector"></block>
+
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar"
+                       template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_simple" name="recurringandrentalpayments_html_calendar_init" as="recurringandrentalpayments_html_calendar_init"
+                       template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_simple>
+	
+   <PRODUCT_TYPE_configurable>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>recurringandrentalpayments/css/main.css</stylesheet>
+            </action>
+			<action method="addJs"><script>jquery/jquery.min.js</script></action>
+        </reference>
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_configurable" name="product.info.recurringandrentalpayments" as="product_type_data"
+                   template="recurringandrentalpayments/product/view/type/configurable.phtml">
+             <!--  <action method="addPriceBlockType">
+                    <type>configurable</type>
+                   <block>recurringandrentalpayments/product_price</block> 
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+                </action> -->
+
+              <block type="recurringandrentalpayments/product_view_type_configurable" name="product.info.recurringandrentalpayments.subscription.selector"
+                       as="subscription_selector"></block>
+
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar"
+                       template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_configurable" name="recurringandrentalpayments_html_calendar_init"
+                       as="recurringandrentalpayments_html_calendar_init"
+                       template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/>
+
+                <block type="configurable/catalog_product_samples" name="product.info.configurable.samples" as="samples"
+                       template="configurable/catalog/product/samples.phtml"/>
+                <block type="configurable/catalog_product_view_type" name="product.info.configurable"
+                       as="product_type_data" template="configurable/catalog/product/type.phtml"/> 
+            </block>
+        </reference>   
+    </PRODUCT_TYPE_configurable>
+	
+	<PRODUCT_TYPE_virtual>
+          <reference name="head">
+               <action method="addCss"><stylesheet>recurringandrentalpayments/css/main.css</stylesheet></action>
+	        <action method="addJs"><script>jquery/jquery.min.js</script></action>
+         </reference>  
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_virtual" name="product.info.recurringandrentalpayments" as="product_type_data" template="recurringandrentalpayments/product/view/type/virtual.phtml"> 
+               <!-- <action method="addPriceBlockType">
+                    <type>virtual</type>
+                    <block>recurringandrentalpayments/product_price</block>
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+                </action> -->
+                  <block type="recurringandrentalpayments/product_view_type_simple" name="product.info.recurringandrentalpayments.subscription.selector" as="subscription_selector"></block>
+
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar" template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_simple" name="recurringandrentalpayments_html_calendar_init" as="recurringandrentalpayments_html_calendar_init"
+                       template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/> 
+			 </block>		   
+        </reference>  
+    </PRODUCT_TYPE_virtual>
+
+    <PRODUCT_TYPE_downloadable>
+        <reference name="head">
+            <action method="addCss"><stylesheet>recurringandrentalpayments/css/main.css</stylesheet></action>
+	    <action method="addJs"><script>jquery/jquery.min.js</script></action>
+         </reference>
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_downloadable" name="product.info.recurringandrentalpayments" as="product_type_data"
+                   template="recurringandrentalpayments/product/view/type/downloadable.phtml">
+          <!--      <action method="addPriceBlockType">
+                    <type>downloadable</type>
+                    <block>recurringandrentalpayments/product_price</block>
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+                </action>-->
+                <block type="recurringandrentalpayments/product_view_type_downloadable" name="product.info.recurringandrentalpayments.subscription.selector"
+                       as="subscription_selector"></block>
+
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar"
+                       template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_downloadable" name="recurringandrentalpayments_html_calendar_init"
+                       as="recurringandrentalpayments_html_calendar_init"
+                       template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/>
+
+                <block type="downloadable/catalog_product_samples" name="product.info.downloadable.samples" as="samples"
+                       template="downloadable/catalog/product/samples.phtml"/>
+                <block type="downloadable/catalog_product_view_type" name="product.info.downloadable"
+                       as="product_type_data" template="downloadable/catalog/product/type.phtml"/>
+            </block>
+
+            <reference name="product.info.options.wrapper">
+                <block type="downloadable/catalog_product_links" name="product.info.downloadable.options"
+                       as="type_downloadable_options" before="-" template="recurringandrentalpayments/downloadable/catalog/product/links.phtml"/>
+                <action method="insert">
+                    <block>product.info.downloadable.options</block>
+                </action>
+            </reference>
+        </reference>
+    </PRODUCT_TYPE_downloadable>
+	
+   <PRODUCT_TYPE_grouped>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>recurringandrentalpayments/css/main.css</stylesheet>
+            </action>
+			<action method="addJs"><script>jquery/jquery.min.js</script></action>
+        </reference>
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_grouped" name="product.info.recurringandrentalpayments" as="product_type_data" template="recurringandrentalpayments/product/view/type/grouped.phtml"> 
+             <!--   <action method="addPriceBlockType">
+                    <type>grouped</type>
+                    <block>recurringandrentalpayments/product_price</block>
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+                </action>  -->
+           <block type="recurringandrentalpayments/product_view_type_grouped" name="product.info.recurringandrentalpayments.subscription.selector" as="subscription_selector"></block>
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar" template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_grouped" name="recurringandrentalpayments_html_calendar_init" as="recurringandrentalpayments_html_calendar_init" template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/>
+
+            </block>
+        </reference>
+    </PRODUCT_TYPE_grouped>   
+	<PRODUCT_TYPE_bundle translate="label" module="bundle">
+        <label>Catalog Product View (Bundle)</label>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/bundle.js</name></action>
+			   <action method="addCss">
+                <stylesheet>recurringandrentalpayments/css/main.css</stylesheet>
+            </action>
+			<action method="addJs"><script>jquery/jquery.min.js</script></action>
+        
+        </reference>
+        <reference name="product.info">
+            <block type="recurringandrentalpayments/product_view_type_bundle" name="product.info.bundle" as="product_type_data" template="recurringandrentalpayments/product/view/type/bundle.phtml">
+                <!--<action method="addPriceBlockType">
+				    <type>bundle</type>
+					 <block>recurringandrentalpayments/product_price</block>
+                    <template>recurringandrentalpayments/product/price.phtml</template>
+				</action>-->
+				<block type="recurringandrentalpayments/product_view_type_bundle" name="product.info.recurringandrentalpayments.subscription.selector" as="subscription_selector"></block>
+                <block type="core/html_calendar" name="recurringandrentalpayments_html_calendar" as="recurringandrentalpayments_html_calendar" template="page/js/calendar.phtml"/>
+                <block type="recurringandrentalpayments/product_view_type_bundle" name="recurringandrentalpayments_html_calendar_init" as="recurringandrentalpayments_html_calendar_init" template="recurringandrentalpayments/product/view/subscription/js/calendar_init.phtml"/>
+
+                <block type="bundle/catalog_product_price" name="bundle.prices" as="bundle_prices" template="bundle/catalog/product/view/price.phtml">
+                    <action method="setMAPTemplate"><tmpl>catalog/product/price_msrp_item.phtml</tmpl></action>
+                </block>
+            </block> 
+        </reference>
+        <reference name="product.info.options.wrapper">
+            <block type="bundle/catalog_product_view_type_bundle" name="product.info.bundle.options" as="type_bundle_options" template="bundle/catalog/product/view/type/bundle/options.phtml">
+                <action method="addRenderer"><type>select</type><block>bundle/catalog_product_view_type_bundle_option_select</block></action>
+                <action method="addRenderer"><type>multi</type><block>bundle/catalog_product_view_type_bundle_option_multi</block></action>
+                <action method="addRenderer"><type>radio</type><block>bundle/catalog_product_view_type_bundle_option_radio</block></action>
+                <action method="addRenderer"><type>checkbox</type><block>bundle/catalog_product_view_type_bundle_option_checkbox</block></action>
+            </block>
+            <action method="insert"><block>product.info.bundle.options</block></action>
+        </reference>
+        <reference name="product.info.options.wrapper.bottom">
+            <remove name="product.tierprices" />
+            <block type="bundle/catalog_product_view" name="bundle.tierprices" as="tierprices" before="-" template="bundle/catalog/product/view/tierprices.phtml"/>
+            <block type="cataloginventory/qtyincrements" name="product.info.qtyincrements" before="-" template="cataloginventory/qtyincrements.phtml"/>
+        </reference>
+        <reference name="product.clone_prices">
+            <action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/view/price.phtml</template></action>
+        </reference>
+    </PRODUCT_TYPE_bundle>  
+     <catalog_product_view>
+	<reference name="head">
+			<!--<action method="addItem"><type>js</type><name>indies/jquery.js</name></action>-->
+			<action method="addItem"><type>js</type><name>indies/noconflict.js</name></action>
+		    <action method="addItem"><type>js</type><name>indies/configurable.js</name></action> 
+		</reference>
+
+        <reference name="catalog.product.related">
+            <action method="addPriceBlockType">
+                <type>simple</type>
+                <block>recurringandrentalpayments/product_price</block>
+                <template>recurringandrentalpayments/product/price.phtml</template>
+            </action>
+            <action method="addPriceBlockType">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/product_price</block>
+                <template>recurringandrentalpayments/product/price.phtml</template>
+            </action>
+            <action method="addPriceBlockType">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/product_price</block>
+                <template>recurringandrentalpayments/product/price.phtml</template>
+            </action>
+            <action method="addPriceBlockType">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/product_price</block>
+                <template>recurringandrentalpayments/product/price.phtml</template>
+            </action>
+            <action method="addPriceBlockType">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/product_price</block>
+                <template>recurringandrentalpayments/product/price.phtml</template>
+            </action>
+        </reference>
+			<!--- Start to Add on date : 2013-07-01 : to update price as per custome option price -->
+		<reference name="product.info.options.wrapper" as="product_options_wrapper">
+			 <block type="catalog/product_view_options" name="product.info.options" as="product_options" template="recurringandrentalpayments/catalog/product/view/options.phtml" />
+			  <block type="core/template" name="options_js" template="catalog/product/view/options/js.phtml"/>
+                    <block type="catalog/product_view_options" name="product.info.options" as="product_options" template="recurringandrentalpayments/catalog/product/view/options.phtml">
+                        <action method="addOptionRenderer"><type>text</type><block>catalog/product_view_options_type_text</block><template>catalog/product/view/options/type/text.phtml</template></action>
+                        <action method="addOptionRenderer"><type>file</type><block>catalog/product_view_options_type_file</block><template>catalog/product/view/options/type/file.phtml</template></action>
+                        <action method="addOptionRenderer"><type>select</type><block>catalog/product_view_options_type_select</block><template>catalog/product/view/options/type/select.phtml</template></action>
+                        <action method="addOptionRenderer"><type>date</type><block>catalog/product_view_options_type_date</block><template>catalog/product/view/options/type/date.phtml</template></action>
+                </block>
+        </reference>
+		<!--- End to Add on date : 2013-07-01 : to update price as per custome option price -->
+	 <!--<reference name="product.info">
+            <action method='setTemplate'><template>recurringandrentalpayments/catalog/product/view.phtml</template></action>
+	</reference> -->
+       
+	<reference name="product.info.addtocart">
+        	<action method='setTemplate'>
+		<template>recurringandrentalpayments/product/view/addtocart.phtml</template>
+		</action>
+       </reference>  
+    </catalog_product_view>	
+
+<!--
+Category default layout
+-->
+    <catalog_category_default translate="label"> 
+      <reference name="category.products">           
+              <block type="catalog/product_list" name="product_list" template="recurringandrentalpayments/product/list.phtml">
+                    <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                        <block type="page/html_pager" name="product_list_toolbar_pager"/>                        
+                    </block>
+                    <action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>5</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+                    <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+                    <!-- Since the addColumnCountLayoutDepend does not work, we are manually setting the max columns -->
+                    <action method="setColumnCount"><count>4</count></action>
+              </block>
+        </reference>
+    </catalog_category_default>
+
+<!--
+Category layered navigation layout
+-->
+    <catalog_category_layered translate="label">
+         <reference name="category.products">            
+                <block type="catalog/product_list" name="product_list" template="recurringandrentalpayments/catalog/product/list.phtml">
+                    <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                        <block type="page/html_pager" name="product_list_toolbar_pager"/>
+                    </block>
+                    <action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>5</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+                    <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+                    <action method="setColumnCount"><count>4</count></action>
+               </block>
+        </reference>
+    </catalog_category_layered>
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/cart/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/cart/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/cart/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/cart/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/cart/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>bundle</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_bundle</block>
+                <template>checkout/cart/item/default.phtml</template>
+            </action>
+	</reference>
+	<reference name="checkout.cart.methods">
+	      <reference name="head">
+				<action method="addCss">
+					<stylesheet>recurringandrentalpayments/css/main.css</stylesheet>
+				</action>	
+       		</reference>
+		<remove name="checkout.cart.methods.onepage"/> 
+		<remove name="checkout.cart.methods.onepage.bottom"/> 
+ 		<block type="checkout/onepage_link" name="recurring.checkout.cart.methods.onepage.bottom" >
+			<action method="setTemplate">
+				<template>recurringandrentalpayments/checkout/onepage/link.phtml</template>
+			</action>
+		</block> 	
+	</reference>  
+	<reference name="checkout.cart.top_methods">
+		<remove name="checkout.cart.methods.onepage.top"/>
+		<block type="checkout/onepage_link" name="recurring.checkout.cart.methods.onepage.top" >
+			<action method="setTemplate">
+				<template>recurringandrentalpayments/checkout/onepage/toplink.phtml</template>
+			</action>
+		</block> 	
+	 </reference>
+    </checkout_cart_index>
+	<checkout_onepage_review>
+        <reference name="root">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+           <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/onepage/review/item.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>bundle</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_bundle</block>
+                <template>checkout/onepage/review/item.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_review>
+	<checkout_multishipping_addresses>
+        <reference name="checkout_addresses">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/multishipping/item/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+        </reference>
+    </checkout_multishipping_addresses>
+	<checkout_multishipping_shipping>
+        <reference name="checkout_shipping">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/multishipping/item/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+		</reference>
+        <reference name="checkout_billing_items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/multishipping/item/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+
+		</reference>
+    </checkout_multishipping_shipping>
+	<checkout_multishipping_overview>
+        <reference name="checkout_overview">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_simple</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			 <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_configurable</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+			<action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_downloadable</block>
+                <template>downloadable/checkout/multishipping/item/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_grouped</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/checkout_cart_item_renderer_virtual</block>
+                <template>checkout/multishipping/item/default.phtml</template>
+            </action>
+		</reference>
+    </checkout_multishipping_overview>
+  <!-- Orders details at customer area -->
+    <sales_order_view>
+        <reference name="order_items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/sales/order/items/renderer/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtmll</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+			 <action method="addItemRender">
+                <type>bundle</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_bundle</block>
+                <template>bundle/sales/order/items/renderer.phtml</template>
+            </action>
+        </reference>
+		<reference name="order_totals">
+            <block type="recurringandrentalpayments/sales_order_total" name="recurringandrentalpayments.sales.order.total" />
+        </reference>
+    </sales_order_view>
+    <sales_order_invoice>
+        <reference name="invoice_items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+        </reference>
+    </sales_order_invoice>
+    <sales_order_shipment>
+        <reference name="shipment_items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/shipment/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/shipment/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>sales/order/shipment/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+        </reference>
+    </sales_order_shipment>
+    <sales_order_creditmemo>
+        <reference name="creditmemo_items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/creditmemo/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/creditmemo/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>sales/order/creditmemo/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>recurringandrentalpayments/sales/order/items/renderer.phtml</template>
+            </action>
+        </reference>
+    </sales_order_creditmemo>
+     <!-- Orders details via email -->
+    <sales_email_order_items>
+        <reference name="items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/email/order/items/order/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+        </reference>
+    </sales_email_order_items>
+
+    <sales_email_order_invoice_items>
+        <reference name="items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/invoice/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/invoice/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/email/order/items/invoice/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+        </reference>
+    </sales_email_order_invoice_items>
+
+    <sales_email_order_shipment_items>
+        <reference name="items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/shipment/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/shipment/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+        </reference>
+    </sales_email_order_shipment_items>
+
+    <sales_email_order_creditmemo_items>
+        <reference name="items">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/creditmemo/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/creditmemo/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/email/order/items/credimemo/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>email/order/items/order/default.phtml</template>
+            </action>
+        </reference>
+    </sales_email_order_creditmemo_items>
+
+    <!-- Orders details at customer area - print section -->
+    <sales_order_printinvoice>
+        <reference name="sales.order.print.invoice">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/sales/order/invoice/items/renderer/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+        </reference>
+    </sales_order_printinvoice>
+    <sales_order_printcreditmemo>
+        <reference name="sales.order.print.creditmemo">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/creditmemo/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/creditmemo/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/sales/order/creditmemo/items/renderer/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+        </reference>
+    </sales_order_printcreditmemo>
+    <sales_order_printshipment>
+        <reference name="sales.order.print.shipment">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/shipment/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/shipment/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/invoice/items/renderer/default.phtml</template>
+            </action>
+        </reference>
+    </sales_order_printshipment>
+    <sales_order_print>
+        <reference name="sales.order.print">
+            <action method="addItemRender">
+                <type>simple</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>configurable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>downloadable</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_downloadable</block>
+                <template>downloadable/sales/order/items/renderer/downloadable.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>grouped</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+            <action method="addItemRender">
+                <type>virtual</type>
+                <block>recurringandrentalpayments/sales_order_items_renderer_simple</block>
+                <template>sales/order/items/renderer/default.phtml</template>
+            </action>
+        </reference>
+    </sales_order_print>
+
+
+</layout>
+

@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusCommission
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <sections>
+        <affiliateplus>
+            <groups>
+                <!--Changed By Adam 13/09/2014: Add User Guide to Configuration page-->
+                <document_help translate="label" module="affiliatepluslevel">
+                    <fields>
+                        <affiliatepluscommission_user_guide translate="label">
+                            <label>Affiliate Plus Commission by Level User Guide</label>
+                            <frontend_type>label</frontend_type>  
+                            <frontend_model>affiliatepluscommission/adminhtml_field_affiliatepluscommission</frontend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment></comment>
+                        </affiliatepluscommission_user_guide>
+                    </fields>
+                </document_help>
+                
+                <!--Changed By Adam 30/07/2014-->
+                <commissionbylevel translate="label" module="affiliatepluscommission">
+                    <label>Commission by Level Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                     <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable Commission By Level Plugin</label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Enable Commission By Level Plugin]]></comment>
+                        </enable>
+                    </fields>
+                </commissionbylevel>
+                <commission>
+                    <!-- <label>Additional Sales Commission</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store> -->
+                    <fields>
+                        
+                        
+                        <additional_separator translate="label">
+                            <label>Monthly/ Yearly Commission</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>630</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>10px</comment>
+                        </additional_separator>
+                        
+                        <type translate="label">
+                            <label>Additional commission based on</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>affiliateplus/system_config_source_salestype</source_model>
+                            <sort_order>640</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </type>
+                        <add_commission_type translate="label">
+                            <label>Additional commission type</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>affiliatepluscommission/system_config_source_fixedpercentage</source_model>
+                            <sort_order>650</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </add_commission_type>
+                        <month translate="label">
+                            <label>Add monthly commission</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>660</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </month>
+                        <month_tier translate="comment">
+                            <label></label>
+                            <frontend_model>affiliatepluscommission/adminhtml_system_config_form_field_commission</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>670</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Monthly Commission Level]]>
+                            </comment>
+                        </month_tier>
+                        <year translate="label">
+                            <label>Add yearly commission</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>680</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </year>
+                        <year_tier translate="comment">
+                            <label></label>
+                            <frontend_model>affiliatepluscommission/adminhtml_system_config_form_field_commission</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>690</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Yearly Commission Level]]>
+                            </comment>
+                        </year_tier>
+                        <show translate="label comment">
+                            <label>Display information on Welcome page</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>700</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </show>
+                    </fields>
+                </commission>
+            </groups>
+        </affiliateplus>
+    </sections>
+</config>

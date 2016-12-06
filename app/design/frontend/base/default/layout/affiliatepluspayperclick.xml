@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusPayPerClick
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <!-- update layout for all frontend page -->
+    </default>
+    <affiliatepluspayperclick_index_index>
+        <reference name="content">
+            <block type="affiliatepluspayperclick/affiliatepluspayperclick" name="affiliatepluspayperclick" template="affiliatepluspayperclick/affiliatepluspayperclick.phtml" />
+        </reference>
+    </affiliatepluspayperclick_index_index>
+    <!--
+    <affiliateplus_transaction>
+        <reference name="sales_statistic">
+            <action method="addTransactionBlock" translate="label" module="affiliatepluspayperclick">
+                <name>payperclick</name>
+                <label>PPC Commissions</label>
+                <link>affiliatepluspayperclick/index/listClickTransaction</link>
+                <type>affiliatepluspayperclick/clickdetails</type>
+                <template>affiliatepluspayperclick/commission.phtml</template>
+            </action>
+        </reference>
+    </affiliateplus_transaction>
+    -->
+    <affiliateplus_transaction>
+        <reference name="sales_statistic">
+            <block type="affiliatepluspayperclick/click" name="click_block"/>
+        </reference>
+    </affiliateplus_transaction>
+    <affiliatepluspayperclick_index_listclicktransaction>
+        <update handle="affiliateplus_transaction" />
+        <reference name="affiliateplus_sales">
+            <action method="activeTransactionBlock">
+                <name>payperclick</name>
+            </action>
+        </reference>
+    </affiliatepluspayperclick_index_listclicktransaction>
+</layout>

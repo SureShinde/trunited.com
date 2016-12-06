@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Magestore_Affiliatepluspayperlead>
+			<active>true</active>
+			<codePool>local</codePool>
+            <aliasName>Affiliate Plus Pay Per Lead</aliasName>
+            <depends>
+            	<Magestore_Affiliateplus />
+            </depends>
+		</Magestore_Affiliatepluspayperlead>
+	</modules>
+</config>

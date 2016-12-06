@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsCoupon
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <sections>
+        <rewardpoints>
+            <groups>
+                <couponplugin translate="label">
+                    <label>Coupon Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>70</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>        
+                        <enable translate="label">
+                            <label>Enable Coupon Plugin</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <show_check_link translate="label">
+                            <label>Show link to redeem reward coupons in frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>2</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </show_check_link>
+                        <max_redeem_code translate="label">
+                            <label>Number of attempts allowed</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <validate>validate-greater-than-zero</validate>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </max_redeem_code>
+
+
+                        <coupon_config_separator translate="label comment">
+                            <label>Coupon Printing Configuration</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>rewardpoints/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>400</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </coupon_config_separator>
+                        <caption translate="label comment">
+                            <label>Label for Point(s) </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>401</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[If empty, the default label 'Point(s)’ will be used on coupon printouts.]]></comment>
+                        </caption>
+                        <!--<max_discount translate="label comment">-->
+                            <!--<label>Show max discount by</label>-->
+                            <!--<frontend_type>select</frontend_type>-->
+                            <!--<sort_order>402</sort_order>-->
+                            <!--<source_model>rewardpointscoupon/system_config_source_maxdiscount</source_model>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<comment>Type of discount on printed coupons</comment>-->
+                        <!--</max_discount>-->
+                        <logo translate="label comment">
+                            <label>Logo</label>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_image_pdf</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">rewardpointscoupon/pdf/logo</upload_dir>
+                            <base_url type="media" scope_info="1">rewardpointscoupon/pdf/logo</base_url>
+                            <sort_order>410</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Recommended logo size: 167x47.
+                                The logo will be used on PDF and HTML documents.
+                                JPEG, TIFF, PNG file formats are supported.
+                            </comment>
+                        </logo>
+                        <note translate="label comment">
+                            <label>Notes</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>420</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[{store_name}: your store's name<br/>{store_url}: your store's url<br/>{store_address}: your store's address]]></comment>
+                        </note>
+                        <style_color translate="label comment">
+                            <label>Title color</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>430</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>color</validate>
+                            <comment>Select text color of title and point number</comment>
+                        </style_color>
+                        <coupon_color translate="label comment">
+                            <label>Text color</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>440</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>color</validate>
+                            <comment>Select text color of coupon code block</comment>
+                        </coupon_color>
+                        <background_coupon>
+                            <label>Background color</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>450</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>color</validate>
+                            <comment>Select background color of coupon code block</comment>
+                        </background_coupon>
+                        <background translate="label comment">
+                            <label>Background image</label>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_image_pdf</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">rewardpointscoupon/pdf/background</upload_dir>
+                            <base_url type="media" scope_info="1">rewardpointscoupon/pdf/background</base_url>
+                            <sort_order>460</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select background image of coupon. Allow jpeg, jpg,tiff, png file type</comment>
+                        </background>
+                        
+                    </fields>
+                </couponplugin>
+            </groups>
+        </rewardpoints>
+    </sections>
+</config>

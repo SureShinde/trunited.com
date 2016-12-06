@@ -1,0 +1,74 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+?>
+<?php $currenct_customer =  Mage::getSingleton('customer/session')->getCustomer()->getId();
+if($this->getSubscription()->getCustomerId() == $currenct_customer ):
+  ?>
+<div class="page-head">
+    <h3><?php echo $this->getTitle()?></h3>
+</div>
+<?php echo $this->getChildHtml('recurringandrentalpayments_subscription_payments_pending') ?>
+<br/>
+<?php if (1 || $this->getCollection()->count()): ?>
+<table class="data-table box-table" id="customer-subscriptions-history-table" cellspacing="0">
+    <col width="100"/>
+    <col/>
+    <col width="100"/>
+
+    <col width="100"/>
+    <thead>
+    <tr>
+        <th><?php echo $this->__('Payment Date') ?></th>
+        <th><?php echo $this->__('Order ID') ?></th>
+        <th><?php echo $this->__('Order Status') ?></th>
+        <th class="a-right"><?php echo $this->__('Order Amount') ?></th>
+
+    </tr>
+    </thead>
+    <tbody>
+     <?php foreach ($this->getCollection() as $Item): ?>
+    <tr>    
+        <td><?php echo date("m/d/y" ,strtotime($Item->getDate()));?></td>
+        <td>
+            <a href="<?php echo Mage::getUrl('sales/order/view', array('order_id' => $Item->getOrder()->getId()))?>">
+                <?php echo $Item->getOrder()->getRealOrderId();?>
+            </a>
+        </td>
+        <td><em><?php echo ($Item->getOrder()->getStatusLabel()) ?></em></td>
+        <td class="a-right">
+		<?php $grandtotal =$Item->getOrder()->getGrandTotal();		 ?>
+		<?php if($grandtotal != 0):
+				echo  $Item->getOrder()->formatPrice($grandtotal);
+			   endif ;  ?></td>
+    </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('customer-subscriptions-history-table');</script>
+
+
+<?php else: ?>
+<?php echo $this->__("You have no subscription payments yet."); ?>
+<?php endif; ?>
+
+<div class="button-set">
+    <a href="<?php echo $this->getUrl('*/*/') ?>" class="left">&laquo; <?php echo $this->__('Back') ?></a>
+</div>
+<?php  else:
+$url = $this->getUrl('*/*');
+Mage::app()->getResponse()->setRedirect($url)->sendResponse();
+endif;
+?>

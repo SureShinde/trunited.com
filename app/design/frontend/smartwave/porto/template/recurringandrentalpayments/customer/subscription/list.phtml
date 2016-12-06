@@ -1,0 +1,146 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+
+    $_taxHelper = Mage::helper('tax');
+	$terms = Mage::getModel('recurringandrentalpayments/terms');
+?>
+
+<div class="page-head">
+    <h3><?php echo $this->getTitle()?></h3>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php if ($this->getCollection()->count()): ?>
+<?php echo $this->getToolbarHtml(); ?>
+<div style="overflow:auto; width:100%;">
+    <table class="data-table box-table" id="customer-subscriptions-table" cellspacing="0">
+        <col width="200"/>
+        <?php  ?>
+        <col width="10"/>
+        <col width="10"/>
+        <col width="10"/>
+        <col width="100"/>
+        <col width="30"/>
+        <col width="50"/>
+        <col width="150"/>
+        <thead>
+        <tr>
+        	
+            <th width="12%"><?php echo $this->__('Order ID') ?></th>
+            <th  width="47%"><?php echo $this->__('Product(S)') ?></th>
+            <th  width="9%"><?php echo $this->__('Term') ?></th>
+            <th  width="10%"><?php echo $this->__('Amount') ?></th>
+            <th  width="10%"><?php echo $this->__('Upcoming payment') ?></th>
+            <th><?php echo $this->__('Expiry Date') ?></th>
+            <th><?php echo $this->__('Status') ?></th>
+           <th class="last a-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->getCollection() as $Subscription): ?>
+        <tr>
+        	<td> 
+            <?php 
+			$collection = Mage::getModel('recurringandrentalpayments/subscription_item')
+			->getCollection()
+			->addFieldToFilter('subscription_id',$Subscription->getId())
+			->getFirstItem();
+
+			$order_id = Mage::getModel('sales/order')->load($collection->getPrimaryOrderId())->getIncrementId();
+	         ?>
+			 <a href="<?php echo Mage::getUrl('sales/order/view', array('order_id' => $collection->getPrimaryOrderId()))?>">
+			<?php  echo $order_id; ?> </a>
+           </td>
+            <td>
+                <ul>
+                    <?php foreach ($Subscription->getItems() as $Item): ?>
+                    <li>
+                    	<?php  if ($Item->getOrderItem()->getParentItemId()):
+									continue ;
+								else :  ?>
+                                    <a href="<?php echo Mage::getUrl('catalog/product/view', array('id' => $Item->getOrderItem()->getProductId()))?>"><?php echo $Item->getOrderItem()->getName()?></a>
+                                    (<?php echo (int)$Item->getOrderItem()->getQtyOrdered()?>)
+                                <?php endif;  ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+            <td><?php echo $this->gettermlabel($Subscription->getTermType());?></td>
+            <td>
+                <ul>
+                    <?php if ($Subscription->getLastOrder()->getId() == $Subscription->getOrder()->getId()): ?>
+                    <?php foreach ($Subscription->getItems() as $SubItem): ?>
+                        <?php 
+							$Item = $SubItem->getOrderItem();
+							if($Item->getParentItemId()):
+								continue;
+							else:
+						 ?>
+                        <li>
+                            <?php include('list/price.phtml')?>
+                        </li>
+                      <?php  endif;  ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                    <?php foreach ($Subscription->getLastOrder()->getItemsCollection() as $Item): ?>
+                        <?php if ($Item->getParentItemId()) continue; ?>
+                        <li>
+                            <?php include('list/price.phtml')?>
+                        </li>
+                        <?php endforeach; ?>
+                    <?php endif ?>
+                </ul>
+            </td>
+            <td>
+                <?php	
+//     echo $this->formatDate($this->getPendingPaymentBlock()->setSubscription($Subscription)->getNextPaymentDate());
+              	echo Mage::helper('recurringandrentalpayments')->__(date("m/d/Y" ,strtotime($Subscription->getFlatNextPaymentDate())));
+
+			    ?>
+            </td>
+            <td><?php
+			 if ($Subscription->isInfinite()) {
+                echo $this->__('-');
+            } else
+			{
+               echo Mage::helper('recurringandrentalpayments')->__(date("m/d/Y" ,strtotime($Subscription->getFlatDateExpire()))); 
+//			    echo Mage::helper('recurringandrentalpayments')->__(date("m/d/Y" ,strtotime($Subscription->getDateExpire())));
+			   // echo $this->formatDate($Subscription->getDateExpire());
+            }
+			  ?></td>
+            
+          <td><?php echo $this->getSubscriptionStatusLabel($Subscription) ?></td>
+      
+            <td class="last a-center">
+                <a href="<?php echo Mage::getUrl('*/*/view', array('id' => $Subscription->getId()))?>" style="text-transform:none;"><?php echo $this->__('Edit') ?></a>
+                <br/>
+                <a href="<?php echo Mage::getUrl('*/*/history', array('id' => $Subscription->getId()))?>" style="text-transform:none;"><?php echo $this->__('Payments') ?></a>
+            </td>
+        </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">decorateTable('customer-subscriptions-table')</script>
+<?php echo $this->getToolbarHtml() ?>
+<?php else: ?>
+<?php echo $this->__("You have no subscriptions") ?>
+<?php endif; ?>
+
+<div class="buttons-set">
+    <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>">
+        <small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+</div>

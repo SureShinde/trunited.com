@@ -1,0 +1,81 @@
+<div class="label-title directlink-banner-code">
+    <h2 class="legend"><?php echo $this->__('Get Source Code') ?></h2>
+    <?php
+    $banner = $this->getBanner();
+    $account = Mage::getSingleton('affiliateplus/session')->getAccount();
+    $store_id = Mage::app()->getStore()->getId();
+    $banner->setStoreId($store_id);
+    if ($this->isBannerModulActive()) {
+        $_typeLabels = $this->getTypesLabel();
+        ?>
+        <div class="banner-title">
+            <strong>
+                <?php echo $this->__('Title: %s', $banner->getTitle()) ?><br />
+                <?php echo $this->__('Type: %s', $_typeLabels[$banner->getTypeId()]) ?><br />
+                <?php if ($banner->getTypeId() != Magestore_AffiliateplusBanner_Helper_Data::BANNER_TYPE_TEXT): ?>
+                    <?php echo $this->__('Size: %sx%s', $banner->getWidth(), $banner->getHeight()) ?><br />
+                <?php endif ?>
+                <?php echo $this->__('Link: ') ?><a rel="nofollow" id="banner-<?php echo $banner->getId() ?>-link" href="<?php echo $this->getLink() ?>"><?php echo Mage::helper('core/string')->truncate($this->getLink(), 96) ?></a>
+            </strong>
+        </div>
+        <br />
+        <div class="banner-share">
+            <?php echo $this->__('Copy/ paste this source code into your website/ forum.') ?>
+            <p id="banner-<?php echo $banner->getId() ?>-share-code">
+                <textarea id="banner-<?php echo $banner->getId() ?>-share-url" readonly="true" onclick="this.select();" class="banner-share-url" rows="4" style="width:99%"><?php echo $this->htmlEscape($this->getBannerCode($banner)) ?></textarea>
+            </p>
+        </div>
+        <?php
+    } else {
+        ?>
+        <?php if ($banner->getTypeId() == '1')://Image  ?>
+            <div class="banner-image-title">
+                <strong><?php echo $this->__('Title: %s', $banner->getTitle()) ?><br />
+                    <?php echo $this->__('Type: Image') ?><br />
+                    <?php echo $this->__('Size: %sx%s', $banner->getWidth(), $banner->getHeight()) ?><br />
+                    <?php echo $this->__('Link: ') ?><a rel="nofollow" href="<?php echo $this->getLink() ?>"><?php echo Mage::helper('core/string')->truncate($this->getLink(), 100) ?></a></strong>
+            </div>
+            <div class="banner-image">
+                <?php $bannerHtml = '<a href="' . $this->getLink() . '" rel="nofollow" target="_blank"><img src="' . $this->getUrl('affiliateplus/banner/image', array('id' => $banner->getId(), 'account_id' => $account->getId(), 'store_id' => $store_id)) . '" title="' . $banner->getTitle() . '" width="' . $banner->getWidth() . '" height="' . $banner->getHeight() . '" /></a>' ?>
+                <?php // echo $bannerHtml ?>
+            </div>
+            <br />
+        <?php elseif ($banner->getTypeId() == '2')://Flash  ?>
+            <div class="banner-flash-title">
+                <strong><?php echo $this->__('Title: %s', $banner->getTitle()) ?><br />
+                    <?php echo $this->__('Type: Flash') ?><br />
+                    <?php echo $this->__('Size: %sx%s', $banner->getWidth(), $banner->getHeight()) ?><br />
+                    <?php echo $this->__('Link: ') ?><a rel="nofollow" href="<?php echo $this->getLink() ?>"><?php echo Mage::helper('core/string')->truncate($this->getLink(), 100) ?></a></strong>
+            </div>
+            <div class="banner-flash">
+                <?php $bannerHtml = '<a href="' . $this->getLink() . '" rel="nofollow" target="_blank"><embed src="' . $this->getUrl('affiliateplus/banner/image', array('id' => $banner->getId(), 'account_id' => $account->getId(), 'store_id' => $store_id)) . '" title="' . $banner->getTitle() . '" width="' . $banner->getWidth() . '" height="' . $banner->getHeight() . '" type="application/x-shockwave-flash" wmode="transparent" quality="high" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" /></a>' ?>
+                <?php // echo $bannerHtml ?>
+            </div>
+            <br />
+        <?php elseif ($banner->getTypeId() == '3')://Text  ?>
+            <div class="banner-text-title">
+                <strong><?php echo $this->__('Title: %s', $banner->getTitle()) ?><br />
+                    <?php echo $this->__('Type: Text') ?><br />
+                    <?php echo $this->__('Link: ') ?><a rel="nofollow" href="<?php echo $this->getLink() ?>"><?php echo Mage::helper('core/string')->truncate($this->getLink(), 100) ?></a></strong>
+            </div>
+            <div class="banner-text">
+                <?php $bannerHtml = '<a href="' . $this->getLink() . '"rel="nofollow" target="_blank" title="' . $banner->getTitle() . '">' . $banner->getTitle() . '</a>' ?>
+                <?php $bannerHtml.='<script type="text/javascript" src="' . $this->getUrl('affiliateplus/banner/image', array('id' => $banner->getId(), 'account_id' => $account->getId(), 'store_id' => $store_id)) . '"></script>' ?>
+                <strong><?php echo $this->__('Preview: ') ?></strong><?php // echo $bannerHtml           ?>
+
+                <br />
+            </div>
+        <?php endif ?>
+        <div class="banner-share">
+            <?php echo $this->__('Copy/ paste this source code into your website/ forum.') ?>
+            <p><textarea readonly="true" onclick="this.select();" class="banner-share-url" rows="4" style="width:100%"><?php echo $this->htmlEscape($bannerHtml) ?></textarea></p>
+        </div>
+    <?php } ?>
+</div>
+<div class="buttons-set">
+    <button id="button-notnow" type="button" class="button button-config" title="<?php echo $this->__('Close') ?>" onclick="notNow()">
+        <span>
+            <span><?php echo $this->__('Close') ?></span>
+        </span>
+    </button>
+</div>

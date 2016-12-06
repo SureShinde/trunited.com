@@ -1,0 +1,63 @@
+<?php
+/**
+ * Grid template
+ */
+?>
+<div class="table-responsive">
+<?php $collection = $this->getCollection() ?>
+<?php $columns = $this->getColumns() ?>
+<?php if ($collection->getSize()): ?>
+
+<table data-toggle="table" class="table table-condensed table-striped table-bordered table-hover no-margin" id="<?php echo $this->getNameInLayout() ?>">
+	<colgroup>
+	<?php foreach ($columns as $id => $column): ?>
+		<col class="<?php echo $id ?>" style="<?php if ($column['align']): ?>align:<?php echo $column['align'] ?>;<?php endif ?><?php if ($column['width']): ?>width:<?php echo $column['width'] ?><?php endif ?>" />
+	<?php endforeach ?>
+	</colgroup>
+	<thead>
+		<tr>
+		<?php foreach ($columns as $id => $column): ?>
+			<th><?php echo $column['header'] ?></th>
+		<?php endforeach ?>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($collection as $row): ?>
+		<?php if ($row->getIsContinueNextRow()) continue; ?>
+		<tr>
+		<?php foreach ($columns as $id => $column): ?>
+			<td>
+			<?php if ($column['render']): ?>
+				<?php echo $this->fetchRender($column['render'],$row) ?>
+			<?php else: ?>
+				<?php if ($column['type'] == 'action'): ?>
+					<?php $action = $column['action'] ?>
+					<a href="<?php echo $this->getUrl($action['url'],array( $action['name'] => $row->getData($action['field']) )) ?>" title="<?php echo $action['label'] ?>"><?php echo $action['label'] ?></a>
+				<?php elseif ($column['type'] == 'options'): ?>
+					<?php echo $column['options'][$row->getData($column['index'])] ?>
+				<?php elseif ($column['type'] == 'date'): ?>
+					<?php echo $this->formatDate($row->getData($column['index']), $column['format'], false) ?>
+				<?php elseif ($column['type'] == 'datetime'): ?>
+					<?php echo $this->formatDate($row->getData($column['index']), $column['format'], true) ?>
+				<?php elseif ($column['type'] == 'price'): ?>
+					<?php echo Mage::app()->getStore()->formatPrice($row->getData($column['index'])) ?>
+				<?php elseif ($column['type'] == 'baseprice'): ?>
+					<?php echo Mage::app()->getStore()->getBaseCurrency()->format($row->getData($column['index'])) ?>
+				<?php else: ?>
+					<?php echo $row->getData($column['index']) ?>
+				<?php endif ?>
+			<?php endif ?>
+			</td>
+		<?php endforeach ?>
+		</tr>
+	<?php endforeach ?>
+	</tbody>
+</table>
+<?php else: ?>
+<div>
+	<p class="note-msg">
+		<?php echo $this->__('There are no items matching this selection.') ?>
+	</p>
+</div>
+<?php endif ?>
+</div>

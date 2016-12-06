@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusDirectLink
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_AffiliateplusDirectLink>
+            <version>0.4.3</version>
+        </Magestore_AffiliateplusDirectLink>
+    </modules>
+    <frontend>
+        <routers>
+            <affiliateplusdirectlink>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_AffiliateplusDirectLink</module>
+                    <frontName>affiliateplusdirectlink</frontName>
+                </args>
+            </affiliateplusdirectlink>
+        </routers>
+        <layout>
+            <updates>
+                <affiliateplusdirectlink>
+                    <file>affiliateplusdirectlink.xml</file>
+                </affiliateplusdirectlink>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_AffiliateplusDirectLink>
+                    <files>
+                        <default>Magestore_AffiliateplusDirectLink.csv</default>
+                    </files>
+                </Magestore_AffiliateplusDirectLink>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+<!--        Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->
+<!--        <routers>
+            <affiliateplusdirectlinkadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_AffiliateplusDirectLink</module>
+                    <frontName>affiliateplusdirectlinkadmin</frontName>
+                </args>
+            </affiliateplusdirectlinkadmin>
+        </routers>-->
+        <routers>
+            <adminhtml> 
+                <args> 
+                    <modules> 
+                        <Magestore_AffiliateplusDirectLink after="Mage_Adminhtml">Magestore_AffiliateplusDirectLink_Adminhtml</Magestore_AffiliateplusDirectLink>
+                    </modules> 
+                </args> 
+            </adminhtml>
+        </routers>  
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <affiliateplusdirectlink>
+                    <file>affiliateplusdirectlink.xml</file>
+                </affiliateplusdirectlink>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_AffiliateplusDirectLink>
+                    <files>
+                        <default>Magestore_AffiliateplusDirectLink.csv</default>
+                    </files>
+                </Magestore_AffiliateplusDirectLink>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <affiliateplusdirectlink>
+                <class>Magestore_AffiliateplusDirectLink_Model</class>
+                <resourceModel>affiliateplusdirectlink_mysql4</resourceModel>
+            </affiliateplusdirectlink>
+            <affiliateplusdirectlink_mysql4>
+                <class>Magestore_AffiliateplusDirectLink_Model_Mysql4</class>
+                <entities>
+                    <directlink>
+                        <table>affiliateplus_direct_link</table>
+                    </directlink>
+                </entities>
+                <entities>
+                    <domain>
+                        <table>affiliateplus_direct_link_domain</table>
+                    </domain>
+                </entities>
+            </affiliateplusdirectlink_mysql4>
+        </models>
+        <resources>
+            <affiliateplusdirectlink_setup>
+                <setup>
+                    <module>Magestore_AffiliateplusDirectLink</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </affiliateplusdirectlink_setup>
+            <affiliateplusdirectlink_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </affiliateplusdirectlink_write>
+            <affiliateplusdirectlink_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </affiliateplusdirectlink_read>
+        </resources>
+        <blocks>
+            <affiliateplusdirectlink>
+                <class>Magestore_AffiliateplusDirectLink_Block</class>
+            </affiliateplusdirectlink>
+        </blocks>
+        <helpers>
+            <affiliateplusdirectlink>
+                <class>Magestore_AffiliateplusDirectLink_Helper</class>
+            </affiliateplusdirectlink>
+        </helpers>
+        <events>
+            <affiliateplus_controller_action_predispatch>
+                <observers>
+                    <affiliateplusdirectlink_observers>
+                        <class>affiliateplusdirectlink/observer</class>
+                        <method>controllerActionPredispatch</method>
+                    </affiliateplusdirectlink_observers>
+                </observers>
+            </affiliateplus_controller_action_predispatch>
+        </events>
+        <template>
+            <email>
+                <affiliateplus_directlink_other_account_verify_domain_email_template translate="label" module="affiliateplusdirectlink">
+                    <label>Email template sent to affiliate when someone re-verifies his domain</label>
+                    <file>affiliateplus/other_account_verify_domain_exited.html</file>
+                    <type>html</type>
+                </affiliateplus_directlink_other_account_verify_domain_email_template>
+            </email>
+        </template>
+    </global>
+    <default>
+        <affiliateplus>
+            <directlink>
+                <!--Changed By Adam 30/07/2014-->
+                <enable>1</enable>
+                <other_account_verify_domain_email_template>affiliateplus_directlink_other_account_verify_domain_email_template</other_account_verify_domain_email_template>
+            </directlink>
+        </affiliateplus>
+    </default>
+</config>

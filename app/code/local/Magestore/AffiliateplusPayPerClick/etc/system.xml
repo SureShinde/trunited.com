@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusPayPerClick
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <tabs>
+        <magestore translate="label">
+            <label>Magestore Extension</label>
+            <sort_order>400</sort_order>
+        </magestore>
+    </tabs>
+    <sections>
+        <affiliateplus>
+            
+            <groups>
+                
+                <!--Changed By Adam 13/09/2014: Add User Guide to Configuration page-->
+                <document_help translate="label" module="affiliatepluspayperclick">
+                    <fields>
+                        <affiliatepluspayperclick_user_guide translate="label">
+                            <label>Affiliate Plus Pay-Per-Click User Guide</label>
+                            <frontend_type>label</frontend_type>  
+                            <frontend_model>affiliatepluspayperclick/adminhtml_field_affiliatepluspayperclick</frontend_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment></comment>
+                        </affiliatepluspayperclick_user_guide>
+                    </fields>
+                </document_help>
+<!--                <payperclick>
+                    <label>Pay-per-click Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable Pay-per-click Plugin</label>
+                            <frontend_type>select</frontend_type>  
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                 
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                    </fields>
+                </payperclick>-->
+                <commission>
+                    <fields>
+                        <payperclick_separator translate="label">
+                            <label>Pay per Click Commission</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>470</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>10px</comment>
+                        </payperclick_separator>
+                        <payperclick_enable translate="label">
+                            <label>Enable Pay per Click</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>480</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </payperclick_enable>
+                        <clickcommission translate="label">
+                            <label>Commission Value (per click)</label>
+                            <frontend_type>text</frontend_type>                   
+                            <sort_order>490</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <payperclick_enable>1</payperclick_enable>
+                            </depends>
+                            <comment>The amount affiliates will earn for each click on banner they generate. It is also shown on Affiliate Home page.</comment>
+                        </clickcommission>
+                    </fields>
+                </commission>
+            </groups>
+        </affiliateplus>
+    </sections>
+</config>

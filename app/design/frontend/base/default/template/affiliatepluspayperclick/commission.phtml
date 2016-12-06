@@ -1,0 +1,16 @@
+<?php
+/**
+ * Sales transaction history template
+ */
+?>
+<?php if (count($this->getCollection())): ?>
+	<?php echo $this->getPagerHtml() ?>
+	<?php echo $this->getGridHtml() ?>
+	<?php echo $this->getPagerHtml() ?>
+<?php else: ?>
+<div>
+	<p class="note-msg">
+		<?php echo $this->__('There are no commissions matching this selection.') ?>
+	</p>
+</div>
+<?php endif ?>

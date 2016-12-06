@@ -1,0 +1,803 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+$_coreHelper = $this->helper('core');
+$_weeeHelper = $this->helper('weee');
+$_taxHelper = $this->helper('tax');
+$_loggedIn = Mage::getSingleton('customer/session')->isLoggedIn();
+$_product = $this->getProduct();
+$_id = $_product->getId();
+$_FirstTermPrice = 0;
+$_InitialPrice = 0;
+$plan_id = 0;
+$plan_status = 0;
+$isavailable = Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_GENERAL_ANONYMOUS_SUBSCRIPTIONS);	
+$custtomer_group = Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_CUSTOMER_GROUP);
+$groupId = 0;
+
+$plans_product = Mage::getModel('recurringandrentalpayments/plans_product')->load($_id,'product_id');
+$plan = Mage::getModel('recurringandrentalpayments/plans')->load($plans_product->getPlanId(),'plan_id');
+
+if($plan->getData())
+{
+	$_FirstTermPrice = $plan->getFirstTermPrice();
+	$_InitialPrice =  $plan->getTrialTermPrice();
+	$plan_id = $plan->getId();
+	$plan_status = $plan->getPlanStatus() ;
+}
+$term_prices = array();
+$baseCurrencyCode = Mage::app()->getStore()->getBaseCurrencyCode();
+$currentCurrencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$term_ids = Mage::getModel('recurringandrentalpayments/terms')->getCollection()
+		->addFieldToFilter('plan_id',$plan_id);
+		$count=0;
+	foreach($term_ids as $term_price)
+	{
+		$term_prices[$count] = Mage::helper('directory')->currencyConvert($term_price->getPrice(), $baseCurrencyCode,$currentCurrencyCode);
+		$count++;	
+	} 
+$_weeeSeparator = '';
+$_simplePricesTax = ($_taxHelper->displayPriceIncludingTax() || $_taxHelper->displayBothPrices());
+$_minimalPriceValue = $_product->getMinimalPrice();
+$_minimalPrice = $_taxHelper->getPrice($_product, $_minimalPriceValue, $_simplePricesTax);
+
+
+ if (!$_product->isGrouped()): 
+     $_weeeTaxAmount = $_weeeHelper->getAmountForDisplay($_product); 
+ if ($_weeeHelper->typeOfDisplay($_product, array(1, 2, 4))): 
+    $_weeeTaxAmount = $_weeeHelper->getAmount($_product);
+    $_weeeTaxAttributes = $_weeeHelper->getProductWeeeAttributesForDisplay($_product); 
+    endif; ?>
+<div class="price-box">
+<?php 
+	 $_price = $_taxHelper->getPrice($_product, $_product->getPrice()); 
+     $_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax);
+     $_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice());
+	 $_finalPriceInclTax = $_taxHelper->getPrice($_product, $_product->getFinalPrice(), true);
+    $_firstPeriodPrice = $_taxHelper->getPrice($_product,$_FirstTermPrice);
+    $_firstPeriodPriceInclTax = $_taxHelper->getPrice($_product, $_FirstTermPrice, true);
+    $_oldSubscriptionPrice = Mage::app()->getStore()->convertPrice($_taxHelper->getPrice($_product,$_firstPeriodPrice), false, false);
+    $_subscriptionPrice = Mage::app()->getStore()->convertPrice($_taxHelper->getPrice($_product, $_firstPeriodPrice), false, false);
+ 	$_subscriptionPriceInclTax = $_taxHelper->getPrice($_product, $_firstPeriodPrice, true);
+	?>
+<script type="text/javascript">
+    if (typeof(init) == 'undefined') {
+        var init = true;
+        RrOptionsPrice.reload = function() {
+            var price;
+            var formattedPrice;
+            var optionPrices = this.getOptionPrices();
+            var nonTaxable = optionPrices[1];
+            var firstPeriod = <?php echo floatVal($_coreHelper->currency($_firstPeriodPriceInclTax, false, false)) ?>;
+            ;
+			
+            optionPrices = optionPrices[0];
+            $H(this.containers).each(function(pair) {
+                var _productPrice;
+                var _plusDisposition;
+                var _minusDisposition;
+                if ($(pair.value)) {
+                    if (pair.value == 'old-price-' + this.productId && this.productOldPrice != this.productPrice) {
+                        _productPrice = this.productOldPrice;
+                        _plusDisposition = this.oldPlusDisposition;
+                        _minusDisposition = this.oldMinusDisposition;
+                    } else {
+                        _productPrice = this.productPrice;
+                        _plusDisposition = this.plusDisposition;
+                        _minusDisposition = this.minusDisposition;
+                    }
+
+                    var price = optionPrices + parseFloat(_productPrice);
+
+                    if (this.includeTax == 'true') {
+                        // tax = tax included into product price by admin
+                        var tax = price / (100 + this.defaultTax) * this.defaultTax;
+                        var excl = price - tax;
+                        var incl = excl * (1 + (this.currentTax / 100));
+                    } else {
+                        var tax = price * (this.currentTax / 100);
+                        var excl = price;
+                        var incl = excl + tax;
+                    }
+
+                    excl += parseFloat(_plusDisposition);
+                    incl += parseFloat(_plusDisposition);
+                    excl -= parseFloat(_minusDisposition);
+                    incl -= parseFloat(_minusDisposition);
+
+                    //adding nontaxlable part of options
+                    excl += parseFloat(nonTaxable);
+                    incl += parseFloat(nonTaxable);
+
+                    if (pair.value == 'price-including-tax-' + this.productId) {
+                        price = incl;
+                    } else if (pair.value == 'old-price-' + this.productId) {
+                        if (this.showIncludeTax || this.showBothPrices) {
+                            price = incl;
+                        } else {
+                            price = excl;
+                        }
+                    } else {
+                        if (this.showIncludeTax) {
+                            price = incl;
+                        } else {
+                            if (!this.skipCalculate || _productPrice == 0) {
+                                price = excl;
+                            } else {
+                                price = optionPrices + parseFloat(_productPrice);
+                            }
+                        }
+                    }
+
+                    if (pair.value == 'indies-recurringandrentalpayments-first-price-' + this.productId) {
+                        var fppOptionPrices = 0;
+                        $H(optionsPrice.fppOptionPrices).each(function(pair){
+                            fppOptionPrices = parseFloat(pair.value);
+                        });
+                        price = fppOptionPrices + parseFloat(firstPeriod);
+                    }
+
+                    if (price < 0) price = 0;
+
+                    if (price > 0 || this.displayZeroPrice) {
+                        formattedPrice = this.formatPrice(price);
+                    } else {
+                        formattedPrice = '';
+                    }
+
+                    if ($(pair.value).select('.price')[0]) {
+                        $(pair.value).select('.price')[0].innerHTML = formattedPrice;
+                        if ($(pair.value + this.duplicateIdSuffix) && $(pair.value + this.duplicateIdSuffix).select('.price')[0]) {
+                            $(pair.value + this.duplicateIdSuffix).select('.price')[0].innerHTML = formattedPrice;
+                        }
+                    } else {
+                        $(pair.value).innerHTML = formattedPrice;
+                        if ($(pair.value + this.duplicateIdSuffix)) {
+                            $(pair.value + this.duplicateIdSuffix).innerHTML = formattedPrice;
+                        }
+                    }
+                }
+                ;
+            }.bind(this));
+        }
+        RrOptionsPrice.updateCustomOptions = function() {
+            var firstPeriodPrice = <?php echo floatVal($_coreHelper->currency($_firstPeriodPriceInclTax, false, false)) ?>;
+            var customOptions = '<?php echo $this->getCustomOptions()?>'.evalJSON();
+            if (customOptions != '') {
+                for (var i in opConfig.config) {
+                    for (var k in opConfig.config[i]) {
+                        if (typeof(opConfig.fppConfig) == 'undefined') {
+                           opConfig.fppConfig = {};
+                        }
+                        if (!isNaN(parseInt(k))) {
+                            var optKey = 'o_' + k;
+                            if (typeof(opConfig.fppConfig[i]) == 'undefined') {
+                                opConfig.fppConfig[i] = {};
+                            }
+                            if (customOptions[optKey].price_type == 'percent') {
+                                opConfig.config[i][k] = this.productPrice / 100 * customOptions[optKey].price;
+                                opConfig.fppConfig[i][k] = firstPeriodPrice / 100 * customOptions[optKey].price;
+                            }
+                            else {
+                                opConfig.config[i][k] = customOptions[optKey].price;
+                                opConfig.fppConfig[i][k] = customOptions[optKey].price;
+                            }
+                        }
+                        else {
+                            if (customOptions[i].price_type == 'percent') {
+                                opConfig.config[i] = this.productPrice / 100 * customOptions[i].price;
+                                opConfig.fppConfig[i] = firstPeriodPrice / 100 * customOptions[i].price;
+                            }
+                            else {
+                                opConfig.config[i] = customOptions[i].price;
+                                opConfig.fppConfig[i] = customOptions[i].price;
+                            }
+                        }
+
+                        var ul = $('options-' + i + '-list');
+                        if (ul) {
+                            ul.childElements().each(function(li) {
+                                li.childElements().each(function(subli) {
+
+                                    if (subli.hasClassName('product-custom-option')) {
+                                        currentOption = subli.readAttribute('value');
+                                        subli.setAttribute('price', opConfig.config[i][currentOption]);
+                                    }
+
+
+                                    if (subli.hasClassName('label')) {
+                                        subli.childElements().each(function(priceNotice) {
+                                            priceNotice.childElements().each(function(priceSpanCont) {
+                                                priceSpanCont.childElements().each(function(priceSpan) {
+                                                    var __price = Math.abs(opConfig.config[i][currentOption]).toFixed(4);
+                                                    priceSpan.update(RrOptionsPrice.formatPrice(__price));
+                                                });
+                                            });
+                                        })
+                                    }
+
+                                });
+                            });
+                        }
+                        var dropdown = $('select_' + i);
+                        if (dropdown) {
+                            dropdown.childElements().each(function(option) {
+                                if (option.readAttribute('price')) {
+                                    var optionTitle = option.textContent;
+                                    var optionPrice = opConfig.config[i][option.readAttribute('value')];
+                                    var __priceStartCut = (optionTitle.indexOf('+') > -1)?(optionTitle.indexOf('+')+1):optionTitle.indexOf('-');
+                                    optionTitle = optionTitle.substr(0, __priceStartCut) + RrOptionsPrice.formatPrice(optionPrice);
+                                    option.setAttribute('price', parseInt(optionPrice));
+                                    option.textContent = optionTitle;
+                                }
+                            });
+                        }
+                    }
+
+                }
+                opConfig.reloadPrice();
+            }
+        }
+        Event.observe(window, 'load', function(){
+            if (typeof(opConfig) == "undefined") {
+                return ;
+            }
+            var oldOptionReloadPrice = opConfig.reloadPrice;
+            opConfig.reloadPrice = function(){
+                price = new Number();
+                config = this.config;
+                skipIds = [];
+                $$('.product-custom-option').each(function(element){
+                    var optionId = 0;
+                    element.name.sub(/[0-9]+/, function(match){
+                        optionId = match[0];
+                    });
+                    if (opConfig.fppConfig[optionId]) {
+                        if (element.type == 'checkbox' || element.type == 'radio') {
+                            if (element.checked) {
+                                if (opConfig.fppConfig[optionId][element.getValue()]) {
+                                    price += parseFloat(opConfig.fppConfig[optionId][element.getValue()]);
+                                }
+                            }
+                        } else if(element.hasClassName('datetime-picker') && !skipIds.include(optionId)) {
+                            dateSelected = true;
+                            $$('.product-custom-option[id^="options_' + optionId + '"]').each(function(dt){
+                                if (dt.getValue() == '') {
+                                    dateSelected = false;
+                                }
+                            });
+                            if (dateSelected) {
+                                price += parseFloat(opConfig.fppConfig[optionId]);
+                                skipIds[optionId] = optionId;
+                            }
+                        } else if(element.type == 'select-one' || element.type == 'select-multiple') {
+                            if (element.options) {
+                                $A(element.options).each(function(selectOption){
+                                    if (selectOption.selected) {
+                                        if (opConfig.fppConfig[optionId][selectOption.value]) {
+                                            price += parseFloat(opConfig.fppConfig[optionId][selectOption.value]);
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            if (element.getValue().strip() != '') {
+                                price += parseFloat(opConfig.fppConfig[optionId]);
+                            }
+                        }
+                    }
+                });
+                if (typeof(optionsPrice.fppOptionPrices) == 'undefined') {
+                    optionsPrice.fppOptionPrices = {};
+                }
+                optionsPrice.fppOptionPrices.options =  price;
+                optionsPrice.fppOptionPrices.optionsPriceInclTax = price;
+                oldOptionReloadPrice();
+            }
+        });
+    }
+</script>
+<?php if ($_FirstTermPrice): ?>
+    <script type="text/javascript">
+        RrOptionsPrice.containers[5] = "indies-recurringandrentalpayments-first-price-" + RrOptionsPrice.productId;
+    </script>
+<?php endif;?>
+    <?php if (!$this->isRelated()): ?>
+   
+<script type="text/javascript">
+    var displayAsRr = function() {
+        if (typeof($$('.subscription-start')[0]) != 'undefined') {
+            $$('.subscription-start')[0].hide();
+        }
+        if ($('indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?>') !== null) {
+            $('indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?>').hide();
+			$('product-price-<?php echo $_id ?>').show();
+			$('product-price-<?php echo $_id ?>_clone').show();
+        }
+        $$('.old-price').each(function(item){
+            item.show();
+        });
+        $$('.special-price .price-label').each(function(item){
+            item.show();
+        })
+    }
+    var noDisplayAsRr = function() {
+        if (typeof($$('.subscription-start')[0]) != 'undefined') {
+            $$('.subscription-start')[0].show();
+        }
+        if ($('indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?>') !== null) {
+            $('indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?>').show();
+			$('product-price-<?php echo $_id ?>').hide();
+			$('product-price-<?php echo $_id ?>_clone').hide();
+        }
+        $$('.old-price').each(function(item){
+            item.hide();
+        });
+        $$('.special-price .price-label').each(function(item){
+            item.hide();
+        })
+	}
+	var subscription;
+    if (typeof(els) == 'undefined') {
+        var els = document.getElementsByName('indies_recurringandrentalpayments_subscription_type');
+        var tmp_price = RrOptionsPrice.productPrice;
+        for (var i = els.length - 1; i >= 0; i--) {
+            els[i][(els[i].tagName.toLowerCase() == 'select' ? 'onchange' : 'onclick')] = function() {
+                if (this.tagName.toLowerCase() == 'input') {
+                    if (this.checked) {
+						if ($(this).getValue() == -1) {
+                            RrOptionsPrice.productOldPrice = <?php echo $_regularPrice?>;
+                            RrOptionsPrice.productPrice = tmp_price;
+                            displayAsRr();
+                        } else {
+                           noDisplayAsRr();
+                        }
+                    }
+                } else {
+                    if ($(this).getValue() == -1) {
+                        RrOptionsPrice.productPrice = tmp_price;
+                        RrOptionsPrice.productOldPrice = <?php echo $_regularPrice?>;
+                        displayAsRr();
+                    } else {
+                       noDisplayAsRr();
+                    }
+                }
+                if (typeof IndiesRrFirstAvailDays != 'undefined' && typeof IndiesRrFirstAvailDays[$(this).getValue()] != 'undefined') {
+                    $('indies_recurringandrentalpayments_subscription_start').value = IndiesRrFirstAvailDays[$(this).getValue()]
+                }
+                RrOptionsPrice.reload();
+                RrOptionsPrice.updateCustomOptions();
+            }
+            Event.observe(window, 'load', function(){
+                var els = document.getElementsByName('indies_recurringandrentalpayments_subscription_type');
+                for (var i = els.length - 1; i >= 0; i--) {
+                    els[i].tagName.toLowerCase() == 'select' ?  els[i].onchange() : els[i].onclick();
+                }
+            });
+        }
+    }
+</script>
+    <?php endif; ?>
+	<input type="hidden" class="termprice" value=''/>
+    <?php $_weeeDisplayType = $_weeeHelper->getPriceDisplayType(); ?>
+    <?php if ($_finalPrice == $_price): ?>
+    <?php if ($_taxHelper->displayBothPrices() && $_finalPriceInclTax != $_finalPrice): ?>
+        <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+            <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)): // incl. + weee ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                    <br/>
+                    <span class="weee">(<small>
+                        <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+                        <?php echo $_weeeSeparator; ?>
+                        <?php echo $_weeeTaxAttribute->getName(); ?>:
+                        <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+                        <?php $_weeeSeparator = ' + '; ?>
+                        <?php endforeach; ?>
+                    </small>)</span>
+                </span>
+            <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                    <br/>
+                    <span class="weee">(<small>
+                        <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+                        <?php echo $_weeeSeparator; ?>
+                        <?php echo $_weeeTaxAttribute->getName(); ?>
+                        : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount() + $_weeeTaxAttribute->getTaxAmount(), true, true); ?>
+                        <?php $_weeeSeparator = ' + '; ?>
+                        <?php endforeach; ?>
+                    </small>)</span>
+                </span>
+            <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_price, true, false) ?>
+                    </span>
+                </span>
+            <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+            <span class="weee">
+                        <small>
+                            <?php echo $_weeeTaxAttribute->getName(); ?>
+                            : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+                        </small>
+                    </span>
+            <br/>
+                <?php endforeach; ?>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+            <?php  else: ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_price, true, false) ?>
+                    </span>
+                </span>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax, true, false) ?>
+                    </span>
+                </span>
+            <?php endif; ?>
+        <?php else: ?>
+        <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
+        <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, true) ?>
+                </span>
+            <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)): // incl. + weee ?>
+        <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, true) ?>
+                </span>
+        <br/>
+        <span class="weee">(<small>
+            <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+            <?php echo $_weeeSeparator; ?>
+            <?php echo $_weeeTaxAttribute->getName(); ?>
+            : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+            <?php $_weeeSeparator = ' + '; ?>
+            <?php endforeach; ?>
+        </small>)</span>
+            <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
+        <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, true) ?>
+                </span>
+        <br/>
+        <span class="weee">(<small>
+            <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+            <?php echo $_weeeSeparator; ?>
+            <?php echo $_weeeTaxAttribute->getName(); ?>
+            : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount() + $_weeeTaxAttribute->getTaxAmount(), true, true); ?>
+            <?php $_weeeSeparator = ' + '; ?>
+            <?php endforeach; ?>
+        </small>)</span>
+            <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
+        <span class="regular-price"><?php echo $_coreHelper->currency($_price, true, true) ?></span><br/>
+            <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+            <span class="weee">
+                        <small>
+                            <?php echo $_weeeTaxAttribute->getName(); ?>
+                            : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+                        </small>
+                    </span>
+            <br/>
+                <?php endforeach; ?>
+        <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_price + $_weeeTaxAmount, true, true) ?>
+                </span>
+            <?php  else: ?>
+        <span class="regular-price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_price, true, true) ?>
+                </span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php else: /* if ($_finalPrice == $_price): */ ?>
+    <?php $_originalWeeeTaxAmount = $_weeeHelper->getOriginalAmount($_product); ?>
+
+    <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
+    <p class="old-price">
+        <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_regularPrice + $_originalWeeeTaxAmount, true, false) ?>
+                </span>
+    </p>
+
+        <?php if ($_taxHelper->displayBothPrices() && $_finalPriceInclTax != $_finalPrice): ?>
+        <p class="special-price">
+            <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                    <span class="price-excluding-tax">
+                        <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                        <span class="price"
+                              id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                            <?php echo $_coreHelper->currency($_finalPrice + $_weeeTaxAmount, true, false) ?>
+                        </span>
+                    </span>
+                <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+        </p>
+            <?php else: ?>
+        <p class="special-price">
+            <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_finalPrice + $_weeeTaxAmount, true, false) ?>
+                </span>
+        </p>
+            <?php endif; ?>
+
+        <?php elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)): // incl. + weee ?>
+    <p class="old-price">
+        <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_regularPrice + $_originalWeeeTaxAmount, true, false) ?>
+                </span>
+    </p>
+
+    <p class="special-price">
+        <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPrice + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+            <span class="weee">(<small>
+                <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+                <?php echo $_weeeSeparator; ?>
+                <?php echo $_weeeTaxAttribute->getName(); ?>
+                : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+                <?php $_weeeSeparator = ' + '; ?>
+                <?php endforeach; ?>
+            </small>)</span>
+            <span class="price-including-tax">
+                <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                </span>
+            </span>
+    </p>
+        <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)): // incl. + weee ?>
+    <p class="old-price">
+        <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_regularPrice + $_originalWeeeTaxAmount, true, false) ?>
+                </span>
+    </p>
+
+    <p class="special-price">
+        <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPrice + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+            <span class="weee">(<small>
+                <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+                <?php echo $_weeeSeparator; ?>
+                <?php echo $_weeeTaxAttribute->getName(); ?>
+                : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount() + $_weeeTaxAttribute->getTaxAmount(), true, true); ?>
+                <?php $_weeeSeparator = ' + '; ?>
+                <?php endforeach; ?>
+            </small>)</span>
+            <span class="price-including-tax">
+                <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                </span>
+            </span>
+    </p>
+        <?php  elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)): // excl. + weee + final ?>
+    <p class="old-price">
+        <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_regularPrice, true, false) ?>
+                </span>
+    </p>
+
+    <p class="special-price">
+        <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPrice, true, false) ?>
+                    </span>
+                </span>
+        <?php foreach ($_weeeTaxAttributes as $_weeeTaxAttribute): ?>
+        <span class="weee">
+                        <small>
+                            <?php echo $_weeeTaxAttribute->getName(); ?>
+                            : <?php echo $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, true); ?>
+                        </small>
+                    </span>
+        <br/>
+        <?php endforeach; ?>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_finalPriceInclTax + $_weeeTaxAmount, true, false) ?>
+                    </span>
+                </span>
+    </p>
+        <?php  else: // excl. ?>
+    <p class="old-price">
+        <span class="price-label"><?php echo $this->__('Regular Price:') ?></span>
+                <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_regularPrice, true, false) ?>
+                </span>
+    </p>
+
+        <?php if ($_taxHelper->displayBothPrices() && $_finalPriceInclTax != $_finalPrice): ?>
+        <p class="special-price">
+            <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                    <span class="price-excluding-tax">
+                        <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                        <span class="price"
+                              id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                            <?php echo $_coreHelper->currency($_finalPrice, true, false) ?>
+                        </span>
+                    </span>
+                    <span class="price-including-tax">
+                        <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                        <span class="price"
+                              id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                            <?php echo $_coreHelper->currency($_finalPriceInclTax, true, false) ?>
+                        </span>
+                    </span>
+        </p>
+            <?php else: ?>
+        <p class="special-price">
+            <span class="price-label"><?php echo $this->__('Special Price:') ?></span>
+                <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    <?php echo $_coreHelper->currency($_finalPrice, true, false) ?>
+                </span>
+        </p>
+            <?php endif; ?>
+        <?php endif; ?>
+
+    <?php endif; /* if ($_finalPrice == $_price): */ ?>
+    
+	<?php  
+	if($isavailable ==1 ||( ($isavailable ==2 )&& $_loggedIn) ||($isavailable == 3 && $_loggedIn &&strpos($custtomer_group,$groupId))):?>
+	<?php if ($_taxHelper->displayBothPrices() && $_finalPriceInclTax != $_finalPrice && $_firstPeriodPrice && $plan->getSize()> 0 && ($plan_status == 1)):
+?>
+<p class="special-price">
+    <span class="price-label"><?php echo $this->__('First Term Discount:') ?></span>
+                    <span class="price-excluding-tax">
+                        <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                        <span class="price1"
+                              id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                            <?php echo $_FirstTermPrice ;//echo $_coreHelper->currency($_firstPeriodPrice, true, false) ?>
+                        </span>
+                    </span>
+                    <span class="price-including-tax">
+                        <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                        <span class="price1"
+                              id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                            <?php echo $_FirstTermPrice ; // echo $_coreHelper->currency($_firstPeriodPriceInclTax, true, false) ?>
+                        </span>
+                    </span>
+</p>
+    <?php else: ?>
+   
+    <?php if (($plan->getSize()>0) && ($plan_status == 1)):?>
+    <p id="indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?>" class="regular-price">
+        <span class="price-label"><?php echo $this->__('First Term Discount:') ?></span>
+		                <span class="price1">
+		                    <?php echo  $_FirstTermPrice.'%';//$_coreHelper->currency($_firstPeriodPriceInclTax, true, false) ?>
+		                </span>
+    </p>
+        <?php endif; ?>
+    <?php endif; ?>
+     <?php endif; ?>
+    <?php if ($this->getDisplayMinimalPrice() && $_minimalPriceValue && $_minimalPriceValue < $_product->getFinalPrice()): ?>
+
+    <?php $_minimalPriceDisplayValue = $_minimalPrice; ?>
+    <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1, 4))): ?>
+        <?php $_minimalPriceDisplayValue = $_minimalPrice + $_weeeTaxAmount; ?>
+        <?php endif; ?>
+
+<a href="<?php echo $_product->getProductUrl(); ?>" class="minimal-price-link">
+    <span class="label"><?php echo $this->__('As low as:') ?></span>
+            <span class="price" id="product-minimal-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <?php echo $_coreHelper->currency($_minimalPriceDisplayValue, true, false) ?>
+            </span>
+</a>
+    <?php endif; ?>
+</div>
+
+<?php else: ?>
+<?php
+    $_exclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue, $includingTax = null);
+    $_inclTax = $_taxHelper->getPrice($_product, $_minimalPriceValue, $includingTax = true);
+    ?>
+<?php if ($this->getDisplayMinimalPrice() && $_minimalPriceValue): ?>
+    <div class="price-box">
+        <span class="label"><?php echo $this->__('Starting at:') ?></span>
+        <?php if ($_taxHelper->displayBothPrices() && ($_exclTax !== $_inclTax)): ?>
+        <span class="price-excluding-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Excl. Tax:') ?></span>
+                    <span class="price" id="price-excluding-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_exclTax, true, false) ?>
+                    </span>
+                </span>
+        <span class="price-including-tax">
+                    <span class="label"><?php echo Mage::helper('tax')->__('Incl. Tax:') ?></span>
+                    <span class="price" id="price-including-tax-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                        <?php echo $_coreHelper->currency($_inclTax, true, false) ?>
+                    </span>
+                </span>
+        <?php else: ?>
+        <?php
+                        $_showPrice = $_inclTax;
+        if (!$_taxHelper->displayPriceIncludingTax()) {
+            $_showPrice = $_exclTax;
+        }
+        ?>
+        <span class="price" id="product-minimal-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <?php echo $_coreHelper->currency($_showPrice, true, false) ?>
+            </span>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+<?php endif; ?>
+<script type="text/javascript">
+document.observe("dom:loaded", function() {
+	var p = <?php echo $_price ?>;
+	if(p <= 0 ){
+		$$('.regular-price')[0].hide();
+		$$('#indies-recurringandrentalpayments-first-period-price-<?php echo $_id ?> span.price-label')[0].replace("<?php echo $this->__('One Time Price:') ?>");
+	}	
+});
+</script>

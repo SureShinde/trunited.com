@@ -1,0 +1,19 @@
+<?php if ($this->isEnabled()) { ?>
+    <script type="text/javascript">
+        //<![CDATA[
+    <?php if ($this->_helper()->getTransferConfig('email_notification')) { ?>  
+            if($('rewardpoints-settings') && $('rewardpoints-settings').down('.form-list')){
+                var eladd=$('rewardpoints-settings').down('.form-list');
+                eladd.insert(
+                        '<li class="control">'+
+                            '<div class="input-box">'+
+                                '<input type="checkbox" name="transfer_notification" title="<?php echo $this->__('Receive email notifying about point transfer') ?>" value="1" id="transfer_notification" class="checkbox" <?php if ($this->getTransferNotification()): ?>checked="checked"<?php endif ?>/>'+
+                            '</div>'+
+                            '<label for="transfer_notification"><?php echo $this->__('Receive email notifying about point transfer') ?></label>'+
+                        '</li>'
+                );
+            }
+    <?php } ?>   
+        //]]>
+    </script>
+<?php } ?>
