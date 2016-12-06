@@ -1,0 +1,225 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusDirectLink
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Affiliateplusdirectlink template
+ *
+ * @see Magestore_AffiliateplusDirectLink_Block_Affiliateplusdirectlink
+ */
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+ if($check_responsvie)
+     $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
+ else
+     $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+?>
+<div class="aff-main-content <?php echo $class_name; ?>">
+    <div class="aff-title">
+        <h1><?php echo $this->__('Add Direct Link') ?></h1>
+    </div>
+    <div class="message direct-link-help">
+        <div class="success-msg">
+            <?php echo $this->__('You can make your affiliate link shorter and friendlier to stimulate visitors to click more. Also, you may change the web-page to show our banner.') ?>
+        </div>
+    </div>
+
+    <form id="direct-link-form" action="<?php echo $this->getUrl('*/*/addDirectLink') ?>" method="post">
+        <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label class="required" for="directlink"><?php echo $this->__('Direct Link') ?><em>*</em></label>
+            <input id="input-directlink" title="Direct Link" value="<?php echo $this->getUrl() ?>" class="input-text required-entry form-control"  name="link" type="text">
+            </div>
+        </div>
+        <div class ="form-group">
+             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <input id="use-link-banner" class="checkbox" type="checkbox" title="Use Link of Banner" onclick="setUseBannerLink(this.checked)" value="1" name="use_link_banner">
+                <?php echo $this->__('Use Link of Banner') ?>
+             </div>
+        </div>
+        <div class="comment-directlink-form form-group"><?php echo $this->__('The link that visitors see when they click on our banner on your site') ?></div>            
+        <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label class="required" for="banner"><?php echo $this->__('Banner') ?><em>*</em></label>
+                <select id="banner_id"title="Banner" class="input-text required-entry form-control" onchange="changeBannerLink()" name="banner_id">
+                    <?php
+                    foreach ($this->getBannerArr() as $banner) {
+                        ?>
+                        <option  value="<?php echo $banner->getId() ?>"><?php echo $banner->getTitle() ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label class="required" for="sourcepage"><?php echo $this->__('Page to show banner') ?><em>*</em></label>
+            <input title="Page to show banner" value="" class="input-text required-entry form-control"  name="source_page"  type="text">            
+            </div>
+        </div>
+        <div class="comment-directlink-form"><?php echo $this->__('The URL of the web-page on which you place our banner') ?></div>
+
+        <div class="buttons-set">
+            <p class="required">* <?php echo $this->__('Required Fields') ?></p>
+            <button id="banner-button-customlink" class ="button button-config"  type="submit" title="<?php echo $this->__('Save') ?>">
+                <span><span ><?php echo $this->__('Save') ?></span></span>
+            </button>             
+        </div>
+    </form>
+    <script type="text/javascript">
+        //<![CDATA[
+        var dataForm = new VarienForm('direct-link-form', true);
+        //]]>
+    </script>
+    <script type="text/javascript">
+        //<![CDATA[
+        function setUseBannerLink(arg) {
+            if (arg) {
+                var banner_id = $('banner_id').options[$('banner_id').selectedIndex].value;
+                var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/getDirectLinkDefault') ?>' + '?banner_id=' + banner_id;
+                var request = new Ajax.Request(url, {
+                    onComplete: function(response) {
+                        $('input-directlink').value = response.responseText;
+                        $('input-directlink').disabled = "disabled";
+                    }
+                }
+                );
+            } else {
+                $('input-directlink').disabled = "";
+            }
+        }
+        function changeBannerLink() {
+            var usebannerlink = $('use-link-banner').checked;
+            if (usebannerlink) {
+                var banner_id = $('banner_id').options[$('banner_id').selectedIndex].value;
+                var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/getDirectLinkDefault') ?>' + '?banner_id=' + banner_id;
+                var request = new Ajax.Request(url, {
+                    onComplete: function(response) {
+                        $('input-directlink').value = response.responseText;
+                        $('input-directlink').disabled = "disabled";
+                    }
+                }
+                );
+            }
+        }
+        //]]>
+    </script>
+
+
+
+    <?php if ($this->getDirectLinkSize()) { ?>
+        <div class="aff-title">
+            <h2><?php echo $this->__('Direct Links') ?></h2>
+        </div>
+
+        <div class="directlink-list" style="width: 100%">
+            <?php echo $this->getChildHtml('directlinks'); ?>
+        </div>
+    <?php } ?>
+    <?php
+    $deletedomain = $this->__('If deleting the domain, all direct links to this domain will be deleted. Do you want to continue?');
+    $deleteddirectlink = $this->__('Are you sure to delete this direct link?');
+    ?>
+    <script type="text/javascript">
+        function notNow() {
+            closeAffPopup();
+        }
+        function getCode(directlinkId,el) {
+            var formUrl = '<?php echo $this->getUrl('affiliateplusdirectlink/index/getCode') ?>directlink/' + directlinkId;
+             ajaxPopup(formUrl,null,el);
+        }
+        function verifyDomain(domainId,el) {
+            var formUrl = '<?php echo $this->getUrl('affiliateplusdirectlink/index/verifyForm') ?>id/' + domainId;
+           ajaxPopup(formUrl,null,el);
+        }
+        function addDirectLink(domainId,el) {
+            var formUrl = '<?php echo $this->getUrl('affiliateplusdirectlink/index/addDirectLinkForm') ?>id/' + domainId;
+            ajaxPopup(formUrl,null,el);
+        }
+        function editDirectLink(directlinkId,el) {
+            var formUrl = '<?php echo $this->getUrl('affiliateplusdirectlink/index/addDirectLinkForm') ?>directlink/' + directlinkId;
+            ajaxPopup(formUrl,null,el);
+        }
+        function deleteDomain(domainId,el) {
+            var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/deleteDomain') . 'id/'; ?>' + domainId;
+            if (confirm('<?php echo $deletedomain ?>'))
+                setLocation(url,el);
+        }
+        function deleteDirectLink(directlinkId,el) {
+            var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/deleteDirectLink') . 'id/'; ?>' + directlinkId;
+            if (confirm('<?php echo $deleteddirectlink ?>'))
+                setLocation(url,el);
+        }
+    </script>
+
+    </br>
+    <?php if ($this->getDoaminsSize()) { ?>
+        <div class="aff-title">
+            <h2><?php echo $this->__('Domains') ?></h2>
+        </div>
+
+        <div class="domains" style="width: 100%">
+            <?php echo $this->getChildHtml('domains'); ?>
+        </div>
+    <?php } ?>
+</div>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    function setUseBannerLinkPopup(arg) {
+        if (arg) {
+            var banner_id = $('form_banner_id').options[$('form_banner_id').selectedIndex].value;
+            var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/getDirectLinkDefault') ?>' + '?banner_id=' + banner_id;
+            var request = new Ajax.Request(url, {
+                onComplete: function(response) {
+                    $('form-input-directlink').value = response.responseText;
+                    $('form-input-directlink').disabled = "disabled";
+                }
+            }
+            );
+        } else {
+            $('form-input-directlink').disabled = "";
+        }
+    }
+    function changeBannerLinkPopup() {
+        var usebannerlink = $('use-link-banner-poup').checked;
+        if (usebannerlink) {
+            var banner_id = $('form_banner_id').options[$('form_banner_id').selectedIndex].value;
+            var url = '<?php echo $this->getUrl('affiliateplusdirectlink/index/getDirectLinkDefault') ?>' + '?banner_id=' + banner_id;
+            var request = new Ajax.Request(url, {
+                onComplete: function(response) {
+                    $('form-input-directlink').value = response.responseText;
+                    $('form-input-directlink').disabled = "disabled";
+                }
+            }
+            );
+        }
+    }
+
+    function submitDirectLinkForm() {
+        var clForm = new VarienForm('direct-link-form-popup', true);
+        if (clForm.validator.validate() == false) {
+            return false;
+        }
+        clForm.form.submit();
+    }
+    //]]>
+</script>

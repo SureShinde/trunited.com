@@ -1,0 +1,13 @@
+<?php if ($this->isEnabled()) { ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        <?php 
+            $email = $this->getRequest()->getParam('rwp');
+            if($email){ ?>
+                if($('email_address')){
+                    $('email_address').setValue("<?php echo $email ?>");
+                }
+        <?php } ?>
+        //]]>
+    </script>
+<?php } ?>

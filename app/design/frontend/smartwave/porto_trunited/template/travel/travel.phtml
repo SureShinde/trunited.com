@@ -1,0 +1,38 @@
+
+<?php
+
+$customer_id = Mage::getSingleton('customer/session')->getCustomerId();
+function randomKey($length) {
+    $pool = array_merge(range(0,9), range('a', 'z'));
+
+    for($i=0; $i < $length; $i++) {
+        $key .= $pool[mt_rand(0, count($pool) - 1)];
+    }
+    return $key;
+}
+$random_num =  randomKey(5);
+$mix_number = $customer_id.randomKey(5);
+$link = 'http://travel.trunited.com/sale/7844-fall_into_savings_sale?refclickid='.$mix_number;
+
+?>
+
+
+  <?php 
+    if(!Mage::getSingleton('customer/session')->isLoggedIn()){ ?>
+        <p><img src="/media/wysiwyg/porto/priceline-header.jpg" alt="Priceline Travel" /></p>
+        <p style="font-size:18px;"><a href="/customer/account/login/">Log In</a> or <a href="/customer/account/login/">Register</a> to earn reward points for travel.</p>
+        <p style="font-size:18px;"><a target="_blank" href='<?php echo $link ?>'>Search Hotels, Cars, or Flights</a></p>
+    <?php }  
+	 else{ ?>
+        <p><img src="/media/wysiwyg/porto/priceline-header.jpg" alt="Priceline Travel" /></p>
+        <p style="font-size:18px;"><a target="_blank" href='<?php echo $link ?>'>Search Hotels, Cars, or Flights</a> to start earning reward points for travel.</p>
+        <p>Pricleline.com is the world leader for online travel. Wherever you want to go, Priceline can get you there with the best deals around.</p>
+        <p>Did you know….</p>
+        <p>
+        <span style="padding:5px; line-height:30px; vertical-align: middle;"><img src="/media/wysiwyg/porto/category/checkmark.png" alt="Check" height="20px" style="padding-right:5px;" />In 2015 alone, Priceline made over $55 billion in gross bookings?<br /></span>
+        <span style="padding:5px; line-height:30px; vertical-align: middle;"><img src="/media/wysiwyg/porto/category/checkmark.png" alt="Check" height="20px" style="padding-right:5px;" />Priceline provides hotels and accommodations in 224 countries in over 42 languages?<br /></span>
+        <span style="padding:5px; line-height:30px; vertical-align: middle;"><img src="/media/wysiwyg/porto/category/checkmark.png" alt="Check" height="20px" style="padding-right:5px;" />Priceline has partnered with Trunited to offer astounding payouts for every hotel, flight, and car rental booked through Trunited.com?<br /></span>
+        </p>
+        <p>It’s all true, and it means now you can go on vacation while putting money directly into the Trunited Payout Pool, providing earnings for you and your fellow Trunited members.</p>
+        <p>There goes any excuse not to get away!</p>
+    <?php } ?>

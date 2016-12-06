@@ -1,0 +1,57 @@
+<div class="transfer-send-transaction">
+    <?php $sendCollection = $this->getCollection() ?>
+    <?php //if (count($sendCollection)): ?>
+    <div class="box-account box-info box-rewardpoints-history">
+        <div class="box-head">
+            <h2><?php echo $this->__('POINT SENDING HISTORY') ?></h2>
+        </div>
+        <?php //echo $this->getPagerHtml() ?>
+        <table class="data-table" id="recent-transactions-history">
+            <colgroup>
+                <col class="id" />
+                <col class="point_amount" />
+                <col class="receiver_email" />
+                <col class="created_time" />
+                <col class="status" />
+                <col class="action" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th><?php echo $this->__('Points') ?></th>
+                    <th><?php echo $this->__('Recipient') ?></th>
+                    <th><?php echo $this->__('Date Created') ?></th>
+                    <th><?php echo $this->__('Status') ?></th>
+                    <?php if($this->getCancelConfig()): ?>
+                    <th><?php echo $this->__('Action') ?></th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($sendCollection)): ?>
+                <?php foreach ($sendCollection as $_transfer): ?>
+                <?php $status = $this->getStatusLabel($_transfer->getId())?>
+                <tr>
+                    <td class="a-right"><?php echo $_transfer->getId() ?></td>
+                    <td class="a-center"><?php echo '-'.$_transfer->getPointAmount() ?></td>
+                    <td><?php echo $_transfer->getReceiverEmail() ?></td>
+                    <td><?php echo $this->formatTime($_transfer->getCreatedTime(), 'medium', true) ?></td>
+                    <td><?php echo $status ?></td>
+                    <?php if($this->getCancelConfig()): ?>
+                    <td>
+                        <a href="<?php echo $this->getUrl('rewardpointstransfer/index/cancelTransfer', array('id'=>$_transfer->getId())) ?>" onclick="return cancelConfirm()"><?php if(($status == 'Pending' || $status == 'Holding')) echo $this->__('Cancel') ?></a>
+                    </td>
+                    <?php endif; ?>
+                </tr>
+                <?php endforeach ?>
+                <?php else: ?>
+                <tr>
+                    <td colspan="7"><?php echo $this->__('No transaction found!') ?></td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+        <?php echo $this->getPagerHtml() ?>
+    </div>
+    <?php// endif ?>
+</div>

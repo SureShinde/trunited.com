@@ -1,0 +1,214 @@
+/* Affiliate Plus Widget Style */
+
+#affiliateplus-widget-fieldset { 
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ececec;
+    margin: 0px;
+    float: left;
+    padding: 22px 15px 12px 14px;
+}
+#affiliateplus-widget-form { 
+    float: left; 
+    margin-bottom: 10px;
+    width: 35%;
+}
+#affiliateplus-widget-preview {
+    float: right; 
+    margin-left: 12px;
+    width: 63%; 
+    background: #fff;
+    border: 1px solid #ececec;
+    margin: 0px 0px 0px 12px;
+    padding: 0px 0px 5px 0px;
+}
+#affiliateplus-widget-preview .buttons-set{
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px solid #ececec;
+}
+#affiliateplus-widget-form div.custom-show {
+    float: left; 
+    margin-right: 30%;
+    width: 100%;    
+}
+#widget_custom_size div.input-box {
+    width: 136px;
+    position:relative; 
+    float: right;
+    margin-right: 20px; 
+    clear: right; 
+}
+#widget_custom_size div.input-box input.input-text {
+    width: 136px; 
+}
+#affiliateplus-widget-fieldset .form-list input.input-text {
+    clear: both;
+    width: 100%;
+}
+#affiliateplus-widget-form  div.input-color {
+    width: 136px;
+    position:relative; 
+    float: right;
+    margin-right: 20px; 
+    clear: right; 
+}
+#affiliateplus-widget-form  div.input-color input.color {
+    width: 136px; 
+}
+.lable-title {
+    background: #eb7705;
+    float: left;
+    width: 100%;
+}
+.lable-title-preview {
+    background: #9d9d9d;
+    float: left;
+    width: 100%;
+}
+#affiliateplus-widget-form .legend{
+    color: #fff;
+    font-size: 14px;
+    padding: 7px 0px 7px 65px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    background: url('../magestore/images/custom.png') no-repeat;
+}
+#affiliateplus-widget-preview .legend {
+    width: 100%;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 7px 0px 7px 65px;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    background: url('../magestore/images/preview.png') no-repeat;
+    line-height: 18px;
+}
+#widget-container {
+   padding: 10px 15px 25px 15px;
+    float: left;
+    overflow: auto;
+    width: 100%;
+}
+#affiliateplus-widget-form #textid {
+    width: 94%;
+    margin: 5px 0;
+}
+#tinybox {
+    position:absolute; 
+    display:none; 
+    padding:10px;
+    background:#fff url(../../images/opc-ajax-loader.gif) no-repeat 50% 50%; 
+    border:10px solid #e3e3e3;
+    z-index:2000
+}
+#tinymask {
+    position:absolute; 
+    display:none; 
+    top:0; 
+    left:0; 
+    height:100%;
+    width:100%;
+    background:#000; 
+    z-index:1500
+}
+#tinycontent {
+    background:#fff
+}
+#affiliateplus-widget-fieldset .fields{
+    float: left; 
+    clear: both;
+    width: 100%;
+}
+#affiliateplus-widget-fieldset .fields .field{
+    width: 100%;
+}
+#affiliateplus-widget-fieldset .custom-show input {
+    float: left;
+    margin-right: 5px;
+}
+#affiliateplus-widget-fieldset .field-show {
+    width: 100%;
+    border-bottom: 1px dashed #ececec;
+    margin-bottom: 0px;
+    float: left;
+}
+#affiliateplus-widget-fieldset .validation-passed, #category_ids, #widget_size {
+    width: 100%;
+}
+#affiliateplus-widget-fieldset .label-custom-show {
+    cursor: pointer;
+    font-weight: 400;
+}
+/**============== Responsive Widgets================**/
+
+@media screen and (max-width: 979px) {
+    
+    
+}
+@media screen and (max-width: 875px) { 
+    .custom-color{
+        float: left;  
+    }
+    .custom-color label{
+       width: 100%;
+    }
+    #affiliateplus-widget-form .custom-color div.input-color{
+        float: left;
+        width: 100%;
+    }
+    #affiliateplus-widget-form div.input-color input.color {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 741px) {
+    #affiliateplus-widget-form {
+        width: 100%;
+    }
+    #affiliateplus-widget-preview {
+        width: 100%;
+        margin: 0;
+    }
+    #affiliateplus-widget-fieldset {
+        padding: 22px 10% 12px 10%;
+    }
+    #affiliateplus-widget-fieldset .form-control {
+        width: 100%;
+    }
+    .custom-color{
+        float: none;  
+    }
+    .custom-color label{
+      float: left;
+        clear: both;
+        width: auto;
+    }
+    #affiliateplus-widget-form .custom-color div.input-color{
+        float: right;
+       width: 136px;
+    }
+    #affiliateplus-widget-form div.input-color input.color {
+       width: 136px;
+    }
+}
+@media screen and (max-width: 400px) {
+.custom-color{
+        float: left;  
+        width: 100%;
+    }
+    .custom-color label{
+       width: 100%;
+    }
+    #affiliateplus-widget-form .custom-color div.input-color{
+        float: left;
+        width: 100%;
+    }
+    #affiliateplus-widget-form div.input-color input.color {
+        width: 100%;
+    }
+}
+
+/**============== End================**/

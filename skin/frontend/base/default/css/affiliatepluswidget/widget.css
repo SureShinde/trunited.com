@@ -1,0 +1,178 @@
+/* Widget Style */
+
+#affiliatepluswidget_product_list {
+    float: left;
+}
+
+#affiliatepluswidget_product_list ul.affiliatepluswidget_products_grid { 
+    list-style:none; 
+}
+#affiliatepluswidget_product_list ul.affiliatepluswidget_products_grid li { 
+    position:relative;
+    float:left;
+    background: #fff;
+    border-radius: 5px;
+}
+
+div.affiliatepluswidget_price_box div.price-box span.regular-price { 
+    color:inherit !important;
+}
+div.affiliatepluswidget_price_box div.price-box span.regular-price span.price { 
+    color:inherit !important; 
+    font-size:11px; 
+}
+.aff-main-content .buttons-set .btn{
+    padding: 6px 12px;
+    height: auto;   
+    margin-right: 5px;
+}
+#affiliatepluswidget_search_form{
+    background-position: 9px 6px;
+}
+#affiliatepluswidget_search {
+    width: 100%;
+    height: 25px;
+}
+.div-affiliate-search {
+    width: 90%;
+    float: left;
+}
+#affiliatepluswidget_submit{
+    cursor:pointer;
+    min-width:24px;
+    height: 25px;
+    float: right;
+    margin-left: 10px;
+}
+.button-go{
+    padding:4px;
+    background-color: #f18200;
+    
+}
+.button-getcode {
+    float: right;
+    margin-right: 5px;
+}
+.button-go:hover{
+    background-color: #ec971f;
+}
+.affiliatepluswidget_products_grid li.item {
+   margin:5px;
+   overflow:hidden; 
+}
+.affiliatepluswidget_right_box {
+    margin-left: 5px;
+    width: 65%;
+    height: 100%;
+    display: -moz-box;
+    -moz-box-align: center;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    display: box;
+    box-align: center;
+    float: right;    
+}
+.div-inner div {
+    float: left;
+    clear: both;
+    margin-bottom: 5px;
+    margin: 0;
+    font-size: 12px;
+}
+.affiliatepluswidget_right_box div.div-inner {
+    float: none;
+    clear: none;
+}
+.affiliatepluswidget_products_grid li .widget-image {
+    height: 100%;
+    float: left;
+    display: -moz-box;
+    -moz-box-align: center;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    display: box;
+    box-align: center;
+    border: none;
+    width: 30%;
+}
+.affiliatepluswidget_products_grid li a.product-image {
+    margin-left: 3px;
+}
+.affiliatepluswidget_products_grid .div-inner h2.product-name {
+   text-transform: none;
+    margin-bottom: 0;
+    line-height: 16px;
+}
+.aff-main-content .product-name a {
+    font-size: 12px;
+    font-weight: 500;
+}
+#affiliatepluswidget_body{
+    float: left; 
+    height:auto;
+    border: 1px solid #ececec;
+    font-size:13px;
+    background: #cfcfcf;
+}
+#affiliatepluswidget_footer{
+    padding: 10px 0px 10px;
+    text-align: center;
+    float: left;
+    width: 100%;
+}
+#affiliatepluswidget_footer a {
+    color: #cfcfcf;
+}
+
+
+#affiliatepluswidget_search_form{
+    text-align:center;
+    float: left;
+    width: 100%;
+    padding: 5px 5px 5px 10px;
+    background: #ececec;
+}
+#affiliatepluswidget_content {
+    width: 100%;
+}
+#affiliatepluswidget_content .form-search{
+    float: left;
+    width: 100%;
+    padding: 0 7%;
+}
+#affiliatepluswidget_search{
+    float: left;
+    border:1px solid #B6B6B6
+}
+.affiliatepluswidget_product_list_container{
+    float: left;
+    margin:0px 9px 3px 9px;
+}
+.buttons-set .save-widgets {
+    float: right;
+    margin-left: 0;
+    margin-top: 5px;
+}
+.buttons-set .get-code {
+    float: right;
+    margin-right: 5px;
+}
+.aff-main-content .widgets-code {
+    width: 100%;
+    height: 230px;
+    margin-top: 10px;
+}
+.affiliatepluswidget_price_box .price-box .price {
+    font-size: 12px;
+}
+.affiliatepluswidget_price_box p.old-price,
+.affiliatepluswidget_price_box p.special-price{
+    margin-bottom: 0;
+    text-align: left;
+    padding-left: 0;
+}
+#affiliateplus-widget-fieldset .form-group {
+    float: left;
+    width: 100%;
+}
+

@@ -1,0 +1,115 @@
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <style>
+        #project-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    var $jq = jQuery.noConflict();
+    $jq(function () {
+        $jq("#affiliate_name").keydown (function (e) {
+                    var checklength = $jq('#affiliate_name').val().length;
+
+                    if(checklength >= 2) {
+                        var projects = <?php echo $this->getAffiliateName()?>;
+                        $jq("#affiliate_name").autocomplete({
+                            minLength: 0,
+                            source: projects,
+                            focus: function (event, ui) {
+                                $jq("#affiliate_name").val(ui.item.label);
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                $jq("#affiliate_name").val(ui.item.label);
+                                $jq("#affiliate_id").val(ui.item.value);
+                                $jq("#affiliate_message_hidden_email").hide();
+                                $jq('#no_refers_me').attr('checked', false);
+                                return false;
+                            }
+                        })
+                    }
+                });
+            });
+
+</script>
+<div class="fieldset">
+    <h2 class="legend"><?php echo $this->__('Affiliate Referral Information') ?></h2>
+    <ul class="form-list">
+        <li class="fields">
+            <div class="field">
+                <label for="affiliate_name" class=""><?php echo $this->__('Who Referred Me:') ?></label>
+                <div class="input-box">
+                    <?php
+                    $accountInfo = Mage::helper('affiliateplus/account')->getAffiliateInfoFromCookie();
+                    if($accountInfo):
+                    ?>
+                        <input type="text" name="affiliate_name" id="affiliate_name" placeholder="<?php echo $this->__('Affiliate Name'); ?>" value="<?php echo $accountInfo->getName();?>" title="<?php echo $this->__('Affiliate Name') ?>" class="input-text" readonly/>
+                        <input type="hidden" id="affiliate_id" name="affiliate_id" value="<?php echo $accountInfo->getId() ?>">
+                    <?php else:?>
+                        <input type="text" name="affiliate_name" id="affiliate_name" placeholder="<?php echo $this->__('Affiliate Name'); ?>" onchange="checkAffiliateCouponCodeExisting('<?php echo $this->getUrl('affiliateplus/account/checkAffiliateName') ?>')" value="" title="<?php echo $this->__('Affiliate Name') ?>" class="input-text" />
+                        <br/><label for="affiliate_name" class=""><?php echo $this->__('Please type at least 3 characters') ?></label>
+                        <input type="hidden" id="affiliate_id" name="affiliate_id">
+                    <?php endif;?>
+                </div>
+                <span id="affiliate-please-wait-email" style="display:none;" class="opc-please-wait">
+                    <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" class="v-middle" alt="" /> &nbsp; <?php echo $this->__('Checking coupon code') ?>...
+                </span>
+                <div id="affiliate_message_hidden_email" class="affiliate_message"></div>
+                <?php if(!$accountInfo):?>
+                <input style="float: left" type="checkbox" class="checkbox" name="no_refers_me" id="no_refers_me" value="1" checked="checked" onclick="checkNoRefer()" />
+                <label for="no_refers_me"><?php echo $this->__('No one refers me.') ?></label>
+                <?php endif;?>
+            </div>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    function checkAffiliateCouponCodeExisting(requestUrl){
+        var affiliate_name = $('affiliate_name').value;
+//        var affiliate_id = jQuery('#affiliate_id').val();
+        var affiliate_id = $('affiliate_id').value;
+        var params = {affiliate_name: affiliate_name,affiliate_id:affiliate_id};
+        $('affiliate-please-wait-email').show();
+        $('affiliate_message_hidden_email').hide();
+        new Ajax.Updater(
+            'affiliate_message_hidden_email',
+            requestUrl,
+            {
+                method: 'get',
+                onComplete: function() {
+                    endCheckEmailRegister();
+                },
+                onSuccess: '',
+                onFailure: '',
+                parameters: params,
+                postBody: params
+            }
+        );
+    }
+
+    function endCheckEmailRegister() {
+        $('affiliate-please-wait-email').hide();
+        $('affiliate_message_hidden_email').show();
+        if ($('is_valid_email').value == '0') {
+            $('affiliate_name').value = '';
+            $('no_refers_me').checked=true;
+        }
+    }
+    function checkNoRefer() {
+        $('affiliate_name').value = '';
+        $('affiliate_id').value = '';
+        if($('no_refers_me').checked ==false){
+            $('affiliate_name').addClassName('required-entry');
+        }else{
+            $('affiliate_name').removeClassName('required-entry');
+            $('affiliate_message_hidden_email').hide();
+        }
+    }
+</script>

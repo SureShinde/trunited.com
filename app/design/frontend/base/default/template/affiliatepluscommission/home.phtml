@@ -1,0 +1,119 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusCommission
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Show Sales Commission in Homepage template
+ * 
+ * @see Magestore_AffiliateplusCommission_Block_Home
+ */
+?>
+<?php if ($this->enableToShow()): ?>
+<?php $monthlyCommission = $this->getMonthlyCommission() ?>
+<?php $yearlyCommission = $this->getYearlyCommission() ?>
+<br/><br/>
+<div class="table-responsive">
+<table data-toggle="table" class="table table-bordered table-hover no-margin" id="list-monthly-commission">
+	<col width="35%"/>
+	<col width="35%"/>
+	<thead>
+		<tr>
+			<th class="aff-th" colspan="3" height="40">
+				<?php echo $this->__('ADDITIONAL SALES COMMISSION') ?>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<strong><?php echo $this->__('') ?></strong>
+			</td>
+			<td>
+				<strong><?php echo ($this->getSalesType() == 'sales') ? $this->__('Total Sales') : $this->__('Total Orders') ?></strong>
+			</td>
+			<td>
+				<strong><?php echo $this->__('Additional commission received') ?></strong>
+				<?php if ($this->getCommissionType() != 'fixed'): ?>
+					 <?php echo $this->__('(base on your commission)') ?>
+				<?php endif ?>
+			</td>
+		</tr>
+		<?php if ($levels = count($monthlyCommission)): ?>
+			<?php $isShow = 1 ?>
+			<?php for ($i = 0; $i < $levels; $i ++): ?>
+				<?php $commission = $monthlyCommission[$i] ?>
+				<?php $cmNext = isset($monthlyCommission[$i+1]) ? $monthlyCommission[$i+1] : 0 ?>
+				<tr>
+				<?php if ($isShow == 1): ?>
+					<td rowspan="<?php echo $levels ?>">
+						<strong><?php echo $this->__('Monthly additional commission') ?></strong>
+					</td>
+					<?php $isShow = 2 ?>
+				<?php endif ?>
+					<td>
+						<?php echo $this->formatSales($commission['sales']) ?>
+						<?php if ($cmNext): ?>
+							- <?php echo $this->formatSales($cmNext['sales'],true) ?>
+						<?php else: ?>
+							+
+						<?php endif ?>
+					</td>
+					<td>
+						<?php echo $this->formatCommission($commission['commission']) ?>
+					</td>
+				</tr>
+			<?php endfor ?>
+		<?php endif ?>
+		<?php if ($levels = count($yearlyCommission)): ?>
+			<?php if (isset($isShow)): ?>
+				<tr>
+					<td colspan="3" height="5">&nbsp;</td>
+				</tr>
+			<?php endif ?>
+			<?php $isShow = 1 ?>
+			<?php for ($i = 0; $i < $levels; $i ++): ?>
+				<?php $commission = $yearlyCommission[$i] ?>
+				<?php $cmNext = isset($yearlyCommission[$i+1]) ? $yearlyCommission[$i+1] : 0 ?>
+				<tr>
+				<?php if ($isShow == 1): ?>
+					<td rowspan="<?php echo $levels ?>">
+						<strong><?php echo $this->__('Yearly additional commission') ?></strong>
+					</td>
+					<?php $isShow = 2 ?>
+				<?php endif ?>
+					<td>
+						<?php echo $this->formatSales($commission['sales']) ?>
+						<?php if ($cmNext): ?>
+							- <?php echo $this->formatSales($cmNext['sales'],true) ?>
+						<?php else: ?>
+							+
+						<?php endif ?>
+					</td>
+					<td>
+						<?php echo $this->formatCommission($commission['commission']) ?>
+					</td>
+				</tr>
+			<?php endfor ?>
+		<?php endif ?>
+	</tbody>
+</table>
+<div class="clear">&nbsp;</div>
+</div>
+<?php endif ?>

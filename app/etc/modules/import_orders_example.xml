@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <LastAuthor>User</LastAuthor>
+  <Created>2010-08-08T20:35:23Z</Created>
+  <Version>11.6568</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>8580</WindowHeight>
+  <WindowWidth>19980</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>45</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s22">
+   <NumberFormat ss:Format="General Date"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="import_orders_example">
+  <Table ss:ExpandedColumnCount="92" ss:ExpandedRowCount="3" x:FullColumns="1"
+   x:FullRows="1">
+   <Row>
+    <Cell><Data ss:Type="String">order_id</Data></Cell>
+    <Cell><Data ss:Type="String">website</Data></Cell>
+    <Cell><Data ss:Type="String">email</Data></Cell>
+    <Cell><Data ss:Type="String">password</Data></Cell>
+    <Cell><Data ss:Type="String">group_id</Data></Cell>
+    <Cell><Data ss:Type="String">store_id</Data></Cell>
+    <Cell><Data ss:Type="String">payment_method</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_method</Data></Cell>
+    <Cell><Data ss:Type="String">billing_prefix</Data></Cell>
+    <Cell><Data ss:Type="String">billing_firstname</Data></Cell>
+    <Cell><Data ss:Type="String">billing_middlename</Data></Cell>
+    <Cell><Data ss:Type="String">billing_lastname</Data></Cell>
+    <Cell><Data ss:Type="String">billing_suffix</Data></Cell>
+    <Cell><Data ss:Type="String">billing_street_full</Data></Cell>
+    <Cell><Data ss:Type="String">billing_city</Data></Cell>
+    <Cell><Data ss:Type="String">billing_region</Data></Cell>
+    <Cell><Data ss:Type="String">billing_country</Data></Cell>
+    <Cell><Data ss:Type="String">billing_postcode</Data></Cell>
+    <Cell><Data ss:Type="String">billing_telephone</Data></Cell>
+    <Cell><Data ss:Type="String">billing_company</Data></Cell>
+    <Cell><Data ss:Type="String">billing_fax</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_prefix</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_firstname</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_middlename</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_lastname</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_suffix</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_street_full</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_city</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_region</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_country</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_postcode</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_telephone</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_company</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_fax</Data></Cell>
+    <Cell><Data ss:Type="String">created_in</Data></Cell>
+    <Cell><Data ss:Type="String">is_subscribed</Data></Cell>
+    <Cell><Data ss:Type="String">customer_id</Data></Cell>
+    <Cell><Data ss:Type="String">created_at</Data></Cell>
+    <Cell><Data ss:Type="String">updated_at</Data></Cell>
+    <Cell><Data ss:Type="String">tax_amount</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_amount</Data></Cell>
+    <Cell><Data ss:Type="String">discount_amount</Data></Cell>
+    <Cell><Data ss:Type="String">subtotal</Data></Cell>
+    <Cell><Data ss:Type="String">grand_total</Data></Cell>
+    <Cell><Data ss:Type="String">total_paid</Data></Cell>
+    <Cell><Data ss:Type="String">total_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">total_qty_ordered</Data></Cell>
+    <Cell><Data ss:Type="String">total_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">total_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">total_online_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">total_offline_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_tax_amount</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_amount</Data></Cell>
+    <Cell><Data ss:Type="String">base_discount_amount</Data></Cell>
+    <Cell><Data ss:Type="String">base_subtotal</Data></Cell>
+    <Cell><Data ss:Type="String">base_grand_total</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_paid</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_qty_ordered</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_online_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_total_offline_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">subtotal_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">subtotal_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">discount_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">discount_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">tax_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">tax_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">base_subtotal_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_subtotal_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">base_discount_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_discount_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">base_discount_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">base_tax_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_tax_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_canceled</Data></Cell>
+    <Cell><Data ss:Type="String">subtotal_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">tax_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">base_subtotal_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">base_tax_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_invoiced</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_tax_amount</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_tax_amount</Data></Cell>
+    <Cell><Data ss:Type="String">shipping_tax_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">base_shipping_tax_refunded</Data></Cell>
+    <Cell><Data ss:Type="String">products_ordered</Data></Cell>
+    <Cell><Data ss:Type="String">order_status</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">1000000057</Data></Cell>
+    <Cell><Data ss:Type="String">base</Data></Cell>
+    <Cell><Data ss:Type="String">mynewtestaccount@tjh.com</Data></Cell>
+    <Cell><Data ss:Type="String">tester123</Data></Cell>
+    <Cell><Data ss:Type="String">General</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">purchaseorder</Data></Cell>
+    <Cell><Data ss:Type="String">flatrate_flatrate</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">James</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">Brown</Data></Cell>
+    <Cell ss:Index="14" ss:StyleID="s21"><Data ss:Type="String">5777 Carson St&#10;Suite 600</Data></Cell>
+    <Cell><Data ss:Type="String">Jamestown</Data></Cell>
+    <Cell><Data ss:Type="String">Connecticut</Data></Cell>
+    <Cell><Data ss:Type="String">US</Data></Cell>
+    <Cell><Data ss:Type="Number">7884</Data></Cell>
+    <Cell><Data ss:Type="String">989-444-3837</Data></Cell>
+    <Cell><Data ss:Type="String">TJE</Data></Cell>
+    <Cell><Data ss:Type="String">949-874-2844</Data></Cell>
+    <Cell ss:Index="23"><Data ss:Type="String">James</Data></Cell>
+    <Cell ss:Index="25"><Data ss:Type="String">Brown</Data></Cell>
+    <Cell ss:Index="27" ss:StyleID="s21"><Data ss:Type="String">5777 Carson St&#10;Suite 600</Data></Cell>
+    <Cell><Data ss:Type="String">Jamestown</Data></Cell>
+    <Cell><Data ss:Type="String">Connecticut</Data></Cell>
+    <Cell><Data ss:Type="String">US</Data></Cell>
+    <Cell><Data ss:Type="Number">7884</Data></Cell>
+    <Cell><Data ss:Type="String">989-444-3837</Data></Cell>
+    <Cell><Data ss:Type="String">TJE</Data></Cell>
+    <Cell><Data ss:Type="String">949-874-2844</Data></Cell>
+    <Cell><Data ss:Type="String">designer</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="38" ss:StyleID="s22"><Data ss:Type="DateTime">2009-01-15T00:20:00.000</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="DateTime">2009-01-15T00:20:00.000</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">25</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">89.95</Data></Cell>
+    <Cell><Data ss:Type="Number">114.95</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">25</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">89.95</Data></Cell>
+    <Cell><Data ss:Type="Number">114.95</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="91"><Data ss:Type="String">BRONZINI:1</Data></Cell>
+    <Cell><Data ss:Type="String">complete</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">1000000058</Data></Cell>
+    <Cell><Data ss:Type="String">base</Data></Cell>
+    <Cell><Data ss:Type="String">scottbolasevich@gmail.com</Data></Cell>
+    <Cell><Data ss:Type="String">tester123</Data></Cell>
+    <Cell><Data ss:Type="String">General</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">purchaseorder</Data></Cell>
+    <Cell><Data ss:Type="String">flatrate_flatrate</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">scott</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">bolasevich</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">111 street</Data></Cell>
+    <Cell><Data ss:Type="String">newington</Data></Cell>
+    <Cell><Data ss:Type="String">California</Data></Cell>
+    <Cell><Data ss:Type="String">US</Data></Cell>
+    <Cell><Data ss:Type="Number">23111</Data></Cell>
+    <Cell><Data ss:Type="String">860-219-2321</Data></Cell>
+    <Cell ss:Index="23"><Data ss:Type="String">scott</Data></Cell>
+    <Cell ss:Index="25"><Data ss:Type="String">bolasevich</Data></Cell>
+    <Cell ss:Index="27"><Data ss:Type="String">111 street</Data></Cell>
+    <Cell><Data ss:Type="String">newington</Data></Cell>
+    <Cell><Data ss:Type="String">California</Data></Cell>
+    <Cell><Data ss:Type="String">US</Data></Cell>
+    <Cell><Data ss:Type="Number">23111</Data></Cell>
+    <Cell><Data ss:Type="String">860-219-2321</Data></Cell>
+    <Cell ss:Index="35"><Data ss:Type="String">jewelry</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="38" ss:StyleID="s22"><Data ss:Type="DateTime">2009-07-14T19:29:00.000</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="DateTime">2009-07-14T19:29:00.000</Data></Cell>
+    <Cell><Data ss:Type="Number">136.04</Data></Cell>
+    <Cell><Data ss:Type="Number">50</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">1888.92</Data></Cell>
+    <Cell><Data ss:Type="Number">2074.96</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">136.04</Data></Cell>
+    <Cell><Data ss:Type="Number">50</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">1888.92</Data></Cell>
+    <Cell><Data ss:Type="Number">2074.96</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="91"><Data ss:Type="String">BRONZINI:1|BRONZIN2:1</Data></Cell>
+    <Cell><Data ss:Type="String">complete</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

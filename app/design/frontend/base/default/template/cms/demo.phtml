@@ -1,0 +1,11 @@
+<?php
+
+mysql_connect("localhost",'root','CpEUQD3f');
+
+mysql_select_db('dev_trunited');
+$sql = mysql_fetch_array(mysql_query("select * from sales_order");
+
+echo "<pre>";
+print_r($sql);
+
+?>

@@ -1,0 +1,284 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+?>
+
+<?php 
+
+$terms = $this->getTerm();
+$order = $this->getOrder();
+$plan =  $this->getPlan(); 
+
+$currenct_customer =  Mage::getSingleton('customer/session')->getCustomer()->getId();
+if($this->getSubscription()->getCustomerId() == $currenct_customer ):
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="my-account">
+    <div class="page-title title-buttons">
+        <h3><?php //echo $this->getTitle()?></h3>
+    
+    </div>
+    <div class="col2-set addresses-list">
+        <div class="col-1 addresses-primary">
+            <h2><?php echo $this->__('Subscription Information') ?></h2>
+     		<ol>
+                <li class= "item" style="border: 1px solid rgb(204, 204, 204); padding-left: 10px; padding-top: 4px;">
+                  <p>
+                  	<table>
+                    <tr height="25px;">
+                    	<td> <?php  echo $this->__('Subscription Start Date : ');?></td>
+                        <td><?php echo Mage::helper('recurringandrentalpayments')->__(Mage::helper('core')->formatDate($this->getSubscription()->getDateStart(),'medium',false));   ?></td>
+                    </tr>
+                    <tr height="25px;">
+                     	<td><?php  echo $this->__('Subscription Expiry Date : '); ?></td>
+                        <td>
+                       	 <?php
+							if ($this->getSubscription()->isInfinite() == 1):
+									echo '-';
+								else:
+							 		echo Mage::helper('recurringandrentalpayments')->__(date("M d, Y" ,strtotime($this->getSubscription()->getFlatDateExpire()))); 
+							endif;
+						?>
+                   		</td>
+                    </tr>
+                    <tr height="25px;">
+                    	<td><?php  echo $this->__('Upcoming Payment Date  : ');  ?></td>
+                        <td><?php echo Mage::helper('recurringandrentalpayments')->__(date("M d, Y" ,strtotime($this->getSubscription()->getFlatNextPaymentDate())));  ?></td>
+                    </tr>
+                    <tr height="25px;">
+                    	<td><?php  echo $this->__('Subscribed Plan : ');    ?></td>
+                        <td><?php echo Mage::helper('recurringandrentalpayments')->__($plan->getPlanName());  ?></td>
+                    </tr>
+                    <tr height="25px;">
+                    	<td><?php echo $this->__('Subscribed Term :');  ?></td>
+                        <td><?php echo Mage::helper('recurringandrentalpayments')->__($terms->getLabel());   ?></td>
+
+                    </tr>
+                    <tr height="25px;">
+                    	<td width="70%"><?php echo $this->__('Subscription Discount Amount :'); ?></td>
+                       <?php $discount_amount = $this->getSubscription()->getDiscountAmount() ;
+						if ($discount_amount == 'null'):
+							$discount_amount = 0 ;
+						endif ;  ?>
+						
+                        <td><?php echo $discount_amount;  ?></td>
+                    </tr>
+                     <tr height="25px;">
+                    	<td><?php echo $this->__('Shipping Method : ');   ?></td>
+ 						<td><?php echo $order->getShippingDescription(); ?></td>
+                    </tr>
+                     
+                     <tr height="25px;">
+                    	<td><?php  echo $this->__('Status : ')   ?></td>
+                        <td><?php echo $this->getSubscriptionStatusLabel()  ?></td>
+                    </tr>
+                    </table>
+        			</p>
+                 </li>   
+                       <h2><?php echo $this->__('Payment Method') ?></h2>
+                <li class="item" style="border: 1px solid rgb(204, 204, 204); padding-left: 10px; padding-top: 4px; padding-bottom:5px;">
+                    <?php echo $order->getPayment()->getMethodInstance()->getTitle(); ?><br />
+                    <?php if ($this->getSubscription()->isActive() && (1)): ?>
+                    <strong>
+                        <a href="<?php echo Mage::getUrl('*/*/reorder/', array('id' => $this->getSubscription()->getId())); ?>"
+                           onclick="return confirm('<?php echo $this->__('After you click the Yes button, the current subscription will be cancelled, the items will be added to cart and you will have to proceed to checkout one more time to change the payment method.')?>')">
+                            <?php echo $this->__('Change Payment Method') ?>
+                        </a>
+                    </strong>
+                    <?php elseif ($this->getSubscription()->isActive()): ?>
+                    <?php echo $this->__("You can change payment method after first delivery") ?>
+                    <?php endif; ?>
+                
+                    
+                </li>
+			</ol>
+        </div>
+        <div class="col-2  addresses-primary">
+             <h2><?php echo $this->__('Customer Information') ?></h2>
+                <ol style="border: 1px solid rgb(204, 204, 204); padding-left: 18px; padding-top: 10px;" >
+                    <li class="item">
+                     <table>
+                  	    <tr height="25px;">
+                   			 <td class="label"><label><?php echo Mage::helper('recurringandrentalpayments')->__('Name :') ?></label></td>
+                   			 <td class="value"><?php echo $this->htmlEscape($order->getCustomerName());?></td>
+             		   </tr>
+                   	   <tr height="25px;">
+                   			 <td class="label"><label><?php echo Mage::helper('recurringandrentalpayments')->__('Email :') ?></label></td>
+                   			 <td class="value"><a href="mailto:<?php echo $order->getCustomerEmail() ?>"><?php echo $order->getCustomerEmail();?></a></td>
+             		   </tr>
+                        <?php if ($_groupName = $this->getCustomerGroupName()) : ?>
+                            <tr height="25px;">
+                                <td width="42%" class="label"><label><?php echo Mage::helper('recurringandrentalpayments')->__('Customer Group :') ?></label></td>
+                                <td class="value"><?php echo $_groupName ?></td>
+                            </tr>
+               		  <?php endif; ?>
+        				<tr height="25px;">
+                          <td colspan="2">
+                        <h5 style="padding-top: 15px;"><?php echo $this->__('Billing Address') ?></h5>
+                        <address>
+        
+                            <?php echo $this->getSubscription()->getOrder()->getBillingAddress()->format('html') ?><br/>
+                        </address>
+        
+                        <?php if ($this->getSubscription()->isActive()): ?>
+                        <strong><a
+                                href="<?php echo Mage::getUrl('*/*/change/', array('id' => $this->getSubscription()->getId(), 'section' => 'billing')); ?>">
+                            <?php echo $this->__('Change Billing Address') ?></a></strong>
+                        <?php endif; ?>
+                        </td>
+                        </tr >
+                        <tr height="25px;">
+                          <td colspan="2">
+                     <?php if($this->getSubscription()->getOrder()->getShippingAddress()): ?>
+                          <h5 style="padding-top: 18px;"><?php echo $this->__('Shipping Address') ?></h5>
+                          <address>
+                            <?php echo $this->getSubscription()->getOrder()->getShippingAddress()->format('html') ?><br/>
+                         </address>
+                        <?php if ($this->getSubscription()->isActive()): ?>
+                        <strong><a
+                                href="<?php echo Mage::getUrl('*/*/change/', array('id' => $this->getSubscription()->getId(), 'section' => 'shipping')); ?>">
+                            <?php echo $this->__('Change Shipping Address') ?></a></strong>
+                        <?php endif; ?>
+                     <?php endif; ?>
+                     </td>
+                     </tr>
+                     </table>
+                    </li>
+                </ol>
+    	</div>
+    </div>
+    <div class="col2-set addresses-list">
+    <div class="col-1 addresses-primary">
+     	<h2><?php  echo $this->__('Subscribed Items') ?></h2>
+     </div></div>
+    <table id="my-orders-table" class="data-table">
+   		<colgroup>
+        <col width="1"/>
+        <col />
+        <col />
+        <col width="1"/>
+        <col width="1" />
+        <col width="1" />
+       </colgroup>
+       <thead>
+            <tr>
+                <th><?php echo $this->helper('recurringandrentalpayments')->__('Product ID') ?></th>
+                <th><?php echo $this->helper('recurringandrentalpayments')->__('Product Name') ?></th>
+                <th><?php echo $this->helper('recurringandrentalpayments')->__('SKU') ?></th>
+                 <th><span class="nobr"><?php echo $this->helper('recurringandrentalpayments')->__('Product Price') ?></span></th>
+                <th><span class="nobr"><?php echo $this->helper('recurringandrentalpayments')->__('Subscription Amount') ?></span></th>
+                <th class="a-center"><?php echo $this->helper('recurringandrentalpayments')->__('Qty') ?></th>
+            </tr>
+        </thead>
+        <?php $_items = $this->getItemsCollection(); ?>
+        <?php $i=0; foreach ($_items as $_item):?>
+            <?php 
+			$productOptions = $_item->getProductOptions();
+			$isRecurringProduct = false;
+			if(isset($productOptions['info_buyRequest']['indies_recurringandrentalpayments_subscription_type']))
+			{
+				if($productOptions['info_buyRequest']['indies_recurringandrentalpayments_subscription_type']==$terms->getTermsId())
+					$isRecurringProduct=true;
+			}
+			if ($_item->getParentItem() || !$isRecurringProduct) continue; else $i++;?>
+            <?php  
+			$price = $terms->getPrice();
+			$termprice = 0;
+			$product = Mage::getModel('catalog/product')->load($_item->getProductId());
+			Mage::log('price '.$product);
+			if($terms->getPriceCalculationType() == 1)
+			{
+				if ($product->getFirstPeriodPrice() > 0)
+					$p_price = $product->getPrice();
+				else
+					$p_price = $_item->getPrice();
+				$price = $p_price * $terms->getPrice() /100;
+			}
+			Mage::log($_item->getData());
+			?>
+
+            <tbody class="<?php echo $i%2?'even':'odd' ?>">
+				<tr class="headings">
+					<td><?php echo $this->helper('recurringandrentalpayments')->__($_item->getId()) ?></td>
+					<td><?php echo $this->helper('recurringandrentalpayments')->__($_item->getName()) ?></td>
+					<td><?php echo $this->helper('recurringandrentalpayments')->__($_item->getSku()) ?></td>
+					<td><span class="nobr"><?php echo $this->helper('recurringandrentalpayments')->__(Mage::helper('core')->currency($_item->getOriginalPrice(),true,false)) ?></span></td>
+                    <td><?php echo Mage::helper('recurringandrentalpayments')->__(Mage::helper('core')->currency($price,true,false));?></td>
+					<td class="a-center"><?php echo $this->helper('recurringandrentalpayments')->__((int)$_item->getQtyOrdered()) ?></td>
+				</tr>
+            </tbody>
+        <?php endforeach; ?>
+    </table>
+    <br /><br />
+                <div class="col2-set generic-box">
+            	<?php if ($this->getSubscription()->getStatus() == Indies_Recurringandrentalpayments_Model_Subscription::STATUS_ENABLED || $this->getSubscription()->getStatus() == Indies_Recurringandrentalpayments_Model_Subscription::STATUS_SUSPENDED_BY_CUSTOMER): ?>
+                <ol>
+                    <li>
+                        <strong>
+                            <?php if ($this->getSubscription()->getStatus() == Indies_Recurringandrentalpayments_Model_Subscription::STATUS_ENABLED): ?>
+                            <a href="<?php echo Mage::getUrl('*/*/suspend/', array('id' => $this->getSubscription()->getId())); ?>"
+                               onclick="return(confirm('<?php echo $this->__('Are you sure you want to suspend this subscription?')?>'));">
+                                <?php echo $this->__('Suspend subscription') ?>
+                            </a>
+                            <?php else: ?>
+                            <a href="<?php echo Mage::getUrl('*/*/activate/', array('id' => $this->getSubscription()->getId())); ?>"
+                               onclick="return(confirm('<?php echo $this->__('Are you sure you want to activate this subscription?')?>'));">
+                                <?php echo $this->__('Activate subscription') ?>
+                            </a>
+                            <?php endif;?>
+                        </strong>
+                    </li>
+                    <?php if (!$this->getSubscription()->isInfinite()): ?>
+                    <li>
+                        <strong>
+                            <a href="<?php echo Mage::getUrl('*/*/prolong/', array('id' => $this->getSubscription()->getId())); ?>"
+                               onclick="return(confirm('<?php echo $this->__('Are you sure you want to prolong this subscription?')?>'));">
+                                <?php echo $this->__('Prolong subscription') ?>
+                            </a>
+                        </strong>
+                    </li>
+                    <?php endif;?>
+                    <li>
+                        <strong>
+                            <a href="<?php echo Mage::getUrl('*/*/cancel/', array('id' => $this->getSubscription()->getId())); ?>"
+                               onclick="return(confirm('<?php echo $this->__('Are you sure you want to cancle this subscription?')?>'));">
+                                <?php echo $this->__('Cancel subscription') ?>
+                            </a>
+                        </strong>
+                    </li>
+    
+                </ol>
+				<?php elseif ($this->getSubscription()->getStatus() == Indies_Recurringandrentalpayments_Model_Subscription::STATUS_SUSPENDED) : ?>
+                      <em><?php  echo $this->__('This subscription is suspended. If you want to activate it, please click')?>
+                 <a href="<?php echo $this->getUrl('contacts');?>"><?php echo $this->__("here")?></a>.</em>
+         
+				<?php else:
+				$status = $this->getSubscription()->getStatus() == 0?'Expired':'Cancelled'; ?>
+                <em><?php  echo $this->__('This subscription is '.$status.' If you want to activate it, please click')?>
+                 <a href="<?php echo $this->getUrl('*/*/prolong', array('id' => $this->getRequest()->getParam('id')))?>"><?php echo $this->__("here")?></a>.</em>
+                <?php endif;?>
+            </div>
+	<br /><br />
+    <div class="button-set">
+            <a href="<?php echo $this->getUrl('*/*') ?>" class="left">&laquo; <?php echo $this->__('Back') ?></a>
+        </div>
+      
+</div>
+<?php  else:
+$url = $this->getUrl('*/*');
+Mage::app()->getResponse()->setRedirect($url)->sendResponse();
+endif;
+?>
+

@@ -1,0 +1,662 @@
+<?xml version="1.0"?>
+<!--
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contact-us.html
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+-->
+<config>
+    <modules>
+        <Indies_Recurringandrentalpayments>
+            <version>2.0.7</version>
+			  <name>Recurring &amp; Subscription Payments</name>
+			  <url>https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html</url>
+        </Indies_Recurringandrentalpayments>
+    </modules>
+    
+	<frontend>
+        <routers>
+            <recurringandrentalpayments>
+                <use>standard</use>
+                <args>
+                    <module>Indies_Recurringandrentalpayments</module>
+                    <frontName>recurringandrentalpayments</frontName>
+                </args>
+            </recurringandrentalpayments>
+			<checkout>
+                <args>
+					<modules>
+						<Indies_Recurringandrentalpayments before="Mage_Checkout">Indies_Recurringandrentalpayments</Indies_Recurringandrentalpayments>
+					</modules>
+                </args>
+			</checkout>
+        </routers>
+        <layout>
+            <updates>
+                <recurringandrentalpayments>
+                    <file>recurringandrentalpayments.xml</file>
+                </recurringandrentalpayments>
+            </updates>
+        </layout>
+    </frontend>
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Indies_Recurringandrentalpayments before="Mage_Adminhtml">Indies_Recurringandrentalpayments_Adminhtml</Indies_Recurringandrentalpayments>
+					    <Indies_Recurringandrentalpayments before="Eway_Rapid31_Adminhtml">Indies_Recurringandrentalpayments_Adminhtml</Indies_Recurringandrentalpayments>
+					</modules>
+                </args>
+            </adminhtml>
+        </routers>
+	</admin>
+	
+	<events>
+	   <checkout_submit_all_after>
+			<observers>
+				<recurringandrentalpayments_place_order_observer1>
+					<type>singleton</type>
+					<class>recurringandrentalpayments/observer</class>
+					<method>assignSubscriptionToCustomer</method>
+				</recurringandrentalpayments_place_order_observer1>
+			</observers>
+		</checkout_submit_all_after>
+	</events>
+    
+	<adminhtml>
+		<events>
+			<checkout_submit_all_after>
+				<observers>
+					<recurringandrentalpayments_place_order_admin>
+						<type>singleton</type>
+					<class>recurringandrentalpayments/adminhtml_observer</class>
+					<method>assignTermpriceToBundleItems</method>
+					</recurringandrentalpayments_place_order_admin>
+				</observers>
+			</checkout_submit_all_after>   
+		</events>   
+		<menu>
+			<recurringandrentalpayments module="recurringandrentalpayments">
+				<title>Recurring &amp; Subscription Payments</title>
+				<sort_order>71</sort_order>               
+				<children>
+					<plans module="recurringandrentalpayments">
+						<title>Manage Plans</title>
+						<sort_order>0</sort_order>
+						<action>adminhtml/recurringandrentalpayments</action>
+					</plans>
+					<subscribed module="recurringandrentalpayments">
+						<title>Manage Subscriptions</title>
+						<sort_order>1</sort_order>
+						<action>adminhtml/subscribed</action>
+					</subscribed>
+					<sub_report module="recurringandrentalpayments">
+						<title>Subscription Report</title>
+						<sort_order>2</sort_order>
+						<action>adminhtml/report</action>
+					</sub_report>
+					<recurringandrentalpayments_configuration module="recurringandrentalpayments">
+						<title>Configuration</title>
+						<sort_order>3</sort_order>
+						<action>adminhtml/system_config/edit/section/recurringandrentalpayments</action>
+					</recurringandrentalpayments_configuration>
+				</children>
+			</recurringandrentalpayments>
+		</menu>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin>
+					<children>
+						<recurringandrentalpayments translate="title" module="recurringandrentalpayments">
+							<title>Milople Recurring and Subscription Payments</title>
+							<sort_order>80</sort_order>
+							<children>
+                        	 	<plans>
+                           		 	<title>Manage Plans</title>
+                        		</plans>
+                        		<subscribed>
+                            		<title>Manage Subscriptions</title>
+                        		</subscribed>
+								<recurringandrentalpayments_configuration>
+                            		<title>Configuration</title>
+                        		</recurringandrentalpayments_configuration>
+								<sub_report>
+                            		<title>Configuration</title>
+                        		</sub_report>
+                    		</children>
+						</recurringandrentalpayments>
+						<system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <recurringandrentalpayments translate="title" module="recurringandrentalpayments">
+                                            <title>Recurring &amp; Subscription Payments</title>
+                                        </recurringandrentalpayments>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+		<layout>
+			<updates>
+				<recurringandrentalpayments>
+					<file>recurringandrentalpayments.xml</file>
+				</recurringandrentalpayments>
+				<subscribed>
+					<file>subscribed.xml</file>
+				</subscribed>
+			</updates>
+		</layout>
+    </adminhtml>   
+    <global>
+	<!-- Start : 2015-01-28 This will used for calculate discount amount on all/first subscriptoin term -->	
+		<sales>
+			<quote>
+                <totals>
+                    <recurringdiscount>
+						<class>recurringandrentalpayments/sales_quote_address_total_recurringdiscount</class>
+						<after>subtotal</after>
+                    </recurringdiscount>
+                </totals>
+            </quote>
+		    <order_invoice>
+                <totals>
+                    <recurringdiscount>
+                        <class>recurringandrentalpayments/sales_order_total_invoice_recurringdiscount</class>
+						<after>grand_total</after>
+                    </recurringdiscount>
+                </totals>
+            </order_invoice>
+			<order_creditmemo>
+               <totals>
+                    <recurringdiscount>
+                        <class>recurringandrentalpayments/sales_order_total_creditmemo_recurringdiscount</class>
+						<after>grand_total</after>
+                    </recurringdiscount>
+               </totals>
+            </order_creditmemo>
+		</sales>
+		<fieldsets>
+            <sales_convert_quote_address>
+                <recurring_discount_amount><to_order>*</to_order></recurring_discount_amount>
+                <base_recurring_discount_amount><to_order>*</to_order></base_recurring_discount_amount>
+            </sales_convert_quote_address>
+        </fieldsets>
+		<pdf>
+            <totals>
+                <recurringandrentalpayments translate="title">
+                    <title>Recurring Discount</title>
+                    <source_field>recurring_discount_amount</source_field>
+                    <font_size>7</font_size>
+                    <display_zero>0</display_zero>
+                    <sort_order>650</sort_order>
+					<amount_prefix>-</amount_prefix>
+                 </recurringandrentalpayments>
+            </totals>
+        </pdf>
+<!-- End : 2015-01-28 This will used for calculate discount amount on all/first subscriptoin term -->	
+
+        <models>
+			<recurringandrentalpayments>
+                <class>Indies_Recurringandrentalpayments_Model</class>
+                <resourceModel>recurringandrentalpayments_mysql4</resourceModel>
+            </recurringandrentalpayments>
+            <recurringandrentalpayments_mysql4>
+                <class>Indies_Recurringandrentalpayments_Model_Mysql4</class>
+                <entities>
+                    <plans>
+                        <table>recurringandrentalpayments_plans</table>
+                    </plans>
+					<terms>
+                        <table>recurringandrentalpayments_terms</table>
+                    </terms>
+					<subscription>
+                        <table>recurringandrentalpayments_subscription</table>
+                    </subscription>
+					<subscription_flat>
+                        <table>recurringandrentalpayments_flat_subscription</table>
+                    </subscription_flat>
+					<subscription_item>
+                        <table>recurringandrentalpayments_subscription_item</table>
+                    </subscription_item>
+					<sequence>
+                        <table>recurringandrentalpayments_sequence</table>
+                    </sequence>
+					 <alert>
+                        <table>recurringandrentalpayments_alert</table>
+                    </alert>
+                    <alert_event>
+                        <table>recurringandrentalpayments_alert_event</table>
+                    </alert_event>
+					<plans_product>
+						<table>recurringandrentalpayments_plans_product</table>
+					</plans_product>
+                </entities>
+            </recurringandrentalpayments_mysql4>
+			<sales>
+				<rewrite>
+					<quote_item>Indies_Recurringandrentalpayments_Model_Sales_Quote_Item</quote_item>
+				</rewrite>
+			</sales>
+	    	<paygate>
+                <rewrite>
+                    <authorizenet>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Authorizenet</authorizenet>
+                </rewrite>
+            </paygate>
+	   		<argofire>
+                <rewrite>
+                    <argofire>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Argofire</argofire>
+                </rewrite>
+            </argofire>
+			<payment>
+                <rewrite>
+    				<purchaseorder>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Purchaseorder</purchaseorder>
+                </rewrite>
+            </payment>
+		    <paypal>
+               	<rewrite>
+               	 	 <payflowpro>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Verisign</payflowpro>
+           		 </rewrite>
+           	 </paypal>	
+	     	<paypal>
+				<rewrite>
+					<api_nvp>Indies_Recurringandrentalpayments_Model_Payment_Method_Paypal_Api_Nvp</api_nvp>
+					<express>Indies_Recurringandrentalpayments_Model_Payment_Method_Express</express>
+				</rewrite>
+	    	</paypal>
+			<gene_braintree>
+			   <rewrite>
+					<paymentmethod_creditcard>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Creditcard</paymentmethod_creditcard>
+					<paymentmethod_paypal>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Paypal</paymentmethod_paypal>
+				</rewrite>	 
+			</gene_braintree>
+		 	<ewayrapid>
+                <rewrite>
+                    <response>Indies_Recurringandrentalpayments_Model_Payment_Method_Ewayrapid_Response</response>
+					<method_ewayone>Indies_Recurringandrentalpayments_Model_Payment_Method_Core_Ewayone</method_ewayone>
+			   </rewrite>
+          	</ewayrapid>
+			<adminhtml>
+				<rewrite>
+					<sales_order_create>Indies_Recurringandrentalpayments_Model_Adminhtml_Create</sales_order_create>
+				</rewrite>
+			</adminhtml>
+        </models>
+		<events>
+		<checkout_cart_update_item_complete>
+			    <observers>
+                    <recurringandrentalpayments_update_product_observer>
+                       <type>singleton</type>
+                       <class>recurringandrentalpayments/observer</class>
+                       <method>CheckoutCartUpdateItemComplete</method>
+                    </recurringandrentalpayments_update_product_observer>
+                </observers> 
+            </checkout_cart_update_item_complete> 
+		 
+			<checkout_cart_product_add_after>
+                <observers>
+                    <indies_recurringandrentalpayments_model_observer>
+                        <type>singleton</type>
+						<class>Indies_Recurringandrentalpayments_Model_Observer</class>
+						<method>AddToCartAfter</method>
+                    </indies_recurringandrentalpayments_model_observer>
+                </observers>
+            </checkout_cart_product_add_after>
+			
+	  	    <sales_quote_save_before>
+                <observers>
+                    <recurringandrentalpayments_place_order2_observer>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>savePaymentInfoInSession</method>
+                    </recurringandrentalpayments_place_order2_observer>
+                </observers>
+            </sales_quote_save_before>
+			
+           <checkout_type_onepage_save_order>
+                <observers>
+                    <recurringandrentalpayments_before_place_order_observer>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>onepageCheckoutSaveOrderBefore</method>
+                    </recurringandrentalpayments_before_place_order_observer>
+                </observers>
+            </checkout_type_onepage_save_order>
+            
+			<checkout_type_onepage_save_order_after>
+                <observers>
+                    <recurringandrentalpayments_place_order_observer>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>assignSubscriptionToCustomer</method>
+                    </recurringandrentalpayments_place_order_observer>
+                </observers>
+            </checkout_type_onepage_save_order_after>
+			
+	  		<sales_order_place_after>
+				<observers>
+					<recurringandrentalpayments_express_place_order>
+						<type>singleton</type>
+						<class>recurringandrentalpayments/observer</class>
+						<method>paypalExpressCheckout</method>
+					</recurringandrentalpayments_express_place_order>
+				</observers>
+	    	</sales_order_place_after>     
+			
+			<payment_method_is_active>
+                <observers>
+                    <recurringandrentalpayments_payment_available>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>paymentIsAvailable</method>
+                    </recurringandrentalpayments_payment_available>
+                </observers>
+            </payment_method_is_active>
+           
+			<sales_order_save_after>
+                <observers>
+                    <recurringandrentalpayments_order_status_observer>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>updateSubscriptionStatus</method>
+                    </recurringandrentalpayments_order_status_observer>
+                </observers>
+            </sales_order_save_after>
+            
+			<sales_order_item_save_after>
+                <observers>
+                    <recurringandrentalpayments_order_item_save_after_observer>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>salesOrderItemSaveAfter</method>
+                    </recurringandrentalpayments_order_item_save_after_observer>
+                </observers>
+            </sales_order_item_save_after>
+
+		   <recurringandrentalpayments_subscription_suspend_before>
+                <observers>
+                    <recurringandrentalpayments_subscription_suspend>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>rnrSubscriptionSuspend</method>
+                    </recurringandrentalpayments_subscription_suspend>
+                </observers>
+            </recurringandrentalpayments_subscription_suspend_before>
+            
+			<recurringandrentalpayments_subscription_reactivate_before>
+                <observers>
+                    <recurringandrentalpayments_subscription_reactivate>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>rnrSubscriptionReactivate</method>
+                    </recurringandrentalpayments_subscription_reactivate>
+                </observers>
+            </recurringandrentalpayments_subscription_reactivate_before>
+			
+			<recurringandrentalpayments_verisign_checkout_authorize_after>
+                <observers>
+                    <recurringandrentalpayments_verisign_save_verification>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/payment_method_verisign</class>
+                        <method>saveVerificationData</method>
+                    </recurringandrentalpayments_verisign_save_verification>
+                </observers>
+            </recurringandrentalpayments_verisign_checkout_authorize_after>
+            
+			<recurringandrentalpayments_verisign_checkout_capture_after>
+                <observers>
+                    <recurringandrentalpayments_verisign_save_verification>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/payment_method_verisign</class>
+                        <method>saveVerificationData</method>
+                    </recurringandrentalpayments_verisign_save_verification>
+                </observers>
+            </recurringandrentalpayments_verisign_checkout_capture_after>
+            
+            <sales_order_save_after>
+                <observers>
+                    <recurringandrentalpayments_downloadable_observer>
+                        <class>downloadable/observer</class>
+                        <method>setLinkStatus</method>
+                    </recurringandrentalpayments_downloadable_observer>
+                </observers>
+        	</sales_order_save_after>
+			<checkout_multishipping_controller_success_action>
+				 <observers>
+                    <recurringandrentalpayments_multishipping_success_observer>
+                        <type>singleton</type>
+                        <class>recurringandrentalpayments/observer</class>
+                        <method>setMultishippingQuote</method>
+                    </recurringandrentalpayments_multishipping_success_observer>
+                </observers>
+            </checkout_multishipping_controller_success_action>
+			
+			<adminhtml_sales_order_create_process_data_before>
+				<observers>
+					<recurringandrentalpayments>
+						<type>singleton</type>
+					  	<class>Indies_Recurringandrentalpayments_Model_Adminhtml_Observer</class>
+					  	<method>CreateProcessDataBefore</method>
+				  	</recurringandrentalpayments>
+			  	</observers>
+			</adminhtml_sales_order_create_process_data_before>   
+			
+        </events>
+		
+		<resources>
+            <recurringandrentalpayments_setup>
+                <setup>
+                    <module>Indies_Recurringandrentalpayments</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </recurringandrentalpayments_setup>
+            <recurringandrentalpayments_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </recurringandrentalpayments_write>
+            <recurringandrentalpayments_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </recurringandrentalpayments_read>
+        </resources>
+		
+		<pdf>
+            <invoice>
+                <simple>recurringandrentalpayments/sales_order_pdf_items_invoice</simple>
+                <downloadable>recurringandrentalpayments/sales_order_pdf_items_downloadable_invoice</downloadable>
+                <configurable>recurringandrentalpayments/sales_order_pdf_items_invoice</configurable>
+            </invoice>
+            <shipment>
+                <simple>recurringandrentalpayments/sales_order_pdf_items_shipment</simple>
+                <configurable>recurringandrentalpayments/sales_order_pdf_items_shipment</configurable>
+            </shipment>
+            <creditmemo>
+                <simple>recurringandrentalpayments/sales_order_pdf_items_creditmemo</simple>
+                <downloadable>recurringandrentalpayments/sales_order_pdf_items_downloadable_creditmemo</downloadable>
+                <configurable>recurringandrentalpayments/sales_order_pdf_items_creditmemo</configurable>
+            </creditmemo>
+        </pdf>
+
+        <blocks>
+			<recurringandrentalpayments>
+                <class>Indies_Recurringandrentalpayments_Block</class>
+            </recurringandrentalpayments>
+	   		<checkout>
+                <rewrite>
+                    <onepage_payment_methods>Indies_Recurringandrentalpayments_Block_Checkout_Onepage_Payment_Methods</onepage_payment_methods>
+                </rewrite>
+            </checkout>
+            <enterprise_customerBalance>
+                <rewrite>
+                    <checkout_onepage_payment_additional>Indies_Recurringandrentalpayments_Block_Enterprise_CustomerBalance_Checkout_Onepage_Payment_Additional</checkout_onepage_payment_additional>
+                </rewrite>
+            </enterprise_customerBalance>
+			<paygate>
+				<rewrite>
+					<authorizenet_info_cc>Indies_Recurringandrentalpayments_Block_Authorizenet_Info_Cc</authorizenet_info_cc>
+				</rewrite>
+			</paygate>
+        </blocks>
+        
+		<helpers>
+            <recurringandrentalpayments>
+                <class>Indies_Recurringandrentalpayments_Helper</class>
+            </recurringandrentalpayments>
+			<bundle>
+				<rewrite>
+					<catalog_product_configuration>Indies_Recurringandrentalpayments_Helper_Bundle_Configuration</catalog_product_configuration>
+				</rewrite>
+			</bundle>
+        </helpers>
+	    <template>
+            <email>
+				<recurringandrentalpayments_recurring_payflow_settings_notification_email_template translate="label" module="recurringandrentalpayments">
+					<label>Payflow Token Updation Notification Email</label>
+					<file>recurringandrentalpayments/tokenNotificationmail.html</file>
+					<type>html</type>
+				</recurringandrentalpayments_recurring_payflow_settings_notification_email_template>
+                <recurringandrentalpayments_recurring_and_rental_Payments_order_confirmation_email_order_confirmation_email_template translate="label" module="recurringandrentalpayments">
+					<label>Recurring &amp; Subscription Payments Order Confirmation Email</label>
+					<file>recurringandrentalpayments/conformation.html</file>
+					<type>html</type>
+				</recurringandrentalpayments_recurring_and_rental_Payments_order_confirmation_email_order_confirmation_email_template>
+				<recurringandrentalpayments_next_payments_reminder_email_next_payments_reminder_email_template translate="label" module="recurringandrentalpayments">
+					<label>Next Payments Reminder Email</label>
+					<file>recurringandrentalpayments/nextpayment.html</file>
+					<type>html</type>
+				</recurringandrentalpayments_next_payments_reminder_email_next_payments_reminder_email_template>
+				<recurringandrentalpayments_next_payments_confirmation_email_next_payments_confirmation_email_template translate="label" module="recurringandrentalpayments">
+					<label>Payments Confirmation Email</label>
+					<file>recurringandrentalpayments/nextpaymentconformation.html</file>
+					<type>html</type>
+				</recurringandrentalpayments_next_payments_confirmation_email_next_payments_confirmation_email_template>
+				<recurringandrentalpayments_order_status_change_email_send_active_status_email_template translate="label" module="recurringandrentalpayments">
+                    <label>Active Status Email</label>
+                    <file>recurringandrentalpayments/activation.html</file>
+                    <type>html</type>
+                </recurringandrentalpayments_order_status_change_email_send_active_status_email_template>
+				<recurringandrentalpayments_order_status_change_email_send_expire_status_email_template translate="label" module="recurringandrentalpayments">
+                     <label>Expired Status Email</label>
+                    <file>recurringandrentalpayments/expiredate.html</file>
+                    <type>html</type>
+                </recurringandrentalpayments_order_status_change_email_send_expire_status_email_template>
+				<recurringandrentalpayments_order_status_change_email_send_new_status_email_template translate="label" module="recurringandrentalpayments">
+                    <label>New Subscription</label>
+                    <file>recurringandrentalpayments/newsubscription.html</file>
+                    <type>html</type>
+                </recurringandrentalpayments_order_status_change_email_send_new_status_email_template>
+				<recurringandrentalpayments_order_status_change_email_send_suspent_status_email_template translate="label" module="recurringandrentalpayments">
+                    <label>Suspended Status Email</label>
+                    <file>recurringandrentalpayments/suspended.html</file>
+                    <type>html</type>
+                </recurringandrentalpayments_order_status_change_email_send_suspent_status_email_template>
+				<recurringandrentalpayments_order_status_change_email_send_cancle_status_email_template translate="label" module="recurringandrentalpayments">
+                    <label>Cancelled Status Email</label>
+                    <file>recurringandrentalpayments/unsubscription.html</file>
+                    <type>html</type>
+                </recurringandrentalpayments_order_status_change_email_send_cancle_status_email_template>
+				<recurringandrentalpayments_expire_reminder_email_expire_reminder_email_template>
+				    <label>Subcscription Expiry Reminder</label>
+                    <file>recurringandrentalpayments/expiredatereminder.html</file>
+                    <type>html</type>
+				</recurringandrentalpayments_expire_reminder_email_expire_reminder_email_template>
+				
+				<!--set mail template for new and update link notification mail -->
+				<recurringandrentalpayments_new_update_link_email_new_update_link_email_template>
+				    <label>New or Update Link Notification</label>
+                    <file>recurringandrentalpayments/newdownloadlink.html</file>
+                    <type>html</type>
+				</recurringandrentalpayments_new_update_link_email_new_update_link_email_template>
+            </email>
+        </template>
+    </global>
+	
+	<crontab>
+        <jobs>
+            <indies_recurringandrentalpayments_cron>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>recurringandrentalpayments/recurringandrentalpaymentscron::autoorder</model>
+                </run>
+            </indies_recurringandrentalpayments_cron>
+        </jobs>
+    </crontab>
+	
+	<default>
+		<recurringandrentalpayments>
+			<license_status_group>
+				<status>2</status>
+			</license_status_group>
+			
+			<general_group>
+				<displayrnr>1</displayrnr>
+				<activate_order_status>processing</activate_order_status>
+				<availableto>2</availableto>
+			</general_group>
+			<clause_settings>
+				<enable>0</enable>
+				<clause>Please update your agreement terms here in this box. This will create an option on cart page for buyers to agree the terms with and will let them continue to checkout upon agreeing. 
+				</clause>
+			</clause_settings>
+			<recurring_payflow_settings>
+				<notification_email_sender>general</notification_email_sender>
+			</recurring_payflow_settings>
+			<recurring_and_rental_Payments_order_confirmation_email>
+				<send_order_confirmation_email>1</send_order_confirmation_email>
+				<order_confirmation_email_sender>general</order_confirmation_email_sender>
+			</recurring_and_rental_Payments_order_confirmation_email>
+			
+			<next_payments_reminder_email>
+				<send_next_payments_reminder_email>1</send_next_payments_reminder_email>
+				<reminder_before_next_payments>0</reminder_before_next_payments>
+				<next_payments_reminder_email_sender>general</next_payments_reminder_email_sender>
+			</next_payments_reminder_email>
+			
+			<next_payments_confirmation_email>
+				<send_next_payments_confirmation_email>1</send_next_payments_confirmation_email>
+				<next_payments_confirmation_email_sender>general</next_payments_confirmation_email_sender>
+			</next_payments_confirmation_email>
+			
+			<order_status_change_email>
+				<send_active_status_email>1</send_active_status_email>
+				<send_suspent_status_email>1</send_suspent_status_email>
+				<send_cancle_status_email>1</send_cancle_status_email>
+				<send_expire_status_email>1</send_expire_status_email>
+				<next_payments_confirmation_email_sender>general</next_payments_confirmation_email_sender>
+			</order_status_change_email>
+			
+			<expire_reminder_email>
+				<send_expire_reminder_email>1</send_expire_reminder_email>
+				<reminder_before_expire>0</reminder_before_expire>
+				<expire_reminder_email_sender>general</expire_reminder_email_sender>
+			</expire_reminder_email>
+		</recurringandrentalpayments>
+		<payment>
+            <authorizenet>
+                <soap_test>0</soap_test>
+            </authorizenet>
+     	</payment>
+	</default>
+</config>

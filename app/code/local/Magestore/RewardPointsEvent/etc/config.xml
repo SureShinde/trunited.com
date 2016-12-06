@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsEvent
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <modules>
+        <Magestore_RewardPointsEvent>
+            <version>0.2.5</version>
+        </Magestore_RewardPointsEvent>
+    </modules>
+    <frontend>
+        <routers>
+            <rewardpointsevent>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_RewardPointsEvent</module>
+                    <frontName>rewardpointsevent</frontName>
+                </args>
+            </rewardpointsevent>
+        </routers>
+        <layout>
+            <updates>
+                <rewardpointsevent>
+                    <file>rewardpointsevent.xml</file>
+                </rewardpointsevent>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsEvent>
+                    <files>
+                        <default>Magestore_RewardPointsEvent.csv</default>
+                    </files>
+                </Magestore_RewardPointsEvent>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <!-- <rewardpointseventadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_RewardPointsEvent</module>
+                    <frontName>rewardpointseventadmin</frontName>
+                </args>
+            </rewardpointseventadmin> -->
+			<adminhtml>
+                <args>
+                    <modules>
+                        <Magestore_RewardPointsEvent before="Mage_Adminhtml">Magestore_RewardPointsEvent_Adminhtml</Magestore_RewardPointsEvent>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <rewardpointsevent>
+                    <file>rewardpointsevent.xml</file>
+                </rewardpointsevent>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_RewardPointsEvent>
+                    <files>
+                        <default>Magestore_RewardPointsEvent.csv</default>
+                    </files>
+                </Magestore_RewardPointsEvent>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <rewardpointsevent>
+                <class>Magestore_RewardPointsEvent_Model</class>
+                <resourceModel>rewardpointsevent_mysql4</resourceModel>
+            </rewardpointsevent>
+            <rewardpointsevent_mysql4>
+                <class>Magestore_RewardPointsEvent_Model_Mysql4</class>
+                <entities>
+                    <rewardpointsevent>
+                        <table>rewardpoints_event</table>
+                    </rewardpointsevent>
+                    <customerevent>
+                        <table>rewardpoints_event_customer</table>
+                    </customerevent>
+                </entities>
+            </rewardpointsevent_mysql4>
+        </models>
+        <resources>
+            <rewardpointsevent_setup>
+                <setup>
+                    <module>Magestore_RewardPointsEvent</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </rewardpointsevent_setup>
+            <rewardpointsevent_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </rewardpointsevent_write>
+            <rewardpointsevent_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </rewardpointsevent_read>
+        </resources>
+        <blocks>
+            <rewardpointsevent>
+                <class>Magestore_RewardPointsEvent_Block</class>
+            </rewardpointsevent>
+        </blocks>
+        <helpers>
+            <rewardpointsevent>
+                <class>Magestore_RewardPointsEvent_Helper</class>
+            </rewardpointsevent>
+        </helpers>
+        <rewardpoints>
+            <actions>
+                <event>rewardpointsevent/action_event</event>
+            </actions>
+        </rewardpoints>
+        <template>
+            <email>
+                <rewardpoints_eventplugin_email_event translate="label" module="rewardpointsevent">
+                    <label>RewardpontEvent Email</label>
+                    <file>rewardpointsevent/event.html</file>
+                    <type>html</type>
+                </rewardpoints_eventplugin_email_event>
+            </email>
+        </template>
+         <events>
+            <customer_save_commit_after>
+                <observers>
+                    <rewardpointsevent_observers>
+                        <class>rewardpointsevent/observer</class>
+                        <method>customerCommitSaveAfter</method>
+                    </rewardpointsevent_observers>
+                </observers>
+            </customer_save_commit_after>
+            <rewardpointsevent_create_customer_from_csv>
+                <observers>
+                    <rewardpointsevent_observers>
+                        <class>rewardpointsevent/observer</class>
+                        <method>customerCsvSaveAfter</method>
+                    </rewardpointsevent_observers>
+                </observers>
+            </rewardpointsevent_create_customer_from_csv>
+        </events> 
+    </global>
+    <default>
+        <rewardpoints>
+            <eventplugin>
+                <enable>1</enable>
+            </eventplugin>
+        </rewardpoints>
+    </default>
+    <crontab>
+        <jobs>
+            <rewardpointsevent_active_event>
+                <schedule><cron_expr>42 */2 * * *</cron_expr></schedule>
+                <run><model>rewardpointsevent/cron::addEventTransaction</model></run>
+            </rewardpointsevent_active_event>
+            <rewardpointsevent_check_active_event>
+                <schedule><cron_expr>30 0 * * *</cron_expr></schedule>
+                <run><model>rewardpointsevent/cron::checkActiveEvent</model></run>
+            </rewardpointsevent_check_active_event>
+        </jobs>
+    </crontab>
+</config>

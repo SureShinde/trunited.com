@@ -1,0 +1,193 @@
+<?php 
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsTransfer
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpointstransfer template
+ * 
+ * @see Magestore_RewardPointsTransfer_Block_Rewardpointstransfer
+ */
+?>
+<div class="rewardpoints-transfer">
+    <div class="page-title">
+        <h1><?php echo $this->__('Point Transfer') ?></h1>
+    </div>
+    <div class="transfer-content">
+        <div class="transfer-send-point">
+            <div class="transfer-send-point-left box-account box-info box-rewardpoints-summary">
+                <div class="box-head">
+                    <h2><?php echo $this->__('Send Point To Friends') ?></h2>
+                </div>
+                <div class="info-summary">
+                    <form action="<?php echo $this->getUrl('rewardpointstransfer/index/transfer') ?>" method="post" id="form-validate" onsubmit="document.getElementById('transfer-button').setAttribute('disabled', true);">
+                        <ul class="form-list">
+                            <li>
+                                <label for="email" class="required"><em>*</em><?php echo $this->__('Recipient’s Email') ?></label>
+                                <div class="input-box">
+                                    <input type="text" name="email" id="email" value="" title="<?php echo $this->__('Email Address') ?>" class="input-text required-entry validate-email" onchange="checkEmail()"/>
+                                </div>
+                                <div id="transfer-ajax-loader" style="display:none"><img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif'); ?>" /></div>
+                                <div id="transfer-email-correct" style="display: none">
+                                    <font class='color-success-transfer'><?php echo $this->__('This email is correct.') ?></font>
+                                </div>
+                                <div id="transfer-email-deni" style="display: none">
+                                    <font class='validation-advice'><?php echo $this->__('You cannot transfer points to yourself!') ?></font>
+                                </div>
+                                <div id="transfer-email-incorrect" style="display: none">
+                                    <div id="confirmTransfer-div" style="padding: 5px">
+<!--                                        <input type="checkbox" name="confirmTransfer" id="confirmTransfer" value="1" class="required-entry" checked/>-->
+                                        <font class="color-success-transfer"><?php echo $this->__('This email does not exist on this store! A notification email will be sent to that email. This transfer will be canceled after %s if your friend does not create an account on this store.', $this->getDayPending()) ?></font>
+                                    </div>
+                                </div>
+                                <div id="transfer-email-error" style="display:none">
+                                    <font class='validation-advice'><?php echo $this->__('Can not validate email address.') ?></font>
+                                </div>
+                            </li>
+                            <li>
+                                <label for="point" class="required"><em>*</em><?php echo $this->__('Points Amount (%s available)', Mage::helper('rewardpoints/point')->format(($this->getPointAvailable()<0)? 0 : $this->getPointAvailable())) ?></label>
+                                <div class="input-box">
+                                    <input type="text" name="point" id="point" value="" title="<?php echo $this->__('Points to Send') ?>" class="input-text required-entry validate-greater-than-zero" onchange="checkPoint()"/>
+                                </div>
+                                <div id="transfer-point-error" style="display:none">
+                                    <font class='validation-advice'>
+                                        <?php
+                                        $pointMax = $this->getPointAvailable();
+                                        if($pointMax == 0) echo $this->__('Your account does not have enough points to transfer!');
+                                        else if($pointMax < 0) echo $this->__('You do not have the permission to transfer!');
+                                        else echo $this->__('You cannot transfer more than %s.', Mage::helper('rewardpoints/point')->format($this->getPointAvailable()));
+                                        ?>
+                                    </font>
+                                </div>
+                            </li>
+                            <li>
+                                <label for="message"><?php echo $this->__('Message') ?></label>
+                                <div class="input-box">
+                                    <textarea name="message" title="<?php echo $this->__('Message') ?>" id="transfer-textarea" class="input-text" maxlength="250"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+                        <button type="submit" title="<?php echo $this->__('Transfer') ?>" class="button" id="transfer-button"><span><span><?php echo $this->__('Transfer') ?></span></span></button>
+                    </form>
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        var dataForm = new VarienForm('form-validate', true);
+                        var isDisableEmail = false;
+                        var isDisablePoint = false;
+                        function checkEmail(){
+                            var email = document.getElementById('email').value;
+                            var website = '<?php echo Mage::app()->getWebsite()->getId() ?>';
+                            var deni = '<?php echo $this->__('You cannot transfer points to yourself!') ?>';
+                            var error = '<?php echo $this->__('Cannot validate email address!') ?>';
+                            
+                            $('transfer-email-correct').hide();
+                            $('transfer-email-incorrect').hide();
+
+                            if(Object.extend(Validation.validate($('email')))){  
+                                $('transfer-ajax-loader').show();
+                                document.getElementById('transfer-button').setAttribute("disabled", true);
+                                isDisableEmail = true;
+
+                                var url = '<?php echo $this->getUrl('rewardpointstransfer/index/checkEmail') ?>';
+                                sendmail = new Ajax.Request(url,{
+                                    method: 'post',
+                                    parameters:{
+                                        email: email,
+                                        website:website
+                                    },
+                                    onSuccess: function(message){
+                                        $('transfer-ajax-loader').hide();
+                                        var mess = message.responseText;
+                                        if(mess=='correct'){
+                                            $('transfer-email-correct').show();
+                                            if(!isDisablePoint) $('transfer-button').removeAttribute("disabled");
+                                            isDisableEmail = false;
+                                        }else if(mess=='deni'){
+                                            Object.extend(Validation.ajaxError($('email'), deni));
+                                        }else if(mess == 'incorrect'){
+                                            $('transfer-email-incorrect').show(); 
+                                            if(!isDisablePoint) $('transfer-button').removeAttribute("disabled");
+                                            isDisableEmail = false;
+                                        }else{
+                                            Object.extend(Validation.ajaxError($('email'), error));
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        function checkPoint(){
+                            if(Object.extend(Validation.validate($('point')))){ 
+                                var pointMax = <?php echo $this->getPointAvailable() ?>;
+                                var point = $('point').value;
+                                if(point > pointMax){
+                                    if(!isDisablePoint){
+                                        $('transfer-button').setAttribute("disabled", true);
+                                        isDisablePoint = true;
+                                    }
+                                    $('point').addClassName('validation-failed');
+                                    $('transfer-point-error').show();
+                                    return false;
+                                }else{
+                                    $('point').removeClassName('validation-failed');
+                                }
+                            }
+                            $('transfer-point-error').hide();
+                            if(!isDisableEmail) $('transfer-button').removeAttribute("disabled");
+                            isDisablePoint = false;
+                            return true;
+                        }
+                        //]]>
+                    </script>
+                </div>
+            </div>
+            <div class="transfer-send-point-right box-account box-info box-rewardpoints-summary">
+                <div class="box-head">
+                    <h2><?php echo $this->__('How to transfer points to friend') ?></h2>
+                </div>
+                <div class="info-summary">
+                    <p><?php echo $this->__('Enter your friend\'s email and the points amount which you want to transfer.')?> </p>
+                    <p><?php if($this->getDayHolding()) echo $this->__('Your points will transfer to your friend after <strong class="transfer-strong">%s</strong>. During this time you can cancel it.', $this->getDayHolding());
+                            else echo $this->__('If your friend’s account has already existed on our website, your points will be transferred to his account immediately.');
+                            ?> </p>
+                    <p><?php echo $this->__('If the email that you enter does not exist on this store, a notification email will be sent to that email. This transfer will be canceled after <strong class="transfer-strong">%s</strong> if your friend does not create an account on this store.', $this->getDayPending())?> </p>
+                    <p><?php 
+                        $pointTransfer = $this->getPointTransfer();
+                        $pointExist = $this->getPointExist();
+                        if($pointTransfer && $pointExist)
+                            echo $this->__('You have to accumulate at least <strong class="transfer-strong">%s</strong> to start making point transfer and your transferred points can not exceed <strong class="transfer-strong">%s</strong> each time.', $pointExist, $pointTransfer);
+                        else if($pointTransfer && !$pointExist)
+                            echo $this->__('Your transferred points can not exceed <strong class="transfer-strong">%s</strong> each time.',$pointTransfer);
+                        else if(!$pointTransfer && $pointExist) echo $this->__('You have to accumulate at least <strong class="transfer-strong">%s</strong> to start making point transfer.', $pointExist);
+                        ?> 
+					</p>
+					<!-- xuan binh 10-07-2015 -->
+                    <?php $totalAccumulatePoint = $this->getTotalAccumulatePoint();?>
+                    <p>
+						<i>
+						<?php echo $this->__("Total Accumulated Points: %s","<strong class='transfer-strong'>$totalAccumulatePoint</strong>"); ?>
+						</i>
+                   	</p> 
+                   	<!--  -->  
+                </div>
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('sendtransfer') ?>
+        <?php echo $this->getChildHtml('receivetransfer') ?>
+    </div>
+</div>

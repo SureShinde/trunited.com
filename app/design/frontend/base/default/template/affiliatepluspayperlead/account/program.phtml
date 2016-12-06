@@ -1,0 +1,114 @@
+<?php
+/**
+ * View Program form
+ */
+?>
+<?php $listPrograms = $this->getListProgram() ?>
+<?php if (count($listPrograms)): ?>
+<br/><br/>
+<table class="data-table" id="list-program-table">
+	<col width="1"/>
+	<col width="1"/>
+	<thead>
+		<tr>
+			<th colspan="3" height="40">
+			<?php if (count($listPrograms) == 1): ?>
+				<?php echo $this->__('OUR PROGRAM') ?>
+			<?php else: ?>
+				<?php echo $this->__('OUR PROGRAMS') ?>
+			<?php endif ?>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $i=0 ?>
+		<?php foreach($listPrograms as $program): ?>
+		<?php if($i>0): ?>
+			<tr><td colspan="3" height="5">&nbsp;</td></tr>
+		<?php endif; ?>
+		<tr>
+			<?php $rowspan = 3 ?>
+			<?php if ($program->getValidFrom()) $rowspan++; ?>
+			<?php if ($program->getValidTo()) $rowspan++; ?>
+			<td rowspan="<?php echo $rowspan ?>" width="25%"><strong><?php echo $program->getName(); ?></strong></td>
+			<td width="25%">
+			<?php if($program->getCode() == 'payperlead'){?>
+				<?php $account_signup_commission = $program->getAccountSignupCommission() ? $program->getAccountSignupCommission() : 0 ?>
+				<?php $customer_subcribe_commission = $program->getCustomerSubcribeCommission() ? $program->getCustomerSubcribeCommission() : 0 ?>
+			<?php }else{?>
+				<?php $commission = $program->getCommission() ? $program->getCommission() : 0 ?>				
+			<?php }?>
+				<strong><?php echo $this->__('Commission Type') ?></strong>
+			</td>
+			<td width="50%">
+			<?php if($program->getCode() == 'payperlead'){?>		
+				<?php if($program->getCommissionType() == 'fixed'): ?>
+					<?php $commissionAccountSignup = Mage::helper('core')->currency($account_signup_commission) ?>
+					<?php $commissionCustomerSubcribe = Mage::helper('core')->currency($customer_subcribe_commission) ?>
+				<?php else: ?>
+					<?php $commissionAccountSignup = rtrim(rtrim(sprintf("%.2f",$account_signup_commission),'0'),'.').'%' ?>
+					<?php $commissionCustomerSubcribe = rtrim(rtrim(sprintf("%.2f",$customer_subcribe_commission),'0'),'.').'%' ?>
+				<?php endif ?>
+				<?php echo $this->__('Commission per each account signed up: %s.',$commissionAccountSignup) ?><br/>
+				<?php echo $this->__('Commission per each new subscription: %s.',$commissionCustomerSubcribe) ?>
+			<?php }else{?>
+				<?php if($program->getCommissionType() == 'fixed'): ?>
+					<?php $commissionText = Mage::helper('core')->currency($commission) ?>
+				<?php else: ?>
+					<?php $commissionText = rtrim(rtrim(sprintf("%.2f",$commission),'0'),'.').'%' ?>
+				<?php endif ?>
+				<?php echo $this->__('Pay-Per-Sale %s for each sale you deliver.',$commissionText) ?>
+			<?php }?>
+			</td>
+		</tr>
+		<?php if($program->getCode() == 'payperlead'){?>	
+		<?php }else{?>
+		<tr>
+			<td>	
+				<strong><?php echo $this->__('Payout Requirements') ?></strong>
+			</td>
+			<td>
+				<?php echo $this->__('%s - Minimum balance required for payout.',Mage::helper('core')->currency($this->getMinPaymentRelease())) ?>
+			</td>
+		</tr>		 
+		<tr>
+			<td>	
+				<strong><?php echo $this->__('Discount policy') ?></strong>
+			</td>
+			<td>
+				<?php $discount = $program->getDiscount() ? $program->getDiscount() : 0 ?>
+				<?php if($program->getDiscountType() == 'fixed'): ?>
+					<?php $discountText = Mage::helper('core')->currency($discount) ?>
+				<?php else: ?>
+					<?php $discountText = rtrim(rtrim(sprintf("%.2f",$discount),'0'),'.').'%' ?>
+				<?php endif	?>
+				<?php echo $this->__('Discount %s for each purchased item.',$discountText) ?>
+			</td>
+		</tr>
+		<?php }?>
+		<?php if ($program->getValidFrom()): ?>
+		<tr>
+			<td>
+				<strong><?php echo $this->__('From Date') ?></strong>
+			</td>
+			<td>
+				<?php echo $this->formatDate($program->getValidFrom(),'medium',false) ?>
+			</td>
+		</tr>
+		<?php endif ?>
+		<?php if ($program->getValidTo()): ?>
+		<tr>
+			<td>
+				<strong><?php echo $this->__('To Date') ?></strong>
+			</td>
+			<td>
+				<?php echo $this->formatDate($program->getValidTo(),'medium',false) ?>
+			</td>
+		</tr>
+		<?php endif ?>
+		<?php $i++ ?>
+	<?php endforeach; ?>
+	</tbody>
+</table>
+<div class="clear">&nbsp;</div>
+<?php endif ?>

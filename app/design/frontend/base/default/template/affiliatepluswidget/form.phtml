@@ -1,0 +1,255 @@
+<?php
+/**
+ * Widget Form Template
+ */
+?>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/affiliatepluswidget/jscolor.js') ?>" ></script>
+<?php $widget = $this->getWidget() ?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/bootstrap/bootstrap.min.css'); ?>" media="all" />
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<div class="page-title">
+    <h2>
+        <?php if ($widget->getId()): ?>
+            <?php echo $this->__('Edit Widget');if($widget->getName()) echo '&nbsp;"'.$widget->getName().'"' ; ?>
+        <?php else: ?>
+            <?php echo $this->__('New Widget') ?>
+        <?php endif ?>
+    </h2>
+</div>
+
+<form id="affiliateplus-widget-form" method="post" action="<?php echo $this->getFormPostUrl() ?>">
+    <div class = "lable-title" id ="lable-title">
+        <h2 class="legend"><?php echo $this->__('Widget Information') ?></h2>
+    </div>
+    <div class="fieldset" id="affiliateplus-widget-fieldset">
+        <ul class="form-list">
+            <?php // widget name ?>
+            <div class="form-group">
+                <label for="name" ><?php echo $this->__('Name') ?></label>
+                <input class="form-control inputSuccess-sm" id="width" type="text" name="name" value="<?php echo $widget->getName() ?>" />
+            </div>
+
+            <?php // categories or product ?>
+            <?php if ($this->getProductId()): ?>
+                <?php
+                $default_width = 168;
+                $default_height = 145;
+                $default_rows = 1;
+                $default_columns = 1;
+                ?>
+                <li class="fields">
+                    <div class="field">
+                        <label><?php echo $this->__('Product') ?></label>
+                        <div class="form-group">
+                            <input type="hidden" name="product_id" value="<?php echo $this->getProductId() ?>" />
+                            <a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->getProductName() ?>">
+                                <span><?php echo $this->getProductName() ?></span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            <?php else: ?>
+                <?php
+                $default_width = 300;
+                $default_height = 250;
+                $default_rows = 3;
+                $default_columns = 2;
+                ?>
+                <li class="fields">
+                    <div class="form-group">
+                        <label for="category_ids" class="required" style="float: none"><em>*</em><?php echo $this->__('Categories') ?></label>
+                        <select id="category_ids" name="category_ids[]" class="required-entry form-control" multiple="multiple" size='6'>
+                            <?php foreach ($this->getStoreCategories() as $category): ?>
+                                <option <?php if ($widget->getCategoryIds() && in_array($category->getId(), $widget->getCategoryIds())) echo 'selected' ?> value="<?php echo $category->getId() ?>" ><?php echo $category->getName() ?></option> <!-- Changed By Adam: 23/10/2014 -->
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </li>
+            <?php endif ?>
+            <?php // custom show   ?>
+            <li class="fields">
+                <div class="field-show">
+                    <div class="input-box custom-show">
+                        <input type="checkbox" id="is_image" name="is_image" <?php if ($widget->getIsImage() || !$widget->getId()) echo 'checked' ?> value="1" />
+                        <label class="label-custom-show" for="is_image"><?php echo $this->__('Show Image') ?></label>
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field-show">
+                    <div class="input-box custom-show">
+                        <input type="checkbox" id="is_price" name="is_price" <?php if ($widget->getIsPrice() || !$widget->getId()) echo 'checked' ?> value="1" />
+                        <label class="label-custom-show" for="is_price"><?php echo $this->__('Show Price') ?></label>
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field-show">                    
+                    <div class="input-box custom-show">
+                        <input type="checkbox" id="is_rated" name="is_rated" <?php if ($widget->getIsRated() || !$widget->getId()) echo 'checked' ?> value="1" />
+                        <label class="label-custom-show" for="is_rated"><?php echo $this->__('Show Rate') ?></label>
+                    </div>
+                </div>
+            </li>
+            <li class="fields">
+                <div class="field-show">                    
+                    <div class="input-box custom-show">
+                        <input type="checkbox" id="is_short_desc" name="is_short_desc" <?php if ($widget->getIsShortDesc()) echo 'checked' ?> value="1" />
+                        <label class="label-custom-show" for="is_short_desc"><?php echo $this->__('Short Description') ?></label>
+                    </div>
+                </div>
+            </li>
+
+            <?php // widget size  ?>
+            <li class="fields">
+                <div class="field">
+                    <div class="form-group">
+                        <label for="widget_size"><?php echo $this->__('Size') ?></label>
+                        <select id="widget_size" class = "form-control" name="widget_size" onclick="widgetChangeSize(this)">
+                            <?php foreach ($this->getSizesOption() as $value => $label): ?>
+                                <option <?php if ($widget->getWidgetSize() == $value) echo 'selected' ?> value="<?php echo $value ?>"><?php echo $label ?></option>
+                            <?php endforeach ?>
+                            <option <?php if ($widget->getId() && !$widget->getWidgetSize()) echo 'selected' ?> value=""><?php echo $this->__('Custom Size') ?></option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+
+            <li id="widget_custom_size" style="<?php if (!$widget->getId() || $widget->getWidgetSize()) echo 'display:none;' ?>">
+                <ul class="form-list">
+                    <div class="form-group">
+                        <label for="width" class="required" ><em>*</em><?php echo $this->__('Width') ?></label>
+                        <input class="input-text required-entry validate-greater-than-zero form-control inputSuccess-sm" id="width" name="width" type="text" value="<?php echo $widget->getWidth() ? $widget->getWidth() : $default_width ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="height" class="required" ><em>*</em><?php echo $this->__('Height') ?></label>
+                        <input class="input-text required-entry validate-greater-than-zero form-control inputSuccess-sm" id="height" name="height" type="text" value="<?php echo $widget->getHeight() ? $widget->getHeight() : $default_height ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="rows" class="required" ><em>*</em><?php echo $this->__('Rows') ?></label>
+                        <input class="input-text required-entry validate-greater-than-zero form-control inputSuccess-sm"  id="rows" name="rows" type="text" value="<?php echo $widget->getRows() ? $widget->getRows() : $default_rows ?>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="columns" class="required" ><em>*</em><?php echo $this->__('columns') ?></label>
+                        <input class="input-text required-entry validate-greater-than-zero form-control inputSuccess-sm"  id="columns" name="columns" type="text"  value="<?php echo $widget->getColumns() ? $widget->getColumns() : $default_columns ?>" />
+                    </div>
+                </ul>
+            </li>
+
+            <?php // default search term  ?>
+            <?php if (!$this->getProductId()): ?>
+                <div class="form-group">
+                    <label for="search" ><?php echo $this->__('Default Search Term') ?></label>
+                    <input class="form-control"  id="columns" name="search" type="search"  value="<?php echo $widget->getSearch() ?>" />
+                </div>
+            <?php endif ?>
+
+            <?php // color fields   ?>
+            <li class="fields custom-color">
+                <div class="field">
+                    <label for="background"><?php echo $this->__('Background Color of widget') ?></label>
+                    <div class="input-box input-color">
+                        <input type="text" id="background" name="background" class="input-text color form-control" value="<?php echo $widget->getBackground() ? $widget->getBackground() : $this->getConfig('background') ?>" />
+						<small>Default is FFFFFF</small>
+                    </div>
+                </div>
+            </li>
+            <li class="fields custom-color">
+                <div class="field">
+                    <label for="border"><?php echo $this->__('Background Color of header') ?></label>
+                    <div class="input-box input-color">
+                        <input type="text" id="border" name="border" class="input-text color form-control" value="<?php echo $widget->getBorder() ? $widget->getBorder() : $this->getConfig('border') ?>" />
+						<small>Default is AAAAAA</small>
+                    </div>
+                </div>
+            </li>
+            <li class="fields custom-color">
+                <div class="field">
+                    <label for="textheader"><?php echo $this->__('Text Color of header') ?></label>
+                    <div class="input-box input-color">
+                        <input type="text" id="textheader" name="textheader" class="input-text color form-control" value="<?php echo $widget->getTextheader() ? $widget->getTextheader() : $this->getConfig('textheader') ?>" />
+						<small>Default is 112211</small>
+                    </div>
+                </div>
+            </li>
+            <li class="fields custom-color">
+                <div class="field">
+                    <label for="textlink"><?php echo $this->__('Text Color of link') ?></label>
+                    <div class="input-box input-color">
+                        <input type="text" id="textlink" name="textlink" class="input-text color form-control" value="<?php echo $widget->getTextlink() ? $widget->getTextlink() : $this->getConfig('textlink') ?>" />
+						<small>Default is 0000FF</small>
+                    </div>
+                </div>
+            </li>
+            <li class="fields custom-color">
+                <div class="field">
+                    <label for="textbody"><?php echo $this->__('Text Color of product informations') ?></label>
+                    <div class="input-box input-color">
+                        <input type="text" id="textbody" name="textbody" class="input-text color form-control" value="<?php echo $widget->getTextbody() ? $widget->getTextbody() : $this->getConfig('textbody') ?>" />
+						<small>Default is 101010</small>
+                    </div>
+                </div>
+            </li>		
+        </ul>
+    </div>
+</form>
+<div class="fieldset" id="affiliateplus-widget-preview">
+    <div class = "lable-title-preview"><h2 class="legend"><?php echo $this->__('Preview') ?></h2></div>
+    <input type="hidden" id="widget-ajax-url" value="<?php echo $this->getUrl("affiliatepluswidget/index/view") ?>" />
+    <div id="widget-container">
+    </div>
+    <div id="widget-ajax-load" style="display:none;">
+        <div style="min-height:45px">&nbsp;</div>
+        <center>
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading...') ?>" title="<?php echo $this->__('Loading...') ?>" />
+            <span style="color:#E76200"><?php echo $this->__('Loading...') ?></span>
+        </center>
+        <div style="min-height:45px">&nbsp;</div>
+    </div>
+    <div class="buttons-set">
+        <button type="button" title="<?php echo $this->__('Save'); ?>" class="button button-config" onclick='getWidgetHtmlCode(this)'>
+            <span>
+                <span><?php echo $this->__('Get HTML Code') ?></span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    var affiliateplusWidgetForm = new VarienForm('affiliateplus-widget-form', true);
+    function widgetChangeSize(el) {
+        if (el.value)
+            $('widget_custom_size').hide();
+        else
+            $('widget_custom_size').show();
+    }
+    Form.getElements('affiliateplus-widget-form').each(function(el) {
+        el.observe('change', changeFormValue);
+    });
+    function getWidgetHtmlCode(el) {
+        var url = '<?php echo $this->getUrl("affiliatepluswidget/index/code") ?>?' + $('affiliateplus-widget-form').serialize();
+        ajaxPopup(url,null,el);
+    }
+
+//]]>
+</script>
+
+<div class="buttons-set">
+    <p class="back-link">
+        <a href="javascript:history.go(-1)">
+            <button type="button" onclick="javascript:history.go(-1)" class="button button-config">
+                <span>
+                    <span><?php echo $this->__('Back') ?></span>
+                </span>
+            </button>           
+        </a>
+    </p>
+    <button type="button" onclick='affiliateplusWidgetForm.submit()' class="button button-config">
+        <span>
+            <span><?php echo $this->__('Save Widget') ?></span>
+        </span>
+    </button>           
+</div>

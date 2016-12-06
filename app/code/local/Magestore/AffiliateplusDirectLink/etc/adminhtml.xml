@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusDirectLink
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<config>
+    <menu>
+<!--        Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->        
+        <affiliateplus module="affiliateplus" translate="title">
+            <children>
+                <directlink module="affiliateplusdirectlink" translate="title">
+                    <title>Direct Links</title>
+                    <sort_order>15</sort_order>
+                    <action>adminhtml/affiliateplusdirectlink_affiliateplusdirectlink</action>
+                    <children>
+                        <domains translate="title">
+                            <title>Manage Domains</title>
+                            <sort_order>0</sort_order>
+                            <action>adminhtml/affiliateplusdirectlink_domain</action>
+                        </domains>
+                        <directlinks translate="title">
+                            <title>Manage Direct Links</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/affiliateplusdirectlink_affiliateplusdirectlink</action>
+                        </directlinks>
+                    </children>
+                </directlink>
+            </children>
+        </affiliateplus>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <affiliateplus>
+                        <children>
+                            <directlink module="affiliateplusdirectlink" translate="title">
+                                <title>Direct links</title>
+                                <sort_order>15</sort_order>
+                                <children>
+                                    <domains translate="title">
+                                        <title>Manage Domains</title>
+                                        <sort_order>0</sort_order>
+                                    </domains>
+                                    <directlinks translate="title">
+                                        <title>Manage Direct Links</title>
+                                        <sort_order>10</sort_order>
+                                    </directlinks>
+                                </children>
+                            </directlink>
+                        </children>
+                    </affiliateplus>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

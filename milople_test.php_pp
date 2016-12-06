@@ -1,0 +1,19 @@
+<?php
+
+include 'app/Mage.php';
+Mage::app();
+      
+echo 'test';
+$data = Mage::getModel('recurringandrentalpayments/sequence')
+	->getCollection()
+	->addFieldToFilter('subscription_id',1)
+	->addFieldToFilter('status','pending');
+
+foreach ($data as $d)
+{
+	$d->setDate('2016-10-26')->save();
+	break;
+}
+/*
+$cron = Mage::getModel('recurringandrentalpayments/recurringandrentalpaymentscron');
+$cron->autoorder();*/

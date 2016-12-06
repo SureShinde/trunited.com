@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+-->
+<config>
+    <tabs>
+        <milople_extensions translate="label" module="recurringandrentalpayments">
+            <label>
+			<![CDATA[<div style="position: relative;height: 4px;margin-left: -2px;"><img id="milople_config" src="" alt="" border="0" /></div>&nbsp;<script>
+            var n = SKIN_URL.indexOf("adminhtml");
+            $('milople_config').src = SKIN_URL.substring(0, n) + "adminhtml/default/default/recurringandrentalpayments/images/config_logo.jpg";
+            </script>]]>
+			</label>
+            <sort_order>150</sort_order>
+        </milople_extensions>
+    </tabs>
+    <sections>
+        <recurringandrentalpayments translate="label">
+            <label>Recurring &amp; Subscription Payments</label>
+            <tab>milople_extensions</tab>
+			<sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+				<license_status_group translate="label" >
+                    <label>License and Status</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <serial_key translate="label">
+                           <label>Serial Key</label>
+						  <validate>required-entry</validate>
+						  <backend_model>recurringandrentalpayments/observer</backend_model> 
+						  <frontend_type>text</frontend_type>
+                           <sort_order>0</sort_order>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </serial_key>
+					   <status translate="label">
+                           <label>Status</label>
+                           <frontend_type>select</frontend_type>
+                           <sort_order>20</sort_order>
+						  <source_model>recurringandrentalpayments/status</source_model>
+                           <show_in_default>1</show_in_default>
+                           <show_in_website>1</show_in_website>
+                           <show_in_store>1</show_in_store>
+                        </status>
+                    </fields>
+                </license_status_group>
+				<general_group>
+					<label>General Settings</label>
+					<sort_order>20</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<displayrnr translate="label">
+                            <label>Show Recurring &amp; Subscription Terms In</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>recurringandrentalpayments/displayrnr</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </displayrnr>
+						 <activate_order_status translate="label">
+                            <label>Activate Subscription On</label>
+                            <validate>required-entry</validate>
+							<frontend_type>select</frontend_type>
+                            <source_model>recurringandrentalpayments/orderstatus</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </activate_order_status>
+					   <availableto translate="label">
+							<label>Enable Recurring &amp; Subscription Payments For</label>
+							<frontend_type>select</frontend_type>
+							<source_model>recurringandrentalpayments/availableto</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</availableto>
+						<customergroup translate="label">
+							<label>Customer Groups</label>
+							<depends>
+        						<availableto separator=",">3</availableto>
+       						</depends>
+							<validate>required-entry</validate>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>recurringandrentalpayments/customergroup</source_model>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</customergroup>
+						<addtocart_lable translate="label">
+                            <label>Subscription Products Button Text</label>
+                            <frontend_type>text</frontend_type>
+                             <sort_order>36</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+						    <comment><![CDATA[Displayed only on product view page to highlight subscription feature.]]></comment>
+                        </addtocart_lable>
+					</fields>
+				</general_group>
+				<discount_group>
+					<label>Discount Settings</label>
+					<sort_order>21</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<apply_discount_settings translate="label">
+							<label>Apply Discount</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</apply_discount_settings>
+						<discount_available_to translate="label">
+							<label>Discount Available To</label>
+							<frontend_type>select</frontend_type>
+							<source_model>recurringandrentalpayments/customertypes</source_model>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</discount_available_to>
+						<apply_discount_group translate="label">
+							<label>Customer Groups</label>
+							<depends>
+        						<discount_available_to separator=",">3</discount_available_to>
+       						</depends>
+							<validate>required-entry</validate>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>recurringandrentalpayments/customergroup</source_model>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</apply_discount_group>
+						<apply_discount_on translate="label">
+							<label>Apply Discount On</label>
+							<frontend_type>select</frontend_type>
+							<source_model>recurringandrentalpayments/applydiscounton</source_model>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+                        </apply_discount_on>
+					   <discount_cal_type translate="label">
+							<label>Calculate Discount In</label>
+							<frontend_type>select</frontend_type>
+							<source_model>recurringandrentalpayments/discountcalculationtype</source_model>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</discount_cal_type>
+						<discount_amount translate="label">
+							<label>Discount Value</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-number</validate>
+							<backend_model>recurringandrentalpayments/validation</backend_model>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</discount_amount>
+					</fields>
+				</discount_group>
+				<recurring_payflow_settings>
+					<label>Paypal Payflow Settings </label>
+					<sort_order>22</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+					   <update_token translate="label">
+						<label>Update token before day(s)</label>
+						<frontend_type>text</frontend_type>
+						<validate>validate-number</validate>-
+						<sort_order>10</sort_order>
+						<show_in_default>1</show_in_default>
+						<show_in_website>1</show_in_website>
+						<show_in_store>1</show_in_store>
+					   </update_token>
+					
+					   <update_token_notification translate="label">
+							<label>Send update token notification email before day(s)</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-number</validate>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+					   </update_token_notification>
+					   <notification_email_sender>
+						    <label>Email Sender</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_email_identity</source_model>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+					   </notification_email_sender>
+				   	   <notification_email_template translate="label">
+					       <label>Email Template</label>
+					       <frontend_type>select</frontend_type>
+					       <source_model>adminhtml/system_config_source_email_template</source_model>
+					       <sort_order>30</sort_order>
+					       <show_in_default>1</show_in_default>
+					       <show_in_website>1</show_in_website>
+					       <show_in_store>1</show_in_store>
+                        		   </notification_email_template>
+					    <notification_email_cc_to translate="label">
+							<label>Email CC To</label>
+							<frontend_type>text</frontend_type>
+							<validate>validate-email</validate>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+                    		<show_in_store>1</show_in_store>
+                         </notification_email_cc_to>
+					</fields>
+				</recurring_payflow_settings>
+				<clause_settings>
+					<label>Terms and Conditions Settings</label>
+					<sort_order>22</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+					    <enable translate="label">
+							<label>Enable Clause</label>
+							<frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+					   </enable>
+					   <clause translate="label">
+							<label>Clause</label>
+							<frontend_type>textarea</frontend_type>
+                             <source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+					   </clause>
+					</fields>
+				</clause_settings>
+				<recurring_and_rental_Payments_order_confirmation_email>
+					<label>Order Confirmation Email Settings</label>
+					<sort_order>40</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<send_order_confirmation_email translate="label">
+							<label>Send Order Confirmation Email</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment><![CDATA[This email will only be sent if subscription is activated.]]></comment>
+                        </send_order_confirmation_email>
+					   <order_confirmation_email_sender>
+							<label>Email Sender</label>
+                             <frontend_type>select</frontend_type>
+                             <source_model>adminhtml/system_config_source_email_identity</source_model>
+                             <sort_order>20</sort_order>
+                             <show_in_default>1</show_in_default>
+                             <show_in_website>1</show_in_website>
+                             <show_in_store>1</show_in_store>
+						</order_confirmation_email_sender>
+						<order_confirmation_email_template translate="label">
+                             <label>Email Template</label>
+                             <frontend_type>select</frontend_type>
+                             <source_model>adminhtml/system_config_source_email_template</source_model>
+                             <sort_order>30</sort_order>
+                             <show_in_default>1</show_in_default>
+                             <show_in_website>1</show_in_website>
+                             <show_in_store>1</show_in_store>
+                         </order_confirmation_email_template>
+						<order_confirmation_email_cc_to translate="label">
+                            <label>Email CC To</label>
+                            <frontend_type>text</frontend_type>
+							<validate>validate-email</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_confirmation_email_cc_to>
+					</fields>
+				</recurring_and_rental_Payments_order_confirmation_email>
+				<next_payments_reminder_email>
+					<label>Upcoming Payment Reminder Email Settings</label>
+					<sort_order>50</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<send_next_payments_reminder_email translate="label">
+                            <label>Send Upcoming Payment Reminder Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment><![CDATA[This email will only be sent if subscription is activated.]]></comment>
+                        </send_next_payments_reminder_email>
+						<reminder_before_next_payments translate="label">
+                            <label>Send Email Before Days</label>
+							<validate>validate-number</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<comment><![CDATA[The days will be considered based on due date of upcoming payment.]]></comment>
+                        </reminder_before_next_payments>
+						<next_payments_reminder_email_sender>
+							<label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</next_payments_reminder_email_sender>
+						<next_payments_reminder_email_template translate="label">
+                            <label>Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </next_payments_reminder_email_template>
+						<next_payments_reminder_email_cc_to translate="label">
+                            <label>Email CC To</label>
+							<validate>validate-email</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </next_payments_reminder_email_cc_to>
+					</fields>
+				</next_payments_reminder_email>
+				<next_payments_confirmation_email>
+					<label>Payment Confirmation Email Settings</label>
+					<sort_order>60</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<send_next_payments_confirmation_email translate="label">
+                            <label>Send Payment Confirmation Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+						   <comment><![CDATA[This email will only be sent if subscription is activated.]]></comment>                        </send_next_payments_confirmation_email>
+						<next_payments_confirmation_email_sender>
+						   <label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</next_payments_confirmation_email_sender>
+						<next_payments_confirmation_email_template translate="label">
+                            <label>Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </next_payments_confirmation_email_template>
+					   <next_payments_confirmation_email_cc_to translate="label">
+                            <label>Email CC To</label>
+                            <frontend_type>text</frontend_type>
+							<validate>validate-email</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </next_payments_confirmation_email_cc_to>
+					</fields>
+				</next_payments_confirmation_email>
+				
+				
+				<order_status_change_email>
+					<label>Subscription Status Notifications Settings</label>
+					<sort_order>90</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<subscriptionstatus translate="label">
+							<label>Send Notifications for Status</label>   
+							<validate>required-entry</validate>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>recurringandrentalpayments/subscriptionstatus</source_model>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</subscriptionstatus>
+						<send_active_status_email_template translate="label">
+						   <label>Active Status Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </send_active_status_email_template>
+						
+						<send_suspent_status_email_template translate="label">
+						   <label>Suspended Status Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </send_suspent_status_email_template>
+						
+						<send_cancle_status_email_template translate="label">
+						   <label>Cancelled Status Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                         </send_cancle_status_email_template>
+						
+						<send_expire_status_email_template translate="label">
+                            <label>Expired Status Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>140</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                         </send_expire_status_email_template>
+						<order_status_change_email_sender>
+						   <label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</order_status_change_email_sender>
+						<order_status_change_email_cc_to translate="label">
+                            <label>Email CC To</label>
+							<validate>validate-email</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>170</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status_change_email_cc_to>
+					</fields>
+				</order_status_change_email>
+				<expire_reminder_email>
+					<label>Subscription Expiry Reminder Email Setttings</label>
+					<sort_order>100</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<send_expire_reminder_email translate="label">
+                            <label>Subscription Expiry Reminder Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<comment><![CDATA[This email will only be sent if subscription is activated.]]></comment>
+                         </send_expire_reminder_email>
+						<reminder_before_expire translate="label">
+                            <label>Send Email Before Days</label>
+							<validate>validate-number</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						   <comment><![CDATA[The days will be considered based on last term end date of subscription.]]></comment>
+                        </reminder_before_expire>
+						<expire_reminder_email_sender>
+							<label>Email Sender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</expire_reminder_email_sender>
+						<expire_reminder_email_template translate="label">
+                            <label>Email Template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </expire_reminder_email_template>
+						<expire_reminder_email_cc_to translate="label">
+                            <label>Email CC To</label>
+							<validate>validate-email</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </expire_reminder_email_cc_to>
+					</fields>
+				</expire_reminder_email>
+	        </groups>
+        </recurringandrentalpayments>
+        <payment>
+            <groups>
+                <authorizenet translate="label" module="paygate">
+                    <label>Authorize.net</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <soap_test translate="label">
+                            <label>Use test SOAP API</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </soap_test>
+                    </fields>
+                </authorizenet>
+            </groups>
+        </payment>
+    </sections>
+</config>

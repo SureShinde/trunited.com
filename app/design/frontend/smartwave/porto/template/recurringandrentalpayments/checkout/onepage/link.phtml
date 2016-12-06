@@ -1,0 +1,79 @@
+<?php if ($this->isPossibleOnepageCheckout()):?>
+<form id="my-custom-form" method='post' action="<?php echo $this->getCheckoutUrl(); ?>">
+ 
+
+<?php	
+	
+	if(Mage::helper('recurringandrentalpayments')->displayTermsandConditions())
+	{	?>
+		
+			 <?php
+					if(Mage::getSingleton('core/session')->getIsaccepted()):
+						$selected = 1;
+					else:
+						$selected = 0 ;
+					endif;	
+			  ?>
+			   <button type="button" title="<?php echo $this->__('Proceed to Checkout') ?>" class="button btn-proceed-checkout btn-checkout<?php if ($this->isDisabled()):?> no-checkout<?php endif; ?>"<?php if ($this->isDisabled()):?> disabled="disabled"<?php endif; ?> onclick = "check();"><span><span><?php echo $this->__('Proceed to Checkout') ?></span></span></button>
+				<ul class="termsandconditions">
+				   <li>
+					  <div class="box">
+						 <input class="required-entry radio" type="radio" name="indies_recurringandrentalpayments_termsandconditions"  id="indies_recurringandrentalpayments_termsandconditions" onclick="clauseaccepted();" <?php if ($selected==1): ?> checked="checked"<?php endif;?>  />
+						<a onclick ="openPopup();" class="termsconditions" href="#popup1"><?php echo $this->__('Agree to Terms and Conditions');  ?></a>
+					  </div>
+					   <div style= "display:none;" id="advice-indies_recurringandrentalpayments_termsandconditions" class="validation-advice" style="">This is a required field.</div>
+				  </li>
+			   </ul>
+			
+	  <?php } 
+	else	{  ?>
+		    <button type="submit" title="<?php echo $this->__('Proceed to Checkout') ?>" class="button btn-proceed-checkout btn-checkout<?php if ($this->isDisabled()):?> no-checkout<?php endif; ?>"<?php if ($this->isDisabled()):?> disabled="disabled"<?php endif; ?> ><span><span><?php echo $this->__('Proceed to Checkout') ?></span></span></button>
+
+	<?php } ?>
+	   
+	<?php $clause_detail = Mage::getStoreConfig('recurringandrentalpayments/clause_settings/clause');  ?>
+	<div id="popup1" class="overlay">
+	<div class="popup">
+		<a class="close" href="#" onclick="document.getElementById('overlay').style.display='none';">&times;</a>
+		<div style="clear:both;"></div>
+		<div class="content">
+			<?php echo $clause_detail;  ?>
+		</div>
+	</div>
+</div>
+	<!--<div class="errormessage" id="errormessage"style="display:none;">
+		Please accept terms and conditions first. 
+	</div> -->
+</form>
+
+<?php endif?>
+
+<script type="text/javascript">
+    //< ![CDATA[
+        var customForm = new VarienForm('my-custom-form');
+    //]]>
+	function clauseaccepted()
+	{
+		jQuery.ajax({
+					url: "<?php echo $this->getUrl('recurringandrentalpayments/index/clauseaccepted'); ?>",
+					type: "POST",        
+					cache: false,
+					success: function() {
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+					}
+				});
+	}
+	function check()
+	{
+	
+		if(document.getElementById('indies_recurringandrentalpayments_termsandconditions').checked) 
+		{
+			document.getElementById("my-custom-form").submit();
+		}
+		else
+		{
+			document.getElementById('advice-indies_recurringandrentalpayments_termsandconditions').style.display = 'block';
+		}
+	}
+</script>

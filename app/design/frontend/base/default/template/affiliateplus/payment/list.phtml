@@ -1,0 +1,92 @@
+<?php
+/**
+ * Payments history template
+ */
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+ if($check_responsvie)
+     $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
+ else
+     $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+?>
+
+<div class="aff-main-content <?php echo $class_name; ?>">
+<div class="aff-title">
+	<h2>
+    <?php if (Mage::helper('affiliateplus/account')->disableWithdrawal()): ?>
+        <?php echo $this->__('Store Credits History') ?>
+    <?php else: ?>
+        <?php echo $this->__('Withdrawal History') ?>
+    <?php endif ?>
+    </h2>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getChildHtml('payment_miniform') ?>
+
+<div class="clear">&nbsp;</div>
+    <ul class="tab">
+        <li><a href="javascript:void(0)" id="tabWithdrawals" class="tablinks" onclick="openTabContent(event, 'withdrawals')"><?php echo $this->__('WITHDRAWALS');?></a></li>
+        <li><a href="javascript:void(0)" id="tabTransfer" class="tablinks" onclick="openTabContent(event, 'transfer')"><?php echo $this->__('TRANSFERS');?></a></li>
+    </ul>
+
+    <div id="withdrawals" class="tabcontent">
+        <?php echo $this->getGridHtml() ?>
+    </div>
+
+    <div id="transfer" class="tabcontent">
+        <?php echo $this->getLayout()->createBlock('affiliateplus/payment_transfer')->setTemplate('affiliateplus/payment/transfer.phtml')->toHtml(); ?>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function openTabContent(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    if(localStorage.defaultTab == 'undefined'){
+        localStorage.defaultTab = 1;
+    }
+
+    if(localStorage.defaultTab == 1){
+        document.getElementById("tabWithdrawals").click();
+    } else {
+        document.getElementById("tabTransfer").click();
+    }
+
+    $J = jQuery.noConflict();
+    $J('#withdrawals .pages ol li').click(function(){
+        localStorage.defaultTab = 1;
+    });
+    $J('#withdrawals .limiter select').click(function(){
+        localStorage.defaultTab = 1;
+    });
+    $J('#withdrawals button').click(function(){
+        localStorage.defaultTab = 1;
+    });
+
+    $J('#transfer .pages ol li').click(function(){
+        localStorage.defaultTab = 2;
+    });
+    $J('#transfer .limiter select').click(function(){
+        localStorage.defaultTab = 2;
+    });
+    $J('#transfer button').click(function(){
+        localStorage.defaultTab = 2;
+    });
+
+
+</script>

@@ -1,0 +1,340 @@
+<?php 
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/   ?>
+
+<script type="text/javascript" language="javascript">
+  function showRecurringHelp () {
+	  var termid = $jradioab('input[name=indies_recurringandrentalpayments_subscription_type]:checked').val() 
+	if (termid > 0) {
+	  	document.getElementById('recurring-help').style.display = 'block';
+	}
+  }
+  function hideRecurringHelp(){
+	document.getElementById('recurring-help').style.display = 'none';  
+  }
+  </script>
+  
+ <?php
+ $controller = Mage::app()->getRequest()->getControllerName();
+ $subscription_type = '' ;
+ $url_value = $this->getRequest()->getParams();
+ $item_id_pass =$url_value['id'];
+ if($controller=='cart')  // Update product page
+ {
+	  $quote = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();
+	  $url_value = $this->getRequest()->getParams();
+	  $item_id_pass = $url_value['id'];
+	  foreach ($quote as $item) 
+	  {
+		 if($item_id_pass == $item->getItemId())
+		 {
+			 $infoBuyRequest = $item->getOptionByCode('info_buyRequest');
+			 $buyRequest = new Varien_Object(unserialize($infoBuyRequest->getValue()));
+			 $subscription_type = $buyRequest->getIndiesRecurringandrentalpaymentsSubscriptionType();
+		  }
+	  }
+ }
+	$_product = $this->getProduct();
+	$symbole = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+
+	$plans_product = Mage::getModel('recurringandrentalpayments/plans_product')->load($_product->getId());
+	$plan = Mage::getModel('recurringandrentalpayments/plans')->load($plans_product->getPlanId());	
+	$planid= $plan->getId();
+	$isnormal=$plan->getIsNormal();
+	?>
+	<ul class="recurringandrentalpayments-subscription options-list">
+		<?php echo $this->__('Subscription type ') ?>
+		<a href="" onclick="return false;" onmouseover="showRecurringHelp();" onmouseout="hideRecurringHelp();">
+    		<img alt="Help" class="recurring-help" height="15px;" src="<?php echo $this->getSkinUrl('recurringandrentalpayments/images/help.jpg'); ?>" title="Help" width="16px;" />
+   		 </a>
+         	 <div id="recurring-help" style="display:none;"></div>
+
+			  <?php if($isnormal==1):?>
+			 <li><input class="radio" type="radio" onchange="updateProductPrice ()"  name="indies_recurringandrentalpayments_subscription_type" value="-1" id="recurringandrentalpayments_period_type_id-1 " <?php echo $subscription_type == '-1' || $subscription_type == '' ?'checked="checked"':''?>/><span class="label regular-price" style="text-transform: capitalize;"><?php echo $this->__(' No Subscription')?></span>
+			 <?php endif;?>
+			  <?php $type = Mage::getModel('recurringandrentalpayments/terms')->getCollection()
+					->addFieldToFilter('plan_id',$planid);?>
+			<?php 
+			$count=0;
+			foreach ($type as $item):
+			$price = $item->getPrice() ;
+			 if($item->getPriceCalculationType() == 1)
+			    $price = $_product->getPrice() * $item->getPrice() /100;
+			 ?>  
+			<li><input class="radio" type="radio" onchange="updateProductPrice ();"  name="indies_recurringandrentalpayments_subscription_type" value="<?php echo $item->getId()?>" id="recurringandrentalpayments_term_type_id<?php echo $item->getId()?>" <?php if ($isnormal==0 && $count==0 || $subscription_type == $item->getId()): ?>
+					   checked="checked"<?php endif;?>/>
+
+				<span class="label">
+					<label for="recurringandrentalpayments_term_type_id<?php echo $item->getId()?>" class="price-label regular-price" style="text-transform: capitalize;"> <?php echo $item->getLabel(); ?></label>
+				</span>
+			</li>
+			<?php $count++; endforeach; ?>
+	</ul>
+<script>
+	var $jradioab = jQuery.noConflict();	
+   $jradioab('input[name=indies_recurringandrentalpayments_subscription_type]:radio').click(function(){
+	var value = $jradioab(this).val();
+	//alert(value);
+	if (value == -1 )
+	{
+		document.getElementsByClassName('subscription-start')[0].style.display = 'none';
+	}
+	else
+	{
+		document.getElementsByClassName('subscription-start')[0].style.display = 'block';
+	}
+	<?php if ($_product->getTypeId() == 'grouped'):    ?>
+			var productprice = 0;
+	<?php else:  ?>
+			 var productprice = <?php echo $_product->getPrice();  ?> ;
+	<?php endif; ?>
+    var first_period_price = 0;
+	<?php if($_product->getFirstPeriodPrice() > 0): ?>
+			first_period_price = <?php echo $_product->getFirstPeriodPrice(); ?> ;
+	<?php  endif;	?>
+	var product_type = <?php echo json_encode($_product->getTypeId()); ?>;
+
+	if(value)
+		{
+			$jradioab.ajax({
+    			url		: "<?php echo $this->getUrl('recurringandrentalpayments/index/helptooltip');?>",
+   				type	: "POST",
+   				success	: function(data){ $jradioab('#recurring-help').html(data);},
+				error	: function(data){alert('Plaease Wait ....');},
+				data	:{ termid : value,  productPrice : productprice,productType : product_type ,firstperiodprice : first_period_price }
+				});
+		}
+	
+	});
+	document.observe("dom:loaded", function(e){
+		updateProductPrice();
+		
+		/* insert recurring div dynamically */
+		//var parentDiv = document.getElementsByClassName('price-box')[0];
+		<?php if ($_product->getTypeId() != 'bundle'): ?>
+			var parentDiv = document.getElementsByClassName('price-box')[0];
+		<?php else: ?>	
+			var parentDiv = document.getElementsByClassName('full-product-price')[0];
+		<?php endif; ?>
+		var node = document.createElement("DIV");
+		node.id = 'subscription-price-info';
+		var child = parentDiv.children[1];
+		parentDiv.insertBefore(node, child);
+		/* insert recurring div dynamically */
+		var termid = $jradioab('input[name=indies_recurringandrentalpayments_subscription_type]:checked').val();
+		if (termid  == -1 )
+		{
+			document.getElementsByClassName('subscription-start')[0].style.display = 'none';
+		}
+		else
+		{
+			document.getElementsByClassName('subscription-start')[0].style.display = 'block';
+		}
+		
+		<?php if ($_product->getTypeId() == 'grouped'):    ?>
+			var productprice = 0; 
+	<?php else:  ?>
+			 var productprice = <?php echo $_product->getPrice();  ?> ;
+	<?php endif; ?>
+		
+	
+		 if(termid > 0)
+		 {
+			 $jradioab.ajax({
+    			url		: "<?php echo $this->getUrl('recurringandrentalpayments/index/helptooltip');?>",
+   				type	: "POST",
+   				success	: function(data){ $jradioab('#recurring-help').html(data);},
+				error	: function(data){alert('fail');},
+				data	:{ termid : termid, productPrice : productprice }
+				});
+		 }
+		first_click = null;
+		
+	});
+
+	function updateProductPrice()
+	{
+		var price_element_id = 'product-price-<?php echo $this->getProduct()->getEntityId(); ?>';
+		var currency_symbol = '<?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?>';
+		var currency_code = '<?php echo Mage::app()->getStore()->getCurrentCurrencyCode(); ?>';
+		var price =jQuery('#' + price_element_id).text();
+		var controller = '<?php echo $controller; ?>';
+		var bundleSelectedOtionQty = 0 ;
+		var id = '<?php echo $_product->getId(); ?>';
+		<?php if ($_product->getTypeId() == 'bundle'): ?> 
+		 bundleSelectedOtionQty =  recurringTotalQty ;
+		<?php endif; ?>
+		price = price.replace(currency_symbol, '');
+		price = price.replace(currency_code, '');
+		price = price.replace(',', '');
+		<?php if ($_product->getTypeId() == 'grouped'):    ?>
+			var product_price = 0; 
+		<?php else:  ?>
+			 var product_price = <?php echo $_product->getPrice();  ?> ;
+		<?php endif; ?>
+	
+		var item_id = <?php echo $item_id_pass; ?> ;
+		var getValue = $jradioab('input[name=indies_recurringandrentalpayments_subscription_type]:checked').val();
+		var data = 'final_price=' + jQuery.trim(price) + '&product_price=' + product_price + '&select_combo=' + getValue + '&item_id_pass=' + item_id +'&bundleSelectedOtionQty=' + bundleSelectedOtionQty + '&id=' + id;
+				jQuery.ajax({
+					url: "<?php echo $this->getUrl('recurringandrentalpayments/index/updateProductPrice'); ?>",
+					type: "POST",        
+					data: data,     
+					cache: false,
+					success: function (html) {
+						jQuery('#subscription-price-info').html(html);
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+					//	alert(textStatus);
+					//	alert(errorThrown);
+					}
+				});
+	}
+	// Bundle product Price change
+	var recurringTotalQty ;
+	Product.Bundle.prototype.reloadPrice =
+		Product.Bundle.prototype.reloadPrice.wrap(function(parentMethod) {
+			var calculatedPrice = 0;
+			var dispositionPrice = 0;
+			var includeTaxPrice = 0;
+			recurringTotalQty = 0 ;
+			for (var option in this.config.selected) {
+				if (this.config.options[option]) {
+					for (var i=0; i < this.config.selected[option].length; i++) 
+					{
+						var prices = this.selectionPrice(option, this.config.selected[option][i]);
+						calculatedPrice += Number(prices[0]);
+						dispositionPrice += Number(prices[1]);
+						includeTaxPrice += Number(prices[2]);
+					}
+				}
+			}
+
+		//Tax is calculated in a different way for the the TOTAL BASED method
+			//We round the taxes at the end. Hence we do the same for consistency
+			//This variable is set in the bundle.phtml
+			if (taxCalcMethod == CACL_TOTAL_BASE) {
+				var calculatedPriceFormatted = calculatedPrice.toFixed(10);
+				var includeTaxPriceFormatted = includeTaxPrice.toFixed(10);
+				var tax = includeTaxPriceFormatted - calculatedPriceFormatted;
+				calculatedPrice = includeTaxPrice - Math.round(tax * 100) / 100;
+			}
+
+			//make sure that the prices are all rounded to two digits
+			//this is needed when tax calculation is based on total for dynamic
+			//price bundle product. For fixed price bundle product, the rounding
+			//needs to be done after option price is added to base price
+			if (this.config.priceType == '0') {
+				calculatedPrice = Math.round(calculatedPrice*100)/100;
+				dispositionPrice = Math.round(dispositionPrice*100)/100;
+				includeTaxPrice = Math.round(includeTaxPrice*100)/100;
+
+			}
+
+			var event = $(document).fire('bundle:reload-price', {
+				price: calculatedPrice,
+				priceInclTax: includeTaxPrice,
+				dispositionPrice: dispositionPrice,
+				bundle: this
+			});
+			if (!event.noReloadPrice) {
+				optionsPrice.specialTaxPrice = 'true';
+				optionsPrice.changePrice('bundle', calculatedPrice);
+				optionsPrice.changePrice('nontaxable', dispositionPrice);
+				optionsPrice.changePrice('priceInclTax', includeTaxPrice);
+				optionsPrice.reload();
+			}
+			updateProductPrice();
+			return calculatedPrice;
+		});
+	Product.Bundle.prototype.selectionPrice =
+		Product.Bundle.prototype.selectionPrice.wrap(function(parentMethod,optionId, selectionId) {
+			if (selectionId == '' || selectionId == 'none') {
+				return 0;
+			}
+			var qty = null;
+
+			var tierPriceInclTax, tierPriceExclTax;
+			if (this.config.options[optionId].selections[selectionId].customQty == 1 && !this.config['options'][optionId].isMulti) {
+				if ($('bundle-option-' + optionId + '-qty-input')) {
+					qty = $('bundle-option-' + optionId + '-qty-input').value;
+				} else {
+					qty = 1;
+				}
+			} else {
+				qty = this.config.options[optionId].selections[selectionId].qty;
+			}
+			if (this.config.priceType == '0') {
+				price = this.config.options[optionId].selections[selectionId].price;
+				tierPrice = this.config.options[optionId].selections[selectionId].tierPrice;
+
+				for (var i=0; i < tierPrice.length; i++) {
+					if (Number(tierPrice[i].price_qty) <= qty && Number(tierPrice[i].price) <= price) {
+						price = tierPrice[i].price;
+						tierPriceInclTax = tierPrice[i].priceInclTax;
+						tierPriceExclTax = tierPrice[i].priceExclTax;
+					}
+				}
+			} else {
+				selection = this.config.options[optionId].selections[selectionId];
+				if (selection.priceType == '0') {
+					price = selection.priceValue;
+				} else {
+					price = (this.config.basePrice*selection.priceValue)/100;
+				}
+			}
+			//price += this.config.options[optionId].selections[selectionId].plusDisposition;
+			//price -= this.config.options[optionId].selections[selectionId].minusDisposition;
+			//return price*qty;
+			var disposition = this.config.options[optionId].selections[selectionId].plusDisposition +
+				this.config.options[optionId].selections[selectionId].minusDisposition;
+
+			if (this.config.specialPrice) {
+				newPrice = (price*this.config.specialPrice)/100;
+				price = Math.min(newPrice, price);
+			}
+
+			selection = this.config.options[optionId].selections[selectionId];
+			if (tierPriceInclTax !== undefined && tierPriceExclTax !== undefined) {
+				priceInclTax = tierPriceInclTax;
+				price = tierPriceExclTax;
+			} else if (selection.priceInclTax !== undefined) {
+				priceInclTax = selection.priceInclTax;
+				price = selection.priceExclTax !== undefined ? selection.priceExclTax : selection.price;
+			} else {
+				priceInclTax = price;
+			}
+			recurringTotalQty += parseInt(qty);
+
+		if (this.config.priceType == '1' || taxCalcMethod == CACL_TOTAL_BASE) {
+				var result = new Array(price*qty, disposition*qty, priceInclTax*qty);
+				return result;
+			}
+			else if (taxCalcMethod == CACL_UNIT_BASE) {
+				price = (Math.round(price*100)/100).toString();
+				disposition = (Math.round(disposition*100)/100).toString();
+				priceInclTax = (Math.round(priceInclTax*100)/100).toString();
+				var result = new Array(price*qty, disposition*qty, priceInclTax*qty);
+				return result;
+			} else { //taxCalcMethod == CACL_ROW_BASE)
+				price = (Math.round(price*qty*100)/100).toString();
+				disposition = (Math.round(disposition*qty*100)/100).toString();
+				priceInclTax = (Math.round(priceInclTax*qty*100)/100).toString();
+				var result = new Array(price, disposition, priceInclTax);
+				return result;
+			}
+		});	
+</script>
+<?php //endif;?>

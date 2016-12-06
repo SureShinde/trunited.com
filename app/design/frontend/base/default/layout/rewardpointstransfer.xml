@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsTransfer
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <!-- update layout for all frontend page -->
+<!--        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/magestore/rewardpointstransfer.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magestore/rewardpoints.css</stylesheet>
+            </action>
+        </reference>-->
+    </default>
+    <rewardpoints_default>       
+        <reference name="rewardpoints.navigation">
+                <action method="addLink" translate="label" module="rewardpointstransfer" ifconfig="rewardpoints/transferplugin/enable">
+                    <name>rewardpoints_transfer</name>
+                    <path>rewardpointstransfer</path>
+                    <label>Point Transfer</label>
+                    <enable helper="rewardpointstransfer/enableLink"/>
+                    <order>50</order>
+                </action>
+        </reference>
+    </rewardpoints_default>
+    <rewardpointstransfer_index_index>
+        <update handle="rewardpoints_default" />
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/magestore/rewardpointstransfer.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magestore/rewardpoints.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="rewardpointstransfer/rewardpointstransfer" name="rewardpointstransfer" template="rewardpointstransfer/rewardpointstransfer.phtml" >
+                <block type="rewardpointstransfer/transaction_send" name="sendtransfer" as="sendtransfer" template="rewardpointstransfer/transaction/send.phtml" />
+                <block type="rewardpointstransfer/transaction_receive" name="receivetransfer" as="receivetransfer" template="rewardpointstransfer/transaction/receive.phtml" />
+            </block>
+        </reference>
+    </rewardpointstransfer_index_index>
+    <rewardpoints_index_settings>
+        <reference name="before_body_end">
+            <block type="rewardpointstransfer/rewardpointstransfer" template="rewardpointstransfer/account/settings.phtml"/>
+        </reference>
+    </rewardpoints_index_settings>
+    <customer_account_create>
+        <reference name="before_body_end">
+            <block type="rewardpointstransfer/rewardpointstransfer" template="rewardpointstransfer/account/create.phtml" />
+        </reference>
+    </customer_account_create>
+</layout>
