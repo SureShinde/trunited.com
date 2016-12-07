@@ -10,6 +10,8 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
      $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
  else
      $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+
+$parameter = $this->getUrlParameter();
 ?>
 
 <div class="aff-main-content <?php echo $class_name; ?>">
@@ -66,6 +68,13 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
                 <form id="affiliate-personal-url-form" method="post" action="<?php echo $this->getUrl('*/*/personal') ?>">
                     <div id="affiliate-opc-personal-url" class="step a-item">
                         <ul class="form-list">
+                            <li class="control">
+                                <label for="use-personal-url"><?php echo $this->__('Custom Direct Link') ?></label>
+                                <div class="actions identify_code">
+                                    <?php echo $parameter?>
+                                </div>
+                                <div class="guide"><?php echo $this->getUrlParameterDescription();?></div>
+                            </li>
                             <!--customize by viet -->
                             <li class="control">
                                 <label for="use-personal-url"><?php echo $this->__('Quick Email Url') ?></label>
@@ -88,7 +97,7 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
                                 <span>
                                     <span><?php echo $this->__('Save') ?></span>
                                 </span>
-                            </button>                                                     
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -296,19 +305,19 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
 									var message = $('affiliate-facebook-content').value;
 									if (message) {
 										var obj = {
-											// method: 'share_open_graph', 
-											method: 'feed', 
+											// method: 'share_open_graph',
+											method: 'feed',
 										    link: '<?php echo $this->getPersonalUrl();?>',
 											description: message,
 										};
-										function callback(response) {											
+										function callback(response) {
 											if (response && response.post_id) $('affiliate-facebook-msg').show();
 										}
 										FB.ui(obj, callback);
 										}
 									}
 								}
-							</script>				
+							</script>
 						</div>
 					</li>
                     <!--add by Sally-->
@@ -333,7 +342,7 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
                             <div class="buttons-set">
                                 <button class = "button button-config" title="<?php echo $this->__('Tweet') ?>" onclick="affiliateTweet();">
                                     <span><span><?php echo $this->__('Tweet') ?></span></span>
-                                </button>                     
+                                </button>
                             </div>
                             <p></p>
                             <script type="text/javascript">
@@ -422,5 +431,5 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
             var top = parseInt(screenY + ((outerHeight - height) / 2.5), 10);
             return 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top;
         }
-    </script> 
+    </script>
 </div>

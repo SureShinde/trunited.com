@@ -27,7 +27,7 @@
 }
 .affiliateplus-account-bottom button.form-button:hover span,.affiliateplus-account-bottom button.form-button:focus span{
     opacity: 1;
-    filter:alpha(opacity=100); 
+    filter:alpha(opacity=100);
 }
 .affiliateplus-account-bottom button.form-button.btn-login span{
     background:url(images/bg-btn.png) no-repeat right -7px  #E05435;
@@ -51,7 +51,7 @@
 #referer_grid thead th a:hover{ color: #0A263C; }
 
 /* Miniform request money */
-.affiliateplus_form_request { 
+.affiliateplus_form_request {
     margin-bottom: 10px;
     float: left;
     width: 100%; }
@@ -70,7 +70,7 @@ li.payment_method_form { margin-left: 21px;*float: left;*width: 100%; }
 }
 #account-new-address-form li.field{
     width: 100%;
-}   
+}
 #affiliateplus_payment_request_form .fieldset{
     float:left;
     padding: 0px 0 12px 0;
@@ -80,14 +80,14 @@ li.payment_method_form { margin-left: 21px;*float: left;*width: 100%; }
     box-sizing: border-box;
     margin: 10px 0;
 }
-#affiliateplus_payment_request_form input.radio { 
+#affiliateplus_payment_request_form input.radio {
     float:left;
-    margin: 3px 5px 0px 0px; 
+    margin: 3px 5px 0px 0px;
 }
 #affiliateplus_payment_request_form .form-group .verified{
-    background: url(../../images/i_msg-success.gif) no-repeat;    
+    background: url(../../images/i_msg-success.gif) no-repeat;
     margin-top: 8px;
-    background-position: 0;  
+    background-position: 0;
 }
 #affiliateplus_payment_request_form .form-group .verified a{
     padding-left: 25px;
@@ -220,10 +220,10 @@ ul.affiliate-commission-tab li a{
 
 /*==========Custom Credit by Crystal===========*/
 .affiliate-page input[type=email],
-.affiliate-page input[type=search], 
-.affiliate-page input[type=number], 
-.affiliate-page input[type=password], 
-.affiliate-page input[type=tel], 
+.affiliate-page input[type=search],
+.affiliate-page input[type=number],
+.affiliate-page input[type=password],
+.affiliate-page input[type=tel],
 .affiliate-page input[type=text],
 .affiliate-page select.form-control{
     width: 100%;
@@ -288,7 +288,7 @@ ul.affiliate-commission-tab li a{
     margin: 0;
     text-transform: uppercase;
     background: url('../magestore/images/custom.png') no-repeat;
-} 
+}
 #discount-affiliateplus-form .discount{
     padding: 0;
     border: 1px solid #d0cbc1;
@@ -308,11 +308,11 @@ ul.affiliate-commission-tab li a{
 }
 #checkout-step-payment #affiliateplus_credit{
     float: left;
-    margin-top: 4px;  
+    margin-top: 4px;
 }
 #discount-affiliateplus-form #affiliateplus_credit{
     float: left;
-    margin-top: 3px;  
+    margin-top: 3px;
 }
 
 #discount-affiliateplus-form .affiliateplus_credit label,
@@ -411,7 +411,7 @@ button {
 .affiliate-list-widgets tbody textarea {
     //width: 100%;
     //float: left;
-    outline: 0;    
+    outline: 0;
 }
 /******banner & link by Sally*******/
 .affiliate-page .affiliate-get-link .box-all{
@@ -484,7 +484,7 @@ signup_affiliate_account_form{
 }
 #affiliateplusstatistic-filter #date_picker_from,
 #affiliateplusstatistic-filter #date_picker_to{
-    float: left; 
+    float: left;
     margin: 10px 0px 0px 5px;
 }
 #affiliateplusstatistic-filter .form-group label{
@@ -510,21 +510,21 @@ signup_affiliate_account_form{
     outline: none;
 }
 .affiliate-page .btn:focus,
-.affiliate-page .btn:active:focus, 
+.affiliate-page .btn:active:focus,
 .affiliate-page .btn.active:focus,
 .affiliate-page .btn.focus,
 .affiliate-page .btn:active.focus,
 .affiliate-page .btn.active.focus
 .affiliate-page select option:focus,
 .affiliate-page input[type="file"]:focus,
-.affiliate-page input[type="radio"]:focus, 
+.affiliate-page input[type="radio"]:focus,
 .affiliate-page input[type="checkbox"]:focus
 {
     outline: none;
 }
 .affiliate-page .messages.col-xs-12,
 .affiliate-page .messages.col-sm-12,
-.affiliate-page .messages.col-md-12, 
+.affiliate-page .messages.col-md-12,
 .affiliate-page .messages.col-lg-12{
     padding-left: 0;
 }
@@ -539,7 +539,7 @@ signup_affiliate_account_form{
     position: absolute;
     left: 15px;
     bottom: 15px;
-    
+
 }
 .affiliate-page #affiliate-personal-url-form input[type="checkbox"]{
     margin:0;
@@ -558,15 +558,15 @@ signup_affiliate_account_form{
     background:#000;
     opacity: 0.85;
     filter:alpha(opacity=85);
-} 
-.aff-popup {       
+}
+.aff-popup {
     z-index: 10000;
     transition: top .25s ease;
     position: absolute;
     top: 20%;
     right: 0;
     left: 0;
-    //min-width: 20%; 
+    //min-width: 20%;
     max-width: 40%;
     margin: 0 auto;
     background: #fff;
@@ -585,7 +585,7 @@ signup_affiliate_account_form{
     min-height: 200px;
 }
 .aff-popup .close-affpopup {
-    position: absolute;        
+    position: absolute;
     right: -15px;
     top: -15px;
 }
@@ -608,7 +608,7 @@ signup_affiliate_account_form{
         margin-top: 0;
     }
     #affiliateplus_payment_request_form .field .not-verified a {
-        padding-left: 30px;         
+        padding-left: 30px;
     }
 }
 @media screen and (max-width: 979px) {
@@ -637,7 +637,7 @@ signup_affiliate_account_form{
     position: relative;
     left:0px;
     bottom: 0px;
-    
+
 }
 }
 .aff-popup.active{
@@ -654,7 +654,7 @@ signup_affiliate_account_form{
 }
 #affiliateplus-email-form .input-box{
     width: 100%
-} 
+}
 textarea.widgets-code, textarea#affiliate-email-content{
     width: 99%;
     margin-top: 10px;
@@ -684,9 +684,9 @@ textarea.widgets-code, textarea#affiliate-email-content{
 .form-group .customer-dob{width:100%; float:left;}
 .form-group .dob-month{width:25%; float:left; padding-right:10px;}
 .form-group .dob-day{width:25%; float:left; padding-right:10px;}
-.form-group .dob-year{width:50%; float:left;} 
+.form-group .dob-year{width:50%; float:left;}
 .form-group .dob-month .input-text{border-radius:4px; height:34px;}
-.form-group .dob-day .input-text{border-radius:4px; height:34px;} 
+.form-group .dob-day .input-text{border-radius:4px; height:34px;}
 .form-group .dob-year .input-text{border-radius:4px; height:34px;}
 .affiliateplus-account-login .account-login .f-right{
     float:right;
@@ -737,3 +737,4 @@ textarea.widgets-code, textarea#affiliate-email-content{
     top: -40px !important;
     padding: 1px !important;
 }
+

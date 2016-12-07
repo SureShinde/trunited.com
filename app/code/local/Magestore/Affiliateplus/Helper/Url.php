@@ -20,7 +20,7 @@ class Magestore_Affiliateplus_Helper_Url extends Mage_Core_Helper_Abstract {
 
         $url = $this->getUrlLink($banner->getLink());
 
-        //hainh 29-07-2014 
+        //hainh 29-07-2014
         $referParam = $this->getPersonalUrlParameter();
         $referParamValue = $account->getIdentifyCode();
         if (Mage::getStoreConfig('affiliateplus/general/url_param_value') == 2)
@@ -92,7 +92,7 @@ class Magestore_Affiliateplus_Helper_Url extends Mage_Core_Helper_Abstract {
             $url .= '?' . $referParam . '=' . $referParamValue;
 
         //end editing
-        
+
         // Changed By Adam: 10/11/2014: Fix loi khi chay multiple website nhung ko co default store view
         if (Mage::app()->getDefaultStoreView() && $store->getId() != Mage::app()->getDefaultStoreView()->getId())
             $url .= '&___store=' . $store->getCode();

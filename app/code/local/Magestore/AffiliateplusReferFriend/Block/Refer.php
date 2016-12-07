@@ -59,6 +59,22 @@ class Magestore_AffiliateplusReferFriend_Block_Refer extends Mage_Core_Block_Tem
         return $this->getAccount()->getEmail();
     }
 
+    public function getIdentifyCode(){
+        return $this->getAccount()->getIdentifyCode();
+    }
+
+    public function getUrlParameter(){
+        $url_param = Mage::getStoreConfig('affiliateplus/general/url_param');
+        if($url_param == '')
+            $url_param = 'acc';
+        return $url_param.'='.$this->getIdentifyCode();
+    }
+
+    public function getUrlParameterDescription(){
+        $url_param_description = Mage::getStoreConfig('affiliateplus/general/url_param_description');
+        return $url_param_description;
+    }
+
     public function getDefaultEmailSubject() {
         return $this->_getHelper()->getReferConfig('email_subject');
     }
@@ -119,7 +135,7 @@ class Magestore_AffiliateplusReferFriend_Block_Refer extends Mage_Core_Block_Tem
                         ), $content
         );
     }
-    
+
     public function getDefaultTwitterContent() {
         $content = $this->_getHelper()->getReferConfig('twitter_message');
         return str_replace(
@@ -151,7 +167,7 @@ class Magestore_AffiliateplusReferFriend_Block_Refer extends Mage_Core_Block_Tem
                     ));
             return $loginUrl;
         } catch (Exception $e) {
-            
+
         }
     }
 

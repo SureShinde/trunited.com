@@ -82,7 +82,7 @@
 
 /* Google */
 #affiliateplus-sidebar .step-title span.aff-logo{
-    padding-left: 60px; 
+    padding-left: 60px;
     color: #fff;
 }
 #affiliateplus-sidebar .step-title span.google-logo{
@@ -205,6 +205,7 @@
 #affiliate-opc-personal-url li.control label{
     padding: 0;
     min-width: 50%;
+    font-weight: bold;
 }
 #affiliateplus-sidebar .actions{
     margin-top: 0;
@@ -281,3 +282,13 @@
 }
 
 #affiliate-facebook-form a{cursor:pointer;}
+
+
+#affiliateplus-sidebar .identify_code{
+    padding-top: 5px;
+    padding-right: 42px;
+}
+
+#affiliateplus-sidebar .guide{
+    font-style: italic;
+}
