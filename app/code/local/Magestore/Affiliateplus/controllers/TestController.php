@@ -2,6 +2,7 @@
 class Magestore_Affiliateplus_TestController extends Mage_Core_Controller_Front_Action
 {
     public function indexAction(){
+        Mage::helper('affiliateplus/random')->reGenerateIdentifyCode();
 //        $transaction = Mage::getModel('affiliateplus/transaction')->load(43);
 //        
 //        $transaction->setCommission(100)

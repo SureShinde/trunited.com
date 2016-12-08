@@ -11,6 +11,7 @@ class Magestore_Affiliateplus_Adminhtml_AccountController extends Mage_Adminhtml
     }
 
     public function indexAction() {
+
         if (!Mage::helper('magenotification')->checkLicenseKeyAdminController($this)) {
             return;
         }

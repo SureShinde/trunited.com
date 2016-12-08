@@ -127,6 +127,8 @@
             <general>
                 <!-- hainh 29-07-2014 -->
                 <url_param_value>1</url_param_value>
+                <length_identity_code>5</length_identity_code>
+                <remove_string>o,O,0,i,I,1</remove_string>
                 <!-- end editing -->
             </general>
             <refer>

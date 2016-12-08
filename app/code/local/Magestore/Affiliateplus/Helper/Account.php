@@ -204,10 +204,13 @@ class Magestore_Affiliateplus_Helper_Account extends Mage_Core_Helper_Abstract {
             return $urlQuick. $existedRewirte->getRequestPath();
         }
         $targetPath = $this->_getDefaultPath($store);
+        $url_param = Mage::getStoreConfig('affiliateplus/general/url_param');
+        if($url_param == '')
+            $url_param = 'acc';
         if (strpos($targetPath, '?') === false)
-            $targetPath .= '/?acc=';
+            $targetPath .= '/?'.$url_param.'=';
         else
-            $targetPath .= '&acc=';
+            $targetPath .= '&'.$url_param.'=';
         $targetPath .= $account->getIdentifyCode();
         $rewrite = Mage::getModel('core/url_rewrite')->load($idPath, 'id_path');
         $rewrite->addData(array(

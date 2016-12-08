@@ -275,15 +275,16 @@ class Magestore_Affiliateplus_Model_Account extends Mage_Core_Model_Abstract {
     }
 
     public function generateIdentifyCode() {
-        $i = 0;
-        do {
-            $code = md5($this->getCustomerEmail() . $i);
-            $collection = $this->getCollection()
-                    ->addFieldToFilter('identify_code', $code);
-            $i++;
-        } while (count($collection));
-
-        return $code;
+//        $i = 0;
+//        do {
+//            $code = md5($this->getCustomerEmail() . $i);
+//            $collection = $this->getCollection()
+//                    ->addFieldToFilter('identify_code', $code);
+//            $i++;
+//        } while (count($collection));
+//
+//        return $code;
+        return Mage::helper('affiliateplus/random')->generateRandomString();
     }
 
     public function loadByCustomer($customer) {

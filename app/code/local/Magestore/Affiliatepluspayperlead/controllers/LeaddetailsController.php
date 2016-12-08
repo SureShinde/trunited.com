@@ -54,14 +54,16 @@ class Magestore_Affiliatepluspayperlead_LeaddetailsController extends Mage_Core_
     			$session->setPayperleadUrl($data['payperlead_url']);
     			return $this->_redirect('*/*/index');
     		}
-    		
+            $url_param = Mage::getStoreConfig('affiliateplus/general/url_param');
+            if($url_param == '')
+                $url_param = 'acc';
     		if(!$targetPath){
 	    		$pageId = Mage::getStoreConfig('web/default/cms_home_page');
 	    		if (strpos($pageId,'|') !== false) $pageId = substr($pageId,strpos($pageId,'|')+1);
-	    		$targetPath = "cms/page/view/id/$pageId/?acc=";
+	    		$targetPath = "cms/page/view/id/$pageId/?'.$url_param.'=";
 	    		$targetPath .= $account->getIdentifyCode();
     		}else{
-    			$targetPath .= '?acc='.$account->getIdentifyCode();
+    			$targetPath .= '?'.$url_param.'='.$account->getIdentifyCode();
     		}
                 // Changed By Adam 12/11/2014
     		if (Mage::app()->getDefaultStoreView() && $store->getId() != Mage::app()->getDefaultStoreView()->getId())
