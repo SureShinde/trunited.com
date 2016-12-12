@@ -181,3 +181,20 @@ strong.rewardpoints-title{ text-transform: uppercase;}
     margin-bottom: 11px;
 	display: none;
 }
+
+#rewardpoints_share_truWallet .rewardpoints_form_request .form-group{
+    margin: 0 0 20px 0;
+}
+
+#rewardpoints_share_truWallet label{
+    margin-bottom: 5px !important;
+    font-weight: bold;
+}
+
+#rewardpoints_share_truWallet textarea{
+    width: 100%;
+}
+
+div.mce-edit-area{
+    border-width: 1px 1px 0px 0px !important;
+}

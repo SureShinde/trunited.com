@@ -25,6 +25,7 @@
  * @see Magestore_RewardPoints_Block_Account_Transactions
  */
 ?>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js')?>tinymce/tinymce.min.js"></script>
 <div class="page-title">
     <h1><?php echo $this->__('Share truWallet Money') ?></h1>
 </div>
@@ -37,7 +38,8 @@
                     <?php echo $_pointMoney ?>
                 <?php endif ?>
             </strong>
-            <img src="https://trunited.com/skin/frontend/base/default/images/rewardpoints/truwallet.png" alt="truWallet" style="display: inline-block;">
+            <img src="https://trunited.com/skin/frontend/base/default/images/rewardpoints/truwallet.png" alt="truWallet"
+                 style="display: inline-block;">
         </strong>
         <br/>
         <?php if ($_holdingBalance = $this->getHoldingBalance()): ?>
@@ -52,44 +54,62 @@
 
 <div class="page-description">
     <?php
-        echo Mage::getModel('cms/block')->load('desc_sharing_truWallet')->getContent();
+    echo Mage::getModel('cms/block')->load('desc_sharing_truWallet')->getContent();
     ?>
 
 </div>
 
-<hr class="share_separate" />
-<h2 id="share_form_header"><?php echo $this->__('Share truWallet');?></h2>
-<form id="rewardpoints_share_truWallet" action="<?php echo $this->getActionForm();?>" method="post">
+<hr class="share_separate"/>
+<h2 id="share_form_header"><?php echo $this->__('Share truWallet'); ?></h2>
+<form id="rewardpoints_share_truWallet" action="<?php echo $this->getActionForm(); ?>" method="post" class="form-inline">
     <div class="rewardpoints_form_request">
-        <div class="input_fields_form form-inline col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 input-blance">
-                <input id="share_amount" name="share_amount" value=""
-                       class="required-entry form-control validate-greater-than-zero validate-number" type="text"
-                       placeholder="<?php echo $this->__('Enter amount');?>" />
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <input id="share_email" name="share_email" value="" type="text"
-                       class="required-entry form-control validate-email"
-                       placeholder="<?php echo $this->__('Enter email');?>" />
-            </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                <button class="button button-config" title="<?php echo $this->__('Send');?>" type="submit">
-                    <span><span><?php echo $this->__('Send truWallet Money');?></span></span>
-                </button>
-            </div>
+        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <label for="email"><?php echo $this->__('Enter amount'); ?></label>
+            <input id="share_amount" name="share_amount" value=""
+                   class="required-entry form-control validate-greater-than-zero validate-number" type="text"
+                   placeholder="<?php echo $this->__('Enter amount'); ?>"/>
         </div>
+        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <label for="email"><?php echo $this->__('Enter email'); ?></label>
+            <input id="share_email" name="share_email" value="" type="text"
+                   class="required-entry form-control validate-email"
+                   placeholder="<?php echo $this->__('Enter email'); ?>"/>
+        </div>
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label for="email" style="display: block"><?php echo $this->__('Message'); ?></label>
+            <textarea class="form-control" rows="5" placeholder="Enter message"></textarea>
+        </div>
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button class="button button-config" title="<?php echo $this->__('Send'); ?>" type="submit">
+                <span><span><?php echo $this->__('Send truWallet Money'); ?></span></span>
+            </button>
+        </div>
+
+
     </div>
 </form>
 <hr class="share_separate" style="clear: both; margin-top: 100px;"/>
-<h2 id="share_form_header"><?php echo $this->__('History Transactions');?></h2>
+<h2 id="share_form_header"><?php echo $this->__('History Transactions'); ?></h2>
 <?php echo $this->getGridHtml() ?>
 <script type="text/javascript">
     var shareTruWalletForm = new VarienForm('rewardpoints_share_truWallet', true);
+    tinymce.init({
+        selector: 'textarea',
+        height: 150,
+        menubar: false,
+        plugins: [
+            'advlist autolink lists link charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime table contextmenu paste code'
+        ],
+        toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link',
+        content_css: '//www.tinymce.com/css/codepen.min.css'
+    });
     /* $j = jQuery.noConflict();
-    $j( function() {
-        var availableEmails = [<?php echo $this->getAllEmail();?>];
-        $j( "#share_email" ).autocomplete({
-            source: availableEmails
-        });
-    }); */
+     $j( function() {
+     var availableEmails = [//echo $this->getAllEmail();];
+     $j( "#share_email" ).autocomplete({
+     source: availableEmails
+     });
+     }); */
 </script>
