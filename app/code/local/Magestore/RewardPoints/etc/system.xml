@@ -423,7 +423,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>day(s)that the truWallet money will return to sender</comment>
+                            <comment>day(s)that the truWallet money will be returned to sender</comment>
                         </expire_date>
                     </fields>
                 </sharewallet>

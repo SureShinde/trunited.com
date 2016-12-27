@@ -30,10 +30,31 @@ class Magestore_Custompromotions_Model_Observer
 {
     public function customerRegisterSuccess($observer)
     {
+        $customer_reg = $observer->getCustomer();
+        /* Save customer phone number */
+        $is_verified = Mage::getSingleton('core/session')->getVerify();
+        $code = Mage::getSingleton('core/session')->getCodeActive();
+        if($is_verified != null && $is_verified){
+            $phone = Mage::getSingleton('core/session')->getPhoneActive();
+            $customer_reg->setPhoneNumber($phone);
+            $customer_reg->save();
+
+            $mobile = Mage::helper('custompromotions/verify')->getVerifyByPhoneCode($phone, $code);
+            if($mobile != null)
+            {
+                $mobile->setCustomerId($customer_reg->getId());
+                $mobile->setUpdatedTime(now());
+                $mobile->save();
+            }
+            Mage::getSingleton('core/session')->unsPhoneActive();
+            Mage::getSingleton('core/session')->unsCodeActive();
+            Mage::getSingleton('core/session')->unsVerify();
+        }
+        /* End save customer phone number */
+
         if (!Mage::helper('custompromotions')->isRunPromotions())
             return $this;
 
-        $customer_reg = $observer->getCustomer();
         $customer = Mage::getModel('customer/customer')->load($customer_reg->getId());
         if (!$customer->getId())
             return $this;
@@ -112,5 +133,68 @@ class Magestore_Custompromotions_Model_Observer
             /* process truWallet Gift card Product */
             Mage::helper('custompromotions')->addTruWalletFromProduct($order);
         }
+        
+        /* Process partially shipment status when order has created shipment */
+        $shipstation_enable = Mage::helper('custompromotions/configuration')->getShipStationEnable();
+        if($shipstation_enable){
+            $is_partially = Mage::getSingleton('core/session')->getOrderShipmentStatus();
+            $total_qty_ordered = floor($order->getData('total_qty_ordered'));
+            if(isset($is_partially) && $is_partially != null)
+            {
+                if($order->hasShipments()){
+                    $shipmentCollection = $order->getShipmentsCollection();
+                    $shipment_qty = 0;
+                    foreach ($shipmentCollection as $ship) {
+                        $shipment_qty += $ship->getTotalQty();
+                    }
+
+                    $new_status = Mage::helper('custompromotions/configuration')->getShipStationOrderStatus();
+                    if($new_status == '')
+                        $new_status = Mage_Sales_Model_Order::STATE_PROCESSING;
+
+                    if($total_qty_ordered > $shipment_qty){
+                        $order->setStatus($new_status);
+                    } else if($total_qty_ordered == $shipment_qty){
+                        $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+                    }
+
+                    Mage::getSingleton('core/session')->unsOrderShipmentStatus();
+                    $order->save();
+                }
+            }
+        }/* END Process partially shipment status when order has created shipment */
+
     }
+
+    public function salesOrderShipmentSaveAfter($observer)
+    {
+        if (Mage::registry('salesOrderShipmentSaveAfterTriggered')) {
+            return $this;
+        }
+
+        /* @var $shipment Mage_Sales_Model_Order_Shipment */
+        $shipment = $observer->getEvent()->getShipment();
+        $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
+
+        if ($shipment) {
+            if($order->hasInvoices()){
+                $total_qty_ordered = floor($order->getData('total_qty_ordered'));
+                $invoiceCollection = $order->getInvoiceCollection();
+                $invoice_qty = 0;
+                foreach ($invoiceCollection as $inv) {
+                    $invoice_qty += $inv->getTotalQty();
+                }
+
+                if($total_qty_ordered > $invoice_qty){
+                    Mage::getSingleton('core/session')->setOrderShipmentStatus(1);
+                } else {
+                    Mage::getSingleton('core/session')->unsOrderShipmentStatus();
+                }
+            } else {
+                Mage::getSingleton('core/session')->setOrderShipmentStatus(1);
+            }
+        }
+        return $this;
+    }
+
 }

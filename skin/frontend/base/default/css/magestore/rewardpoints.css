@@ -182,19 +182,83 @@ strong.rewardpoints-title{ text-transform: uppercase;}
 	display: none;
 }
 
-#rewardpoints_share_truWallet .rewardpoints_form_request .form-group{
-    margin: 0 0 20px 0;
+.verify_mobile .send_code{
+    margin-top: 25px;
 }
 
-#rewardpoints_share_truWallet label{
-    margin-bottom: 5px !important;
-    font-weight: bold;
+#verify_customer_mobile, #verify_code_mobile{
+    display: block;
+    border: 1px solid #ececec;
+    border-radius: 0;
+    background: #fff;
+    border-top: 4px solid #65829d;
+    padding: 35px 25px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+}
+#verify_customer_mobile h2.legend, #verify_code_mobile h2.legend{
+    color: #65829d;
+    text-transform: uppercase;
+    margin: 0 0 20px;
 }
 
-#rewardpoints_share_truWallet textarea{
+#verify_code_mobile button[type="submit"]{
+    margin-top: 13px;
+}
+
+#verify_customer_mobile .fields label{
+    display: block;
     width: 100%;
 }
 
-div.mce-edit-area{
-    border-width: 1px 1px 0px 0px !important;
+#verify_customer_mobile .fields .pprefix{
+    width: 23%;
+    display: inline-block;
+}
+
+#verify_customer_mobile .fields .phone{
+    width: 60%;
+    display: inline-block;
+}
+
+#verify_customer_mobile em{
+    display: block;
+}
+
+#verify_customer_mobile label.required em
+{
+    float: none;
+    left: 16%;
+}
+
+.pprefix .combobox-showall{
+    height: 36px;
+    position: absolute;
+    border-radius: 0;
+    background-color: transparent !important;
+    border: none;
+    top: 1px;
+    right: 0;
+}
+
+.pprefix a.ui-button:active, .pprefix .ui-button:active{
+    border: none;
+    background: transparent;
+}
+
+.pprefix a.ui-button:hover{
+    border: none;
+}
+
+#verify_customer_mobile .input-box{
+    vertical-align: top !important;
+}
+
+ul.ui-widget-content.ui-autocomplete{
+    max-height: 400px !important;
+    overflow-y: scroll !important;
+    max-width: 18.6%;
+}
+
+ul.ui-widget-content.ui-autocomplete li{
+    text-align: left !important;
 }

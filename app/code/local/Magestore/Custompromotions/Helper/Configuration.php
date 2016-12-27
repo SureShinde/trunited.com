@@ -61,4 +61,14 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
     {
         return '<ul class="messages"><li class="notice-msg"><ul><li><span>'.$this->getNotifyMessage().'</span></li></ul></li></ul>';
     }
+
+    public function getShipStationEnable()
+    {
+        return $this->getDataConfig('shipment','enable');
+    }
+    
+    public function getShipStationOrderStatus()
+    {
+        return $this->getDataConfig('shipment','order_status');
+    }
 }

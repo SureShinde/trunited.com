@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Magestore_Custompromotions>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Magestore_Custompromotions>
     </modules>
     <frontend>
@@ -73,6 +73,12 @@
                     <custompromotions>
                         <table>custompromotions</table>
                     </custompromotions>
+                    <verifymobile>
+                        <table>customer_verify_mobile</table>
+                    </verifymobile>
+                    <phonecode>
+                        <table>mobile_codes</table>
+                    </phonecode>
                 </entities>
             </custompromotions_mysql4>
         </models>
@@ -134,6 +140,15 @@
                     </custompromotions_sales_order_save_after>
                 </observers>
             </sales_order_save_after>
+            <sales_order_shipment_save_after>
+                <observers>
+                    <custompromotions_sales_order_shipment_save_after>
+                        <type>singleton</type>
+                        <class>custompromotions/observer</class>
+                        <method>salesOrderShipmentSaveAfter</method>
+                    </custompromotions_sales_order_shipment_save_after>
+                </observers>
+            </sales_order_shipment_save_after>
         </events>
     </global>
 
@@ -151,6 +166,18 @@
                 <order_status>pending</order_status>
                 <notify_message>Important: truWallet cannot be used as a payment option for Gift Cards.</notify_message>
             </product>
+            <shipment>
+                <enable>1</enable>
+                <order_status>partially_shipped</order_status>
+            </shipment>
+            <verify>
+                <enable>1</enable>
+                <account_sid>ACd6a9a46831370f7b1e0a4bfec67e01f7</account_sid>
+                <auth_token>1f5a99d7d43d1e8e97da27f3df5c379f</auth_token>
+                <sender_number>16025170555</sender_number>
+                <code_length>5</code_length>
+                <allow_edit>0</allow_edit>
+            </verify>
         </custompromotions>
     </default>
 </config>
