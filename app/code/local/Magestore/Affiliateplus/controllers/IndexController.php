@@ -220,33 +220,37 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             return $this->_redirect('affiliateplus/index/payments');
         }
 
-        $customer = Mage::getModel('customer/customer')->load($affiliate_account->getCustomerId());
-        $transferObject = new Varien_Object();
-        $transferObject->setData('product_credit', $transfer_amount);
-        $transferObject->setData('point_amount', 0);
-        
-        Mage::helper('rewardpoints/action')
-            ->addTransaction(
-                'transfer_credit', $customer, $transferObject
-            );
+        try{
+            $customer = Mage::getModel('customer/customer')->load($affiliate_account->getCustomerId());
+            $transferObject = new Varien_Object();
+            $transferObject->setData('product_credit', $transfer_amount);
+            $transferObject->setData('point_amount', 0);
+
+            Mage::helper('rewardpoints/action')
+                ->addTransaction(
+                    'transfer_credit', $customer, $transferObject
+                );
 
 
-        $storeId = Mage::app()->getStore()->getStoreId();
-        $scope = Mage::getStoreConfig('affiliateplus/account/balance', $storeId);
-        if($scope == 'store'){
+            $storeId = Mage::app()->getStore()->getStoreId();
+            $scope = Mage::getStoreConfig('affiliateplus/account/balance', $storeId);
+            if($scope == 'store'){
 
-        } else {
-            $storeId = null;
+            } else {
+                $storeId = null;
+            }
+
+            $amount = -$transfer_amount;
+            $balance = $affiliate_account->getBalance() + $amount;
+            $affiliateAccount = Mage::getModel('affiliateplus/account')->setStoreId($storeId)->load($affiliate_account->getId());
+            $affiliateAccount->setBalance($balance)->save();
+            Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
+
+            $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
+                , $baseCurrency->format($transfer_amount, array(), false)));
+        } catch(Exception $ex){
+            $this->_getCoreSession()->addError($ex->getMessage());
         }
-
-        $amount = -$transfer_amount;
-        $balance = $affiliate_account->getBalance() + $amount;
-        $affiliateAccount = Mage::getModel('affiliateplus/account')->setStoreId($storeId)->load($affiliate_account->getId());
-        $affiliateAccount->setBalance($balance)->save();
-        Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
-
-        $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
-            , $baseCurrency->format($transfer_amount, array(), false)));
         return $this->_redirect('affiliateplus/index/payments');
     }
 
@@ -672,6 +676,21 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->getLayout()->getBlock('head')->setTitle(Mage::helper('affiliateplus')->__('Sub Store Url'));
         $this->renderLayout();
     }
+	
+	public function myconnectionsAction() {
+        // Added By Aellon tech 17/12/2016
+        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+        
+        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
+            return;
+        }
+        if ($this->_getAccountHelper()->accountNotLogin())
+            return $this->_redirect('affiliateplus/account/login');
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('My Connections'));
+        $this->renderLayout();
+    }
+	
 
     /**
      *	Changed by Adam (27/08/2016): show list lifetimecustomer in frontend

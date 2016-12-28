@@ -43,10 +43,8 @@ class Magestore_PaypalBNCode_Model_Config extends Mage_Paypal_Model_Config
 		}
 		
         $bnCode = parent::getBuildNotationCode($countryCode);
-		$newBnCode = str_replace('Varien_Cart',$newBnCode,$bnCode);	
 		
-                // Changed By Adam 29/10/2015: fixed the issue can't find the Magestore_Onestepcheckout_Helper_Data
-		if(Mage::helper('core')->isModuleEnabled('Magestore_Onestepcheckout') && class_exists("Magestore_Onestepcheckout_Helper_Data") && Mage::getStoreConfig('onestepcheckout/general/active')){
+		if(class_exists("Magestore_Onestepcheckout_Helper_Data") && Mage::getStoreConfig('onestepcheckout/general/active')){
 			return $newBnCode;
 		} else {
 			return $bnCode;

@@ -1,0 +1,13 @@
+<?php
+
+class Magestore_Affiliateplus_Model_marketing extends Mage_Core_Model_Abstract
+{
+	protected $_eventPrefix = 'affiliateplus_marketing';
+    protected $_eventObject = 'affiliateplus_marketing';
+	
+    public function _construct()
+	{
+        parent::_construct();
+        $this->_init('affiliateplus/marketing');
+    }   
+}

@@ -2,9 +2,10 @@
 class Magestore_Affiliateplus_TestController extends Mage_Core_Controller_Front_Action
 {
     public function indexAction(){
-        Mage::helper('affiliateplus/random')->reGenerateIdentifyCode();
-        zend_debug::dump($_SERVER['REMOTE_ADDR']);
-        zend_debug::dump(Mage::log(Mage::helper('affiliateplus/random')->reGenerateIdentifyCode(), null, 'test.log'));
+    	zend_debug::dump($_SERVER['REMOTE_ADDR']);
+    	zend_debug::dump(Mage::log('test: '.now(), null, 'test.log')); 
+    	echo '<br />success';
+        // Mage::helper('affiliateplus/random')->reGenerateIdentifyCode();
 //        $transaction = Mage::getModel('affiliateplus/transaction')->load(43);
 //        
 //        $transaction->setCommission(100)

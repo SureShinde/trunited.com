@@ -177,6 +177,7 @@
                 <sender_number>16025170555</sender_number>
                 <code_length>5</code_length>
                 <allow_edit>0</allow_edit>
+                <mobile_code>1</mobile_code>
             </verify>
         </custompromotions>
     </default>

@@ -205,10 +205,10 @@ strong.rewardpoints-title{ text-transform: uppercase;}
     margin-top: 13px;
 }
 
-#verify_customer_mobile .fields label{
-    display: block;
-    width: 100%;
-}
+/*#verify_customer_mobile .fields label{*/
+    /*display: block;*/
+    /*width: 100%;*/
+/*}*/
 
 #verify_customer_mobile .fields .pprefix{
     width: 23%;
@@ -220,14 +220,23 @@ strong.rewardpoints-title{ text-transform: uppercase;}
     display: inline-block;
 }
 
-#verify_customer_mobile em{
-    display: block;
+/*#verify_customer_mobile em{*/
+    /*display: block;*/
+/*}*/
+
+/*#verify_customer_mobile label.required em*/
+/*{*/
+    /*float: none;*/
+    /*left: 16%;*/
+/*}*/
+
+.resend_code{
+    color: #a94442;
 }
 
-#verify_customer_mobile label.required em
-{
-    float: none;
-    left: 16%;
+.resend_code:hover{
+    text-decoration: none;
+    color: #a94442;
 }
 
 .pprefix .combobox-showall{

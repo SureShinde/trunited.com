@@ -123,6 +123,11 @@ class Magestore_Custompromotions_Helper_Verify extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('custompromotions/verify/allow_edit');
     }
 
+    public function getMobileCode()
+    {
+        return Mage::getStoreConfig('custompromotions/verify/mobile_code') != null ? Mage::getStoreConfig('custompromotions/verify/mobile_code') : '+1';
+    }
+
     public function generateRandomString()
     {
         $length = $this->getDefaultLength() == '' ? 5 : $this->getDefaultLength();
