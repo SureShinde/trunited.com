@@ -255,5 +255,4 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
 			echo 'None order';
 		}
     }
-
 }

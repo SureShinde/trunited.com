@@ -37,4 +37,36 @@ class Magestore_RewardPoints_CustomerController extends Mage_Core_Controller_Fro
 		return;
     }
 
+	public function cancelTransactionAction()
+	{
+		$transaction_id = $this->getRequest()->getParam('id');
+		$transaction = Mage::getModel('rewardpoints/transaction')->load($transaction_id);
+
+		try{
+
+			if(!$transaction->getId()){
+				throw new Exception(Mage::helper('rewardpoints')->__('Transaction doesn\'t exist'));
+			}
+
+			$transaction->setUpdatedTime(now());
+			$transaction->setStatus(Magestore_RewardPoints_Model_Transaction::STATUS_CANCELED);
+			$transaction->save();
+
+			$rewardAccount = Mage::helper('rewardpoints/customer')->getAccountByCustomerId($transaction->getCustomerId());
+			$rewardAccount->setProductCredit($rewardAccount->getProductCredit() + abs($transaction->getProductCredit()));
+			$rewardAccount->save();
+
+			Mage::getSingleton('core/session')->addSuccess(
+				Mage::helper('rewardpoints')->__('Transaction has been cancelled successfully')
+			);
+
+		} catch (Exception $ex) {
+			Mage::getSingleton('customer/session')->addError(
+				$ex->getMessage()
+			);
+		}
+
+		$this->_redirectUrl(Mage::getUrl('rewardpoints/index/shareTruWallet'));
+	}
+
 }

@@ -110,6 +110,19 @@ class Magestore_RewardPoints_Block_Account_ShareTruWallet extends Magestore_Rewa
 //            'searchable' => true,
         ));
 
+        $grid->addColumn('cancel', array(
+            'header' => Mage::helper('rewardpoints')->__('Action'),
+            'index' => 'cancel',
+            'align' => 'left',
+            'type' => 'action',
+            'action' => array(
+                            'label' => 'Cancel',
+                            'url' 	=> 'rewardpoints/customer/cancelTransaction',
+                            'name'	=> 'id',
+                            'field'	=> 'transaction_id',
+      					),
+        ));
+
         $this->setChild('share_grid', $grid);
         return $this;
     }

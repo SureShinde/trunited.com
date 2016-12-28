@@ -215,8 +215,14 @@
                                 <?php else: ?>
                                     <?php $type = isset($column['type']) ? $column['type'] : '' ?>
                                     <?php switch ($type): case 'action': ?>
-                                            <?php $action = $column['action'] ?>
-                                            <a href="<?php echo $this->getUrl($action['url'], array($action['name'] => $row->getData($action['field']))) ?>" title="<?php echo $action['label'] ?>"><?php echo $action['label'] ?></a>
+                                            <?php
+                                                $action = $column['action'];
+                                                if($row->getData('status') == 1){
+                                            ?>
+
+                                            <a href="<?php echo $this->getUrl($action['url'], array($action['name'] => $row->getData($action['field']))) ?>"
+                                               title="<?php echo $action['label'] ?>" class="cancel_transaction"><?php echo $action['label'] ?></a>
+                                            <?php }?>
                                             <?php
                                             break;
                                         case 'options':
@@ -266,3 +272,11 @@
     </table>
 </div>
 <?php echo $this->getPagerHtml() ?>
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('#share_grid').delegate('.cancel_transaction','click',function(){
+        var prompt = confirm('Are you sure?');
+        if(!prompt)
+            return false;
+    });
+</script>
