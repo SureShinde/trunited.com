@@ -371,7 +371,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
         }
 
         if($data['is_send']){
-            $this->sendEmailWhenSharingTruWallet($rewardAccount, $this->getProductCredit(),$data['customer_exist'], $data['email']);
+            $this->sendEmailWhenSharingTruWallet($rewardAccount, $this->getProductCredit(),$data['customer_exist'], $data['email'], $data['message']);
         }
 
         if (!Mage::registry(('product_credit'))) {
@@ -417,9 +417,10 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
      * @param $amount
      * @param $type
      * @param $email
+     * @param $message
      * @return $this
      */
-    public function sendEmailWhenSharingTruWallet($account, $amount, $type, $email)
+    public function sendEmailWhenSharingTruWallet($account, $amount, $type, $email, $message)
     {
         if (!Mage::getStoreConfigFlag(self::XML_PATH_EMAIL_ENABLE, $this->getStoreId())) {
             return $this;
@@ -461,6 +462,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
             'point_balance' => Mage::helper('rewardpoints/point')->format($current_credit, $store),
             'status' => $this->getStatusLabel(),
 			'register_link' => $link,
+			'message' => $message,
         );
 
         Mage::getModel('core/email_template')

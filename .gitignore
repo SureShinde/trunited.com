@@ -26,7 +26,6 @@ app/etc/local.xml.template
 app/etc/local.xml
 app/.htaccess
 app/bootstrap.php
-app/locale/en_US/
 app/Mage.php
 /cron.php
 cron.sh

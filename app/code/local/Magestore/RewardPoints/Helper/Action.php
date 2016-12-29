@@ -128,6 +128,11 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             if($actionModel->getActionObject()->getData('is_send')){
                 $is_send = $actionModel->getActionObject()->getData('is_send');
             }
+
+            $message = '';
+            if($actionModel->getActionObject()->getData('message')){
+                $message = $actionModel->getActionObject()->getData('message');
+            }
             $transaction->createTransactionProductCredit(array(
                 'customer_id' => $customer->getId(),
                 'customer' => $customer,
@@ -141,6 +146,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
                 'customer_exist' => $is_exist,
                 'email' => $email,
                 'is_send' => $is_send,
+                'message' => $message,
             ));
         }
 

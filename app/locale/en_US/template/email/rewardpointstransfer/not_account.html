@@ -1,0 +1,50 @@
+<!--@subject {{var customer_name}} invited you to join him on {{var store_name}}@-->
+<!--@vars 
+{
+logo : {{var logo_url}}
+logo alt : {{var logo_alt}}
+store url : {{store url}}
+customer_name : {{var customer_name}}
+customer_email : {{var customer_email}}
+friend_email : {{var friend_email}}
+store_name : {{var store_name}}
+points_transferred : {{var points_transferred}}
+}
+@-->
+<style type="text/css">
+    body,td { color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+</style>
+
+<div style="font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top"><a href="{{store url=""}}">
+                                            <img src="{{var logo_url}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/>
+                            </a></td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Hello {{var customer}}</strong>,</p>
+                            <p>Your friend, {{var sender}}, just tried to send you a gift of <b>{{var point_amount}}</b> at
+                            <a href="{{store url=""}}">{{var store.getFrontendName()}}</a>, but couldn't do this because you haven't had a registered account.</p>
+                            <p>Receive his gift now by <a href="{{store url="customer/account/create"}}?rwp={{var customer}}">creating an account at {{var store.getFrontendName()}}</a> and never miss this chance again in the future.</p>
+                            {{if ismessage}}
+                                <p>{{var sender}}'s personal message: <br />
+                                    <i>{{var message}}</i>
+                                </p>
+                            {{/if}}
+                            
+                            <p>Happy Shopping!</p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</div>

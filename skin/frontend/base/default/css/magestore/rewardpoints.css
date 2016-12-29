@@ -271,3 +271,8 @@ ul.ui-widget-content.ui-autocomplete{
 ul.ui-widget-content.ui-autocomplete li{
     text-align: left !important;
 }
+
+#rewardpoints_share_truWallet label{
+    font-size: 15px;
+    margin: 10px 0 5px 0;
+}

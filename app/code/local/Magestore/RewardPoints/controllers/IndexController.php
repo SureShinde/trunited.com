@@ -159,6 +159,7 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
+        $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
 
@@ -200,6 +201,7 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         $shareObject->setData('customer_exist', $is_exist);
         $shareObject->setData('email', $email);
         $shareObject->setData('is_send', true);
+        $shareObject->setData('message', $message);
 
         Mage::helper('rewardpoints/action')
             ->addTransaction(

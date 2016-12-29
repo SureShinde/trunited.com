@@ -1,0 +1,47 @@
+<!--@subject Small gift from {{var store.getFrontendName()}}@-->
+<!-- 
+<pre>
+[[ help ]]
+logo : {{skin url="images/logo_email.gif" _area='frontend'}}
+logo alt : {{var store.getFrontendName()}}
+store url : {{store url=""}}
+customer_name : {{var customer_name}}
+title of event : {{var title}}
+message of event : {{var message}}
+store_name : {{var store.getFrontendName()}}
+points amount : {{var point_amount}}
+</pre>
+-->
+<style type="text/css">
+    body,td { color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+</style>
+
+<div style="font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top"><a href="{{store url=""}}">
+                                            <img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  
+                                 style="margin-bottom:10px;" border="0"/>
+                            </a></td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Dear {{var customer_name}}</strong>,</p>
+                            <p>On occasion of <b>{{var title}}</b>, {{var store.getFrontendName()}} would like to sent you a gift of <b>{{var point_amount}}</b>.</p>
+                            <p>You can <a href="{{store url="rewardpoints"}}">log in to your account</a> and use your points to purchase products right now!</p>
+              
+                            <p>Store Owner's message: {{var message}}</p>
+                            <p>Happy Shopping!</p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</div>
