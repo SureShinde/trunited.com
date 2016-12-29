@@ -179,6 +179,9 @@
                 <allow_edit>0</allow_edit>
                 <mobile_code>1</mobile_code>
             </verify>
+            <cms_page>
+                <message_login>You have to login first ! Please click <a href="{{login_url}}" title="Login Customer">here</a> to login.</message_login>
+            </cms_page>
         </custompromotions>
     </default>
 </config>

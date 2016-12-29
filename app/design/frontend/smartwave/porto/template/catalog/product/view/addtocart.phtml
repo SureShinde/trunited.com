@@ -1,5 +1,24 @@
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php $isRequiredCondition = $_product->getData('conditional_agreements');?>
+<?php $agreement = Mage::getModel('checkout/agreement')->load(1); ?>
+<?php if($isRequiredCondition && $agreement->getIsActive()):?>
+	<div class="product-agreement">
+        <div class="agreement-content"<?php echo ($agreement->getContentHeight() ? ' style="height:' . $agreement->getContentHeight() . '"' : '')?>>
+            <?php if ($agreement->getIsHtml()):?>
+                <?php echo $agreement->getContent() ?>
+            <?php else:?>
+                <?php echo nl2br($this->escapeHtml($agreement->getContent())) ?>
+            <?php endif; ?>
+        </div>
+        <p class="agree">
+			<input type="checkbox" name="agreement[<?php echo $agreement->getId()?>]"  title="<?php echo $this->escapeHtml($agreement->getCheckboxText()) ?>" class="checkbox required-entry" />
+			<label for="agreement-<?php echo $agreement->getId()?>">
+				<?php echo $agreement->getIsHtml() ? $agreement->getCheckboxText() : $this->escapeHtml($agreement->getCheckboxText()) ?>
+			</label>
+        </p>
+	</div>
+<?php endif; ?>
 <?php if($_product->isSaleable()): ?>
     <div class="add-to-cart">
         <?php if(!$_product->isGrouped()): ?>

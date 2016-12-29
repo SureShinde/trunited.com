@@ -1,0 +1,223 @@
+<?php
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    
+    $custID = $customer->getID();//get customer id
+
+}
+
+?>
+<style>
+    *,.cb.normal,.prox-b .prox-r{font-family:Arial,Helvetica,sans-serif!important;font-weight:400;font-style:normal}.cb,b,strong,h1,h2,h3{font-family:Arial,Helvetica,sans-serif!important;font-weight:400;font-style:normal}*{margin:0;padding:0;color:#333}body{font-size:14px}@media(max-width:1173px){.imga img{width:100%}.container-fixed{width:1000px}#left-blk{float:left}#rightd-blk{float:left;margin-left:10px;width:800px}}@media(max-width:980px){.imga{padding-bottom:20px;width:980px}.container-fixed{width:980px}#left-blk{float:left}#rightd-blk{float:left;margin-left:10px;width:600px}}@media(max-width:768px){.imga{padding-bottom:30px;width:760px}.container-fixed{width:768px}#rightd-blk{float:left;margin-left:10px;width:420px}}@media(max-width:360px){.imga{padding-bottom:55px;width:360px}.container-fixed{width:100%}#left-blk{display:none}#rightd-blk{float:left;margin-left:0;width:356px}}@media(max-width:320px){.imga{padding-bottom:50px;width:320px}.container-fixed{width:100%}#left-blk{display:none}#rightd-blk{float:left;margin-left:0;width:320px}}.container-fluid{width:100%}.container-fixed{width:1170px;margin:0 auto}.blk-group,.blk,.blk-group:after,.blk:after,.blk-group:before,.blk:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.blk-group{*zoom:1}.blk-group:before,.blk-group:after{display:table;content:"";line-height:0}.blk-group:after{clear:both}.blk-group{list-style-type:none;padding:0;margin:0}.blk-group>.blk-group{clear:none;float:left;margin:0!important}.blk{float:left;width:100%}.blk-r{float:right;width:100%}.blk0{width:100%}.blk0 .col1{width:1170px;width:100%}.col2,.col3,.col3_2_3,.col4,.col5,.col6,.col3.col_2_3:nth-child(3n+1){margin-right:12px;margin-right:1.02%}.blk1{width:826px;margin-right:10px}.blk1 .col1{width:616px}.blk1 .col2{width:406px;width:49.15%}.blk1 .col3{width:266px}.blk1 .col4{width:196px}.blk1 .col5{width:158px}.blk1 .col6{width:130px}.blk1.pad-20 .col2{width:386px}.blk2{width:305px}.blk2 .col2{width:50%}.blk1 .col2,.blk1 .col3,.blk1 .col4{margin-right:14px}.inl{display:inline}.iblk,.i-icn{display:inline-block}.block,.bblk,.icn{display:block}.col-full{width:100%}.col-half{width:50%}.col-third{width:33%;width:33.33%}.col-fourth{width:25%}.col-last{margin-right:0!important}.pad-2{padding:2px}.pad-5{padding:5px}.pad-10{padding:10px}.pad-12{padding:12px}.pad-15{padding:15px}.pad-20{padding:20px}.pad-25{padding:25px}.pad-30{padding:30px}.pad-40{padding:40px}.pad-50{padding:50px}.pad-0-b{padding-bottom:0}.pad-5-b{padding-bottom:5px}.pad-10-b{padding-bottom:10px}.pad-12-b{padding-bottom:12px}.pad-13-b{padding-bottom:13px}.pad-15-b{padding-bottom:15px}.pad-17-b{padding-bottom:17px}.pad-18-b{padding-bottom:18px}.pad-20-b{padding-bottom:20px}.pad-25-b{padding-bottom:25px}.pad-30-b{padding-bottom:30px}.pad-35-b{padding-bottom:35px}.pad-45-b{padding-bottom:45px}.pad-50-b{padding-bottom:50px}.pad-60-b{padding-bottom:60px}.pad-70-b{padding-bottom:70px}.pad-80-b{padding-bottom:80px}.pad-140-b{padding-bottom:140px}.pad-0-l{padding-left:0}.pad-2-l{padding-left:2px}.pad-4-l{padding-left:4px}.pad-5-l{padding-left:5px}.pad-10-l{padding-left:10px}.pad-15-l{padding-left:15px}.pad-20-l{padding-left:20px}.pad-25-l{padding-left:25px}.pad-30-l{padding-left:30px}.pad-40-l{padding-left:40px}.pad-50-l{padding-left:50px}.pad-55-l{padding-left:55px}.pad-60-l{padding-left:60px}.pad-65-l{padding-left:65px}.pad-0-lr{padding-right:0;padding-left:0}.pad-5-lr{padding-right:5px;padding-left:5px}.pad-10-lr{padding-right:10px;padding-left:10px}.pad-15-lr{padding-right:15px;padding-left:15px}.pad-17-lr{padding-left:17px;padding-right:17px}.pad-18-lr{padding-left:18px;padding-right:18px}.pad-20-lr{padding-right:20px;padding-left:20px}.pad-30-lr{padding-right:30px;padding-left:30px}.pad-40-lr{padding-right:40px;padding-left:40px}.pad-50-lr{padding-right:50px;padding-left:50px}.pad-60-lr{padding-left:60px;padding-right:60px}.pad-0-r{padding-right:0!important}.pad-2-r{padding-right:2px}.pad-3-r{padding-right:3px}.pad-5-r{padding-right:5px}.pad-10-r{padding-right:10px}.pad-15-r{padding-right:15px}.pad-20-r{padding-right:20px}.pad-30-r{padding-right:30px}.pad-40-r{padding-right:40px}.pad-50-r{padding-right:50px}.pad-0-t{padding-top:0}.pad-1-t{padding-top:1px}.pad-2-t{padding-top:2px}.pad-4-t{padding-top:4px}.pad-5-t{padding-top:5px}.pad-7-t{padding-top:7px}.pad-8-t{padding-top:8px}.pad-9-t{padding-top:9px}.pad-10-t{padding-top:10px}.pad-12-t{padding-top:12px}.pad-13-t{padding-top:13px}.pad-15-t{padding-top:15px}.pad-18-t{padding-top:18px}.pad-20-t{padding-top:20px}.pad-22-t{padding-top:22px}.pad-23-t{padding-top:23px}.pad-25-t{padding-top:25px}.pad-30-t{padding-top:30px}.pad-35-t{padding-top:35px}.pad-36-t{padding-top:36px}.pad-40-t{padding-top:40px}.pad-45-t{padding-top:45px}.pad-50-t{padding-top:50px}.pad-60-t{padding-top:60px}.pad-65-t{padding-top:65px}.pad-0-tb{padding-top:0;padding-bottom:0}.pad-2-tb{padding-top:2px;padding-bottom:2px}.pad-10-tb{padding-top:10px;padding-bottom:10px}.pad-12-tb{padding-top:12px;padding-bottom:12px}.pad-13-tb{padding-top:13px;padding-bottom:13px}.pad-15-tb{padding-top:15px;padding-bottom:15px}.pad-20-tb{padding-top:20px;padding-bottom:20px}.pad-22-tb{padding-top:22px;padding-bottom:22px}.pad-25-tb{padding-top:25px;padding-bottom:25px}.pad-30-tb{padding-top:30px;padding-bottom:30px}.mar-10{margin:10px}.mar-15{margin:15px}.mar-20{margin:20px}.mar-25{margin:25px}.mar-30{margin:30px}.mar-35{margin:35px}.mar-40{margin:40px}.mar-1-t-neg{margin-top:-1px}.mar-2-t-neg{margin-top:-2px}.mar-2-t{margin-top:2px}.mar-3-t{margin-top:3px}.mar-5-t{margin-top:5px}.mar-7-t{margin-top:7px}.mar-10-t{margin-top:10px}.mar-12-t{margin-top:12px}.mar-15-t{margin-top:15px}.mar-20-t{margin-top:20px}.mar-25-t{margin-top:25px}.mar-30-t{margin-top:30px}.mar-35-t{margin-top:35px}.mar-40-t{margin-top:40px}.mar-45-t{margin-top:45px}.mar-50-t{margin-top:50px}.mar-60-t{margin-top:60px}.mar-65-t{margin-top:65px}.mar-85-t{margin-top:85px}.mar-125-t{margin-top:125px}.mar-5-b{margin-bottom:5px}.mar-8-b{margin-bottom:8px}.mar-10-b{margin-bottom:10px}.mar-15-b{margin-bottom:15px}.mar-20-b{margin-bottom:20px}.mar-25-b{margin-bottom:25px}.mar-30-b{margin-bottom:30px}.mar-40-b{margin-bottom:40px}.mar-45-b{margin-bottom:45px}.mar-50-b{margin-bottom:50px}.mar-60-b{margin-bottom:60px}.mar-0-r{margin-right:0}.mar-2-r{margin-right:2px}.mar-5-r{margin-right:5px}.mar-10-r{margin-right:10px}.mar-20-r{margin-right:20px}.mar-25-r{margin-right:25px}.mar-5-l{margin-left:5px}.mar-10-l{margin-left:10px}.mar-15-l{margin-left:15px}.mar-20-l{margin-left:20px}.mar-25-l{margin-left:25px}.mar-50-l{margin-left:50px}.mar-130-l{margin-left:130px}.mar-10-lr{margin-right:10px;margin-left:10px}.mar-20-lr{margin-right:20px;margin-left:20px}.mar-10-tb{margin-top:10px;margin-bottom:10px}.mar-20-tb{margin-top:20px;margin-bottom:20px}.mar-50-tb{margin-top:50px;margin-bottom:50px}.mar-center{margin:0 auto}.space-1,.ls-1{letter-spacing:1px}.space-2,.ls-2{letter-spacing:2px}.bg-grn,.grn-bar{background-color:#23ae4a}.bg-blu{background-color:#017edb}.bg-blu2{background-color:#43aed2}.bg-gry{background-color:#ebebeb}.bg-gry-c{background-color:#ccc}.bg-gry-3{background-color:#333}.bg-gry-6{background-color:#666}.bg-gry-8,.bg-gry-dk-8{background:#888}.bg-gry-f6{background-color:#f6f6f6}.bg-grf{background-color:#363636}.bg-black{background-color:#000}.bg-org{background-color:#f30!important}.blk-reg,.bg-reg,.bg-w,.white-bg{background-color:#fff}.bg-blu-disable{background-color:#9ebce2}.bg-blu-bonus{background-color:#43aed1}.bg-cc-blue{background-color:#3d78c3}.bg-yel{background-color:#fc0}h1,h2,.f-grn{color:#23ae4a}h3,.f-gry-dk{color:#333}h1.cn{font-size:2em}h2.scn{font-size:20px}h2{font-size:24px}h3{font-size:20px}ul{list-style-type:none}ul.bull{list-style-type:circle;list-style-position:inside}img{border:none}a{color:#23ae4a;text-decoration:none}a:hover{text-decoration:underline}a.nohover:hover,.nohover a:hover{text-decoration:none}li:hover>a.grn-hover,.grn-hover:hover span{color:#23ae4a}.bld{font-weight:700}.cb,span.cb,.f-orange{color:#f30}.cb-was{color:#acacac}.f-orange-2{color:#f60}.f-orange-cc{color:#e18922}.flt{float:left}.frt{float:right}.pos-fix,.fixed{position:fixed}.pos-rel,.rel,.relative{position:relative}.pos-abs,.absolute{position:absolute}.pos-abs-r{position:absolute;right:0}.pos-abs-l{position:absolute;left:0}.pos-stat{position:static}.cent,.center,.f-cent{text-align:center}.v-center{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.v-top,.valign-top{vertical-align:top}.v-middle,.valign-mid{vertical-align:middle}.v-mid-flex{display:flex;display:-webkit-flex;justify-content:center;flex-direction:column}.top-0{position:fixed!important;top:0}.f-left{text-align:left}.f-right{text-align:right}.f-norm,.f-norm a{color:#333!important}.f-gry{color:#333}.f-gry-c{color:#ccc}.f-gry-dk-6{color:#666}.f-gry-dk-8{color:#888}.f-gry-dk2,.f-gry-dk-9{color:#999}.f-gry-ec,.f-gry-ec a{color:#ececec}.f-gry-lte{color:#ebebeb}.f-gry-lte2{color:#d7d7d7}.f-white,.f-white a,.white-font{color:#fff}.f-white-all *{color:#fff!important}.f-blu,.f-cc-blue,a.f-cc-blue,.cb-blue,.cb.bluecb,span.cb.bluecb{color:#017edb}.f-blu-bonus,a.f-blu-bonus,.bonus-blu{color:#43aed1}.f-cc-blu{color:#3d78c3}.f-grn-hover .f-gry-dk:hover,.f-grn-hover .f-gry-dk:hover .cb{color:#23ae4a}.f-red,.error-msg,.red{color:red}.account-menu .dropdown .f-norm{color:#333}.account-menu .dropdown a:hover{color:#23ae4a}.f-7{font-size:7px!important}.f-9{font-size:9px!important}.f-10{font-size:10px!important}.f-11{font-size:11px!important}.f-12{font-size:12px!important}.f-13{font-size:13px}.f-reg,.f-14{font-size:14px!important}.f-15{font-size:15px}.f-16{font-size:16px}.f-17{font-size:17px}.f-18{font-size:18px}.f-19{font-size:19px}.f-20{font-size:20px}.f-21{font-size:21px}.f-22{font-size:22px}.f-23{font-size:23px}.f-24{font-size:24px}.f-25{font-size:25px}.f-26{font-size:26px}.f-27{font-size:27px}.f-28{font-size:28px}.f-29{font-size:29px}.f-30{font-size:30px}.f-31{font-size:31px}.f-32{font-size:32px}.f-33{font-size:33px}.f-34{font-size:34px}.f-36{font-size:36px}.f-38{font-size:38px}.f-40{font-size:40px}.f-42{font-size:42px}.f-48{font-size:48px}.f-50{font-size:50px}.f-52{font-size:52px}.f-53{font-size:53px}.f-55{font-size:55px}.f-60{font-size:60px}.f-66{font-size:66px}.f-70{font-size:70px}.f-72{font-size:72px}.f-76{font-size:76px}.f-80{font-size:80px}.lh-1{line-height:1}.lh-12{line-height:12px}.lh-13{line-height:13px}.lh-14{line-height:14px}.lh-15{line-height:15px}.lh-16{line-height:16px}.lh-17{line-height:17px}.lh-18{line-height:18px}.lh-20{line-height:20px}.lh-21{line-height:21px}.lh-22{line-height:22px}.lh-23{line-height:23px}.lh-24{line-height:24px}.lh-26{line-height:26px}.lh-27{line-height:27px}.lh-28{line-height:28px}.lh-30{line-height:30px}.lh-32{line-height:32px!important}.lh-33{line-height:33px}.lh-34{line-height:36px}.lh-36{line-height:36px}.lh-38{line-height:38px}.lh-40{line-height:40px}.lh-42{line-height:42px}.lh-50{line-height:50px}.lh-54{line-height:54px}.lh-55{line-height:55px}.lh-60{line-height:60px}.lh-65{line-height:65px}.lh-70{line-height:70px}.ht-0,.zero-height{height:0;padding:0;display:block}.ht-2{height:2px}.ht-3{height:3px}.ht-5{height:5px}.ht-12{height:12px}.ht-18{height:18px}.ht-20{height:20px}.ht-22{height:22px}.ht-24{height:24px}.ht-28{height:28px}.ht-30{height:30px}.ht-32{height:32px}.ht-36{height:36px}.ht-38{height:38px}.ht-40{height:40px}.ht-44{height:44px}.ht-60{height:60px}.ht-70{height:70px}.ht-100{height:100px}.ht-170{height:170px}.ht-200{height:200px}.ht-250{height:250px}.uppercase{text-transform:uppercase}.lowercase{text-transform:lowercase}.underline{text-decoration:underline}.strike{text-decoration:line-through}.overflow-0{overflow:hidden}.overflow-auto{overflow:auto}.op0{opacity:0}.op1{opacity:.1}.op2{opacity:.2}.op3{opacity:.3}.op4{opacity:.4}.op5{opacity:.5}.op6{opacity:.6}.mirror{-moz-transform:matrix(-1,0,0,1,0,0);-webkit-transform:matrix(-1,0,0,1,0,0);-o-transform:matrix(-1,0,0,1,0,0);-ms-transform:matrix(-1,0,0,1,0,0);filter:progid:DXImageTransform.Microsoft.BasicImage(mirror=1)}.clr,.clear,.clear-both{clear:both}.clear-no{clear:none}.clearfix:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0}*+html .clearfix{display:inline-block}.no-f-boosting{max-height:999999px}.row{display:block;clear:both}.no-outline{outline:none}.no-wrap{white-space:nowrap}.norm{font-weight:400}.round{border-radius:10px}.roundtop{border-radius:10px 10px 0 0}.roundtop-4{border-radius:4px 4px 0 0}.roundtop-l{border-radius:10px 0 0 0}.roundtop-r{border-radius:0 10px 0 0}.roundbottom,.roundfoot{border-radius:0 0 10px 10px}.roundright{border-radius:0 10px 10px 0}.roundleft{border-radius:10px 0 0 10px}.round-big,.round-20{border-radius:20px}.round-30{border-radius:30px}.round-40{border-radius:40px}.round3{border-radius:3px}.round3-l{border-radius:3px 0 0 3px}.round3-r,.round3-right{border-radius:0 3px 3px 0}.round5{border-radius:5px}.round5-r{border-radius:0 5px 5px 0}.round5-l{border-radius:5px 0 0 5px}.article_hdr{background-color:#e0eed2;border:1px solid #d3e8c1;height:28px;line-height:28px}.article_border{border:1px solid #d8ebc8}.article_box{border:1px solid #d8ebc8;border-top:none}.roundbottomright{border-radius:0 0 10px 0}*.ui2012,*.ui2014,*.ui2015{background:url(/global_files/layout_v1/images/sprites/ui2015.1.0.6.png) no-repeat 0 0}.shop a{display:inline-block;width:75px;height:19px;background-position:0 -383px}.merch-logos{margin:25px 0;text-align:center}.arrow,.arrow-sm,.arrow,.arrow-grn,.arrow-grn-sm,.arrow-grn-15,.arrow-big,.arrow-lg,.triangle,.arrow-cb,.arrow-cb-sm,.arrow-cb-lg,.arrow-cb-6,.arrow-black,.arrow-black-7,.arrow-sm-black{display:inline-block;width:0;height:0}.arrow-sm.arr-up{border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid #fff}.arrow-sm.arr-down{border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #fff}.arrow-sm.arr-right{border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:4px solid #fff}.arrow-sm.arr-right.green{border-left:5px solid #23ae4a}.arrow-sm.arr-left{border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:4px solid #fff}.arrow.arr-up.triangle.tri-up{border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:5px solid #fff}.arrow.arr-down,.triangle.tri-down{border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #fff}.arrow.arr-right,.triangle.tri-right{border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #fff}.arrow.arr-left,.triangle.tri-left{border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:5px solid #fff}.arrow-cb.arr-right{border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #f30}.arrow-cb-sm.arr-right{border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:4px solid #f30}.arrow-cb-lg.arr-right{border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:8px solid #f30}.arrow-cb-6.arr-right{border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:6px solid #f30}.arrow-black.arr-down{border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #000}.arrow-black.arr-right{border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #000}.arrow-black.arr-up{border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:5px solid #000}.arrow-sm-black.arr-up{border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid #000}.arrow-sm-black.arr-down{border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid #000}.arrow-sm-black.arr-right{border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:4px solid #000}.arrow-black-7.arr-down{border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #000}.arrow-lg.arr-down{border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid #fff}.arrow-grn.arr-right{border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid #23ae4a}.arrow-grn.arr-down{border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #23ae4a}.arrow-grn-15.arr-down{border-left:15px solid transparent;border-right:15px solid transparent;border-top:15px solid #23ae4a}.arrow-grn-sm.arr-right{border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:4px solid #23ae4a}.arrow-box{border:1px solid #d7d7d7}.arrow-box:after,.arrow-box:before{top:100%;;border:solid transparent;content:" ";height:0;width:0;position:absolute;pointer-events:none}.arrow-box:after{border-color:rgba(255,255,255,0);border-top-color:#fff;border-width:8px;margin-left:-12px}.arrow-box:before{border-color:rgba(215,215,215,0);border-top-color:#d7d7d7;border-width:9px;margin-left:-13px}.button,.button-sm,.button-lg,.button-xlg,.button-xxlg{border:none;cursor:pointer;transition:all 0.1s;text-align:center;display:inline-block;color:#fff;border-radius:3px}.button:hover,.button-sm:hover,.button-lg:hover,.button-xlg:hover,.button-xxlg:hover{text-decoration:none}.button{font-size:16px;line-height:16px;padding:7px 12px}.button.f-18{font-size:18px!important}.button.f-20{font-size:20px!important}.button-sm{font-size:12px;line-height:12px;padding:2px 4px}.button-lg{font-size:20px;line-height:20px;padding:11px 12px}.button-xlg{font-size:24px;line-height:24px;padding:13px 16px}.button-xxlg{font-size:28px;line-height:28px;padding:13px 16px}.button.nopad,.button-lg.nopad,.button-xlg.nopad,.button-xxlg.nopad{padding:0}.button.ext,.button-lg.ext,.button-xlg.ext,.button-xxlg.ext{background-color:#f30}.button.int,.button-lg.int,.button-xlg.int,.button-xxlg.int{background-color:#23ae4a}.button.int.hov:hover,.button-lg.int.hov:hover,.button-xlg.int.hov:hover,.button-xxlg.int.hov:hover{background-color:#3abf56}.button.dis,.button-lg.dis,.button-xlg.dis,.button-xxlg.dis{background-color:#ccc;color:#333}.button.dis.hov:hover,.button-lg.dis.hov:hover,.button-xlg.dis.hov:hover,.button-xxlg.dis.hov:hover{background-color:#ddd}.button.blu,.button-lg.blu,.button-xlg.blu,.button-xxlg.blu{background-color:#017edb}.button.no-bg,.button-lg.no-bg,.button-xlg.no-bg,.button-xxlg.no-bg{color:#f30}.button.gry3,.button-lg.gry3,.button-xlg.gry3,.button-xxlg.gry3{background-color:#333}.button-sm.social,.button-lg.social,.button-xlg.social,.button-xxlg.social{position:relative}.button-sm.social span,.button-lg.social span,.button-xlg.social span,.button-xxlg.social span{position:relative;position:absolute;left:10px}.button-sm.social span{left:6px}.button-sm.social,.button-sm.social span{height:15px;line-height:15px}.button-lg.social,.button-lg.social span{height:33px;line-height:33px}.button-xlg.social,.button-xlg.social span{height:35px;line-height:35px}.button-xxlg.social,.button-xxlg.social span{height:40px;line-height:40px}.button-xxlg.social{font-size:16px}.button-sm.social.fb{padding:0 6px 0 20px}.button-sm.social.goog{padding:0 6px 0 25px}.button-lg.social.fb{padding:0 30px}.button-lg.social.goog{padding:0 40px}.button-xlg.social.fb{padding:0 32px}.button-xlg.social.goog{padding:0 48px}.button-xxlg.social.fb{padding:0 32px}.button-xxlg.social.goog{padding:0 48px}.button.round-r,.button-lg.round-r,.button-xlg.round-r{border-radius:0 3px 3px 0}.button.round-l,.button-lg.round-l,.button-xlg.round-l{border-radius:3px 0 0 3px}.button{border:none;cursor:pointer;transition:all 0.1s;text-align:center;display:inline-block;color:#fff;border-radius:3px}.button:hover{text-decoration:none}.button.sm{height:15px;line-height:17px;padding:0 4px}.button.reg{font-size:16px;height:30px;line-height:30px;padding:0 12px}.button.lg{font-size:18px;height:46px;line-height:46px;padding:0;min-width:175px}.button.xlg{font-size:24px;height:50px;line-height:50px;padding:0;min-width:175px}.button.xxlg{font-size:28px;height:54px;line-height:54px;padding:0;min-width:175px}.button.nopad{padding:0}.button.ext{background-color:#f30}.button.int{background-color:#23ae4a}.button.int.hov:hover{background-color:#3abf56}.button.dis{background-color:#ccc;color:#333}.button.dis.hov:hover{background-color:#ddd}.button.blu,.button.cc{background-color:#017edb}padding:0 30px}.cursor,.pointer{cursor:pointer}.cursor-def{cursor:default}.hide{display:none}.border{border:1px solid #ccc}.border-t{border-top:1px solid #ccc}.border-t-0{border-top:none!important}.border-tr{border-top:1px solid #ccc;border-right:1px solid #ccc}.border-b{border-bottom:1px solid #ccc}.border-b-0{border-bottom:none}.border-br{border-right:1px solid #ccc;border-bottom:1px solid #ccc}.border-l{border-left:1px solid #ccc}.border-l-0{border-left:none}#pge{position:relative}div.exceptions{margin:0 20px}div.exceptions p,div.exceptions ul{font-size:.9em;margin:0;padding-bottom:8px}.long-desc p,.two-lines{line-height:18px}.coupon-blk li{padding-bottom:10px}.coupon-blk .coupon-fav{height:0;padding-bottom:0}.coupon-blk .coupon-fav .fav-sm{position:relative;left:100%;top:-15px}.coupon-blk .coupon-desc{font-size:20px;line-height:26px}.coupon-blk .coupon-desc a{font-size:14px;line-height:19px}.coupon-blk .coupon-code{padding-bottom:0}.coupon-blk .coupon-code span{display:inline-block}.blk1 #store-coupons .coupon-blk .merchlogo{padding-top:25px}.blk1 #store-coupons .coupon-blk .expander-parent{margin-bottom:10px}.coupon-blk.logo-blk .merchlogo{width:150px;text-align:center}.coupon-blk.logo-blk .merchlogo img{margin:5px 0 0 0}.coupon-blk.logo-blk ul{width:600px}.coupon-blk.border-b:last-child{border-bottom:none}.store-hero{position:relative}.store-hero-image img{margin:0 auto}.store-main{position:relative}.faves-circ{height:42px;width:42px;position:relative;top:-12px;left:12px;z-index:2}.cb-amounts{margin-top:-30px;position:relative;z-index:3}.fav-message-show{display:block!important}.dd-cb{position:absolute;top:15px;left:16px}.dd-cb a{line-height:27px;height:27px}.dd-ribbon{width:14px;height:27px;background-position:-148px -24px}.cb-amounts li{width:292px}.cb-amounts .cb-was{height:26px;line-height:26px}.cb-amounts .cb{height:23px;line-height:23px;padding-bottom:13px}.cb-amounts .button-lg{font-size:18px;line-height:16px;width:226px;padding:11px 12px}.filter-item{height:25px;width:295px}.filter-label{height:20px}.arrow-wrap .bblk{display:block}.arrow-wrap .arr-up{margin:6px 0 2px}.mkt-ops h3,.mkt-ops p,.mkt-ops ol,.mkt-ops ul{margin-bottom:10px}
+	#coupons ul {list-style: none !important;}
+</style>
+<div class="store-main blk-group mar-10-b">
+    <div id="left-blk" class="blk blk2">
+        <div class="blk blk-reg border mar-10-b center">
+            <div class="faves-circ "></div>
+            <div class="cb-amounts bg-reg pad-20 pad-15-t">
+                <ul style="list-style: none !important; padding-left:0em !important;">
+                    <li>
+                        <a href="/walmart_2946-xfas?sourceName=Web-Desktop&store=new" alt="Walmart Coupons & Promo Codes" data-navigation-id="22866"  rel="nofollow" target="_blank">
+                        <img src="https://www.ebates.com/image/store/icon/2946/icon-280x80.gif" width="225" height="48" class="lg-img pad-10-t" title="Get 2.0% Cash Back at Walmart">
+                        </a>
+                    </li>
+                    <li class="cb-was f-15">
+                        was 1.0%
+                    </li>
+                    <li class="cb f-25">
+                        <div>
+                            <a href="/walmart_2946-xfas?sourceName=Web-Desktop&store=new" rel="nofollow" data-navigation-id="22867" target="_blank" class="cb prox-b nohover" title="Get 2.0% Cash Back at Walmart">2.0% Cash Back</a>
+                        </div>
+                    </li>
+                    <li class="mar-5-b"><a href="/walmart_2946-xfas?sourceName=Web-Desktop&store=new" rel="nofollow" data-navigation-id="22867" target="_blank" class="button-lg ext" title="Activate Cash Back at Walmart">Shop Now <span class="arrow arr-right"></span></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="blk blk-reg border pad-20 pad-10-b mar-10-b store-info">
+            <h2 class="prox-b f-gry-dk f-20 mar-10-b">About Walmart Coupons, Deals and Cash Back</h2>
+            <div class="merch-desc mar-10-b">
+                <p class="five-lines no-f-boosting">Walmart has become one of the largest and most popular discount department stores in the world, and with prices as low as they are, it&rsquo;s no wonder why. Walmart shoppers have come to expect the best deals on the largest selection of consumer goods through Walmart stores. With Walmart coupons, seasonal sales and a low-price guarantee, Walmart really does outdo other discount department stores time and time again. Walmart provides the largest selection of electronics, <br /></p>
+            </div>
+        </div>
+        <div class="blk blk-reg border pad-20 mar-10-b store-cb-terms">
+            <div class="expandablediv">
+                <h2 class="prox-b space-1">Cash Back Terms</h2>
+            </div>
+            <div class="expandablediv">
+                <p class="mar-15-t">
+                    <strong class="prox-b">Exclusions:</strong>                            Cash Back is not available on Apple Watch, newest model iPhones, Walmart Grocery to Go, cellular purchases, prepaid phone cards (Straight Talk), prescription drugs, travel, financial services, tires, Walmart Connect Internet Service, gift card/online gift cards and ShippingPass subscription.
+                    <br/>                
+                </p>
+                <p class="mar-15-t">
+                    <strong class="prox-b">Special Terms:</strong> 								Cash Back is not available on orders deemed by Walmart to be for reselling purposes.
+                </p>
+            </div>
+        </div>
+        <div class="blk blk-reg border pad-20 mar-10-b">
+            <h2 class="prox-b mar-15-b space-1">Free Shipping</h2>
+            <p class="mar-10-b">Walmart offers free shipping on orders of $50 or more.</p>
+            <p><a href="/walmart_2946-xfas?sourceName=Web-Desktop&store=new" data-navigation-id="22870" target="_blank" class="cb prox-b">Shop Walmart with 2.0% Cash Back <span class="arrow-cb-sm arr-right"></span></a></p>
+        </div>
+    </div>
+    <div  id="rightd-blk" class="blk blk1 frt col-last">
+        <div id="store-coupons" class="blk border border-b-0">
+            <div class="blk blk-reg pad-20">
+                <h1 class="heading-main prox-b f-26 lh-26">Walmart Coupons, Promo Codes & Cash Back</h1>
+            </div>
+        </div>
+        <div class="blk bg-grn ht-3"></div>
+        <div id="store-coupons" class="blk pad-0-t pad-0-b border-t-0 mar-10-b">
+            <div id="coupons">
+                <div class="blk blk-reg coupon-blk border-t-0 border pad-20 pad-10-t">
+                    <ul>
+                        <li>
+                            <h3 class='f-16 mar-10-b f-grn'>Department Sale</h3>
+                        </li>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Shop Early Bird Online Specials for Holiday.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/10/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                'Tis the Season for Amazing Savings.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/30/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Find Fantastic Online Specials this Holiday.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 12/26/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Incredible Prices on Bestselling Baby Products.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/18/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Big Rollbacks on Window Coverings.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 12/19/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Warehouse Clear-out.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/18/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Huge Rollbacks on Home Decor.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/18/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="blk blk-reg coupon-blk border border-t-0 pad-20">
+                    <ul>
+                        <li class="coupon-desc prox-b">
+                            <div>
+                                <span class="title-part">
+                                Diaper Pack Savings.
+                                </span>
+                                <span class="prox-r f-reg f-gry-dk2"> Exp. 11/18/2016</span>
+                            </div>
+                        </li>
+                        <li class="coupon-cb">
+                            <span class="cb f-16 pad-20-r">
+                            + 2.0% Cash Back
+                            </span>
+                            <a href="<?php echo 'https://discountschoolsupply.com?trunitedid='.$custID ?>" data-navigation-id="22869" target="_blank" rel="nofollow" class="button ext frt" title="Shop Now at Walmart">Shop Now <span class="arrow arr-right"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

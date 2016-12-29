@@ -1,0 +1,79 @@
+<?php
+    $store = Mage::app()->getStore();
+    $code  = $store->getCode();
+	
+	$new = Mage::getModel('dailydeal/dailydeal')->getCollection();
+    $key = array_search(3, array_column($new->getData(), 'status'));
+	$deals = $new->getData();
+	
+	$deals1 = $deals[$key];
+	$_product = Mage::getModel('catalog/product')->load($deals1['product_id']);
+	
+?>
+<script type="text/javascript">
+//<![CDATA[
+var dailydealTimeCounters = new Array();
+var i = 0;
+//]]>
+</script>
+	<?php
+	$deals       = $this->getSidebarDeals();
+	$_coreHelper = $this->helper('core');
+	$_helper     = $this->helper('catalog/output');
+	?>
+	
+	<?php  $itemLeft = $deals1['quantity'] - $deals1['sold']  ?>
+	<style>.mbdialog{box-sizing: inherit !important;}</style>
+	<div style="padding: 30px 50px; background-color:#f4f4f4;">
+<p class="popupBig" style="text-align: center; font-size: 40px; line-height: 60px; text-shadow: 2px 2px tan; font-weight: bold; margin: 0;">Black Friday Deal</p>
+<p class="popupBig" style="text-align: center; font-size: 40px; line-height: 60px; text-shadow: 2px 2px tan; font-weight: bold; margin: 0;"><?php echo $deals1['save'].'%'; ?> OFF</p>
+<p style="text-align: center; font-size: 18px; font-weight: bold;">Hurry! Only <?php echo $itemLeft ?> items remaining!</p>
+
+<div class="products small-list sidebar-list ">
+			<div class="sidebardailydeal item" style="width:300px !important; margin: 0 auto !important; ">
+				<div class="item-area">
+					<div class="product-image-area">
+						<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+							<img src="<?php if(Mage::getStoreConfig("porto_settings/category/aspect_ratio",$code)):?><?php echo $this->helper('catalog/image')->init($_product, 'small_image')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(300);?><?php else: ?><?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(Mage::getStoreConfig("porto_settings/category/ratio_width",$code),Mage::getStoreConfig("porto_settings/category/ratio_height",$code)); ?><?php endif; ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/>
+                            <div class="bottom-home-dailydeal">
+                                <ul class="time-left">
+                                    <?php $now_time = Mage::getModel('core/date')->timestamp(time()) ?>
+                                    <?php
+                                    $end_time = Mage::getModel('core/date')->timestamp(strtotime($deals1['close_time']));
+                                    ?>
+                                    <div style="box-sizing: inherit !important;" class="timeleft timeleft_right<?php echo $_product->getId() ?>"> </div>
+                                </ul>
+                            </div>
+						</a>
+					</div>
+<?php /* ?>					<div class="details-area">
+						<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_product->getName() ?>"><?php echo $deals1['title'] ?></a></h2>
+						<div class="price-box">
+							<p class="old-price">
+								<span class="price-label">Regular Price:</span>
+								<span class="price"><?php echo $_coreHelper->currency($_product->getPrice()) ?></span>
+							</p>
+							<p class="special-price">
+								<span class="price-label">Special Price</span>
+								<span class="price"><?php echo $_coreHelper->currency($deals1['deal_price']); ?></span>
+							</p>
+						</div>
+					</div>
+					
+					<?php */ ?>	
+				
+				</div>
+			</div>
+			<script type="text/javascript">
+			//<![CDATA[
+			dailydealTimeCounters[i] = new DailydealTimeCounter('<?php echo $now_time ?>', '<?php echo $end_time ?>', '<?php echo $deals1['id'] ?>');
+			dailydealTimeCounters[i].setTimeleft('timeleft_right<?php echo $deals1['product_id'] ?>');
+			//]]>
+			</script>
+				<?php // endforeach; ?>
+		</div>
+
+<p style="text-align: center; font-size: 40px; line-height: 60px;"><a href="<?php echo $_product->getProductUrl() ?>">Buy Now</a></p>
+</div>
+	<script type="text/javascript">decorateGeneric($$('.block-dailydeal .sidebardailydeal'), ['odd', 'even', 'first', 'last'])</script>
+	

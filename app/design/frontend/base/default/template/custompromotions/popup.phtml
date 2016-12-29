@@ -1,0 +1,41 @@
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS)?>fancybox/jquery.fancybox.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS)?>fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+<style type="text/css">
+    .fancybox-custom .fancybox-skin {
+        box-shadow: 0 0 50px #222;
+    }
+    .fancybox-opened .fancybox-skin{
+        overflow: visible;
+    }
+    a.fancybox-close{
+        position: absolute;
+        top: -18px;
+        right: -18px;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        z-index: 8040;
+        background-image: url('<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS)?>fancybox/fancybox_sprite.png');
+    }
+    a.fancybox-close:before{
+        content: "";
+    }
+    a.fancybox-close:hover{
+        opacity: 1;
+    }
+</style>
+<?php
+if(!$this->isLogged()){
+    ?>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j(document).ready(function() {
+            $j('.custom-url').fancybox({
+                autoHeight: true,
+                minHeight: 10,
+                content: '<p class="fancybox-error"><?php echo $this->getMessageUrl();?></p>'
+            });
+        });
+
+    </script>
+<?php }?>

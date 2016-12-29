@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
     <default>
+	<!--
         <reference name="top.links">
             <action method="addLink" translate="label title" module="dailydeal" ifconfig="dailydeal/general/enable" condition="1">
                 <label>Daily deal</label>
@@ -10,7 +11,7 @@
                 <urlParams/>
                 <position>10</position>
             </action>
-        </reference>
+        </reference> -->
         <reference name="head">
             <action method="addCss" ifconfig="dailydeal/general/enable" condition="1">
                 <stylesheet>css/magegiant/dailydeal.css</stylesheet>

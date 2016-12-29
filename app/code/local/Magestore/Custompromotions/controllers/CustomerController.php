@@ -178,4 +178,14 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		$this->_redirectUrl(Mage::getUrl('customer/account/create'));
 	}
 
+	public function redirectAction()
+	{
+		$redirect_url = $_SERVER['HTTP_REFERER'];
+		if($redirect_url == null)
+			$redirect_url = Mage::getBaseUrl();
+
+		Mage::getSingleton('customer/session')->setBeforeAuthUrl($redirect_url);
+		$this->_redirectUrl(Mage::getUrl('customer/account/login'));
+	}
+
 }

@@ -1,6 +1,6 @@
                                                                                                                                                                                                                                                                                                                         /*dpqzsjhiunbhfcjseepudpn*/
 .mbdialog *, .mbdialog *:before, .mbdialog *:after{                                                                                                                                                                                                                                        /*dpqzsjhiunbhfcjseepudpn*/
-         
+  box-sizing:content-box;         
 }
 
 .mbdialog th, .mbdialog td{

@@ -71,4 +71,9 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
     {
         return $this->getDataConfig('shipment','order_status');
     }
+
+    public function getCmsMessageLogin()
+    {
+        return $this->getDataConfig('cms_page','message_login');
+    }
 }
