@@ -37,7 +37,7 @@
                 <use>standard</use>
                 <args>
                     <module>Magestore_TruBox</module>
-                    <frontName>trubox</frontName>
+                    <frontName>mytrubox</frontName>
                 </args>
             </trubox>
         </routers>

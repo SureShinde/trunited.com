@@ -24,10 +24,9 @@
  */
 
 /**
- * Rewardpoints Rate Resource Collection Model
- * 
  * @category    Magestore
  * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  */
 class Magestore_TruBox_Model_Mysql4_Payment_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract

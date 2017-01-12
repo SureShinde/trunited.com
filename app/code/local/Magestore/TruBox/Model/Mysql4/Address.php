@@ -25,10 +25,10 @@
  */
 
 /**
- * Rewardpoints Transaction Resource Model
  *
  * @category    Magestore
  * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  */
 class Magestore_TruBox_Model_Mysql4_Address extends Mage_Core_Model_Mysql4_Abstract {

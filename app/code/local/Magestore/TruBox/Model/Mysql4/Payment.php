@@ -24,7 +24,6 @@
  */
 
 /**
- * Rewardpoints Rate Resource Model
  * 
  * @category    Magestore
  * @package     Magestore_TruBox

@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
- * @module     RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  *
  * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
@@ -24,10 +24,11 @@
  */
 
 /**
- * RewardPoints Helper
+ * TruBox Helper
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  */
 class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
@@ -35,13 +36,14 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_ENABLE = 'rewardpoints/general/enable';
 
     /**
-     * get rewards points label to show on Account Navigation
      *
      * @return string
      */
     public function getTruboxLabel()
     {
-        return $this->__('My TruBox');
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        if ($customer->getEmail() == 'dev@trunited.vn')
+            return $this->__('My TruBox');
     }
 
     public function getCurrentTruBoxId() {

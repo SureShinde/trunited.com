@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
- * @module     RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  *
  * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
@@ -24,10 +24,10 @@
  */
 
 /**
- * Rewardpoints Setup Resource Model
- * 
+ *
  * @category    Magestore
- * @package     Magestore_RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  */
 class Magestore_TruBox_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup

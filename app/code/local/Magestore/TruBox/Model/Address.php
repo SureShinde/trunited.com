@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
- * @module     RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  *
  * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
@@ -24,7 +24,6 @@
  */
 
 /**
- * Rewardpoints Rate Information Model
  * 
  * @category    Magestore
  * @package     Magestore_TruBox

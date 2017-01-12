@@ -15,8 +15,8 @@
  * version in the future.
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
- * @module     RewardPoints
+ * @package     Magestore_TruBox
+ * @module      TruBox
  * @author      Magestore Developer
  *
  * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
@@ -25,11 +25,11 @@
  */
 
 /**
- * Rewardpoints Core Block Template Block
+ * TruBox Core Block Template Block
  * You should write block extended from this block when you write plugin
  *
  * @category    Magestore
- * @package     Magestore_RewardPoints
+ * @package     Magestore_TruBox
  * @author      Magestore Developer
  */
 class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
@@ -52,23 +52,23 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     }
 
     public function saveItemsUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/saveItems';
+        return Mage::getBaseUrl() . 'mytrubox/index/saveItems';
     }
 
     public function saveAddressUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/saveAddress';
+        return Mage::getBaseUrl() . 'mytrubox/index/saveAddress';
     }
 
     public function savePaymentUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/savePayment';
+        return Mage::getBaseUrl() . 'mytrubox/index/savePayment';
     }
 
     public function deleteItemsUrl($id) {
-        return Mage::getBaseUrl() . 'trubox/index/deleteItems?id=' . $id;
+        return Mage::getBaseUrl() . 'mytrubox/index/deleteItems?id=' . $id;
     }
 
     public function getRegionHtml() {
-        return Mage::getBaseUrl() . 'trubox/index/getRegionHtml';
+        return Mage::getBaseUrl() . 'mytrubox/index/getRegionHtml';
     }
 
     public function getAddressTruBox() {
@@ -146,5 +146,18 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         return $regionCollection;
     }
 
+    public function getPointEarning($item)
+    {
+        if (!Mage::helper('rewardpointsrule')->isEnabled()) {
+            return false;
+        }
+
+        $item->setProductId($item->getId());
+        if ($item->getRewardpointsEarn()) {
+            return $item->getRewardpointsEarn();
+        }
+        return Mage::helper('rewardpointsrule/calculation_earning')
+            ->getCatalogItemEarningPoints($item);
+    }
 
 }

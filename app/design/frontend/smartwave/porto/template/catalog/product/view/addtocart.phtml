@@ -33,5 +33,15 @@
         <?php endif; ?>
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
         <?php echo $this->getChildHtml('', true, true) ?>
+		<?php 
+			if(Mage::getSingleton('customer/session')->isLoggedIn()){
+				$customer = Mage::getSingleton('customer/session')->getCustomer();
+				if ($customer->getEmail() == 'dev@trunited.vn') {
+		?>
+			<a href="<?php echo Mage::getBaseUrl() . 'mytrubox/index/addTruBox?id=' . $_product->getId() ?>" class="addtrubox" title="<?php echo $this->__('Add to TruBox') ?>"><img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" /></a>
+		<?php
+				}
+			}
+		?>
     </div>
 <?php endif; ?>

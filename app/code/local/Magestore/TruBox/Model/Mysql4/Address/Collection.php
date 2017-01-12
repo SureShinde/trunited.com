@@ -25,7 +25,6 @@
  */
 
 /**
- * Rewardpoints Transaction Resource Collection Model
  * 
  * @category    Magestore
  * @package     Magestore_TruBox

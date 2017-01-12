@@ -77,7 +77,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         } else {
             $truBoxAddress->setData($address)->save();
         }
-        $this->_redirect('trubox/index/index');
+        $this->_redirect('mytrubox/index/index');
     }
 
     public function savePaymentAction() {
@@ -94,7 +94,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         } else {
             $truBoxAddress->setData($address)->save();
         }
-        $this->_redirect('trubox/index/index');
+        $this->_redirect('mytrubox/index/index');
     }
 
     public function deleteItemsAction() {
@@ -104,7 +104,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             ->addFieldToFilter('product_id', $productId)->getFirstItem();
         $itemId = $truBoxFilter->getItemId();
         Mage::getModel('trubox/item')->setId($itemId)->delete();
-        $this->_redirect('trubox/index/index');
+        $this->_redirect('mytrubox/index/index');
     }
 
     public function saveItemsAction() {
@@ -115,7 +115,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 ->addFieldToFilter('product_id', $k)->getFirstItem();
             $truBoxFilter->setQty($v)->save();
         }
-        $this->_redirect('trubox/index/index');
+        $this->_redirect('mytrubox/index/index');
     }
 
     public function getRegionHtmlAction() {
@@ -142,6 +142,29 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     {
         $regionCollection = Mage::getModel('directory/region_api')->items($countryCode);
         return $regionCollection;
+    }
+
+    public function addTruBoxAction() {
+        $productId = $this->getRequest()->getParam('id');
+        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
+        $truBox = Mage::getModel('trubox/trubox');
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customerId = $customer->getId();
+        $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
+        if (!$truBoxId) {
+            $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
+        }
+        $truBoxItems = Mage::getModel('trubox/item');
+        $checkItem = $truBoxItems->getCollection()->addFieldToFilter('trubox_id', $truBoxId)
+            ->addFieldToFilter('product_id', $productId)->getFirstItem();
+        if (!$checkItem->getItemId()) {
+            $itemData = array('trubox_id' => $truBoxId, 'product_id' => $productId, 'qty' => 1);
+            $truBoxItems->setData($itemData)->save();
+        } else {
+            $qtyCheckItem = $checkItem->getQty();
+            $checkItem->setQty($qtyCheckItem + 1)->save();
+        }
+        $this->_redirect('mytrubox/index/index');
     }
 
 }
