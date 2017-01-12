@@ -99,7 +99,14 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));
-
+		//TruBox Bonus Points
+		if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) 
+			&& (Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId()))){
+			$earningPoints = $address->getRewardpointsEarn();
+			$bonusPoints = ceil(0.1*$earningPoints);
+			$address->setRewardpointsBonus($bonusPoints);
+			$address->setRewardpointsEarn($earningPoints + $bonusPoints);
+		}
         
         return $this;
     }

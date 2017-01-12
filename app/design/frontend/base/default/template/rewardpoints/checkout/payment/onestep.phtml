@@ -55,8 +55,9 @@ if (Mage::helper('rewardpoints/customer')->getProductCredit())
                 if (Mage::getModel('checkout/session')->getData('rewardpoints_customerid'))
                     echo $this->__('Spend Credits');
                 else
-                    echo $this->__('Spend Your Credits');
+                    echo $this->__('Spend truWallet Dollars');
                 ?>
+                <img src="/skin/frontend/base/default/images/rewardpoints/truwallet.png" alt="truWallet icon" />
             </label>
             </dt>
             <dd>
@@ -65,7 +66,7 @@ if (Mage::helper('rewardpoints/customer')->getProductCredit())
                         <?php if (count($_sliderRules)): ?>
                             <?php $_sliderData = $this->getSliderData() ?>
                             <dt>
-                            <label><?php echo $this->__('Choose how many credits to spend') ?>:</label>
+                            <label><?php echo $this->__('Choose how many truWallet dollars to spend') ?>:</label>
                             </dt>
                             <dd class="rewards-slider">
                                 <?php if (count($_sliderRules) == 1): ?>
@@ -103,13 +104,12 @@ if (Mage::helper('rewardpoints/customer')->getProductCredit())
                                             <span>
                                                 <?php echo $this->__('You will spend') ?>
                                                 <input type="text" class="input-text" id="reward_sales_point" name="reward_sales_point" value="0" />
-                                                <?php echo $_pointName ?>
                                             </span>
                                         </div>
                                         <div class="input-max">
                                             <input type="checkbox" id="reward_max_points_used" />
                                             <label for="reward_max_points_used" style="display: inherit;">
-                                                <?php echo $this->__('Maximize my discount with credits') ?>
+                                                <?php echo $this->__('Maximize my discount with truWallet') ?>
                                             </label>
                                         </div>
                                     </div>

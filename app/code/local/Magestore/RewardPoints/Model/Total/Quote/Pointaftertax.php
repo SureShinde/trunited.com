@@ -85,7 +85,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Pointaftertax extends Mage_Sales_
 
         // Checked Rules Discount First
         if (is_array($rewardCheckedRules)) {
-            $newRewardCheckedRules = array();
+			$newRewardCheckedRules = array();
             foreach ($rewardCheckedRules as $ruleData) {
                 if ($baseTotal < 0.0001)
                     break;
@@ -124,12 +124,12 @@ class Magestore_RewardPoints_Model_Total_Quote_Pointaftertax extends Mage_Sales_
 
         // Sales Rule (slider) discount Last
         if (is_array($rewardSalesRules)) {
-            $newRewardSalesRules = array();
+			$newRewardSalesRules = array();
             if ($baseTotal > 0.0 && isset($rewardSalesRules['rule_id'])) {
                 $rule = $helper->getQuoteRule($rewardSalesRules['rule_id']);
                 if ($rule && $rule->getId() && $rule->getSimpleAction() == 'by_price') {
-                    $points = min($rewardSalesRules['use_point'], $maxPoints);
-                    $ruleDiscount = $helper->getQuoteRuleDiscount($quote, $rule, $points);
+					$points = min($rewardSalesRules['use_point'], $maxPoints);
+					$ruleDiscount = $helper->getQuoteRuleDiscount($quote, $rule, $points);
                     if ($ruleDiscount > 0.0) {
                         $baseTotal -= $ruleDiscount;
                         $maxPoints -= $points;
@@ -197,7 +197,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Pointaftertax extends Mage_Sales_
         $productPoints = $address->getPointSpentForProducts();
         if ($amount = $address->getRewardpointsDiscount()) {
             if ($points = $address->getRewardpointsSpent() - $productPoints) {
-                $title = Mage::helper('rewardpoints')->__('Use credit (%s)', Mage::helper('rewardpoints/point')->format($points, $address->getQuote()->getStoreId())
+                $title = Mage::helper('rewardpoints')->__('Truwallet', Mage::helper('rewardpoints/point')->format($points, $address->getQuote()->getStoreId())
                 );
             } else {
                 $title = Mage::helper('rewardpoints')->__('Use credit on spend');

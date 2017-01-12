@@ -1,0 +1,70 @@
+
+
+<div class="aff-main-content col-lg-9 col-md-9 col-sm-12 col-xs-12">
+    <div class="aff-title">
+	    <h2 style="color: #65829d;"><?php echo $this->__('Digital Resources') ?></h2>
+    </div>
+  
+
+
+
+<script type="text/javascript">
+
+    function openTabContent(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+   if(localStorage.defaultTab == 'undefined'){
+        localStorage.defaultTab = 1;
+    }
+
+    if(localStorage.defaultTab == 1){
+        document.getElementById("tabtrul").click();
+    }
+	else {
+        document.getElementById("tabfiles").click();
+    }
+
+</script>
+
+
+<div class="clear">&nbsp;</div>
+    <ul class="tab">
+        <li><a href="javascript:void(0)" id="tabtrul" class="tablinks active" onclick="openTabContent(event, 'trulessons')"><?php echo 'truLessons';?></a></li>
+        <li><a href="javascript:void(0)" id="tabvideo" class="tablinks" onclick="openTabContent(event, 'videos')"><?php echo 'Videos';?></a></li>
+		<li><a href="javascript:void(0)" id="tabfiles" class="tablinks" onclick="openTabContent(event, 'files')"><?php echo 'Files';?></a></li>
+    </ul>
+
+    <div id="trulessons" class="tabcontent" style="display: block;"> 
+       
+	<p><a href="https://vimeo.com/196024358" target="_blank">Seeds to Circles</a></p>
+	   
+    </div>
+
+    <div id="videos" class="tabcontent" >
+    
+	 
+	 <p><a href="https://vimeo.com/191316037" target="_blank">Trunited In Less Than 3 Minutes</a></p>
+	 
+    </div>
+	
+	  <div id="files" class="tabcontent">
+    
+	 
+	 <p>Files</p>
+	 
+	 
+    </div>
+    
+
+    
+</div>

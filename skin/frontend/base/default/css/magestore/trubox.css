@@ -1,0 +1,35 @@
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/* ============ Reward Points Stylesheets ============ */
+
+.trubox-address { clear:both; }
+.trubox-page h4 {
+
+}
+.trubox-page .product-qty { width: 35px; text-align: center; }
+.trubox-page .button { clear: both; display: block; margin-top: 30px;}
+.trubox-address { margin-top: 25px; margin-bottom: 25px; }
+.trubox-page .product-image { float: left; display: block; }
+.trubox-page .product-name {
+    display: block;
+    float: left;
+    padding: 30px 10px;
+}

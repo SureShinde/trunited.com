@@ -11,19 +11,6 @@ class Magestore_Onestepcheckout_Model_Giftwrap extends Mage_Core_Model_Abstract
         );
     }
 	
-/* 	public function paypal_prepare_line_items($observer)
-	{
-		$paypalCart = $observer->getEvent()->getPaypalCart();
-		if ($paypalCart){
-			$salesEntity = $paypalCart->getSalesEntity();
-			if(Mage::getModel('checkout/session')->getData('onestepcheckout_giftwrap_amount') > 0){
-				$paypalCart->updateTotal(Mage_Paypal_Model_Cart::TOTAL_SUBTOTAL,abs((float)Mage::getModel('core/session')->getData('onestepcheckout_giftwrap_amount')),Mage::helper('onestepcheckout')->__('Giftwrap'));				
-			}
-		}
-
-	} */
-	
-	//QuyenNH 
     public function paypal_prepare_line_items($observer) {
 
         if (!Mage::helper('onestepcheckout')->enabledOnestepcheckout()) {
@@ -41,7 +28,7 @@ class Magestore_Onestepcheckout_Model_Giftwrap extends Mage_Core_Model_Abstract
                     $giftwrapAmount = Mage::getModel('checkout/session')->getData('onestepcheckout_giftwrap_amount');
                 }
                 if ($giftwrapAmount) {
-                    $paypalCart->addItem(Mage::helper('onestepcheckout')->__('Giftwrap'), 1, abs((float) $giftwrapAmount));
+                    $paypalCart->addItem(Mage::helper('onestepcheckout')->__('Get It Now'), 1, abs((float) $giftwrapAmount));
                 }
             }
         } else {
@@ -57,7 +44,7 @@ class Magestore_Onestepcheckout_Model_Giftwrap extends Mage_Core_Model_Abstract
                 if ($giftwrapAmount) {
                     $items = $additional->getItems();
                     $items[] = new Varien_Object(array(
-                        'name' => Mage::helper('onestepcheckout')->__('Giftwrap'),
+                        'name' => Mage::helper('onestepcheckout')->__('Get It Now'),
                         'qty' => 1,
                         'amount' => (abs((float) $giftwrapAmount)),
                     ));

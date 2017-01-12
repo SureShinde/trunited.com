@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!--
+  ~ Magestore
+  ~
+  ~ NOTICE OF LICENSE
+  ~
+  ~ This source file is subject to the Magestore.com license that is
+  ~ available through the world-wide-web at this URL:
+  ~ http://www.magestore.com/license-agreement.html
+  ~
+  ~ DISCLAIMER
+  ~
+  ~ Do not edit or add to this file if you wish to upgrade this extension to newer
+  ~ version in the future.
+  ~
+  ~ @category    Magestore
+  ~ @package     Magestore_TruBox
+  ~ @module     TruBox
+  ~ @author      Magestore Developer
+  ~
+  ~ @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
+  ~ @license     http://www.magestore.com/license-agreement.html
+  ~
+  -->
+<config>
+    <modules>
+        <Magestore_TruBox>
+            <version>0.1.1</version>
+        </Magestore_TruBox>
+    </modules>
+    <frontend>
+        <secure_url>
+            <trubox_checkout>/trubox/checkout</trubox_checkout>
+        </secure_url>
+        <routers>
+            <trubox>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_TruBox</module>
+                    <frontName>trubox</frontName>
+                </args>
+            </trubox>
+        </routers>
+        <layout>
+            <updates>
+                <trubox module="Magestore_TruBox">
+                    <file>trubox.xml</file>
+                </trubox>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_TruBox>
+                    <files>
+                        <default>Magestore_TruBox.csv</default>
+                    </files>
+                </Magestore_TruBox>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <!-- <truboxadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_TruBox</module>
+                    <frontName>truboxadmin</frontName>
+                </args>
+            </truboxadmin> -->
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Magestore_TruBox before="Mage_Adminhtml">Magestore_TruBox_Adminhtml</Magestore_TruBox>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <trubox>
+                    <file>trubox.xml</file>
+                </trubox>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_TruBox>
+                    <files>
+                        <default>Magestore_TruBox.csv</default>
+                    </files>
+                </Magestore_TruBox>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <trubox>
+                <class>Magestore_TruBox_Model</class>
+                <resourceModel>trubox_mysql4</resourceModel>
+            </trubox>
+            <trubox_mysql4>
+                <class>Magestore_TruBox_Model_Mysql4</class>
+                <entities>
+                    <trubox>
+                        <table>trubox</table>
+                    </trubox>
+                    <item>
+                        <table>trubox_item</table>
+                    </item>
+                    <address>
+                        <table>trubox_address</table>
+                    </address>
+                    <payment>
+                        <table>trubox_payment</table>
+                    </payment>
+                </entities>
+            </trubox_mysql4>
+        </models>
+        <resources>
+            <trubox_setup>
+                <setup>
+                    <module>Magestore_TruBox</module>
+                    <class>Magestore_TruBox_Model_Mysql4_Setup</class>
+                </setup>
+            </trubox_setup>
+        </resources>
+        <blocks>
+            <trubox>
+                <class>Magestore_TruBox_Block</class>
+            </trubox>
+        </blocks>
+        <helpers>
+            <trubox>
+                <class>Magestore_TruBox_Helper</class>
+            </trubox>
+        </helpers>
+    </global>
+    <default>
+        <sales>
+            <totals_sort>
+                <trubox>34</trubox>
+                <trubox_after_tax>44</trubox_after_tax>
+            </totals_sort>
+        </sales>
+    </default>
+</config>

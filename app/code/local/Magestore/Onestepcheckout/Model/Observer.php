@@ -320,30 +320,28 @@ class Magestore_Onestepcheckout_Model_Observer extends Mage_Core_Controller_Vari
 
     public function orderPlaceAfter($observers) {
         $session = Mage::getSingleton('checkout/session');
-        $giftwrap = $session->getData('onestepcheckout_giftwrap');
+        $deliveryType = $session->getData('delivery_type');
         $giftwrapAmount = $session->getData('onestepcheckout_giftwrap_amount');
-        if ($giftwrap || $giftwrapAmount) {
-            $session->unsetData('onestepcheckout_giftwrap');
+        if ($deliveryType || $giftwrapAmount) {
+            $session->unsetData('delivery_type');
             $session->unsetData('onestepcheckout_giftwrap_amount');
         }
-        //Save Comment                
+        //Save Order Note                
         $order = $observers->getEvent()->getOrder();
         $customerComment = $session->getData('customer_comment');
+		$isFirstOrder = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_email',$order->getCustomerEmail());
+		if($isFirstOrder->getSize() == 1){
+			$customerComment = '*GET IT NOW*';
+		}
         if ($customerComment != "") {
             try {
-                $order->setOnestepcheckoutOrderComment($customerComment)
-                        ->addStatusHistoryComment($customerComment, false)
-                        ->save();
+                $order->addStatusHistoryComment($customerComment, false)->save();
             } catch (Exception $e) {
                 
             }
         }
-        /* save OSC comment */
+        //Save OSC order comment
         $OSCCM = $session->getOSCCM();
-		$isFirstOrder = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_email',$order->getCustomerEmail());
-		if($isFirstOrder->getSize() == 1){
-			$OSCCM = $OSCCM.'*NEW CUSTOMER*';
-		}
 		if($OSCCM != null){
 				$order->setOnestepcheckoutOrderComment($OSCCM)->save();
 				$session->setOSCCM(null);
@@ -390,5 +388,29 @@ class Magestore_Onestepcheckout_Model_Observer extends Mage_Core_Controller_Vari
             $quote->setCustomerId(null);
         }
     }
+	
+	public function setShippingCost($observer)
+    {
+        $events = $observer->getEvent();
+        $address = $events->getQuoteAddress();
+        if(($address->getAddressType()=='shipping') && (Mage::getSingleton('checkout/session')->getData('delivery_type') == 1)){
+			$price = 0;
+			$address->setShippingAmount($price);
+			$address->setBaseShippingAmount($price);
+			$address->save();
+		}
+    }
+	
+	public function addCondition($observer) {
 
+        $additional = $observer->getAdditional();
+        $conditions = (array) $additional->getConditions();
+        $conditions = array_merge_recursive($conditions, array(
+            array('label'=>Mage::helper('onestepcheckout')->__('Subtotal without Virtual Product value'), 'value'=>'onestepcheckout/addCondition'),
+        ));
+        $additional->setConditions($conditions);
+        $observer->setAdditional($additional);
+
+        return $observer;
+    }
 }

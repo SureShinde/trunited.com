@@ -36,12 +36,24 @@ class Magestore_RewardPoints_Block_Adminhtml_Totals_Order_Label extends Mage_Adm
     {
         $totalsBlock = $this->getParentBlock();
         $order = $totalsBlock->getOrder();
-        
+		$bonusPoints = $order->getRewardpointsBonus();
+		if(!$bonusPoints)
+			$bonusPoints = 0;
+		
         if ($order->getRewardpointsEarn()) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'rewardpoints_earn_label',
                 'label' => $this->__('Earned Points'),
-                'value' => $order->getRewardpointsEarn(),
+                'value' => $order->getRewardpointsEarn() - $bonusPoints,
+                'strong'        => true,
+                'is_formated'   => true,
+            )), 'subtotal');
+        }
+        if ($bonusPoints) {
+            $totalsBlock->addTotal(new Varien_Object(array(
+                'code'  => 'rewardpoints_bonus_label',
+                'label' => $this->__('TruBox Bonus'),
+                'value' => $bonusPoints,
                 'strong'        => true,
                 'is_formated'   => true,
             )), 'subtotal');

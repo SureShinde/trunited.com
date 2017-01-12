@@ -59,6 +59,10 @@ class Magestore_RewardPoints_Model_Total_Invoice_Point extends Mage_Sales_Model_
         }
         if($earnPoint > 0)
             $invoice->setRewardpointsEarn($earnPoint);
+		//TruBox Bonus Points
+		$bonusPoints = $order->getRewardpointsBonus();
+		if($bonusPoints)
+			$invoice->setRewardpointsBonus($bonusPoints);
         /** End earningn point **/
         
         /** Spending point **/

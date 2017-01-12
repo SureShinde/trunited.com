@@ -156,6 +156,9 @@ if($enable_addtocart_sticky){
                 <div class="product-name">
                     <h1 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
                 </div>
+				
+				<?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
+				
                 <?php if($enabled_richsnippets): ?>
                 <?php
                     $storeId = Mage::app()->getStore()->getId();

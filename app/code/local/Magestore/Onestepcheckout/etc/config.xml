@@ -151,7 +151,12 @@
                     <customer>Magestore_Onestepcheckout_Model_Customer_Customer</customer>
                 </rewrite>
             </customer>
-        </models>
+			<salesrule>
+				<rewrite>
+					<quote_freeshipping>Magestore_Onestepcheckout_Model_Freeshipping</quote_freeshipping>
+				</rewrite>
+			</salesrule>
+		</models>
         <resources>
             <onestepcheckout_setup>
                 <setup>
@@ -181,25 +186,33 @@
                     <system_config_edit>Magestore_Onestepcheckout_Block_Adminhtml_Config_Edit</system_config_edit>
                 </rewrite>
             </adminhtml>
-<!--             <checkout>
+            <checkout>
                 <rewrite>
                     <onepage_link>Magestore_Onestepcheckout_Block_Onepage_Link</onepage_link>
                     <links>Magestore_Onestepcheckout_Block_Checkout_Links</links>
                 </rewrite>
             </checkout>
- -->        </blocks>
+        </blocks>
         <helpers>
             <onestepcheckout>
                 <class>Magestore_Onestepcheckout_Helper</class>
             </onestepcheckout>
-<!--             <checkout>
+             <checkout>
                 <rewrite>
                     <url>Magestore_Onestepcheckout_Helper_Rewrite_Checkout_Url</url>
                 </rewrite>
             </checkout>
- -->        </helpers>
+        </helpers>
         <events>
-<!--             <controller_action_predispatch_checkout_onepage_index>
+            <salesrule_rule_condition_combine>
+                <observers>
+                    <add_condition_to_sales_rule>
+                        <class>onestepcheckout/observer</class>
+                        <method>addCondition</method>
+                    </add_condition_to_sales_rule>
+                </observers>
+            </salesrule_rule_condition_combine>
+			<controller_action_predispatch_checkout_onepage_index>
                 <observers>
                     <magestore_onestepcheckout_observer>
                         <type>singleton</type>
@@ -208,7 +221,7 @@
                     </magestore_onestepcheckout_observer>
                 </observers>
             </controller_action_predispatch_checkout_onepage_index>
- -->            <checkout_cart_add_product_complete>
+            <checkout_cart_add_product_complete>
                 <observers>
                     <checkout_cart_index>
                         <type>singleton</type>
@@ -287,7 +300,7 @@
                     <giftwrap>
                         <class>onestepcheckout/sales_quote_address_total_giftwrap</class>
                         <after>wee,discount,tax,tax_subtotal,grand_total</after>
-                    </giftwrap>													
+                    </giftwrap>
                 </totals>
             </quote>
             <order_invoice>

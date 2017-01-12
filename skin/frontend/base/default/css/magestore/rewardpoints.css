@@ -276,3 +276,14 @@ ul.ui-widget-content.ui-autocomplete li{
     font-size: 15px;
     margin: 10px 0 5px 0;
 }
+input#send_friend {
+    margin-top: 0px!important;
+}
+input#send_friend {
+    margin-top: 0px!important;
+}
+
+.giftcard-send-friend label {
+    font-weight: bold;
+    font-size: 14px !important;
+}

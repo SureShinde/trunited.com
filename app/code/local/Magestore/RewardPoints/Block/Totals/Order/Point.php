@@ -40,12 +40,25 @@ class Magestore_RewardPoints_Block_Totals_Order_Point extends Magestore_RewardPo
         }
         $totalsBlock = $this->getParentBlock();
         $order = $totalsBlock->getOrder();
+		$bonusPoints = $order->getRewardpointsBonus();
+		if(!$bonusPoints)
+			$bonusPoints = 0;
+		
         if ($order->getRewardpointsEarn()) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code' => 'rewardpoints_earn_label',
                 'label' => $this->__('Earn Points'),
-                'value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn()),
-                'base_value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn()),
+                'value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints),
+                'base_value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints),
+                'is_formated' => true,
+                    )), 'subtotal');
+        }
+        if ($bonusPoints) {
+            $totalsBlock->addTotal(new Varien_Object(array(
+                'code' => 'rewardpoints_bonus_label',
+                'label' => $this->__('TruBox Bonus'),
+                'value' => Mage::helper('rewardpoints/point')->format($bonusPoints),
+                'base_value' => Mage::helper('rewardpoints/point')->format($bonusPoints),
                 'is_formated' => true,
                     )), 'subtotal');
         }

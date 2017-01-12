@@ -33,6 +33,11 @@
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
             <?php if (!$this->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+				<?php 
+					//Mask Tax ID
+					if($_option['option_id'] == 186)
+						$_formatedOptionValue['value'] = substr($_formatedOptionValue['value'], 0, 2) . str_repeat('*', strlen($_formatedOptionValue['value']) - 2);
+				?>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>>
                     <?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>

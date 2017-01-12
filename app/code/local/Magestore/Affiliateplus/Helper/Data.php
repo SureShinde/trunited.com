@@ -552,15 +552,23 @@ class Magestore_Affiliateplus_Helper_Data extends Mage_Core_Helper_Abstract {
     public function addLifetimeCustomers($addLifetimeCustomers, $affiliateId){
         if($addLifetimeCustomers) {
             $arrAddLifetimeCustomers = explode(',', $addLifetimeCustomers);
+			$customerObject = Mage::getModel('customer/customer'); 
+			$customerObject->setWebsiteId(1);
             foreach($arrAddLifetimeCustomers as $customer) {
                 $customer = trim($customer);
                 if (Zend_Validate::is($customer, 'EmailAddress')) {
                     if(!$this->checkLifetimeCustomer($customer, $affiliateId)) {
-                        $model = Mage::getModel('affiliateplus/tracking');
+                        $customerId = 0;
+						$customerObject->loadByEmail($customer);
+						if($customerObject)
+							$customerId = $customerObject->getId();
+						
+						$model = Mage::getModel('affiliateplus/tracking');
                         try{
                             $model->setId(null)
                                 ->setAccountId($affiliateId)
                                 ->setCustomerEmail($customer)
+								->setCustomerId($customerId)
                                 ->setCreatedTime(now())
                                 ->save();
                         } catch(Exception $e) {

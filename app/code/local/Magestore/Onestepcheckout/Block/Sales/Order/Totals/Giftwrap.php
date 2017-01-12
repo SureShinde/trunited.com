@@ -3,15 +3,20 @@ class Magestore_Onestepcheckout_Block_Sales_Order_Totals_Giftwrap extends Mage_S
 {
 	public function initTotals()
     {
+		if($this->giftwrapAmount() == null)
+			return $this;
+		
+		$total = new Varien_Object();
+		$total->setCode('giftwrap');
+		$total->setValue($this->giftwrapAmount());
+		$total->setBaseValue($this->baseGiftwrapAmout());
 		if($this->giftwrapAmount() > 0){
-			$total = new Varien_Object();
-			$total->setCode('giftwrap');
-			$total->setValue($this->giftwrapAmount());
-			$total->setBaseValue($this->baseGiftwrapAmout());
-			$total->setLabel('Gift wrap');
-			$parent = $this->getParentBlock();
-			$parent->addTotal($total,'subtotal');
+			$total->setLabel('Get It Now');
+		}else{
+			$total->setLabel('TruBox This Order');
 		}
+		$parent = $this->getParentBlock();
+		$parent->addTotal($total,'subtotal');
 	}
 	
 	public function giftwrapAmount() {

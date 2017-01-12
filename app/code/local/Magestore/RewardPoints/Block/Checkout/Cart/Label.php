@@ -80,4 +80,12 @@ class Magestore_RewardPoints_Block_Checkout_Cart_Label extends Mage_Checkout_Blo
         }
         return Mage::helper('rewardpoints/calculation_earning')->getTotalPointsEarning();
     }
+    
+	public function getBonusPoint()
+    {
+        if (Mage::helper('rewardpoints/calculation_spending')->getTotalPointSpent() && !Mage::getStoreConfigFlag('rewardpoints/earning/earn_when_spend',Mage::app()->getStore()->getId())) {
+            return 0;
+        }
+        return Mage::helper('rewardpoints/calculation_earning')->getTotalPointsBonus();
+    }
 }

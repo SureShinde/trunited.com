@@ -427,10 +427,10 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $checkoutMethod = '';
         if (!$this->_isLoggedIn()) {
             $checkoutMethod = 'guest';
-            if ($helper->enableRegistration() || !$helper->allowGuestCheckout()) {
+            if ($helper->enableRegistration()) {
                 $is_create_account = $this->getRequest()->getPost('create_account_checkbox');
                 $email_address = $billing_data['email'];
-                if ($is_create_account || !$helper->allowGuestCheckout()) {
+                if ($is_create_account) {
                     /* Changed By Adam (31/05/2016): Fix issue of expire session in onestepcheckout page */
                     if (!$email_address) {
                         Mage::getSingleton('checkout/session')->addError(Mage::helper('onestepcheckout')->__('Missing email address or session has been expired. Please enter information again.'));
@@ -1121,6 +1121,10 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             $session->setData('url', $result['url']);
         if ($result['success'])
             $session->setData('success', true);
+		if($this->isVirtual()){
+			$result['is_virtual'] = 1;
+		}
+		
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults($result, true);
         $this->getResponse()->setBody(Zend_Json::encode($result));
@@ -1191,6 +1195,9 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             $session->setData('url', $result['url']);
         if ($result['success'])
             $session->setData('success', true);
+		if($this->isVirtual()){
+			$result['is_virtual'] = 1;
+		}
 
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults($result, true);
@@ -1262,7 +1269,10 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             $session->setData('error', $result['error']);
         if ($result['success'])
             $session->setData('success', true);
-
+		if($this->isVirtual()){
+			$result['is_virtual'] = 1;
+		}
+		
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults($result, true);
         $this->getResponse()->setBody(Zend_Json::encode($result));
@@ -1351,9 +1361,14 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
     }
 	
 	public function testAction(){
-		$testOrder = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_email','leo@magestore.com');
-		Zend_Debug::dump($testOrder->getSize());die;
-		
+		$installer =  new Mage_Core_Model_Resource_Setup('core_setup');
+			
+		$installer->startSetup();
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
+		$installer->endSetup();
+		die('aaa');
 	}
 
 }

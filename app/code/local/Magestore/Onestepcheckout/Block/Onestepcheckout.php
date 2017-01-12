@@ -51,6 +51,12 @@ class Magestore_Onestepcheckout_Block_Onestepcheckout extends Mage_Checkout_Bloc
         /* End: Huy - fix bug estimate shipping */
         $this->_setDefaultShippingMethod();
         $this->_setDefaultPaymentMethod();
+		
+		//Set default delivery type
+		$session = Mage::getSingleton('checkout/session');
+		$deliveryType = $session->getData('delivery_type');
+		if($deliveryType == null)
+			$session->setData('delivery_type',1);
     }
 
     /* End: Modified by Daniel - improve OSC load speed */

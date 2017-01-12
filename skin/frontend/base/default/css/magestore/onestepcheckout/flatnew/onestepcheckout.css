@@ -94,7 +94,7 @@ button.onestepcheckout-btn-checkout{padding:5px 30px;border-radius:3px;width: 10
 .onestepcheckout-shipping-method-section .sp-methods dt{display:none}
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li{float:left;width:100%;margin:5px 0;font-size:14px}
 #one-step-checkout-form input.radio{float:left;margin:6px 4px 4px 0}
-#one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li label{font-weight:400;font-size:14px}
+#one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li label{font-weight:400;font-size:13px}
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li .price{font-weight:700;font-size:14px}
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section .sp-methods dt{font-size:14px;margin:0}
 .one-step-checkout .login{padding-bottom:20px}
@@ -382,3 +382,6 @@ p.forgot-link{float:left;width:100%;padding-top:15px;padding-bottom:5px;border-t
     #one-step-checkout-form .remove-icon{display:none}
 }
 .data-table tbody tr{border-left: none;border-right: none;background-color:#fff;}
+#delivery-type input.radio {
+    margin-top: 1px;
+}

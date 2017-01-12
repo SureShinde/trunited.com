@@ -24,6 +24,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
+<?php 
+$order = Mage::getModel('sales/order');
+    $incrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId(); 
+    $order->loadByIncrementId($incrementId);
+
+    try{ $order->sendNewOrderEmail();} 
+    catch (Exception $ex) { echo "Email Not Sent..."; }
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $email = $customer->getEmail();//End Email Sending
+	?>
 <div class="page-title">
     <h1><?php echo $this->__('Your order has been received.') ?></h1>
 </div>

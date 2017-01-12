@@ -843,7 +843,7 @@
                     </fields>
                 </order_notification>
                 <giftwrap translate="label comment">
-                    <label>Gift Wrap Configuration</label>
+                    <label>Delivery Option Configuration</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>10</sort_order>
                     <show_in_default>1</show_in_default>
@@ -851,7 +851,7 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <enable_giftwrap translate="label">
-                            <label>Enable gift wrap</label>
+                            <label>Enable Delivery Option</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>14</sort_order>
@@ -859,31 +859,35 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enable_giftwrap>
-                        <giftwrap_type translate="label">
-                            <label>Gift wrap type</label>
+                        <enable_freeshipping translate="label">
+                            <label>Enable Free Shipping</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>onestepcheckout/giftwrap</source_model>
-                            <comment><![CDATA[To calculate gift wrap fee based on item or order.]]>
-                            </comment>
-                            <sort_order>15</sort_order>                          
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <depends>
-                                <enable_giftwrap>1</enable_giftwrap>
-                            </depends>
-                        </giftwrap_type>
-                        <giftwrap_amount translate="label">
-                            <label>Gift wrap fee</label>
-                            <frontend_type>text</frontend_type>							
+                        </enable_freeshipping>
+                        <enable_bonuspoints translate="label">
+                            <label>Enable TruBox Bonus Points</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>16</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                        </enable_bonuspoints>
+                        <giftwrap_amount translate="label">
+                            <label>Get It Now Fee</label>
+                            <frontend_type>text</frontend_type>							
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
                             <depends>
                                 <enable_giftwrap>1</enable_giftwrap>
                             </depends>
-                            <comment><![CDATA[Enter the amount of gift wrap fee.]]>
+                            <comment><![CDATA[Enter the amount of Get It Now fee.]]>
                             </comment>
                         </giftwrap_amount>
                     </fields>
@@ -954,97 +958,6 @@
                         </survey_values>
                     </fields>
                 </survey>
-                <!-- <geoip transalte="label">
-                    <label>GeoIP Management</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>23</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <fields>
-                        <enable translate="label">
-                            <label>Enable GeoIP</label>
-                            <frontend_type>select</frontend_type>							
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </enable>
-                        <detect_by_ip translate="label">
-                            <label>Detect country by IP</label>
-                            <frontend_type>select</frontend_type>							
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </detect_by_ip>
-                        <detect_by_postcode translate="label">
-                            <label>Detect address by postcode</label>
-                            <frontend_type>select</frontend_type>							
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </detect_by_postcode>
-                        <postcode_characters translate="label">
-                            <label>Number of characters to start detecting postcode</label>
-                            <frontend_type>text</frontend_type>														
-                            <sort_order>15</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </postcode_characters>
-                        <detect_by_city translate="label">
-                            <label>Detect address by city</label>
-                            <frontend_type>select</frontend_type>							
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </detect_by_city>
-                        <city_characters translate="label">
-                            <label>Number of characters to start detecting city</label>
-                            <frontend_type>text</frontend_type>														
-                            <sort_order>25</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </city_characters>
-                        <rows translate="label">
-                            <label>Number of rows updated each time</label>
-                            <frontend_type>text</frontend_type>														
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store> 
-                            <comment><![CDATA[During the process of updating GeoIP Database.]]>
-                            </comment>
-                        </rows>
-                    </fields>
-                </geoip>			 -->	
-                <!-- <mobile transalte="label">
-                    <label>Mobile Version Management</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>25</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <enable translate="label">
-                            <label>Enable Mobile Version</label>
-                            <frontend_type>select</frontend_type>							
-                            <source_model>adminhtml/system_config_source_yesno</source_model>												
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>                           
-                        </enable>
-                    </fields>
-                </mobile> -->
                 <style_management translate="label">
                     <label>Style Management</label>
                     <frontend_type>text</frontend_type>

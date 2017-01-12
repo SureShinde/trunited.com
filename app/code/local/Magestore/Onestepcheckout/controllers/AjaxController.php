@@ -3,14 +3,9 @@
 class Magestore_Onestepcheckout_AjaxController extends Mage_Core_Controller_Front_Action {
 
     public function add_giftwrapAction() {
-        $remove = $this->getRequest()->getPost('remove', false);
+        $deliveryType = $this->getRequest()->getPost('delivery_type');
         $session = Mage::getSingleton('checkout/session');
-        if (!$remove) {
-            $session->setData('onestepcheckout_giftwrap', 1);
-        } else {
-            $session->unsetData('onestepcheckout_giftwrap');
-            $session->unsetData('onestepcheckout_giftwrap_amount');
-        }
+        $session->setData('delivery_type', $deliveryType);
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults($result, true);
         $this->getResponse()->setBody(Zend_Json::encode($result));

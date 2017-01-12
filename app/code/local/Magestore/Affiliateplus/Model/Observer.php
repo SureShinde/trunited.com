@@ -1753,7 +1753,7 @@ class Magestore_Affiliateplus_Model_Observer {
 
     //hainh 25-07-2014
     public function customerSaveAfter($observer) {
-        // Changed By Adam 28/07/2014
+		// Changed By Adam 28/07/2014
         if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled())
             return;
         $request = Mage::app()->getRequest();
@@ -1764,20 +1764,13 @@ class Magestore_Affiliateplus_Model_Observer {
         $affiliateName = $request->getPost('affiliate_name');
         $noRefersMe = $request->getPost('no_refers_me');
         if(!$noRefersMe) {
-//            zend_Debug::dump($request);
-//            zend_Debug::dump($request->getParams());
-//            zend_Debug::dump($affiliateId);
-
-//        $affiliateId = Mage::getModel('affiliatepluscoupon/coupon')->getCollection()
-//            ->addFieldToFilter('coupon_code',$affiliateCoupon)
-//            ->getFirstItem()->getAccountId();
-            if(!$affiliateId) {
+			if(!$affiliateId) {
                 $affiliateId = Mage::getModel('affiliateplus/account')->getCollection()
                     ->addFieldToFilter('name', $affiliateName)
                     ->getFirstItem()->getAccountId();
             }
             if (isset($affiliateId) && $affiliateId) {
-                $collectionTracking = Mage::getModel('affiliateplus/tracking')->getCollection()
+				$collectionTracking = Mage::getModel('affiliateplus/tracking')->getCollection()
                     ->addFieldToFilter('customer_id', $customer->getId())
                     ->getFirstItem();
                 if (!$collectionTracking->getId()) {
@@ -1814,6 +1807,21 @@ class Magestore_Affiliateplus_Model_Observer {
                 return $this;
             }
         }
+		/* Update Life Time Customer Email when customer email is changed in backend */
+		if(Mage::app()->getWebsite()->getId() == 0){
+			$collectionTracking = Mage::getModel('affiliateplus/tracking')->getCollection()
+				->addFieldToFilter('customer_id', $customer->getId())
+				->getFirstItem();
+			if($collectionTracking){
+                $collectionTracking->setCustomerEmail($customer->getEmail());
+				try {
+					$collectionTracking->save();
+				} catch (Exception $e) {
+					Mage::log($e->getMessage(), null, 'affiliate.log');
+				}
+			}
+		}
+		/* Update Life Time Customer Email when customer email is changed in backend */
         return $this;
     }
 

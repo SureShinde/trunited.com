@@ -24,7 +24,35 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="product-options" id="product-options-wrapper">
+<?php 
+$_product = $this->getProduct();
+$isGiftCard = false;
+if (strpos($_product->getName(), 'Gift Card')){
+	$isGiftCard = true;
+}
+?>
+<?php if($isGiftCard): ?>
+<div class = "giftcard-send-friend form-group">
+    <div class="checkbox">
+		<label for="send_friend">
+			<input type="checkbox" name="send_friend" id="send_friend" onclick="sendFriend(this);" />
+			<?php echo $this->__('Send Gift Card to friend') ?>
+	    </label>
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        function sendFriend(el) {
+			if(el.checked)
+				$('product-options-wrapper').show();
+			else
+				$('product-options-wrapper').hide();
+        }
+        //]]>
+    </script>
+</div>
+<?php endif;?>
+
+<div class="product-options" id="product-options-wrapper" style="<?php if ($isGiftCard) echo 'display:none;'?>">
     <?php echo $this->getChildHtml('', true, true);?>
     <?php if ($this->hasRequiredOptions()):?>
         <p class="required"><?php echo $this->__('* Required Fields') ?></p>

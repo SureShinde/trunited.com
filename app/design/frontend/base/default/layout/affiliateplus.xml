@@ -111,6 +111,7 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>180</order>
                 </action-->
+				
                 <action method="addLink" translate="label" module="affiliateplus">
                     <name>edit</name>
                     <path>affiliateplus/account/edit</path>
@@ -141,6 +142,13 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>185</order>
                 </action-->
+				<action method="addLink" translate="label" module="affiliateplus">
+                    <name>connecction</name>
+                    <path>affiliateplus/index/myconnections</path>
+                    <label>My Connections</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>186</order>
+                </action>
 
             </block>
         </reference>
@@ -246,12 +254,43 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>185</order>
                 </action-->
-				<action method="addLink" translate="label" module="affiliateplus">
+				
+			<!--<action method="addLink" translate="label" module="affiliateplus">
+                    <name>marketing</name>
+                    <path>affiliateplus/index/referrers</path>
+                    <label>Marketing Resources</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>183</order>
+            </action>-->
+		    <!--<action method="addLink" translate="label" module="affiliateplus">
+                    <name>marketing</name>
+                    <path>affiliateplus/index/marketing</path>
+                    <label>Marketing Resources</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>184</order>
+            </action>-->
+				<!--<action method="addLink" translate="label" module="affiliateplus">
+                    <name>marketing</name>
+                    <path>affiliateplus/index/marketing</path>
+                    <label>Marketing Resources</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>184</order>
+                </action>-->
+				
+				<!--<action method="addLink" translate="label" module="affiliateplus">
                     <name>connecction</name>
                     <path>affiliateplus/index/substore</path>
                     <label>My Connections</label>
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>185</order>
+                </action>-->
+				<!--Added By Aellon tech (17/12/2016): -->
+				<action method="addLink" translate="label" module="affiliateplus">
+                    <name>connecction</name>
+                    <path>affiliateplus/index/myconnections</path>
+                    <label>My Connections</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>186</order>
                 </action>
             </block>
         </reference>
@@ -364,13 +403,21 @@
         </reference>
     </affiliateplus_index_confirmrequest>
     
-    <affiliateplus_index_referrers>
+    <!--<affiliateplus_index_referrers>
         <update handle="affiliateplus_default" />
         <reference name="content">
-            <block type="affiliateplus/referrer" name="affiliateplus_referer" template="affiliateplus/referrer.phtml" />
+            <block type="affiliateplus/referrer" name="affiliateplus_referer" template="affiliateplus/account/marketing.phtml" />
         </reference>
-    </affiliateplus_index_referrers>
-    
+    </affiliateplus_index_referrers>-->
+	
+    <!--<affiliateplus_index_marketing>
+        <update handle="affiliateplus_default" />
+        <reference name="content">
+            <block type="affiliateplus/1
+			2" name="affiliateplus_marketing" template="affiliateplus/account/marketing.phtml" />
+        </reference>
+    </affiliateplus_index_marketing>-->
+	
     <affiliateplus_account_register>
         <update handle="affiliateplus_default" />
         <reference name="content">
@@ -465,15 +512,30 @@
             <block type="affiliateplus/sales_credit_creditmemo" />
         </reference>		
     </sales_email_order_creditmemo_items>
-
+	
+    <!--<affiliateplus_index_marketing>
+        <update handle="affiliateplus_default" />
+        <reference name="content">
+            <block type="affiliateplus/account_edit" name="affiliateplus_marketing" template="affiliateplus/account/marketing.phtml" />
+        </reference>
+    </affiliateplus_index_marketing>-->
     <!--Added By Adam (27/08/2016): -->
-    <affiliateplus_index_substore>
+	
+    <!--<affiliateplus_index_substore>
         <update handle="affiliateplus_default" />
         <reference name="content">
             <block type="affiliateplus/account_edit" name="affiliateplus_substore" template="affiliateplus/account/substore.phtml" />
         </reference>
-    </affiliateplus_index_substore>
+    </affiliateplus_index_substore>-->
+ <!--Added By Aellon tech (17/12/2016): -->
+	<affiliateplus_index_myconnections>
+        <update handle="affiliateplus_default" />
+        <reference name="content">
+            <block type="affiliateplus/account_edit" name="affiliateplus_myconnections" template="affiliateplus/account/substore.phtml" />
+        </reference>
+    </affiliateplus_index_myconnections>
 
+	
     <!-- Changed by Adam (27/08/2016): show list lifetimecustomer in frontend -->
     <affiliateplus_index_lifetimecustomer>
         <update handle="affiliateplus_default" />

@@ -1,0 +1,268 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints Account Dashboard
+ *
+ * @see Magestore_RewardPoints_Block_Account_Dashboard
+ */
+?>
+<?php
+    $collection = $this->getTruBox();
+?>
+<div class="trubox-page">
+    <div class="page-title">
+        <h1><?php echo $this->__('My TruBox') ?></h1>
+    </div>
+
+    <div class="box-account box-info box-trubox-summary">
+        <div class="info-summary trubox-items">
+            <h4><?php echo $this->__('Trubox Items') ?></h4>
+            <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST">
+                <table id="shopping-cart-table" class="cart-table data-table">
+                    <thead>
+                    <tr class="first last">
+                        <th rowspan="1"><span class="nobr"><?php echo $this->__('Product') ?></span></th>
+                        <th rowspan="1" class="a-center">
+                            <?php echo $this->__('Qty') ?>
+                        </th>
+                        <th class="a-center cart-price-head" colspan="1">
+                            <span class="nobr"><?php echo $this->__('Price') ?></span></span>
+                        </th>
+                        <th class="a-center cart-price-head" colspan="1">
+                            <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                        foreach ($collection as $item) {
+                            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                            ?>
+                            <tr>
+                                <td><span class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($product,'small_image')->resize(100); ?>" /></span>
+                                    <p class="product-name"><strong><?php echo $product->getName() ?></strong></p></td>
+                                <td class="a-center"><input class="product-qty" name="<?php echo $product->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
+                                <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice(), true, false); ?></p></td>
+                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getProductId()) ?>" class="product-price a-center"><?php echo $this->__('Delete'); ?></a></td>
+                            </tr>
+                            <?php
+                        }
+                    ?>
+                    </tbody>
+                </table>
+                <button class="button btn-cart" type="submit">
+                    <span><span><?php echo $this->__('Save Items') ?></span></span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="info-summary trubox-address">
+        <?php $address = $this->getAddressTruBox();
+//            print_r($address->getFax());
+        ?>
+        <h4><?php echo $this->__('Trubox Address') ?></h4>
+        <form class="items" action="<?php echo $this->saveAddressUrl() ?>" method="POST">
+            <div class="fieldsets">
+                <ul class="form-list">
+                    <li class="fields">
+                        <div class="customer-name-middlename">
+                            <div class="field name-firstname">
+                                <label for="firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="firstname" name="firstname" value="<?php if ($address->getFirstname()) echo $address->getFirstname(); ?>"
+                                           title="<?php echo $this->__('First Name') ?>" maxlength="255" class="input-text required-entry">
+                                </div>
+                            </div>
+                            <div class="field name-lastname">
+                                <label for="lastname" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="lastname" name="lastname" value="<?php if ($address->getLastname()) echo $address->getLastname();?>"
+                                           title="<?php echo $this->__('Last Name') ?>" maxlength="255" class="input-text required-entry">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                            <div class="input-box">
+                                <input type="tel" name="telephone" value="<?php if ($address->getTelephone()) echo $address->getTelephone();?>"
+                                       title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" id="telephone">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="fieldsets">
+                <ul class="form-list">
+                    <li class="wide">
+                        <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="street" value="<?php if ($address->getStreet()) echo $address->getStreet();?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text  required-entry">
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="zipcode" value="<?php if ($address->getZipcode()) echo $address->getZipcode();?>" title="Zip/Postal Code" id="zip" class="input-text validate-zip-international  required-entry">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                            <div class="input-box">
+                                <?php echo $this->getCountryHtmlSelect('billing') ?>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="city" value="<?php if ($address->getCity()) echo $address->getCity();?>" title="City" class="input-text  required-entry" id="city">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                            <div class="state-section"><input type='text' name='state' class='state input-text required-entry' value="" /></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <button class="button btn-cart" type="submit">
+                <span><span><?php echo $this->__('Save Address') ?></span></span>
+            </button>
+        </form>
+    </div>
+    <div class="info-summary trubox-payment">
+        <?php
+            $payment = $this->getPaymentTruBox();
+            $paymentList = array('AE' => 'American Express', 'VI' => 'Visa', 'MC' => 'MasterCard', 'DI' => 'Discover' );
+            $monthList = array('1' => '01 - January', '2' => '02 - February', '3' => '03 - March', '4' => '04 - April',
+                '5' => '05 - May', '6' => '06 - June', '7' => '07 - July', '8' => '08 - August', '9' => '09 - September',
+                '10' => '10 - October', '11' => '11 - November', '12' => '12 - December',);
+            $yearList = array();
+            $yearNow =  date("Y");
+            for ($i = 0; $i < 10; $i++) {
+                $yearList[$yearNow + $i] = $yearNow + $i;
+            }
+        ?>
+        <h4><?php echo $this->__('Trubox Payment') ?></h4>
+        <div class="fieldsets">
+            <form class="items" action="<?php echo $this->savePaymentUrl() ?>" method="POST">
+                <ul class="form-list" id="payment_form_ccsave">
+                    <li>
+                        <label for="ccsave_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="Name on Card" class="input-text required-entry" id="ccsave_cc_owner"
+                                   name="name_on_card" value="<?php if ($payment->getNameOnCard()) echo $payment->getNameOnCard() ?>">
+                        </div>
+                    </li>
+                    <li>
+                        <label for="ccsave_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
+                        <div class="input-box">
+                            <select id="ccsave_cc_type" name="card_type" title="Credit Card Type" class="required-entry validate-cc-type-select">
+                                <option value="">--Please Select--</option>
+                                <?php
+                                    foreach ($paymentList as $k=>$v) {
+                                 ?>
+                                        <option value="<?php echo $k ?>" <?php if ($k == $payment->getCardType()) echo "selected" ?>><?php echo $v ?></option>
+                                <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <label for="ccsave_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+                        <div class="input-box">
+                            <input type="text" id="ccsave_cc_number" name="card_number" title="Credit Card Number"
+                                   class="input-text validate-cc-number validate-cc-type" value="<?php if ($payment->getCardNumber())
+                                       echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?>">
+                        </div>
+                    </li>
+                    <li>
+                        <label for="ccsave_expiration" class="required"><em>*</em>Expiration Date</label>
+                        <div class="input-box">
+                            <div class="v-fix">
+                                <select id="ccsave_expiration" name="month_expire" class="month validate-cc-exp required-entry">
+                                    <option value="" selected="selected"><?php echo $this->__('Month') ?></option>
+                                    <?php
+                                    foreach ($monthList as $k=>$v) {
+                                        ?>
+                                        <option value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="v-fix">
+                                <select id="ccsave_expiration_yr" name="year_expire" class="year required-entry">
+                                    <option value=""><?php echo $this->__('Year') ?></option>
+                                    <?php
+                                    foreach ($yearList as $k=>$v) {
+                                        ?>
+                                        <option value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <label for="ccsave_cc_cid" class="required"><em>*</em><?php echo $this->__('Billing Zip Code') ?></label>
+                        <div class="input-box">
+                            <div class="v-fix">
+                                <input type="text" title="Card Verification Number" class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid" name="cvv"
+                                       value="<?php if ($payment->getCvv()) echo $payment->getCvv() ?>">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button class="button btn-cart" type="submit">
+                    <span><span><?php echo $this->__('Save Payment') ?></span></span>
+                </button>
+            <form>
+        </div>
+    </div>
+    <?php echo $this->getChildHtml('other') ?>
+</div>
+<script type="text/javascript">
+    jQuery('#country-trubox').change(function () {
+        console.log(jQuery('#country-trubox')[0].selectedOptions[0].value);
+        var countryCode = jQuery('#country-trubox')[0].selectedOptions[0].value;
+        jQuery.ajax({
+            type      : 'POST',
+            url       : '<?php echo $this->getRegionHtml() ?>',
+            data      : { code: countryCode },
+            success   : function(data) {
+                if (data.indexOf("option") >= 0) {
+                    jQuery('.state-section').html(data);
+                } else {
+                    jQuery('.state-section').html("<input type='text' name='state' class='state input-text required-entry' />");
+                }
+            }
+        });
+    });
+</script>
+

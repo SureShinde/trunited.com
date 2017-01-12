@@ -170,8 +170,8 @@ function save_address_information(save_address_url, update_address_shipping, upd
         var update_address_review = false;
     }
     if (update_address_shipping == 1) {
-        var shipping_method_section = $$('div.onestepcheckout-shipping-method-section')[0];
-        if (typeof shipping_method_section != 'undefined') {
+        var shipping_method_section = $('onestepcheckout-shipping-method-section');
+        if (shipping_method_section) {
             shippingLoad();
         }
     }
@@ -199,7 +199,7 @@ function save_address_information(save_address_url, update_address_shipping, upd
                 count_loading = count_loading - 1;
                 if (count_loading == 0) {
                     if (update_address_shipping == 1) {
-                        if (typeof shipping_method_section != 'undefined') {
+                        if (shipping_method_section && response.shipping_method) {
                             shipping_method_section.update(response.shipping_method);
                             shippingShow();
                         }
@@ -223,13 +223,10 @@ function save_address_information(save_address_url, update_address_shipping, upd
                         reviewShow();
                     }
                     if (update_address_shipping == 1) {
-                        save_shipping_method(shipping_method_url, update_address_payment, update_address_review);
-                    } else {
-
-
-
+                        save_shipping_method(shipping_method_url, 0, 1);
                     }
-                    checkvalidEmail();
+                    
+					checkvalidEmail();
                     if ((update_address_shipping == 1) || (update_address_payment == 1) || (update_address_review == 1)) {
                         if (update_address_shipping == 1) {
                             if ((update_address_payment == 1) || (update_address_review == 1)) {
@@ -571,30 +568,19 @@ function checkPaymentMethod() {
     return pay;
 }
 
-function addGiftwrap(url) {
+function addDeliveryFee(url,deliveryType) {
     var parameters = {};
-    if (!$('onestepcheckout_giftwrap_checkbox').checked) {
-        parameters['remove'] = 1;
-    } else {
-        var options = document.getElementsByName('payment[method]');
-        if (checkPaymentMethod()) {
-            if ($(options[0].id))
-                $(options[0].id).checked = true;
-        }
-    }
-    var summary = $('checkout-review-load');
-    //    summary.update('<div class="ajax-loader3">&nbsp;</div>');
-    paymentLoad();
-    reviewLoad();
+    parameters['delivery_type'] = deliveryType;
+    shippingLoad();
+	reviewLoad();
     new Ajax.Request(url, {
         method: 'post',
         parameters: parameters,
         onFailure: '',
         onSuccess: function (transport) {
             if (transport.status == 200) {
-                //summary.update(transport.responseText);
-                save_shipping_method(shipping_method_url, 1, 1);
-            }
+				save_address_information(save_address_url, 1, 0, 1);
+			}
         }
     });
 }
@@ -1112,7 +1098,6 @@ function deleteproduct(id, url, ms) {
 function minusproduct(id, url) {
     var qty = $('qty-item-' + id).value;
     shippingLoad();
-    paymentLoad();
     reviewLoad();
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
@@ -1141,16 +1126,22 @@ function minusproduct(id, url) {
                             /* Start: Modified by Daniel - 02042015 - reload data after minus product - decrease ajax request */
                             if (result.success) {
                                 var shipping_method = $('onestepcheckout-shipping-method-section');
-                                var payment_method = $('onestepcheckout-payment-methods');
                                 var order_review = $('checkout-review-load');
                                 if (result.shipping_method && shipping_method)
                                     shipping_method.update(result.shipping_method);
-                                if (result.payment_method)
-                                    payment_method.update(result.payment_method);
                                 if (result.review)
                                     order_review.update(result.review);
+								
+								//Hide shipping and delivery sections if only virtual product in cart
+								var shipping_container = $('shipping-method-container');
+								var delivery_container = $('delivery-type-container');
+								if(result.is_virtual && shipping_container)
+									shipping_container.hide();
+								if(result.is_virtual && delivery_container)
+									delivery_container.hide();
+								//Hide shipping and delivery sections if only virtual product in cart
+								
                                 shippingShow();
-                                paymentShow();
                                 reviewShow();
                                 $('onestepcheckout-button-place-order').disabled = false;
                                 $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
@@ -1180,7 +1171,6 @@ function addproduct(id, url) {
     var review = $('checkout-review-load');
     var tmp = review.innerHTML;
     shippingLoad();
-    paymentLoad();
     reviewLoad();
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
@@ -1195,7 +1185,6 @@ function addproduct(id, url) {
                         if (result.error) {
                             alert(result.error);
                             shippingShow();
-                            paymentShow();
                             reviewShow();
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
@@ -1205,16 +1194,12 @@ function addproduct(id, url) {
                         /* Start: Modified by Daniel - 02042015 - reload data after add product - decrease ajax request */
                         if (result.success) {
                             var shipping_method = $('onestepcheckout-shipping-method-section');
-                            var payment_method = $('onestepcheckout-payment-methods');
                             var order_review = $('checkout-review-load');
                             if (result.shipping_method && shipping_method)
                                 shipping_method.update(result.shipping_method);
-                            if (result.payment_method)
-                                payment_method.update(result.payment_method);
                             if (result.review)
                                 order_review.update(result.review);
                             shippingShow();
-                            paymentShow();
                             reviewShow();
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');

@@ -31,6 +31,7 @@
     $_pointHelper = $this->getPointHelper();
     $_spendingPoint = $this->getSpendingPoint();
     $_earningPoints = $this->getEarningPoint();
+    $_bonusPoints = $this->getBonusPoint();
     $_earningPointsByCoupon = Mage::helper('rewardpoints/calculation_earning')->getEarningPointByCoupon();
     ?>
     <?php if ($_spendingPoint || $_earningPoints  || $_earningPointsByCoupon): ?>
@@ -53,7 +54,19 @@
                             } ?>:</strong>
                     </td>
                     <td class="a-right" style="min-width: 70px;<?php echo $this->getTotal()->getStyle() ?>">
-                        <?php echo $_pointHelper->format($_earningPoints) ?>
+                        <?php echo $_pointHelper->format($_earningPoints - $_bonusPoints) ?>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <?php if ($_bonusPoints): ?>
+                <tr>
+                    <td class="a-right" colspan="<?php echo $this->getColspan() ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
+                        <strong style="font-size: 13px;">
+                            <?php echo $this->__('TruBox Bonus:'); ?>
+						</strong>
+                    </td>
+                    <td class="a-right" style="min-width: 70px;<?php echo $this->getTotal()->getStyle() ?>">
+                        <?php echo $_pointHelper->format($_bonusPoints) ?>
                     </td>
                 </tr>
             <?php endif ?>

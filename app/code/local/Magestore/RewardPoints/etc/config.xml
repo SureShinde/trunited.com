@@ -373,6 +373,9 @@
                 <rewardpoints_earn>
                     <to_order>*</to_order>
                 </rewardpoints_earn>
+                <rewardpoints_bonus>
+                    <to_order>*</to_order>
+                </rewardpoints_bonus>
                 <rewardpoints_spent>
                     <to_order>*</to_order>
                 </rewardpoints_spent>

@@ -187,5 +187,21 @@ class Magestore_RewardPoints_Helper_Calculation_Earning extends Magestore_Reward
         }
         return $shippingEarningPoints;
     }
+	
+    public function getTotalPointsBonus($quote = null) {
+        if (is_null($quote)) {
+            $quote = $this->getQuote();
+        }
+        if ($quote->isVirtual()) {
+            $address = $quote->getBillingAddress();
+        } else {
+            $address = $quote->getShippingAddress();
+        }
+        
+        if($address->getRewardpointsBonus())
+			return $address->getRewardpointsBonus();
+		else
+			return 0;
+	}
 
 }
