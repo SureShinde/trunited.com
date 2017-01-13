@@ -7,9 +7,9 @@
 		</magestore>
 	</tabs>
 	<sections>
-		<custompromotions translate="label" module="custompromotions">
+		<trubox translate="label" module="trubox">
 			<class>separator-top</class>
-			<label>Custompromotions</label>
+			<label>trubox</label>
 			<tab>magestore</tab>
 			<frontend_type>text</frontend_type>
 			<sort_order>299</sort_order>
@@ -35,228 +35,31 @@
 							<show_in_store>1</show_in_store>
 							<comment></comment>
 						</enable>
-						<start_date translate="label">
-							<label>Start Date</label>
-							<frontend_type>text</frontend_type>
-							<frontend_model>custompromotions/adminhtml_system_configuration_date</frontend_model>
+						<logo translate="label comment">
+							<label>Logo</label>
+							<comment>Allowed file types: jpeg, gif, png.</comment>
+							<frontend_type>image</frontend_type>
+							<backend_model>adminhtml/system_config_backend_image</backend_model>
+							<upload_dir config="system/filesystem/media" scope_info="1">trubox</upload_dir>
+							<base_url type="media" scope_info="1">trubox</base_url>
 							<sort_order>2</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</start_date>
-						<end_date translate="label">
-							<label>End Date</label>
-							<frontend_type>text</frontend_type>
-							<frontend_model>custompromotions/adminhtml_system_configuration_date</frontend_model>
+						</logo>
+						<cms_description translate="label comment">
+							<label>CMS content for description</label>
+							<comment>The content of CMS page will be displayed as description on My TruBox page</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>trubox/cms</source_model>
 							<sort_order>3</sort_order>
 							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</end_date>
-						<rewards translate="label">
-							<label>Amount Point(s)</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>4</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>Point(s) that the customers will be received when participate promotions.</comment>
-						</rewards>
-						<max_customers translate="label">
-							<label>Max customers that the affiliate is able to received</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>5</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>Customer(s) that The affiliate only receive credit to his truWallet from max customers and for first order.</comment>
-						</max_customers>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</cms_description>
 					</fields>				
 				</general>
-				<product translate="label">
-					<label>truWallet Gift Card Product Configuration</label>
-					<frontend_type>text</frontend_type>
-					<sort_order>2</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<enable translate="label">
-							<label>Enable</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>1</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</enable>
-						<truwallet_sku translate="label">
-							<label>truWallet Gift Card SKU</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</truwallet_sku>
-						<truwallet_value translate="label">
-							<label>truWallet Gift Card Value</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>3</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</truwallet_value>
-						<order_status translate="label">
-							<label>Add truWallet balance when order status is</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_order_status</source_model>
-							<sort_order>4</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</order_status>
-						<notify_message translate="label">
-							<label>Notify message when the cart contains Gift Card Product</label>
-							<frontend_type>textarea</frontend_type>
-							<sort_order>5</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</notify_message>
-					</fields>
-				</product>
-                <shipment translate="label">
-                    <label>ShipStation Configuration</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>3</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <enable translate="label">
-                            <label>Enable</label>
-                            <frontend_type>select</frontend_type>
-                            <sort_order>1</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </enable>
-                        <order_status translate="label">
-                            <label>Order status when created shipment</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_order_status</source_model>
-                            <sort_order>4</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </order_status>
-                    </fields>
-                </shipment>
-				<verify translate="label">
-					<label>Verification Code Configuration</label>
-					<frontend_type>text</frontend_type>
-					<sort_order>4</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<enable translate="label">
-							<label>Enable</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>1</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</enable>
-						<account_sid translate="label">
-							<label>Account SID</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>Your Account SID from www.twilio.com/console</comment>
-						</account_sid>
-						<auth_token translate="label">
-							<label>Auth Token</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>3</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>Your Auth Token from www.twilio.com/console</comment>
-						</auth_token>
-						<sender_number translate="label">
-							<label>The phone of sender</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>4</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>From a valid Twilio number. Don't add + before number</comment>
-						</sender_number>
-						<allow_edit translate="label">
-							<label>Allow customer edit phone number</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>5</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</allow_edit>
-						<code_length translate="label">
-							<label>The default length of verification code</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>6</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</code_length>
-						<mobile_code translate="label">
-							<label>The default mobile code</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>7</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</mobile_code>
-					</fields>
-				</verify>
-				<cms_page translate="label">
-					<label>CMS Page Configuration</label>
-					<frontend_type>text</frontend_type>
-					<sort_order>5</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<message_login>
-							<label>Message is showed when customers don't login</label>
-							<frontend_type>textarea</frontend_type>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>In which: {{login_url}} is url for logging of customers and you don't allow to remove it.</comment>
-						</message_login>
-					</fields>
-				</cms_page>
 			</groups>
-		</custompromotions>
+		</trubox>
 	</sections>
 </config>

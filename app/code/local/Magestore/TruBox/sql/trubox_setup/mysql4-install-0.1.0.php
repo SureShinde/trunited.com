@@ -57,6 +57,9 @@ CREATE TABLE {$this->getTable('trubox/address')} (
   `city` text NULL,
   `zipcode` text NULL,
   `country` text NULL,
+  `address_type` int(10) DEFAULT 2,
+  `region` text DEFAULT NULL,
+  `region_id` int(10),
   PRIMARY KEY (`address_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

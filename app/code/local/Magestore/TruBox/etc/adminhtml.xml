@@ -1,22 +1,17 @@
 <?xml version="1.0"?>
 <config>
 	<menu>
-		<custompromotions module="custompromotions" translate="title">
-			<title>Custom Promotions</title>
-			<sort_order>71</sort_order>               
+		<trubox module="trubox" translate="title">
+			<title>My TruBox</title>
+			<sort_order>72</sort_order>
 			<children>
-				<custompromotions module="custompromotions" translate="title">
-					<title>Black Friday Report</title>
-					<sort_order>0</sort_order>
-					<action>custompromotionsadmin/adminhtml_custompromotions</action>
-				</custompromotions>
-				<settings module="custompromotions" translate="title">
+				<settings module="trubox" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
-					<action>adminhtml/system_config/edit/section/custompromotions</action>
+					<action>adminhtml/system_config/edit/section/trubox</action>
 				</settings>
 			</children>
-		</custompromotions>
+		</trubox>
 	</menu>
 	<acl>
 		<resources>
@@ -29,30 +24,25 @@
 						<children>
 							<config>
 								<children>
-									<custompromotions module="custompromotions" translate="title">
-										<title>Promotions</title>
-										<sort_order>71</sort_order>									
-									</custompromotions>								
+									<trubox module="trubox" translate="title">
+										<title>My TruBox</title>
+										<sort_order>72</sort_order>
+									</trubox>								
 								</children>
 							</config>
 						</children>
 					</system>
-					<custompromotions module="custompromotions" translate="title">
-						<title>Promotions</title>
+					<trubox module="trubox" translate="title">
+						<title>My TruBox</title>
 						<sort_order>71</sort_order>               
 						<children>
-							<custompromotions module="custompromotions" translate="title">
-								<title>Black Friday Report</title>
-								<sort_order>0</sort_order>
-								<action>custompromotionsadmin/adminhtml_custompromotions</action>
-							</custompromotions>
-							<settings module="custompromotions" translate="title">
+							<settings module="trubox" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>
-								<action>adminhtml/system_config/edit/section/custompromotions</action>
+								<action>adminhtml/system_config/edit/section/trubox</action>
 							</settings>
 						</children>
-					</custompromotions>
+					</trubox>
 				</children>
 			</admin>
 		</resources>

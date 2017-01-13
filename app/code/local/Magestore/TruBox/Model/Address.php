@@ -32,6 +32,9 @@
 class Magestore_TruBox_Model_Address extends Mage_Core_Model_Abstract
 {
 
+    const ADDRESS_TYPE_BILLING = 1;
+    const ADDRESS_TYPE_SHIPPING = 2;
+
     public function _construct()
     {
         parent::_construct();

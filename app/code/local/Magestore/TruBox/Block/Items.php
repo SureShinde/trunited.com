@@ -47,35 +47,66 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
 
     public function getTruBox() {
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $collection = Mage::getModel('trubox/item')->getCollection()->addFieldToFilter('trubox_id', $truBoxId);
+        $collection = Mage::getModel('trubox/item')
+            ->getCollection()
+            ->addFieldToFilter('trubox_id', $truBoxId)
+            ->setOrder('item_id','desc')
+        ;
         return $collection;
     }
 
     public function saveItemsUrl() {
-        return Mage::getBaseUrl() . 'mytrubox/index/saveItems';
+        return Mage::getBaseUrl() . 'trubox/index/saveItems';
     }
 
     public function saveAddressUrl() {
-        return Mage::getBaseUrl() . 'mytrubox/index/saveAddress';
+        return Mage::getBaseUrl() . 'trubox/index/saveAddress';
     }
 
     public function savePaymentUrl() {
-        return Mage::getBaseUrl() . 'mytrubox/index/savePayment';
+        return Mage::getBaseUrl() . 'trubox/index/savePayment';
     }
 
     public function deleteItemsUrl($id) {
-        return Mage::getBaseUrl() . 'mytrubox/index/deleteItems?id=' . $id;
+        return Mage::getBaseUrl() . 'trubox/index/deleteItems?id=' . $id;
     }
 
     public function getRegionHtml() {
-        return Mage::getBaseUrl() . 'mytrubox/index/getRegionHtml';
+        return Mage::getBaseUrl() . 'trubox/index/getRegionHtml';
     }
 
-    public function getAddressTruBox() {
+    public function getCurrentCustomer()
+    {
+        return Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
+    }
+
+    public function getShippingAddressTruBox()
+    {
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
         $truBoxFilter = Mage::getModel('trubox/address')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)->getFirstItem();
-        return $truBoxFilter;
+            ->addFieldToFilter('trubox_id', $truBoxId)
+            ->addFieldToFilter('address_type', Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING)
+            ->getFirstItem();
+
+        if ($truBoxFilter->getId() != null)
+            return $truBoxFilter;
+        else
+            return $this->getCurrentCustomer()->getDefaultShippingAddress();
+    }
+
+    public function getBillingAddressTruBox()
+    {
+        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
+        $truBoxFilter = Mage::getModel('trubox/address')->getCollection()
+            ->addFieldToFilter('trubox_id', $truBoxId)
+            ->addFieldToFilter('address_type', Magestore_TruBox_Model_Address::ADDRESS_TYPE_BILLING)
+            ->getFirstItem();
+
+
+        if ($truBoxFilter->getId() != null)
+            return $truBoxFilter;
+        else
+            return $this->getCurrentCustomer()->getDefaultBillingAddress();
     }
 
     public function getPaymentTruBox() {
@@ -87,22 +118,40 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
 
     public function getCountryHtmlSelect($type)
     {
-        $address = $this->getAddressTruBox();
+        if ($type == 'billing') {
+            $country_name = 'billing[country]';
+            $address = $this->getBillingAddressTruBox();
+        } else {
+            $address = $this->getShippingAddressTruBox();
+            $country_name = 'shipping[country]';
+        }
+
+
         $countryId = Mage::helper('core')->getDefaultCountry();
-        $country = $address->getCountry();
+
+        if ($address == null) {
+            $country = self::COUNTRY_DEFAULT_SHIPING;
+        } else {
+            $country = $address->getCountry();
+        }
+
+
         if ($country) {
             $countryId = $country;
         }
+
         if (!$countryId) {
             $countryId = self::COUNTRY_DEFAULT_SHIPING;
         }
+
         $select = $this->getLayout()->createBlock('core/html_select')
-            ->setName('country')
-            ->setId('country-trubox')
+            ->setName($country_name)
+            ->setId('country-trubox-'.$type)
             ->setTitle(Mage::helper('checkout')->__('Country'))
             ->setClass('validate-select')
             ->setValue($countryId)
             ->setOptions($this->getCountryOptions());
+
         if ($type === 'shipping') {
             $select->setExtraParams('onchange="if(window.shipping)shipping.setSameAsBilling(false);"');
         }
@@ -158,6 +207,15 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         }
         return Mage::helper('rewardpointsrule/calculation_earning')
             ->getCatalogItemEarningPoints($item);
+    }
+
+    public function getLogo()
+    {
+        $logo = Mage::getStoreConfig('trubox/general/logo');
+        if ($logo != null)
+            return Mage::getBaseUrl('media') . 'trubox' . DS . $logo;
+        else
+            return null;
     }
 
 }

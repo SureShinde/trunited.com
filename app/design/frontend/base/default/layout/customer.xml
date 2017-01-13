@@ -237,7 +237,6 @@ Customer account pages, rendered for all tabs in dashboard
             </block>
             <block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/>
             <remove name="tags_popular"/>
-
         </reference>
     </customer_account>
 
