@@ -58,64 +58,148 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
      * index action
      */
     public function indexAction() {
+        /* Check default address when trubox address is null */
+        Mage::helper('trubox')->firstCheckAddress();
+        /* End check default address when trubox address is null */
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox'));
         $this->renderLayout();
     }
 
     public function saveAddressAction() {
-        $address = $this->getRequest()->getPost();
+        $billing = $this->getRequest()->getParam('billing');
+        $shipping = $this->getRequest()->getParam('shipping');
+
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
         $address['trubox_id'] = $truBoxId;
-        $truBoxAddress = Mage::getModel('trubox/address');
-        $truBoxFilter = Mage::getModel('trubox/address')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)->getFirstItem();
-        $truBoxAddressId = $truBoxFilter->getAddressId();
-        if ($truBoxAddressId) {
-            $truBoxAddress->load($truBoxAddressId)->addData($address);
-            $truBoxAddress->setId($truBoxAddressId)->save();
-        } else {
-            $truBoxAddress->setData($address)->save();
+
+        $billing['trubox_id'] = $truBoxId;
+        $shipping['trubox_id'] = $truBoxId;
+        $billing['address_type'] = Magestore_TruBox_Model_Address::ADDRESS_TYPE_BILLING;
+        $shipping['address_type'] = Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING;
+
+        try {
+            /* save data to billing address */
+            $billing_model = Mage::getModel('trubox/address')->getCollection()
+                ->addFieldToFilter('address_type', Magestore_TruBox_Model_Address::ADDRESS_TYPE_BILLING)
+                ->addFieldToFilter('trubox_id', $truBoxId)
+                ->getFirstItem();
+
+            if ($billing_model == null) {
+                $billing_model = Mage::getModel('trubox/address');
+            }
+            $billing_model->setData($billing);
+            $billing_model->save();
+            /* end save data to billing address */
+
+            /* save data to shipping address */
+            $shipping_model = Mage::getModel('trubox/address')->getCollection()
+                ->addFieldToFilter('address_type', Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING)
+                ->addFieldToFilter('trubox_id', $truBoxId)
+                ->getFirstItem();
+
+            if ($shipping_model == null) {
+                $shipping_model = Mage::getModel('trubox/address');
+            }
+            $shipping_model->setData($shipping);
+            $shipping_model->save();
+            /* end save data to shipping address */
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('You have updated TruBox Address successfully !')
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
         }
-        $this->_redirect('mytrubox/index/index');
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
     }
 
     public function savePaymentAction() {
         $address = $this->getRequest()->getPost();
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
         $address['trubox_id'] = $truBoxId;
-        $truBoxAddress = Mage::getModel('trubox/payment');
-        $truBoxFilter = Mage::getModel('trubox/payment')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)->getFirstItem();
-        $truBoxPaymentId = $truBoxFilter->getPaymentId();
-        if ($truBoxPaymentId) {
-            $truBoxAddress->load($truBoxPaymentId)->addData($address);
-            $truBoxAddress->setId($truBoxPaymentId)->save();
-        } else {
-            $truBoxAddress->setData($address)->save();
+
+        try {
+            $payment = Mage::getModel('trubox/payment')->getCollection()
+                ->addFieldToFilter('trubox_id', $truBoxId)
+                ->getFirstItem()
+            ;
+
+            if($payment == null)
+                $payment = Mage::getModel('trubox/payment');
+
+            $payment->setData($address);
+            $payment->save();
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('You have updated Payment Information successfully !')
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
         }
-        $this->_redirect('mytrubox/index/index');
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
     }
 
     public function deleteItemsAction() {
         $productId = $this->getRequest()->getParam('id');
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $truBoxFilter = Mage::getModel('trubox/item')->getCollection()->addFieldToFilter('trubox_id', $truBoxId)
-            ->addFieldToFilter('product_id', $productId)->getFirstItem();
+
+        $truBoxFilter = Mage::getModel('trubox/item')->getCollection()
+            ->addFieldToFilter('trubox_id', $truBoxId)
+            ->addFieldToFilter('product_id', $productId)
+            ->getFirstItem()
+        ;
+
         $itemId = $truBoxFilter->getItemId();
-        Mage::getModel('trubox/item')->setId($itemId)->delete();
-        $this->_redirect('mytrubox/index/index');
+
+        try{
+            Mage::getModel('trubox/item')->setId($itemId)->delete();
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('You have deleted item successfully !')
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
+        }
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
     }
 
     public function saveItemsAction() {
         $itemData = $this->getRequest()->getPost();
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        foreach ($itemData as $k=>$v) {
-            $truBoxFilter = Mage::getModel('trubox/item')->getCollection()->addFieldToFilter('trubox_id', $truBoxId)
-                ->addFieldToFilter('product_id', $k)->getFirstItem();
-            $truBoxFilter->setQty($v)->save();
+
+        try{
+            $transactionSave = Mage::getModel('core/resource_transaction');
+            foreach ($itemData as $k=>$v) {
+                $truBoxFilter = Mage::getModel('trubox/item')->getCollection()
+                    ->addFieldToFilter('trubox_id', $truBoxId)
+                    ->addFieldToFilter('product_id', $k)
+                    ->getFirstItem()
+                ;
+                $truBoxFilter->setQty($v);
+                $transactionSave->addObject($truBoxFilter);
+            }
+            $transactionSave->save();
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('You have updated item(s) successfully !')
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
         }
-        $this->_redirect('mytrubox/index/index');
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
     }
 
     public function getRegionHtmlAction() {
@@ -150,21 +234,54 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $truBox = Mage::getModel('trubox/trubox');
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId();
-        $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
-        if (!$truBoxId) {
-            $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
+
+        try{
+            $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
+            if (!$truBoxId) {
+                $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
+            }
+
+            $truBoxItems = Mage::getModel('trubox/item');
+            $checkItem = $truBoxItems->getCollection()
+                ->addFieldToFilter('trubox_id', $truBoxId)
+                ->addFieldToFilter('product_id', $productId)
+                ->getFirstItem()
+            ;
+
+            if (!$checkItem->getItemId()) {
+                $itemData = array('trubox_id' => $truBoxId, 'product_id' => $productId, 'qty' => 1);
+                $truBoxItems->setData($itemData)->save();
+            } else {
+                $qtyCheckItem = $checkItem->getQty();
+                $checkItem->setQty($qtyCheckItem + 1)->save();
+            }
+
+            $product = Mage::getModel('catalog/product')->load($productId);
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('%s was added to your TruBox.',$product->getName())
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
         }
-        $truBoxItems = Mage::getModel('trubox/item');
-        $checkItem = $truBoxItems->getCollection()->addFieldToFilter('trubox_id', $truBoxId)
-            ->addFieldToFilter('product_id', $productId)->getFirstItem();
-        if (!$checkItem->getItemId()) {
-            $itemData = array('trubox_id' => $truBoxId, 'product_id' => $productId, 'qty' => 1);
-            $truBoxItems->setData($itemData)->save();
-        } else {
-            $qtyCheckItem = $checkItem->getQty();
-            $checkItem->setQty($qtyCheckItem + 1)->save();
-        }
-        $this->_redirect('mytrubox/index/index');
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
+    }
+
+    public function updateDbAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('trubox/address')} ADD `address_type` int(10) DEFAULT 2;
+            ALTER TABLE {$setup->getTable('trubox/address')} ADD `region` text DEFAULT NULL ;
+            ALTER TABLE {$setup->getTable('trubox/address')} ADD `region_id` int(10);
+		");
+        $installer->endSetup();
+        echo "success";
     }
 
 }

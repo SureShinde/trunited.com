@@ -54,6 +54,7 @@
         </reference>
     </customer_account_index>
     <trubox_index_index>
+        <update handle="customer_account"/>
         <reference name="content">
             <block type="trubox/items" name="trubox.items" template="trubox/account/trubox.phtml">
                 <block type="rewardpoints/template" name="rewardpoints.dashboard.earn" as="dashboard_earn" template="rewardpoints/account/dashboard/list.phtml">

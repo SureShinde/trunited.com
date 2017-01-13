@@ -37,7 +37,7 @@
                 <use>standard</use>
                 <args>
                     <module>Magestore_TruBox</module>
-                    <frontName>mytrubox</frontName>
+                    <frontName>trubox</frontName>
                 </args>
             </trubox>
         </routers>
@@ -144,5 +144,11 @@
                 <trubox_after_tax>44</trubox_after_tax>
             </totals_sort>
         </sales>
+        <trubox>
+            <general>
+                <enable>1</enable>
+                <cms_description>trubox_description</cms_description>
+            </general>
+        </trubox>
     </default>
 </config>

@@ -27,16 +27,35 @@
 ?>
 <?php
     $collection = $this->getTruBox();
+    $logo = $this->getLogo();
 ?>
 <div class="trubox-page">
-    <div class="page-title">
+    <?php echo $this->getChildHtml('global_messages'); ?>
+    <div class="page-title" tabindex="1">
         <h1><?php echo $this->__('My TruBox') ?></h1>
     </div>
 
+    <div class="info-summary">
+        <?php if($logo != null){?>
+            <img src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS .Mage::getStoreConfig('trubox/general/logo');?>">
+        <?php } else {?>
+            <img src="<?php echo Mage::getBaseUrl('media') . 'trubox/no_image.png';?>">
+        <?php }?>
+    </div>
+
+    <div class="page-description">
+        <?php
+            echo Mage::getModel('cms/block')->load('trubox_description')->getContent();
+        ?>
+    </div>
+    <br style="clear: both"/>
+    <hr class="share_separate" />
+
     <div class="box-account box-info box-trubox-summary">
-        <div class="info-summary trubox-items">
-            <h4><?php echo $this->__('Trubox Items') ?></h4>
-            <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST">
+        <div class="trubox-items">
+            <h2 class="trubox-header"><?php echo $this->__('Trubox Items') ?></h2>
+            <?php if(sizeof($collection) > 0){?>
+            <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST" id="trubox-items">
                 <table id="shopping-cart-table" class="cart-table data-table">
                     <thead>
                     <tr class="first last">
@@ -45,7 +64,13 @@
                             <?php echo $this->__('Qty') ?>
                         </th>
                         <th class="a-center cart-price-head" colspan="1">
+                            <span class="nobr"><?php echo $this->__('Points') ?></span></span>
+                        </th>
+                        <th class="a-center cart-price-head" colspan="1">
                             <span class="nobr"><?php echo $this->__('Price') ?></span></span>
+                        </th>
+                        <th class="a-center cart-price-head" colspan="1">
+                            <span class="nobr"><?php echo $this->__('Total Price') ?></span></span>
                         </th>
                         <th class="a-center cart-price-head" colspan="1">
                             <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
@@ -54,33 +79,57 @@
                     </thead>
                     <tbody>
                     <?php
+                        $totalPointEarn = 0;
+                        $totalPrice = 0;
                         foreach ($collection as $item) {
                             $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                            $pointEarn =  $this->getPointEarning($product);
+                            $totalPointEarn += $pointEarn * $item->getQty();
+                            $itemPrice = $product->getFinalPrice()*$item->getQty();
+                            $totalPrice += $itemPrice;
                             ?>
                             <tr>
-                                <td><span class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($product,'small_image')->resize(100); ?>" /></span>
-                                    <p class="product-name"><strong><?php echo $product->getName() ?></strong></p></td>
+                                <td><a href="<?php echo $product->getProductUrl(true);?>" target="_blank" class="product-image">
+                                        <img src="<?php echo $this->helper('catalog/image')->init($product,'small_image')->resize(100); ?>" /></a>
+                                    <a href="<?php echo $product->getProductUrl(true);?>" target="_blank" class="product-name">
+                                        <strong><?php echo $product->getName() ?></strong></a></td>
                                 <td class="a-center"><input class="product-qty" name="<?php echo $product->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
+                                <td class="a-center"><?php echo $pointEarn * $item->getQty();?></td>
                                 <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice(), true, false); ?></p></td>
-                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getProductId()) ?>" class="product-price a-center"><?php echo $this->__('Delete'); ?></a></td>
+                                <td class="a-center"><p class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p></td>
+                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getProductId()) ?>" class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a></td>
                             </tr>
                             <?php
                         }
                     ?>
                     </tbody>
                 </table>
-                <button class="button btn-cart" type="submit">
-                    <span><span><?php echo $this->__('Save Items') ?></span></span>
-                </button>
+                <div class="total-trubox">
+                    <p><?php echo $this->__('Total Profit Points <span>%s</span>', Mage::helper('rewardpoints/point')->format($totalPointEarn)) ?></p>
+                    <p><?php echo $this->__('Total Price <span>%s</span>', Mage::helper('core')->currency($totalPrice, true, false)) ?></p>
+                </div>
+                <div class="buttons-set">
+                    <button class="button btn-cart" type="submit">
+                        <span><span><?php echo $this->__('Save Items') ?></span></span>
+                    </button>
+                </div>
             </form>
+            <?php } else {?>
+                <p><?php echo $this->__('No products found');?></p>
+            <?php }?>
         </div>
     </div>
-    <div class="info-summary trubox-address">
-        <?php $address = $this->getAddressTruBox();
-//            print_r($address->getFax());
+    <hr class="share_separate">
+    <div class="trubox-address">
+        <?php
+            $shipping_address = $this->getShippingAddressTruBox();
+            $billing_address = $this->getBillingAddressTruBox();
+            $regions = Mage::getModel('directory/country')->load('US')->getRegions();
         ?>
-        <h4><?php echo $this->__('Trubox Address') ?></h4>
-        <form class="items" action="<?php echo $this->saveAddressUrl() ?>" method="POST">
+        <h2 class="trubox-header"><?php echo $this->__('Trubox Address') ?></h2>
+        <form class="items" id="trubox-shipping-address" action="<?php echo $this->saveAddressUrl() ?>" method="POST">
+            <h2 class="legend"><?php echo $this->__('Billing Address') ?></h2>
+            <!-- BILLING ADDRESS -->
             <div class="fieldsets">
                 <ul class="form-list">
                     <li class="fields">
@@ -88,24 +137,24 @@
                             <div class="field name-firstname">
                                 <label for="firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
                                 <div class="input-box">
-                                    <input type="text" id="firstname" name="firstname" value="<?php if ($address->getFirstname()) echo $address->getFirstname(); ?>"
+                                    <input type="text" id="firstname" name="billing[firstname]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address->getFirstname()) echo $billing_address->getFirstname(); ?>"
                                            title="<?php echo $this->__('First Name') ?>" maxlength="255" class="input-text required-entry">
                                 </div>
                             </div>
                             <div class="field name-lastname">
                                 <label for="lastname" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
                                 <div class="input-box">
-                                    <input type="text" id="lastname" name="lastname" value="<?php if ($address->getLastname()) echo $address->getLastname();?>"
+                                    <input type="text" id="lastname" name="billing[lastname]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address->getLastname()) echo $billing_address->getLastname();?>"
                                            title="<?php echo $this->__('Last Name') ?>" maxlength="255" class="input-text required-entry">
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li class="fields">
-                        <div class="field">
+                        <div class="wide">
                             <label for="telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
                             <div class="input-box">
-                                <input type="tel" name="telephone" value="<?php if ($address->getTelephone()) echo $address->getTelephone();?>"
+                                <input type="tel" name="billing[telephone]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address->getTelephone()) echo $billing_address->getTelephone();?>"
                                        title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" id="telephone">
                             </div>
                         </div>
@@ -117,14 +166,14 @@
                     <li class="wide">
                         <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
                         <div class="input-box">
-                            <input type="text" name="street" value="<?php if ($address->getStreet()) echo $address->getStreet();?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text  required-entry">
+                            <input type="text" name="billing[street]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address['street']) echo $billing_address['street'];?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text  required-entry">
                         </div>
                     </li>
                     <li class="fields">
                         <div class="field">
                             <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
                             <div class="input-box">
-                                <input type="text" name="zipcode" value="<?php if ($address->getZipcode()) echo $address->getZipcode();?>" title="Zip/Postal Code" id="zip" class="input-text validate-zip-international  required-entry">
+                                <input type="text" name="billing[zipcode]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address->getZipcode()) echo $billing_address->getZipcode();?>" title="Zip/Postal Code" id="zip" class="input-text validate-zip-international  required-entry">
                             </div>
                         </div>
                         <div class="field">
@@ -138,22 +187,126 @@
                         <div class="field">
                             <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
                             <div class="input-box">
-                                <input type="text" name="city" value="<?php if ($address->getCity()) echo $address->getCity();?>" title="City" class="input-text  required-entry" id="city">
+                                <input type="text" name="billing[city]" value="<?php if ($billing_address != null && $billing_address->getId() && $billing_address->getCity()) echo $billing_address->getCity();?>" title="City" class="input-text  required-entry" id="city">
                             </div>
                         </div>
                         <div class="field">
                             <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
-                            <div class="state-section"><input type='text' name='state' class='state input-text required-entry' value="" /></div>
+
+                            <div class="state-section">
+                                <select name="billing[region]" id="billing_region"  class="state input-text required-entry">
+                                    <?php
+                                        foreach($regions as $region)
+                                        {
+                                            if($billing_address != null && $billing_address->getId() && $billing_address->getRegionId() && $billing_address->getRegionId() == $region->getId())
+                                                echo "<option value=".$region['name']." title=".$region->getId()." selected='selected'>".$region['name'] . "</option>";
+                                            else
+                                                echo "<option value=".$region['name']." title=".$region->getId().">".$region['name'] . "</option>";
+                                        }
+                                    ?>
+                                </select>
+                                <input type="hidden" id="billing_region_id" name="billing[region_id]"
+                                       value="<?php if($billing_address != null && $billing_address->getId() && $billing_address->getRegionId()) echo $billing_address->getRegionId(); ?>" />
+                            </div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <button class="button btn-cart" type="submit">
-                <span><span><?php echo $this->__('Save Address') ?></span></span>
-            </button>
+            <!-- SHIPPING ADDRESS -->
+            <h2 class="legend shipping"><?php echo $this->__('Shipping Address') ?></h2>
+            <div class="fieldsets">
+                <ul class="form-list">
+                    <li class="fields">
+                        <div class="customer-name-middlename">
+                            <div class="field name-firstname">
+                                <label for="firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="firstname" name="shipping[firstname]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getFirstname()) echo $shipping_address->getFirstname(); ?>"
+                                           title="<?php echo $this->__('First Name') ?>" maxlength="255" class="input-text required-entry">
+                                </div>
+                            </div>
+                            <div class="field name-lastname">
+                                <label for="lastname" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
+                                <div class="input-box">
+                                    <input type="text" id="lastname" name="shipping[lastname]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getLastname()) echo $shipping_address->getLastname();?>"
+                                           title="<?php echo $this->__('Last Name') ?>" maxlength="255" class="input-text required-entry">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="wide">
+                            <label for="telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                            <div class="input-box">
+                                <input type="tel" name="shipping[telephone]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getTelephone()) echo $shipping_address->getTelephone();?>"
+                                       title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" id="telephone">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="fieldsets">
+                <ul class="form-list">
+                    <li class="wide">
+                        <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="shipping[street]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getStreet()) echo $shipping_address->getStreet();?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text  required-entry">
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="shipping[zipcode]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getZipcode()) echo $shipping_address->getZipcode();?>" title="Zip/Postal Code" id="zip" class="input-text validate-zip-international  required-entry">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                            <div class="input-box">
+                                <?php echo $this->getCountryHtmlSelect('shipping') ?>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="shipping[city]" value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getCity()) echo $shipping_address->getCity();?>" title="City" class="input-text  required-entry" id="city">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                            <div class="state-section">
+                                <div class="state-section">
+                                    <select name="shipping[region]" id="shipping_region"  class="state input-text required-entry">
+                                        <?php
+                                        foreach($regions as $region)
+                                        {
+                                            if($shipping_address != null && $shipping_address->getId() && $shipping_address->getRegionId() && $shipping_address->getRegionId() == $region->getId())
+                                                echo "<option value=".$region['name']." title=".$region->getId()." selected='selected'>".$region['name'] . "</option>";
+                                            else
+                                                echo "<option value=".$region['name']." title=".$region->getId().">".$region['name'] . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <input type="hidden" id="shipping_region_id" name="shipping[region_id]"
+                                           value="<?php if($shipping_address != null && $shipping_address->getId() && $shipping_address->getRegionId()) echo $shipping_address->getRegionId(); ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="buttons-set">
+                <p class="required"><?php echo $this->__('* Required Fields');?></p>
+                <button class="button btn-cart" type="submit">
+                    <span><span><?php echo $this->__('Save Address') ?></span></span>
+                </button>
+            </div>
         </form>
     </div>
-    <div class="info-summary trubox-payment">
+    <hr class="share_separate">
+    <div class="trubox-payment">
         <?php
             $payment = $this->getPaymentTruBox();
             $paymentList = array('AE' => 'American Express', 'VI' => 'Visa', 'MC' => 'MasterCard', 'DI' => 'Discover' );
@@ -166,9 +319,9 @@
                 $yearList[$yearNow + $i] = $yearNow + $i;
             }
         ?>
-        <h4><?php echo $this->__('Trubox Payment') ?></h4>
+        <h2 class="trubox-header"><?php echo $this->__('Trubox Payment') ?></h2>
         <div class="fieldsets">
-            <form class="items" action="<?php echo $this->savePaymentUrl() ?>" method="POST">
+            <form class="items" id="trubox-payment-information" action="<?php echo $this->savePaymentUrl() ?>" method="POST">
                 <ul class="form-list" id="payment_form_ccsave">
                     <li>
                         <label for="ccsave_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
@@ -181,7 +334,7 @@
                         <label for="ccsave_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
                         <div class="input-box">
                             <select id="ccsave_cc_type" name="card_type" title="Credit Card Type" class="required-entry validate-cc-type-select">
-                                <option value="">--Please Select--</option>
+                                <option value=""><?php echo $this->__('--Please Select--');?></option>
                                 <?php
                                     foreach ($paymentList as $k=>$v) {
                                  ?>
@@ -200,57 +353,110 @@
                                        echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?>">
                         </div>
                     </li>
-                    <li>
-                        <label for="ccsave_expiration" class="required"><em>*</em>Expiration Date</label>
-                        <div class="input-box">
-                            <div class="v-fix">
-                                <select id="ccsave_expiration" name="month_expire" class="month validate-cc-exp required-entry">
-                                    <option value="" selected="selected"><?php echo $this->__('Month') ?></option>
-                                    <?php
-                                    foreach ($monthList as $k=>$v) {
-                                        ?>
-                                        <option value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="ccsave_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date');?></label>
+                            <div class="input-box">
+                                <div class="v-fix">
+                                    <select id="ccsave_expiration" name="month_expire" class="month validate-cc-exp required-entry">
+                                        <option value="" selected="selected"><?php echo $this->__('Month') ?></option>
                                         <?php
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="v-fix">
-                                <select id="ccsave_expiration_yr" name="year_expire" class="year required-entry">
-                                    <option value=""><?php echo $this->__('Year') ?></option>
-                                    <?php
-                                    foreach ($yearList as $k=>$v) {
+                                        foreach ($monthList as $k=>$v) {
+                                            ?>
+                                            <option value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                            <?php
+                                        }
                                         ?>
-                                        <option value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                    </select>
+                                </div>
+                                <div class="v-fix">
+                                    <select id="ccsave_expiration_yr" name="year_expire" class="year required-entry">
+                                        <option value=""><?php echo $this->__('Year') ?></option>
                                         <?php
-                                    }
-                                    ?>
-                                </select>
+                                        foreach ($yearList as $k=>$v) {
+                                            ?>
+                                            <option value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </li>
-                    <li>
-                        <label for="ccsave_cc_cid" class="required"><em>*</em><?php echo $this->__('Billing Zip Code') ?></label>
-                        <div class="input-box">
-                            <div class="v-fix">
-                                <input type="text" title="Card Verification Number" class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid" name="cvv"
-                                       value="<?php if ($payment->getCvv()) echo $payment->getCvv() ?>">
+                        <div class="field">
+                            <label for="ccsave_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+                            <div class="input-box">
+                                <div class="v-fix">
+                                    <input type="text" title="Card Verification Number" class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid" name="cvv"
+                                           value="<?php if ($payment->getCvv()) echo $payment->getCvv() ?>">
+                                    <a href="#" class="cvv-what-is-this">What is this?</a>
+                                </div>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <button class="button btn-cart" type="submit">
-                    <span><span><?php echo $this->__('Save Payment') ?></span></span>
-                </button>
+                <div class="buttons-set">
+                    <p class="required"><?php echo $this->__('* Required Fields');?></p>
+                    <button class="button btn-cart" type="submit">
+                        <span><span><?php echo $this->__('Save Payment') ?></span></span>
+                    </button>
+                </div>
             <form>
         </div>
     </div>
     <?php echo $this->getChildHtml('other') ?>
 </div>
+<div class="tool-tip" id="payment-tool-tip" style="display: none">
+    <div class="btn-close"><a href="#" id="payment-tool-tip-close" title="Close">Close</a></div>
+    <div class="tool-tip-content"><img src="https://trunited.com/skin/frontend/base/default/images/cvv.gif" alt="Card Verification Number Visual Reference" title="Card Verification Number Visual Reference"></div>
+</div>
 <script type="text/javascript">
-    jQuery('#country-trubox').change(function () {
-        console.log(jQuery('#country-trubox')[0].selectedOptions[0].value);
-        var countryCode = jQuery('#country-trubox')[0].selectedOptions[0].value;
+    var trubox_items = new VarienForm('trubox-items', true);
+    var trubox_shipping_address = new VarienForm('trubox-shipping-address', true);
+    var trubox_billing_address = new VarienForm('trubox-billing-address', true);
+    var trubox_payment_information = new VarienForm('trubox-payment-information', true);
+
+    $j = jQuery.noConflict();
+    $j('.page-title').focus();
+
+    $j('.delete-trubox-items').click(function(){
+        var rs = confirm('<?php echo $this->__('Are you sure?');?>');
+        if(!rs)
+            return false;
+    });
+
+    $j('#billing_region').change(function(){
+        var opt = $j(this).find('option:selected');
+        $j('#billing_region_id').val(opt.attr('title'));
+    });
+
+    $j('#shipping_region').change(function(){
+        var opt = $j(this).find('option:selected');
+        $j('#shipping_region_id').val(opt.attr('title'));
+    });
+
+    function toggleToolTip(event){
+        if($('payment-tool-tip')){
+            console.log(Event.pointerY(event));
+            $('payment-tool-tip').setStyle({
+//                top: '200px'//,
+                top: (Event.pointerY(event)-560)+'px'//,
+                //left: (Event.pointerX(event)+100)+'px'
+            })
+            $('payment-tool-tip').toggle();
+        }
+        Event.stop(event);
+    }
+    if($('payment-tool-tip-close')){
+        Event.observe($('payment-tool-tip-close'), 'click', toggleToolTip);
+    }
+
+    $$('.cvv-what-is-this').each(function(element){
+        Event.observe(element, 'click', toggleToolTip);
+    });
+
+    jQuery('#country-trubox1').change(function () {
+        var countryCode = jQuery('#country-trubox1')[0].selectedOptions[0].value;
         jQuery.ajax({
             type      : 'POST',
             url       : '<?php echo $this->getRegionHtml() ?>',

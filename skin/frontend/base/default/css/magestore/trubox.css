@@ -25,11 +25,141 @@
 
 }
 .trubox-page .product-qty { width: 35px; text-align: center; }
-.trubox-page .button { clear: both; display: block; margin-top: 30px;}
+.trubox-page .button { clear: both; display: block;}
 .trubox-address { margin-top: 25px; margin-bottom: 25px; }
 .trubox-page .product-image { float: left; display: block; }
 .trubox-page .product-name {
     display: block;
     float: left;
     padding: 30px 10px;
+}
+
+.trubox-page .info-summary img
+{
+    width: 200px;
+}
+
+.trubox-page .share_separate
+{
+    clear: both;
+    padding: 10px 0;
+    /*margin-top: 80px;*/
+}
+
+.trubox-page .info-summary
+{
+    float: left;
+    margin-right: 20px;
+}
+
+.trubox-page .page-description
+{
+    margin: 10px;
+}
+
+.trubox-page .trubox-header
+{
+    color: #313131;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.trubox-page form
+{
+    display: block;
+    border: 1px solid #ececec;
+    border-radius: 0;
+    background: #fff;
+    padding: 35px 25px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    border-top: 4px solid #65829d;
+}
+
+.trubox-page form h2.legend
+{
+    color: #65829d;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    font-size: 16px;
+}
+
+.trubox-page form h2.shipping
+{
+    margin-top: 35px;
+}
+
+.trubox-page .cart-table tbody td
+{
+    padding: 5px;
+}
+
+.trubox-page form .product-image img
+{
+    min-width: 60px;
+    max-width: 60px;
+}
+
+.trubox-page .product-name
+{
+    padding: 15px 0 15px 15px;
+}
+
+.trubox-page a:hover
+{
+    cursor: pointer;
+}
+
+.trubox-page .total-trubox
+{
+    margin: 20px 10px 0;
+    float: right;
+    text-align: right;
+    color: #313131;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.trubox-page .total-trubox p span
+{
+    min-width: 70px;
+    width: 70px;
+    display: inline-block;
+    font-weight: normal;
+}
+
+.trubox-page .name-firstname
+{
+    width: 48% !important;
+}
+
+.trubox-page .name-firstname .input-box input
+{
+    width: 100% !important;
+}
+
+.cvv-what-is-this:hover
+{
+    cursor: help !important;
+}
+
+.addtrubox img{
+    width: 32px;
+    height: 32px;
+}
+
+.addtrubox {
+    right: 53px;
+    position: absolute;
+    margin-top: 2px;
+
+}
+
+.products-grid .actions .addtrubox{
+    border: 0;
+    margin-top: 1px !important;
+}
+
+.products-grid .actions .addtrubox img{
+    width: 36px;
+    height: 36px;
 }

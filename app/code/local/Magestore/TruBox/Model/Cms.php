@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Magestore
  *
@@ -29,16 +30,32 @@
  * @package     Magestore_TruBox
  * @author      Magestore Developer
  */
-class Magestore_TruBox_Model_Address extends Mage_Core_Model_Abstract
+class Magestore_TruBox_Model_Cms
 {
 
-    const ADDRESS_TYPE_BILLING = 1;
-    const ADDRESS_TYPE_SHIPPING = 2;
-
-    public function _construct()
+    public function toOptionArray()
     {
-        parent::_construct();
-        $this->_init('trubox/address');
+        $collection = Mage::getModel('cms/block')->getCollection()
+            ->addFieldToSelect('identifier')
+            ->addFieldToSelect('title')
+            ->setOrder('block_id','desc')
+        ;
+
+        $rs = array();
+        if(sizeof($collection) > 0){
+            foreach($collection as $cms)
+            {
+                $rs[] = array(
+                    'value' => $cms->getIdentifier(),
+                    'label' => $cms->getTitle()
+                );
+            }
+
+
+        }
+
+        return $rs;
+
+
     }
-    
 }

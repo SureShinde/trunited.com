@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<trubox module="trubox" translate="title">
+			<title>My TruBox</title>
+			<sort_order>72</sort_order>
+			<children>
+				<settings module="trubox" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/trubox</action>
+				</settings>
+			</children>
+		</trubox>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<trubox module="trubox" translate="title">
+										<title>My TruBox</title>
+										<sort_order>72</sort_order>
+									</trubox>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<trubox module="trubox" translate="title">
+						<title>My TruBox</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<settings module="trubox" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/trubox</action>
+							</settings>
+						</children>
+					</trubox>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
