@@ -34,7 +34,9 @@ class Auctane_Api_Model_Action_Shipnotify
         $order = $this->_getOrder($xml->OrderID);
         $qtys = $this->_getOrderItemQtys($xml->Items, $order);
         $shipment = $this->_getOrderShipment($order, $qtys);
-
+        Mage::log($request->getParams(), null, 'apiship.log'); //logs the arguments
+        Mage::log($order->getData(), null, 'apiship.log'); //logs the arguments
+        Mage::log($shipment->getData(), null, 'apiship.log'); //logs the arguments
         // this is where tracking is actually added
         $track = Mage::getModel('sales/order_shipment_track')
                 ->setNumber($xml->TrackingNumber)

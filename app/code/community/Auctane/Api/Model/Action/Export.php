@@ -29,6 +29,7 @@ class Auctane_Api_Model_Action_Export
     public function process(Mage_Core_Controller_Request_Http $request, Mage_Core_Controller_Response_Http $response)
     {
         // In case store is part of URL path use it to choose config.
+        Mage::log($request->getParams(), null, 'apiexport.log'); //logs the arguments
         $store = $request->get('store');
         if ($store)
             $store = Mage::app()->getStore($store);

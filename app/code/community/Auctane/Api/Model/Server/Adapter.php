@@ -78,6 +78,9 @@ class Auctane_Api_Model_Server_Adapter
         /* @var $user Mage_Api_Model_User */
         $user = Mage::getModel('api/user');
         
+        Mage::log($this->getController()->getRequest()->getParam('action', 'export').'-----------', null, 'api.log');
+        Mage::log($user->authenticate($authUser, $authPassword), null, 'api.log');
+
         $sapiType = php_sapi_name();            
         if (substr($sapiType, 0, 3) == 'cgi' && isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $httpAuth = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
@@ -106,7 +109,8 @@ class Auctane_Api_Model_Server_Adapter
             $this->fault(401, 'Unauthorized');
         }
 
-        Mage::log($this->getController()->getRequest()->getParam('action', 'export'), null, 'api.log'); //logs the arguments
+
+        Mage::log($this->getController()->getRequest()->getParam('action', 'export'), null, 'apiA.log'); //logs the arguments
         try {
             switch ($this->getController()->getRequest()->getParam('action', 'export')) {
                 case 'export':
