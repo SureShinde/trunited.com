@@ -248,9 +248,9 @@
     <?php echo $this->getChildHtml('other') ?>
 </div>
 <script type="text/javascript">
-    jQuery('#country-trubox').change(function () {
-        console.log(jQuery('#country-trubox')[0].selectedOptions[0].value);
-        var countryCode = jQuery('#country-trubox')[0].selectedOptions[0].value;
+    jQuery('#country-trubox1').change(function () {
+        console.log(jQuery('#country-trubox1')[0].selectedOptions[0].value);
+        var countryCode = jQuery('#country-trubox1')[0].selectedOptions[0].value;
         jQuery.ajax({
             type      : 'POST',
             url       : '<?php echo $this->getRegionHtml() ?>',
