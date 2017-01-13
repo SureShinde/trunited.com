@@ -41,9 +41,7 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getTruboxLabel()
     {
-        $customer = Mage::getSingleton('customer/session')->getCustomer();
-        if ($customer->getEmail() == 'dev@trunited.vn')
-            return $this->__('My TruBox');
+        return $this->__('My TruBox');
     }
 
     public function getCurrentTruBoxId() {
