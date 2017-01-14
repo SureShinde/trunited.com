@@ -239,8 +239,12 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     public function addTruBoxAction() {
         $productId = $this->getRequest()->getParam('id');
         $product = Mage::getModel('catalog/product')->load($productId);
+
         $super_attributes = $this->getRequest()->getParam('super_attribute');
         $str_encode = json_encode($super_attributes);
+
+        $options = $this->getRequest()->getParam('options');
+        $str_option = json_encode($options);
 
         try {
 
@@ -250,59 +254,52 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 );
             }
 
-
-            if($str_encode == "null")
+            $flag = false;
+            if ($str_encode == "null" && $product->getTypeId() == 'configurable')
             {
-                $flag = false;
+                $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                foreach ($options as $_option) {
+                    $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
 
-                if($product->getTypeId() == 'configurable'){
-                    $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                    if ($attr->getId() && $attr->getIsRequired()) {
+                        $flag = true;
+                        break;
+                    }
+                }
 
+                if ($flag) {
+                    Mage::getSingleton('core/session')->addError(
+                        Mage::helper('trubox')->__('Please specify product option(s).')
+                    );
+                    $this->_redirectUrl($product->getProductUrl());
+                    return;
+                }
+            }
 
-                    foreach ($options as $_option){
-                        $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
-                       
-                        if($attr->getId() && $attr->getIsRequired())
-                        {
-                            $flag = true;
+            if ($str_option == "null" && $product->getHasOptions()) {
+                $_flag = false;
+                if ($product->getHasOptions()) {
+                    foreach ($product->getOptions() as $o) {
+                        if ($o->getIsRequire()) {
+                            $_flag = true;
                             break;
                         }
                     }
-
-                    if($flag){
-                        Mage::getSingleton('core/session')->addError(
-                            Mage::helper('trubox')->__('Please specify product option(s).')
-                        );
-                        $this->_redirectUrl($product->getProductUrl());
-                        return;
-                    }
-                } else {
-                    // if($product->getHasOptions())
-//                    foreach ($product->getOptions() as $o) {
-//                        $optionType = $o->getType();
-//                        echo 'Type = '.$optionType;
-//
-//                        if ($optionType == 'drop_down') {
-//                            $values = $o->getValues();
-//
-//                            foreach ($values as $k => $v) {
-//                                print_r($v);
-//                            }
-//                        }
-//                        else {
-//                            print_r($o);
-//                        }
-//                    }
                 }
 
+                if ($_flag) {
+                    Mage::getSingleton('core/session')->addError(
+                        Mage::helper('trubox')->__('Please specify product option(s).')
+                    );
+                    $this->_redirectUrl($product->getProductUrl());
+                    return;
+                }
             }
 
             $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
             $truBox = Mage::getModel('trubox/trubox');
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $customerId = $customer->getId();
-
-            
 
             $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
             if (!$truBoxId) {
@@ -313,7 +310,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $checkItem = $truBoxItems->getCollection()
                 ->addFieldToFilter('trubox_id', $truBoxId)
                 ->addFieldToFilter('product_id', $productId)
-                ->addFieldToFilter('option_params', $str_encode)
+                ->addFieldToFilter('option_params', $str_encode != "null" ? $str_encode : $str_option)
                 ->getFirstItem()
             ;
 
@@ -322,14 +319,16 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                     'trubox_id' => $truBoxId,
                     'product_id' => $productId,
                     'qty' => 1,
-                    'origin_params' => $str_encode,
-                    'option_params' => $str_encode
+                    'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
+                    'option_params' => $str_encode != "null" ? $str_encode : $str_option
 
                 );
                 $truBoxItems->setData($itemData)->save();
             } else {
 
-                if (strcasecmp($checkItem->getOptionParams(), $str_encode) == 0) {
+                if ((strcasecmp($checkItem->getOptionParams(), $str_encode) == 0 && $str_encode != "null")
+                    || (strcasecmp($checkItem->getOptionParams(), $str_option) == 0 && $str_option != "null")
+                ) {
                     $qtyCheckItem = $checkItem->getQty();
                     $checkItem->setQty($qtyCheckItem + 1);
                     $checkItem->save();
@@ -339,14 +338,11 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                         'trubox_id' => $truBoxId,
                         'product_id' => $productId,
                         'qty' => 1,
-                        'origin_params' => $str_encode,
-                        'option_params' => $str_encode
+                        'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
+                        'option_params' => $str_encode != "null" ? $str_encode : $str_option,
 
                     );
-                    if ($super_attributes != null) {
-                        $itemData['origin_params'] = $str_encode;
-                        $itemData['option_params'] = $str_encode;
-                    }
+
                     $truBoxItems->setData($itemData)->save();
                 }
             }
