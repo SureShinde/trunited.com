@@ -412,10 +412,12 @@ var i = 0;
                         <?php if(Mage::getStoreConfig("porto_settings/category/compare", $code) && $_compareUrl=$this->getAddToCompareUrl($_product)): ?>
                             <a href="<?php if(Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)):?>javascript:void(0)<?php else: ?><?php echo $_compareUrl ?><?php endif; ?>" <?php if(Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)):?>onclick="ajaxCompare(this,'<?php echo $_compareUrl ?>','<?php echo $_product->getId()?>');"<?php endif; ?> class="comparelink" title="<?php echo $this->__('Add to Compare') ?>"><i class="icon-compare"></i></a>
                         <?php endif; ?>
+                        <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
                         <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>" class="addtrubox addtowishlist"
                            title="<?php echo $this->__('Add to TruBox') ?>">
                             <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" />
                         </a>
+                        <?php }?>
                         <div class="clearer"></div>
                     </div>
                     <?php endif; ?>
@@ -448,14 +450,3 @@ var i = 0;
     </div>
 </div>
 <?php endif; ?>
-
-<script type="text/javascript">
-    var product_add_form = VarienForm('product_addtocart_form',true);
-    $j = jQuery.noConflict();
-    $j('.addtrubox').click(function(){
-        alert('a');
-        return false;
-        console.log(product_add_form.validator && !product_add_form.validator.validate());
-        return false;
-    });
-</script>

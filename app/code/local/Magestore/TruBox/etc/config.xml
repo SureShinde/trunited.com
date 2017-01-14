@@ -148,6 +148,9 @@
             <general>
                 <enable>1</enable>
                 <cms_description>trubox_description</cms_description>
+                <enable_testing_mode>0</enable_testing_mode>
+                <email_testing_mode>dev@trunited.vn</email_testing_mode>
+                <enable_orders_section>1</enable_orders_section>
             </general>
         </trubox>
     </default>

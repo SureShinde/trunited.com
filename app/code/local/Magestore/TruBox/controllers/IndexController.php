@@ -50,6 +50,14 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 );
                 $this->_redirect('customer/account/login');
                 $this->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
+            } else {
+                if (!Mage::helper('trubox')->isCurrentCheckingCustomer()) {
+                    Mage::getSingleton('core/session')->addNotice(
+                        Mage::helper('trubox')->__('You don\'t have permission for this action')
+                    );
+                    $this->_redirect('customer/account/');
+                    $this->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
+                }
             }
         }
     }
@@ -88,7 +96,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             if ($billing_model == null) {
                 $billing_model = Mage::getModel('trubox/address');
             }
-            $billing_model->setData($billing);
+            $billing_model->addData($billing);
             $billing_model->save();
             /* end save data to billing address */
 
@@ -101,7 +109,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             if ($shipping_model == null) {
                 $shipping_model = Mage::getModel('trubox/address');
             }
-            $shipping_model->setData($shipping);
+            $shipping_model->addData($shipping);
             $shipping_model->save();
             /* end save data to shipping address */
 
@@ -131,7 +139,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             if($payment == null)
                 $payment = Mage::getModel('trubox/payment');
 
-            $payment->setData($address);
+            $payment->addData($address);
             $payment->save();
 
             Mage::getSingleton('core/session')->addSuccess(
@@ -230,12 +238,72 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
     public function addTruBoxAction() {
         $productId = $this->getRequest()->getParam('id');
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $truBox = Mage::getModel('trubox/trubox');
-        $customer = Mage::getSingleton('customer/session')->getCustomer();
-        $customerId = $customer->getId();
+        $product = Mage::getModel('catalog/product')->load($productId);
+        $super_attributes = $this->getRequest()->getParam('super_attribute');
+        $str_encode = json_encode($super_attributes);
 
-        try{
+        try {
+
+            if (!$product->getId()){
+                throw new Exception(
+                    Mage::helper('trubox')->__('Product does not exist')
+                );
+            }
+
+
+            if($str_encode == "null")
+            {
+                $flag = false;
+
+                if($product->getTypeId() == 'configurable'){
+                    $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+
+
+                    foreach ($options as $_option){
+                        $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
+                       
+                        if($attr->getId() && $attr->getIsRequired())
+                        {
+                            $flag = true;
+                            break;
+                        }
+                    }
+
+                    if($flag){
+                        Mage::getSingleton('core/session')->addError(
+                            Mage::helper('trubox')->__('Please specify product option(s).')
+                        );
+                        $this->_redirectUrl($product->getProductUrl());
+                        return;
+                    }
+                } else {
+                    // if($product->getHasOptions())
+//                    foreach ($product->getOptions() as $o) {
+//                        $optionType = $o->getType();
+//                        echo 'Type = '.$optionType;
+//
+//                        if ($optionType == 'drop_down') {
+//                            $values = $o->getValues();
+//
+//                            foreach ($values as $k => $v) {
+//                                print_r($v);
+//                            }
+//                        }
+//                        else {
+//                            print_r($o);
+//                        }
+//                    }
+                }
+
+            }
+
+            $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
+            $truBox = Mage::getModel('trubox/trubox');
+            $customer = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customer->getId();
+
+            
+
             $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
             if (!$truBoxId) {
                 $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
@@ -245,18 +313,43 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $checkItem = $truBoxItems->getCollection()
                 ->addFieldToFilter('trubox_id', $truBoxId)
                 ->addFieldToFilter('product_id', $productId)
+                ->addFieldToFilter('option_params', $str_encode)
                 ->getFirstItem()
             ;
 
             if (!$checkItem->getItemId()) {
-                $itemData = array('trubox_id' => $truBoxId, 'product_id' => $productId, 'qty' => 1);
+                $itemData = array(
+                    'trubox_id' => $truBoxId,
+                    'product_id' => $productId,
+                    'qty' => 1,
+                    'origin_params' => $str_encode,
+                    'option_params' => $str_encode
+
+                );
                 $truBoxItems->setData($itemData)->save();
             } else {
-                $qtyCheckItem = $checkItem->getQty();
-                $checkItem->setQty($qtyCheckItem + 1)->save();
-            }
 
-            $product = Mage::getModel('catalog/product')->load($productId);
+                if (strcasecmp($checkItem->getOptionParams(), $str_encode) == 0) {
+                    $qtyCheckItem = $checkItem->getQty();
+                    $checkItem->setQty($qtyCheckItem + 1);
+                    $checkItem->save();
+                } else {
+                    $truBoxItems = Mage::getModel('trubox/item');
+                    $itemData = array(
+                        'trubox_id' => $truBoxId,
+                        'product_id' => $productId,
+                        'qty' => 1,
+                        'origin_params' => $str_encode,
+                        'option_params' => $str_encode
+
+                    );
+                    if ($super_attributes != null) {
+                        $itemData['origin_params'] = $str_encode;
+                        $itemData['option_params'] = $str_encode;
+                    }
+                    $truBoxItems->setData($itemData)->save();
+                }
+            }
 
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper('trubox')->__('%s was added to your TruBox.',$product->getName())
@@ -279,6 +372,19 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             ALTER TABLE {$setup->getTable('trubox/address')} ADD `address_type` int(10) DEFAULT 2;
             ALTER TABLE {$setup->getTable('trubox/address')} ADD `region` text DEFAULT NULL ;
             ALTER TABLE {$setup->getTable('trubox/address')} ADD `region_id` int(10);
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb2Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `origin_params` text DEFAULT NULL;
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `option_params` text DEFAULT NULL;
 		");
         $installer->endSetup();
         echo "success";

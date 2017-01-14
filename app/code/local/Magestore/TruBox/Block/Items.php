@@ -36,6 +36,26 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
 
     CONST COUNTRY_DEFAULT_SHIPING = 'US';
     protected $_address;
+
+    //construct function
+    public function __construct() {
+        parent::__construct();
+        $collection = $this->getListOrders();
+        $this->setCollection($collection);
+    }
+
+    //prepare layout
+    public function _prepareLayout() {
+        parent::_prepareLayout();
+        $pager = $this->getLayout()->createBlock('page/html_pager', 'trubox.pager')->setCollection($this->getCollection());
+        $this->setChild('pager', $pager);
+        return $this;
+    }
+
+    public function getPagerHtml() {
+        return $this->getChildHtml('pager');
+    }
+
     /**
      * check trubox system is enabled or not
      *
@@ -216,6 +236,11 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
             return Mage::getBaseUrl('media') . 'trubox' . DS . $logo;
         else
             return null;
+    }
+
+    public function getListOrders()
+    {
+        return Mage::helper('trubox')->getOrdersByCustomer();
     }
 
 }

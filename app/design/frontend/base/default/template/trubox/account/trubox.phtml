@@ -28,6 +28,7 @@
 <?php
     $collection = $this->getTruBox();
     $logo = $this->getLogo();
+    $orders = $this->getCollection();
 ?>
 <div class="trubox-page">
     <?php echo $this->getChildHtml('global_messages'); ?>
@@ -87,12 +88,45 @@
                             $totalPointEarn += $pointEarn * $item->getQty();
                             $itemPrice = $product->getFinalPrice()*$item->getQty();
                             $totalPrice += $itemPrice;
+                            $option_params = json_decode($item->getOptionParams(), true);
                             ?>
                             <tr>
-                                <td><a href="<?php echo $product->getProductUrl(true);?>" target="_blank" class="product-image">
+                                <td><a href="<?php echo $product->getProductUrl(true);?>" class="product-image">
                                         <img src="<?php echo $this->helper('catalog/image')->init($product,'small_image')->resize(100); ?>" /></a>
-                                    <a href="<?php echo $product->getProductUrl(true);?>" target="_blank" class="product-name">
-                                        <strong><?php echo $product->getName() ?></strong></a></td>
+                                    <a href="<?php echo $product->getProductUrl(true);?>" class="product-name">
+                                        <strong><?php echo $product->getName() ?></strong></a>
+                                    <?php
+                                        $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                                        if ($_options && sizeof($option_params) > 0):?>
+                                        <dl class="item-options">
+                                            <?php foreach ($_options as $_option) : ?>
+                                                <?php
+                                                    $_attribute_value = 0;
+                                                    foreach($option_params as $k=>$v){
+                                                        if($k == $_option['attribute_id']){
+                                                            $_attribute_value = $v;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if($_attribute_value > 0){
+                                                ?>
+                                                <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                                <dd>
+                                                    <?php
+                                                        foreach($_option['values'] as $val){
+                                                            if($val['value_index'] == $_attribute_value){
+                                                                echo $val['default_label'];
+                                                                break;
+                                                            }
+                                                        }
+                                                    ?>
+                                                </dd>
+                                                <?php }?>
+                                            <?php endforeach; ?>
+                                        </dl>
+                                    <?php endif;?>
+                                </td>
                                 <td class="a-center"><input class="product-qty" name="<?php echo $product->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
                                 <td class="a-center"><?php echo $pointEarn * $item->getQty();?></td>
                                 <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice(), true, false); ?></p></td>
@@ -120,6 +154,59 @@
         </div>
     </div>
     <hr class="share_separate">
+    <?php if(Mage::helper('trubox')->isEnableOrdersSection()){?>
+    <div class="box-account box-info box-trubox-summary">
+        <div class="trubox-orders">
+            <h2 class="trubox-header"><?php echo $this->__('Trubox Orders') ?></h2>
+            <?php if(sizeof($orders) > 0){?>
+                <form action="#" method="post">
+                    <?php echo $this->getPagerHtml() ?> <!--Add Paging-->
+                    <table id="trubox-orders" class="data-table">
+                        <colgroup>
+                            <col width="1">
+                            <col>
+                            <col width="1">
+                            <col width="1">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr class="first last">
+                            <th><?php echo $this->__('Order #') ?></th>
+                            <th><?php echo $this->__('Date') ?></th>
+                            <th><?php echo $this->__('Ship To') ?></th>
+                            <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('Order Status') ?></span></th>
+                            <th><?php echo $this->__('Action') ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php $_odd = ''; ?>
+                        <?php foreach ($orders as $_order): ?>
+                            <tr>
+                                <td><?php echo $_order->getRealOrderId() ?></td>
+                                <td><span class="nobr"><?php echo $_order->getCreatedAtStoreDate(); ?></span></td>
+                                <td><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                                <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                                <td><em><?php echo $_order->getStatusLabel() ?></em></td>
+                                <td class="a-center">
+                                        <span class="nobr">
+                                            <a href="<?php echo Mage::getUrl('sales/order/view',array('order_id'=>$_order->getId())); ?>"><?php echo $this->__('View Order') ?></a>
+                                        </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <script type="text/javascript">decorateTable('trubox-orders')</script>
+                </form>
+
+            <?php } else {?>
+                <p><?php echo $this->__('No orders found');?></p>
+            <?php }?>
+        </div>
+    </div>
+    <hr class="share_separate">
+    <?php }?>
     <div class="trubox-address">
         <?php
             $shipping_address = $this->getShippingAddressTruBox();
