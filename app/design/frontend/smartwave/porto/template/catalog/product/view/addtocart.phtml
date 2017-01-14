@@ -34,8 +34,10 @@
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
         <?php echo $this->getChildHtml('', true, true) ?>
     </div>
+    <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
     <a href="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>" class="addtrubox trubox_btn" title="<?php echo $this->__('Add to TruBox') ?>">
         <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" /></a>
+    <?php }?>
 <?php endif; ?>
 <script type="text/javascript">
     $j = jQuery.noConflict();
@@ -45,7 +47,12 @@
             if(productAddToCartForm1.validator && !productAddToCartForm1.validator.validate())
             {
                 return false;
+            } else {
+                var new_url = $j(this).attr('href')+'?'+$j('#product_addtocart_form').serialize();
+                window.location.href = new_url;
             }
+
+            return false;
         });
     });
 

@@ -35,6 +35,36 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const XML_PATH_ENABLE = 'rewardpoints/general/enable';
 
+    public function getEnableTestingMode()
+    {
+        return  Mage::getStoreConfig('trubox/general/enable_testing_mode');
+    }
+
+    public function getEmailTestingMode()
+    {
+        return  Mage::getStoreConfig('trubox/general/email_testing_mode');
+    }
+
+    public function isEnableOrdersSection()
+    {
+        return  Mage::getStoreConfig('trubox/general/enable_orders_section');
+    }
+
+    public function isCurrentCheckingCustomer()
+    {
+        $enable_test_mode = $this->getEnableTestingMode();
+        $email_test_mode = $this->getEmailTestingMode();
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        if($enable_test_mode)
+        {
+            if($customer->getEmail() == $email_test_mode)
+                return true;
+            else
+                return false;
+        } else
+            return true;
+    }
+
     /**
      *
      * @return string
@@ -47,9 +77,23 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
     public function getCurrentTruBoxId() {
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $id = $customer->getId();
-        $truBox = Mage::getModel('trubox/trubox')->getCollection()->addFieldToFilter('status', 'open')
-            ->addFieldToFilter('customer_id', $id)->getFirstItem();
-        $truBoxId = $truBox->getTruboxId();
+        $truBox = Mage::getModel('trubox/trubox')->getCollection()
+            ->addFieldToFilter('status', 'open')
+            ->addFieldToFilter('customer_id', $id)
+            ->getFirstItem()
+        ;
+
+        if($truBox->getId()){
+            $truBoxId = $truBox->getTruboxId();
+        } else {
+            $_truBox = Mage::getModel('trubox/trubox');
+            $_truBox->setData('customer_id', $id);
+            $_truBox->setData('status', 'open');
+            $_truBox->save();
+
+            $truBoxId = $_truBox->getId();
+        }
+
         return $truBoxId;
     }
 
@@ -117,6 +161,23 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
 
+    }
+
+    public function getConfigurableOptionProduct($product)
+    {
+        if($product->getTypeId() == 'configurable')
+            return $product->getTypeInstance(true)->getConfigurableAttributesAsArray($product);
+        else
+            return array();
+    }
+
+    public function getOrdersByCustomer()
+    {
+        return Mage::getResourceModel('sales/order_collection')
+            ->addFieldToSelect('*')
+            ->addFieldToFilter('customer_id',Mage::getSingleton('customer/session')->getCustomer()->getId())
+            ->addFieldToFilter('onestepcheckout_giftwrap_amount', 0)
+            ->setOrder('created_at', 'desc');
     }
 
 }

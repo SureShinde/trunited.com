@@ -60,7 +60,9 @@
                 <block type="rewardpoints/template" name="rewardpoints.dashboard.earn" as="dashboard_earn" template="rewardpoints/account/dashboard/list.phtml">
                     <block type="rewardpoints/account_dashboard_earn" name="dashboard.earn" template="rewardpoints/account/dashboard/earn.phtml" />
                 </block>
+                <block type="page/html_pager" name="trubox_pager"/>
             </block>
+
         </reference>
     </trubox_index_index>
 

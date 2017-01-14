@@ -54,7 +54,7 @@
 
 .trubox-page .page-description
 {
-    margin: 10px;
+    margin: 0 0 10px 0;
 }
 
 .trubox-page .trubox-header
@@ -101,7 +101,7 @@
 
 .trubox-page .product-name
 {
-    padding: 15px 0 15px 15px;
+    padding: 15px 0 0 15px;
 }
 
 .trubox-page a:hover
@@ -162,4 +162,15 @@
 .products-grid .actions .addtrubox img{
     width: 36px;
     height: 36px;
+}
+
+.trubox-page .item-options
+{
+    font-size: 10px;
+    margin: 33px 0 0 76px;
+}
+
+.trubox-page .pager .limiter
+{
+    float: left; !important;
 }
