@@ -10,8 +10,114 @@ class Magestore_TruBox_Adminhtml_ItemsController extends Mage_Adminhtml_Controll
 	}
  
 	public function indexAction(){
+		$this->test();
 		$this->_initAction()
 			->renderLayout();
+	}
+
+	public function test()
+	{
+		$productId  = 170;
+		$store      = Mage::app()->getStore();
+
+		// Start New Sales Order Quote
+		$quote      = Mage::getModel('sales/quote')->setStoreId($store->getId());
+
+
+		//Customer Billing Address Data
+		$billingAddress = array(
+			'firstname' => 'Andrew',
+			'lastname' => 'Garfield',
+			'company' => 'Test',
+			'email' =>  'bluemoon.test15@gmail.com',
+			'street' => '91/2, Sector 2',
+			'city' => 'Kolkata',
+			'region_id' => '17',
+			'region' => 'Federated',
+			'postcode' => '700001',
+			'country_id' => 'US',
+			'telephone' =>  '9876543210',
+			'fax' => '',
+			'customer_password' => '',
+			'confirm_password' =>  '',
+			'save_in_address_book' => '0',
+			'use_for_shipping' => '1',
+		);
+
+
+
+		//Customer Shipping Address Data
+
+		$shippingAddress = array(
+			'firstname' => 'Andrew',
+			'lastname' => 'Garfield',
+			'street' => '91/2, Sector 2',
+			'city' => 'Kolkata',
+			'region' => 'Federated',
+			'region_id' => '17',
+			'postcode' => '700001',
+			'country_id' => 'US',
+			'telephone' => '9876543210',
+		);
+
+
+		$quote      = Mage::getModel('sales/quote')->setStoreId($store->getId());
+
+		//Load Product and add to cart
+		$product    = Mage::getModel('catalog/product')->load($productId);
+		$buyInfo    = array('qty' => 1);
+		$quote->addProduct($product, new Varien_Object($buyInfo));
+
+
+
+
+		// Add Billing Address
+
+		$quote->getBillingAddress()
+			->addData($billingAddress);
+
+
+
+		//Add Shipping Address and set shipping method
+
+		$quote->getShippingAddress()
+			->addData($shippingAddress)
+			->setCollectShippingRates(true)
+			->setShippingMethod('freeshipping_freeshipping')
+			->collectTotals();
+
+
+
+		//Set Customer group As Guest
+
+		$quote->setCheckoutMethod('guest')
+			->setCustomerId(null)
+			->setCustomerEmail($quote->getBillingAddress()->getEmail())
+			->setCustomerIsGuest(true)
+			->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+
+
+
+		//Set Payment method
+
+		$quote->getPayment()->importData(array('method' => 'cashondelivery'));
+		$quote->collectTotals()->save();
+		//Save Order With All details
+		$service = Mage::getModel('sales/service_quote', $quote);
+		$service->submitAll();
+
+		$increment_id = $service->getOrder()->getIncrementId();
+
+
+		Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "1");
+
+		//Send Order Mail
+
+		$order_mail = new Mage_Sales_Model_Order();
+		$order_mail->loadByIncrementId($increment_id);
+		$order_mail->sendNewOrderEmail();
+
+		echo $increment_id;
 	}
 
 	public function editAction() {
@@ -32,8 +138,8 @@ class Magestore_TruBox_Adminhtml_ItemsController extends Mage_Adminhtml_Controll
 			$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item News'), Mage::helper('adminhtml')->__('Item News'));
 
 			$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-			$this->_addContent($this->getLayout()->createBlock('trubox/adminhtml_trubox_edit'))
-				->_addLeft($this->getLayout()->createBlock('trubox/adminhtml_trubox_edit_tabs'));
+			$this->_addContent($this->getLayout()->createBlock('trubox/adminhtml_items_edit'))
+				->_addLeft($this->getLayout()->createBlock('trubox/adminhtml_items_edit_tabs'));
 
 			$this->renderLayout();
 		} else {
@@ -161,16 +267,36 @@ class Magestore_TruBox_Adminhtml_ItemsController extends Mage_Adminhtml_Controll
 		}
 		$this->_redirect('*/*/index');
 	}
+
+	public function massOrderAction() {
+		$truboxIds = $this->getRequest()->getParam('trubox');
+
+		if(!is_array($truboxIds)){
+			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
+		}else{
+			try {
+				foreach ($truboxIds as $truboxId) {
+					$trubox = Mage::getModel('trubox/item')->load($truboxId);
+					$tb = Mage::getModel('trubox/trubox')->load($trubox->getTruboxId());
+					$order = Mage::helper('trubox/order')->createOrder($tb->getCustomerId());
+				}
+				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully created orders', count($truboxIds)));
+			} catch (Exception $e) {
+				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+			}
+		}
+		$this->_redirect('*/*/index');
+	}
   
 	public function exportCsvAction(){
-		$fileName   = 'trubox.csv';
-		$content	= $this->getLayout()->createBlock('trubox/adminhtml_trubox_grid')->getCsv();
+		$fileName   = 'trubox_items.csv';
+		$content	= $this->getLayout()->createBlock('trubox/adminhtml_items_grid')->getCsv();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
 
 	public function exportXmlAction(){
-		$fileName   = 'trubox.xml';
-		$content	= $this->getLayout()->createBlock('trubox/adminhtml_trubox_grid')->getXml();
+		$fileName   = 'trubox_items.xml';
+		$content	= $this->getLayout()->createBlock('trubox/adminhtml_items_grid')->getXml();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
 }

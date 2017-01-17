@@ -1,48 +1,39 @@
 <?php
 
-class Magestore_TruBox_Block_Adminhtml_TruBox_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+class Magestore_TruBox_Block_Adminhtml_Items_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-	protected function _prepareForm(){
-		$form = new Varien_Data_Form();
-		$this->setForm($form);
-		
-		if (Mage::getSingleton('adminhtml/session')->getTruBoxData()){
-			$data = Mage::getSingleton('adminhtml/session')->getTruBoxData();
-			Mage::getSingleton('adminhtml/session')->setTruBoxData(null);
-		}elseif(Mage::registry('trubox_data'))
-			$data = Mage::registry('trubox_data')->getData();
-		
-		$fieldset = $form->addFieldset('trubox_form', array('legend'=>Mage::helper('trubox')->__('Item information')));
+    protected function _prepareForm()
+    {
+        $form = new Varien_Data_Form();
+        $this->setForm($form);
 
-		$fieldset->addField('title', 'text', array(
-			'label'		=> Mage::helper('trubox')->__('Title'),
-			'class'		=> 'required-entry',
-			'required'	=> true,
-			'name'		=> 'title',
-		));
+        if (Mage::getSingleton('adminhtml/session')->getTruBoxData()) {
+            $data = Mage::getSingleton('adminhtml/session')->getTruBoxData();
+            Mage::getSingleton('adminhtml/session')->setTruBoxData(null);
+        } elseif (Mage::registry('trubox_data'))
+            $data = Mage::registry('trubox_data')->getData();
 
-		$fieldset->addField('filename', 'file', array(
-			'label'		=> Mage::helper('trubox')->__('File'),
-			'required'	=> false,
-			'name'		=> 'filename',
-		));
+        $fieldset = $form->addFieldset('trubox_form', array('legend' => Mage::helper('trubox')->__('Item information')));
 
-		$fieldset->addField('status', 'select', array(
-			'label'		=> Mage::helper('trubox')->__('Status'),
-			'name'		=> 'status',
-			'values'	=> Mage::getSingleton('trubox/status')->getOptionHash(),
-		));
+        $customer_id = Mage::getModel('trubox/trubox')->load($data['trubox_id'])->getCustomerId();
+        $customer = Mage::getModel('customer/customer')->load($customer_id);
+        $data['customer_name'] = $customer->getName();
+        $data['customer_email'] = $customer->getEmail();
 
-		$fieldset->addField('content', 'editor', array(
-			'name'		=> 'content',
-			'label'		=> Mage::helper('trubox')->__('Content'),
-			'title'		=> Mage::helper('trubox')->__('Content'),
-			'style'		=> 'width:700px; height:500px;',
-			'wysiwyg'	=> false,
-			'required'	=> true,
-		));
+        $fieldset->addField('customer_name', 'link', array(
+            'label' => Mage::helper('trubox')->__('Customer Name'),
+            'style'   => "",
+            'href' => Mage::helper("adminhtml")->getUrl("adminhtml/customer/edit",array("id"=>$customer_id)),
+            'value'  =>  $customer->getName(),
+            'after_element_html' => ''
+        ));
 
-		$form->setValues($data);
-		return parent::_prepareForm();
-	}
+        $fieldset->addField('customer_email', 'label', array(
+            'label' => Mage::helper('trubox')->__('Customer Email'),
+            'name' => 'customer_email',
+        ));
+
+        $form->setValues($data);
+        return parent::_prepareForm();
+    }
 }

@@ -185,8 +185,12 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             foreach ($data as $id=>$qty) {
                 $item = Mage::getModel('trubox/item')->load($id);
                 if($item->getId()){
-                    $item->setQty($qty);
-                    $transactionSave->addObject($item);
+                    if($qty == 0)
+                        $item->delete();
+                    else{
+                        $item->setQty($qty);
+                        $transactionSave->addObject($item);
+                    }
                 }
             }
             $transactionSave->save();
@@ -315,6 +319,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 ->getFirstItem()
             ;
 
+            $truBox_obj = null;
             if (!$checkItem->getItemId()) {
                 $itemData = array(
                     'trubox_id' => $truBoxId,
@@ -325,6 +330,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
                 );
                 $truBoxItems->setData($itemData)->save();
+                $truBox_obj = $truBoxItems;
             } else {
 
                 if ((strcasecmp($checkItem->getOptionParams(), $str_encode) == 0 && $str_encode != "null")
@@ -333,6 +339,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                     $qtyCheckItem = $checkItem->getQty();
                     $checkItem->setQty($qtyCheckItem + 1);
                     $checkItem->save();
+                    $truBox_obj = $checkItem;
                 } else {
                     $truBoxItems = Mage::getModel('trubox/item');
                     $itemData = array(
@@ -345,8 +352,13 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                     );
 
                     $truBoxItems->setData($itemData)->save();
+                    $truBox_obj = $truBoxItems;
                 }
             }
+
+            $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
+            $truBox_obj->setPrice($price);
+            $truBox_obj->save();
 
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper('trubox')->__('%s was added to your TruBox.',$product->getName())
@@ -399,15 +411,43 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
             CREATE TABLE {$setup->getTable('trubox/order')} (
               `trubox_order_id` int(10) unsigned NOT NULL auto_increment,
-              `customer_id` int(10) NOT NULL,
+              `trubox_id` int(10) NOT NULL,
               `order_id` int(10) NOT NULL,
               `updated_time` datetime NULL,
               `created_time` datetime NULL,
               PRIMARY KEY (`trubox_order_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-             ALTER TABLE {$setup->getTable('trubox/item')} ADD `order_id` INT;
              ALTER TABLE {$setup->getTable('trubox/item')} ADD `price` FLOAT ;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb4Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+
+             ALTER TABLE {$setup->getTable('trubox/order')} DROP COLUMN  `customer_id`;
+             ALTER TABLE {$setup->getTable('trubox/order')} ADD `trubox_id` INT ;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb5Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+
+             ALTER TABLE {$setup->getTable('trubox/item')} DROP COLUMN  `order_id`;
 
 		");
         $installer->endSetup();
@@ -417,6 +457,40 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     public function updatePriceAction()
     {
         Mage::helper('trubox/item')->updatePrice();
+    }
+
+    public function createOrderAction()
+    {
+        $order = Mage::helper('trubox/order')->createOrder(
+            3719,
+            array(
+                // Add configurable product
+                array(
+                    'product' => 168,
+                    'super_attribute' => array(
+                        92 => 7,
+                    ),
+                    'qty' => 3
+                ),
+                // Add products with custom options
+                array(
+                    'product' => 169,
+                    'options' => array(
+                        158 => array(
+                            282, 283
+                        )
+                    ),
+                    'qty' => 2
+                ),
+                // Add 1-3 random simple products
+                array(
+                    'product' => 2,
+                    'qty' => 2
+                ),
+            )
+        );
+
+        zend_debug::dump($order->debug());
     }
 
 }

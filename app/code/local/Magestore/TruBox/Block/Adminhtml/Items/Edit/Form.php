@@ -1,6 +1,6 @@
 <?php
 
-class Magestore_TruBox_Block_Adminhtml_TruBox_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
+class Magestore_TruBox_Block_Adminhtml_Items_Edit_Form extends Mage_Adminhtml_Block_Widget_Form
 {
 	protected function _prepareForm(){
 		$form = new Varien_Data_Form(array(

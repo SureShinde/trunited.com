@@ -58,26 +58,19 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             'filter_condition_callback' => array($this, '_filterProductNameCallback')
         ));
 
-        $this->addColumn('product_price', array(
+        $this->addColumn('price', array(
             'header' => Mage::helper('trubox')->__('Price'),
             'width' => '200px',
-            'type' => 'price',
-            'filter' => false,
-            'index' => 'product_price',
-            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_Items_Price',
-//            'filter_condition_callback' => array($this, '_filterProductPriceCallback')
+            'type'  => 'price',
+            'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
+            'index' => 'price',
         ));
 
         $this->addColumn('qty', array(
             'header' => Mage::helper('trubox')->__('Product Qty'),
             'width' => '50px',
             'index' => 'qty',
-        ));
-
-        $this->addColumn('order_id', array(
-            'header' => Mage::helper('trubox')->__('Order ID'),
-            'width' => '100px',
-            'index' => 'order_id',
+            'type' => 'number',
         ));
 
         $this->addColumn('action',
@@ -113,6 +106,11 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             'label' => Mage::helper('trubox')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('trubox')->__('Are you sure?')
+        ));
+
+        $this->getMassactionBlock()->addItem('order', array(
+            'label' => Mage::helper('trubox')->__('Make orders'),
+            'url' => $this->getUrl('*/*/massOrder')
         ));
 
         return $this;

@@ -112,14 +112,18 @@ class Magestore_TruBox_Helper_Item extends Mage_Core_Helper_Abstract
         $transactionSave = Mage::getModel('core/resource_transaction');
         foreach ($items as $item)
         {
-            zend_debug::dump($item->getData('price'));
-            $_data = $this->getItemData($item->getId());
-            $item->setPrice($_data['product_price']);
+            $item_price = $this->getItemPrice($item);
+            $item->setPrice($item_price);
             $transactionSave->addObject($item);
-            zend_debug::dump($item->debug());
         }
         $transactionSave->save();
 
         echo 'success';
+    }
+
+    public function getItemPrice($item)
+    {
+        $data = $this->getItemData($item->getId());
+        return $data['item_price'];
     }
 }

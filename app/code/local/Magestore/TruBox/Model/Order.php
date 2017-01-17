@@ -24,7 +24,7 @@
  */
 
 /**
- * 
+ *
  * @category    Magestore
  * @package     Magestore_TruBox
  * @author      Magestore Developer
@@ -36,5 +36,6 @@ class Magestore_TruBox_Model_Order extends Mage_Core_Model_Abstract
         parent::_construct();
         $this->_init('trubox/order');
     }
-    
+
+
 }

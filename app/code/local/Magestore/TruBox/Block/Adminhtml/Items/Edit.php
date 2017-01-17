@@ -1,13 +1,13 @@
 <?php
 
-class Magestore_TruBox_Block_Adminhtml_TruBox_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+class Magestore_TruBox_Block_Adminhtml_Items_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 	public function __construct(){
 		parent::__construct();
 		
 		$this->_objectId = 'id';
 		$this->_blockGroup = 'trubox';
-		$this->_controller = 'adminhtml_trubox';
+		$this->_controller = 'adminhtml_items';
 		
 		$this->_updateButton('save', 'label', Mage::helper('trubox')->__('Save Item'));
 		$this->_updateButton('delete', 'label', Mage::helper('trubox')->__('Delete Item'));
