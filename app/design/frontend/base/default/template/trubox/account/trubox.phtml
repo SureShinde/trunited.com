@@ -177,11 +177,11 @@
                                         $totalPrice += $itemPrice;
                                     ?>
                                 </td>
-                                <td class="a-center"><input class="product-qty" name="<?php echo $product->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
+                                <td class="a-center"><input class="product-qty" name="<?php echo $item->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
                                 <td class="a-center"><?php echo $pointEarn * $item->getQty();?></td>
                                 <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p></td>
                                 <td class="a-center"><p class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p></td>
-                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getProductId()) ?>" class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a></td>
+                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getId()) ?>" class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a></td>
                             </tr>
                             <?php
                         }

@@ -155,19 +155,16 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     }
 
     public function deleteItemsAction() {
-        $productId = $this->getRequest()->getParam('id');
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-
-        $truBoxFilter = Mage::getModel('trubox/item')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)
-            ->addFieldToFilter('product_id', $productId)
-            ->getFirstItem()
-        ;
-
-        $itemId = $truBoxFilter->getItemId();
+        $item_id = $this->getRequest()->getParam('id');
 
         try{
-            Mage::getModel('trubox/item')->setId($itemId)->delete();
+            $item = Mage::getModel('trubox/item')->load($item_id);
+            if(!$item->getId())
+                throw new Exception(
+                    Mage::helper('trubox')->__('Item does not exist !')
+                );
+
+            $item->delete();
 
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper('trubox')->__('You have deleted item successfully !')
@@ -178,23 +175,19 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/'));
+        $this->_redirectUrl(Mage::getUrl('*/*/index'));
     }
 
     public function saveItemsAction() {
-        $itemData = $this->getRequest()->getPost();
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-
+        $data = $this->getRequest()->getParams();
         try{
             $transactionSave = Mage::getModel('core/resource_transaction');
-            foreach ($itemData as $k=>$v) {
-                $truBoxFilter = Mage::getModel('trubox/item')->getCollection()
-                    ->addFieldToFilter('trubox_id', $truBoxId)
-                    ->addFieldToFilter('product_id', $k)
-                    ->getFirstItem()
-                ;
-                $truBoxFilter->setQty($v);
-                $transactionSave->addObject($truBoxFilter);
+            foreach ($data as $id=>$qty) {
+                $item = Mage::getModel('trubox/item')->load($id);
+                if($item->getId()){
+                    $item->setQty($qty);
+                    $transactionSave->addObject($item);
+                }
             }
             $transactionSave->save();
 
