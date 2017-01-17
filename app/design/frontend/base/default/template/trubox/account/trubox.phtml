@@ -86,52 +86,102 @@
                             $product = Mage::getModel('catalog/product')->load($item->getProductId());
                             $pointEarn =  $this->getPointEarning($product);
                             $totalPointEarn += $pointEarn * $item->getQty();
-                            $itemPrice = $product->getFinalPrice()*$item->getQty();
-                            $totalPrice += $itemPrice;
+
                             $option_params = json_decode($item->getOptionParams(), true);
+                            $price_options = 0;
+                            
+                            
                             ?>
                             <tr>
                                 <td><a href="<?php echo $product->getProductUrl(true);?>" class="product-image">
                                         <img src="<?php echo $this->helper('catalog/image')->init($product,'small_image')->resize(100); ?>" /></a>
                                     <a href="<?php echo $product->getProductUrl(true);?>" class="product-name">
                                         <strong><?php echo $product->getName() ?></strong></a>
-                                    <?php
-                                        $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
-                                        if ($_options && sizeof($option_params) > 0):?>
-                                        <dl class="item-options">
-                                            <?php foreach ($_options as $_option) : ?>
-                                                <?php
-                                                    $_attribute_value = 0;
-                                                    foreach($option_params as $k=>$v){
-                                                        if($k == $_option['attribute_id']){
-                                                            $_attribute_value = $v;
-                                                            break;
-                                                        }
-                                                    }
+                                    <?php if($product->getTypeId() == 'configurable'){?>
+                                        <?php
+                                            $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
 
-                                                    if($_attribute_value > 0){
-                                                ?>
-                                                <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                            if ($_options && sizeof($option_params) > 0):?>
+                                            <dl class="item-options">
+                                                <?php foreach ($_options as $_option) : ?>
+                                                    <?php
+                                                    	
+                                                        $_attribute_value = 0;
+                                                        foreach($option_params as $k=>$v){
+                                                            if($k == $_option['attribute_id']){
+                                                                $_attribute_value = $v;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if($_attribute_value > 0){
+                                                    ?>
+                                                    <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                                    <dd>
+                                                        <?php
+
+                                                            foreach($_option['values'] as $val){
+                                                            	
+                                                                if($val['value_index'] == $_attribute_value){
+                                                                    echo $val['default_label'];
+                                                                    break;
+                                                                }
+                                                            }
+                                                        ?>
+                                                    </dd>
+                                                    <?php }?>
+                                                <?php endforeach; ?>
+                                            </dl>
+                                        <?php endif;?>
+                                    <?php } else {?>
+                                    <dl class="item-options">
+                                        <?php foreach ($product->getOptions() as $o) {?>
+                                            <?php
+                                            $values = $o->getValues();
+                                            $_attribute_value = 0;
+                                            
+                                            foreach($option_params as $k=>$v){
+                                                if($k == $o->getOptionId()){
+                                                    $_attribute_value = $v;
+                                                    break;
+                                                }
+                                            }
+                                            if($_attribute_value > 0){
+                                        ?>
+                                                <dt><?php echo $this->escapeHtml($o->getTitle()) ?></dt>
                                                 <dd>
                                                     <?php
-                                                        foreach($_option['values'] as $val){
-                                                            if($val['value_index'] == $_attribute_value){
-                                                                echo $val['default_label'];
-                                                                break;
+                                                    	/*if($_SERVER['REMOTE_ADDR'] == '101.99.23.40'){
+							                            	zend_debug::dump(in_array($val->getOptionTypeId(), $_attribute_value));
+							                            }*/
+                                                        foreach($values as $val){
+                                                        	if(is_array($_attribute_value)){
+																if(in_array($val->getOptionTypeId(), $_attribute_value)) {
+																	echo $val->getTitle().' ';
+                                                                	$price_options += $val->getPrice();
+                                                                
+																}
+                                                        	} else if($val->getOptionTypeId() == $_attribute_value){
+                                                                echo $val->getTitle().' ';
+                                                                $price_options += $val->getPrice();
                                                             }
                                                         }
                                                     ?>
                                                 </dd>
-                                                <?php }?>
-                                            <?php endforeach; ?>
+                                            <?php }?>
+                                        <?php }?>
                                         </dl>
-                                    <?php endif;?>
+                                    <?php }?>
+                                    <?php
+                                        $itemPrice = ($product->getFinalPrice() + $price_options)*$item->getQty();
+                                        $totalPrice += $itemPrice;
+                                    ?>
                                 </td>
-                                <td class="a-center"><input class="product-qty" name="<?php echo $product->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
+                                <td class="a-center"><input class="product-qty" name="<?php echo $item->getId(); ?>" value="<?php echo $item->getQty() ?>"></td>
                                 <td class="a-center"><?php echo $pointEarn * $item->getQty();?></td>
-                                <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice(), true, false); ?></p></td>
+                                <td class="a-center"><p class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p></td>
                                 <td class="a-center"><p class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p></td>
-                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getProductId()) ?>" class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a></td>
+                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getId()) ?>" class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a></td>
                             </tr>
                             <?php
                         }
