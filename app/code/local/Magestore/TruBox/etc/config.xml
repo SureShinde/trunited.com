@@ -25,7 +25,7 @@
 <config>
     <modules>
         <Magestore_TruBox>
-            <version>0.1.1</version>
+            <version>0.2.0</version>
         </Magestore_TruBox>
     </modules>
     <frontend>
@@ -60,20 +60,13 @@
     </frontend>
     <admin>
         <routers>
-            <!-- <truboxadmin>
+            <truboxadmin>
                 <use>admin</use>
                 <args>
                     <module>Magestore_TruBox</module>
                     <frontName>truboxadmin</frontName>
                 </args>
-            </truboxadmin> -->
-            <adminhtml>
-                <args>
-                    <modules>
-                        <Magestore_TruBox before="Mage_Adminhtml">Magestore_TruBox_Adminhtml</Magestore_TruBox>
-                    </modules>
-                </args>
-            </adminhtml>
+            </truboxadmin>
         </routers>
     </admin>
     <adminhtml>
@@ -115,6 +108,9 @@
                     <payment>
                         <table>trubox_payment</table>
                     </payment>
+                    <order>
+                        <table>trubox_order</table>
+                    </order>
                 </entities>
             </trubox_mysql4>
         </models>

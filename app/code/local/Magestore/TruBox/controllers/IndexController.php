@@ -389,4 +389,34 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         echo "success";
     }
 
+    public function updateDb3Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            DROP TABLE IF EXISTS {$setup->getTable('trubox/order')};
+
+            CREATE TABLE {$setup->getTable('trubox/order')} (
+              `trubox_order_id` int(10) unsigned NOT NULL auto_increment,
+              `customer_id` int(10) NOT NULL,
+              `order_id` int(10) NOT NULL,
+              `updated_time` datetime NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`trubox_order_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+             ALTER TABLE {$setup->getTable('trubox/item')} ADD `order_id` INT;
+             ALTER TABLE {$setup->getTable('trubox/item')} ADD `price` FLOAT ;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updatePriceAction()
+    {
+        Mage::helper('trubox/item')->updatePrice();
+    }
+
 }
