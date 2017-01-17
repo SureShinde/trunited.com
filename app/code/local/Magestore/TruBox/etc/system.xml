@@ -24,17 +24,18 @@
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
-					<fields>		
-						<!--<enable translate="label">
-							<label>Enable</label>
-							<frontend_type>select</frontend_type>
+					<fields>
+						<general_separator translate="label comment">
+							<label>Description</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
 							<sort_order>1</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<comment></comment>
-						</enable>-->
+						</general_separator>
 						<logo translate="label comment">
 							<label>Logo</label>
 							<comment>Allowed file types: jpeg, gif, png.</comment>
@@ -57,10 +58,22 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</cms_description>
+
+						<testing_separator translate="label comment">
+							<label>Testing Mode</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</testing_separator>
 						<enable_testing_mode translate="label">
 							<label>Enable Testing Mode</label>
 							<frontend_type>select</frontend_type>
-							<sort_order>4</sort_order>
+							<sort_order>5</sort_order>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
@@ -70,21 +83,55 @@
 						<email_testing_mode>
 							<label>Email for testing mode</label>
 							<frontend_type>text</frontend_type>
-							<sort_order>5</sort_order>
+							<sort_order>6</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</email_testing_mode>
+
+						<orders_separator translate="label comment">
+							<label>Orders</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</orders_separator>
 						<enable_orders_section translate="label">
 							<label>Enable Orders Section</label>
 							<frontend_type>select</frontend_type>
-							<sort_order>6</sort_order>
+							<sort_order>8</sort_order>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<comment>Enable / Disable list orders in TruBox page</comment>
 						</enable_orders_section>
+
+						<products_separator translate="label comment">
+							<label>Products</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</products_separator>
+						<product_exclusion_list  translate="label">
+							<label>TruBox Exclusion List</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Trubox exclusion list and hide the trubox icon from product list and product details page.</comment>
+						</product_exclusion_list>
 					</fields>				
 				</general>
 			</groups>

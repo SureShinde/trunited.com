@@ -241,9 +241,17 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
         try {
 
-            if (!$product->getId()){
+            if (!$product->getId())
+            {
                 throw new Exception(
                     Mage::helper('trubox')->__('Product does not exist')
+                );
+            }
+
+            if(Mage::helper('trubox')->isInExclusionList($product))
+            {
+                throw new Exception(
+                    Mage::helper('trubox')->__('You can not add this product to TruBox')
                 );
             }
 
@@ -347,6 +355,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             Mage::getSingleton('core/session')->addError(
                 $ex->getMessage()
             );
+            $this->_redirectUrl($product->getProductUrl());
+            return;
         }
 
         $this->_redirectUrl(Mage::getUrl('*/*/'));

@@ -50,6 +50,42 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return  Mage::getStoreConfig('trubox/general/enable_orders_section');
     }
 
+    public function getProductExclusionList()
+    {
+        return  Mage::getStoreConfig('trubox/general/product_exclusion_list');
+    }
+
+    public function getExclusionList()
+    {
+        $list = $this->getProductExclusionList();
+        $result = array();
+        if($list != null)
+        {
+            $data = explode(',', $list);
+            foreach ($data as $sku) {
+                $result[] = trim(strtolower($sku));
+            }
+        }
+
+        return $result;
+
+    }
+
+    public function isInExclusionList($product)
+    {
+
+        $product_exclusion = $this->getExclusionList();
+
+        if(sizeof($product_exclusion) == 0)
+            return false;
+        else {
+            if(in_array(strtolower(trim($product->getSku())), $product_exclusion))
+                return true;
+            else
+                return false;
+        }
+    }
+
     public function isCurrentCheckingCustomer()
     {
         $enable_test_mode = $this->getEnableTestingMode();
