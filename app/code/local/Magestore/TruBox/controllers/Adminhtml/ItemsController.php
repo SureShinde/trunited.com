@@ -316,6 +316,40 @@ class Magestore_TruBox_Adminhtml_ItemsController extends Mage_Adminhtml_Controll
 
 	public function generateOrdersAction()
 	{
-		echo 'aaaaa';
+		$truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/trubox');
+
+		$collection = Mage::getModel('trubox/item')->getCollection();
+		$collection->getSelect()
+			->joinLeft(
+				array("tb" => $truBox_table),
+				"main_table.trubox_id = tb.trubox_id",
+				array("customer_id" => "tb.customer_id")
+			);
+
+		$data = array();
+		foreach ($collection as $item) {
+			if(!array_key_exists($item->getTruboxId(), $data)){
+				$data[$item->getTruboxId()] = array(
+					$item->getId()
+				);
+			} else {
+				$data[$item->getTruboxId()][] = $item->getId();
+			}
+		}
+
+		$rs = 0;
+		if(sizeof($data) > 0)
+		{
+			$rs = Mage::helper('trubox/order')->prepareOrder($data);
+		}
+
+		if($rs == 0)
+			Mage::getSingleton('adminhtml/session')->addError(
+				Mage::helper('trubox')->__('Something was wrong with this action !')
+			);
+		else
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d order(s) were successfully created', $rs));
+
+		$this->_redirect('*/*/');
 	}
 }
