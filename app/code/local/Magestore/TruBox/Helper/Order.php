@@ -164,28 +164,31 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
         {
             foreach ($items as $item)
             {
-                if($item->getOptionParams() != null){
-                    $option_params = json_decode($item->getOptionParams(), true);
-                    $product = Mage::getModel('catalog/product')->load($item->getProductId());
-                    if($product->getTypeId() == 'configurable')
-                    {
-                        $data[$item->getProductId()] = array(
-                            'qty' => $item->getQty(),
-                            'super_attribute' => $option_params,
-                            '_processing_params' => array(),
-                        );
+                $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                $inStock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getIsInStock();
+                if ($product->getIsInStock() === '1' && $product->isSaleable() === true) {
+                    if($item->getOptionParams() != null){
+                        $option_params = json_decode($item->getOptionParams(), true);
+                        if($product->getTypeId() == 'configurable')
+                        {
+                            $data[$item->getProductId()] = array(
+                                'qty' => $item->getQty(),
+                                'super_attribute' => $option_params,
+                                '_processing_params' => array(),
+                            );
+                        } else {
+                            $data[$item->getProductId()] = array(
+                                'qty' => $item->getQty(),
+                                'options' => $option_params,
+                                '_processing_params' => array(),
+                            );
+                        }
                     } else {
                         $data[$item->getProductId()] = array(
                             'qty' => $item->getQty(),
-                            'options' => $option_params,
                             '_processing_params' => array(),
                         );
                     }
-                } else {
-                    $data[$item->getProductId()] = array(
-                        'qty' => $item->getQty(),
-                        '_processing_params' => array(),
-                    );
                 }
             }
         }
@@ -247,13 +250,14 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $payment_information = $this->getPaymentInformation($customer_id);
             $paymentData = array(
-                'method' => $this->_paymentMethod,
+                'method' => 'ccsave',
                 'cc_type' => $payment_information->getCardType(),
                 'cc_owner' => $payment_information->getNameOnCard(),
                 'cc_number' => $payment_information->getCardNumber(),
                 'cc_exp_month' => $payment_information->getMonthExpire(),
                 'cc_exp_year' => $payment_information->getYearExpire(),
                 'cc_cid' => $payment_information->getCvv(),
+                'checks' => 179
             );
 
             $store = Mage::app()->getStore();
@@ -346,10 +350,10 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             return true;
         } catch (Exception $ex) {
-            $admin_session->clear();
-            Mage::getSingleton('adminhtml/session')->addError(
-                Mage::helper('trubox')->__($ex->getMessage())
-            );
+            Mage::log($ex->getMessage(), null, '1.log');
+//            Mage::getSingleton('adminhtml/session')->addError(
+//                Mage::helper('trubox')->__($ex->getMessage())
+//            );
 
             return false;
         }
