@@ -490,7 +490,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             )
         );
 
-        zend_debug::dump($order->debug());
+//        zend_debug::dump($order->debug());
     }
 
 }

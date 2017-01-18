@@ -253,14 +253,13 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'method' => 'ccsave',
                 'cc_type' => $payment_information->getCardType(),
                 'cc_owner' => $payment_information->getNameOnCard(),
+                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
                 'cc_number' => $payment_information->getCardNumber(),
                 'cc_exp_month' => $payment_information->getMonthExpire(),
                 'cc_exp_year' => $payment_information->getYearExpire(),
                 'cc_cid' => $payment_information->getCvv(),
                 'checks' => 179
             );
-
-            $store = Mage::app()->getStore();
 
             $billingAddress = array(
                 'prefix' => '',
@@ -300,7 +299,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'vat_id' => '',
             );
 
-            $quote      = Mage::getModel('sales/quote')->setStoreId($store->getId());
+            $quote      = Mage::getModel('sales/quote')->setStoreId(1);
 
             //Load Product and add to cart
             foreach ($products as $id => $dt){
@@ -325,6 +324,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $quote->getPayment()->importData($paymentData);
             $quote->collectTotals()->save();
+//            $reservedOrderId = Mage::getSingleton('eav/config')
+//                ->getEntityType('order')
+//                ->fetchNewIncrementId(0);
+//            $quote->setReservedOrderId(986547);
+
             //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);
             $service->submitAll();
@@ -337,7 +341,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $order_mail = new Mage_Sales_Model_Order();
             $order_mail->loadByIncrementId($increment_id);
-            $order_mail->sendNewOrderEmail();
+//            $order_mail->sendNewOrderEmail();
 
             /* update table trubox order */
             $truBox_order = Mage::getModel('trubox/order');
@@ -357,6 +361,35 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             return false;
         }
+    }
+
+    public function getNextIncrementId(){
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+
+        $entityStoreTable = $resource->getTableName('eav_entity_store');
+        $entityTypeTable = $resource->getTableName('eav_entity_type');
+
+        $selectEntity = $readConnection->select()->from($entityTypeTable, "*")
+            ->where("entity_type_code = 'order'");
+
+        $entityTypeRow = $readConnection->fetchRow($selectEntity);
+
+        if(isset($entityTypeRow['entity_type_id']) && $entityTypeRow['entity_type_id'] > 0){
+            $orderEntityTypeId = $entityTypeRow['entity_type_id'];
+            $entityStoreSelect = $readConnection->select()->from($entityStoreTable, "*")
+                ->where("store_id = ? AND entity_type_id = $orderEntityTypeId", 1);
+
+            $row = $readConnection->fetchRow($entityStoreSelect);
+
+            $lastIncrementId = 0;
+            if(isset($row['increment_last_id'])){
+                $lastIncrementId = $row['increment_last_id'] + 1;
+            }
+            return $lastIncrementId;
+        }
+
+        return 0;
     }
 
 }
