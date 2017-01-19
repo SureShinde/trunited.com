@@ -166,27 +166,35 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             {
                 $product = Mage::getModel('catalog/product')->load($item->getProductId());
                 $inStock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getIsInStock();
-                if ($product->getIsInStock() === '1' && $product->isSaleable() === true) {
+
+                if ($product->getIsInStock() && $product->isSaleable() === true) {
+
                     if($item->getOptionParams() != null){
                         $option_params = json_decode($item->getOptionParams(), true);
                         if($product->getTypeId() == 'configurable')
                         {
-                            $data[$item->getProductId()] = array(
-                                'qty' => $item->getQty(),
-                                'super_attribute' => $option_params,
-                                '_processing_params' => array(),
+                            $data[$item->getId()] = array(
+                                $item->getProductId() => array(
+                                    'qty' => $item->getQty(),
+                                    'super_attribute' => $option_params,
+                                    '_processing_params' => array(),
+                                )
                             );
                         } else {
-                            $data[$item->getProductId()] = array(
-                                'qty' => $item->getQty(),
-                                'options' => $option_params,
-                                '_processing_params' => array(),
+                            $data[$item->getId()] = array(
+                                $item->getProductId() => array(
+                                    'qty' => $item->getQty(),
+                                    'options' => $option_params,
+                                    '_processing_params' => array(),
+                                )
                             );
                         }
                     } else {
-                        $data[$item->getProductId()] = array(
-                            'qty' => $item->getQty(),
-                            '_processing_params' => array(),
+                        $data[$item->getId()] = array(
+                            $item->getProductId() => array(
+                                'qty' => $item->getQty(),
+                                '_processing_params' => array(),
+                            )
                         );
                     }
                 }
@@ -302,9 +310,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $quote      = Mage::getModel('sales/quote')->setStoreId(1);
 
             //Load Product and add to cart
-            foreach ($products as $id => $dt){
-                $product    = Mage::getModel('catalog/product')->load($id);
-                $quote->addProduct($product, new Varien_Object($dt));
+            foreach ($products as $itemid => $pro){
+                foreach ($pro as $k => $v){
+                    $product    = Mage::getModel('catalog/product')->load($k);
+                    $quote->addProduct($product, new Varien_Object($v));
+                }
             }
 
             // Add Billing Address
