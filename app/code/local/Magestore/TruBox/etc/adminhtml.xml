@@ -5,6 +5,11 @@
 			<title>My TruBox</title>
 			<sort_order>72</sort_order>
 			<children>
+				<items module="trubox" translate="title">
+					<title>TruBox Items</title>
+					<sort_order>0</sort_order>
+					<action>truboxadmin/adminhtml_items</action>
+				</items>
 				<settings module="trubox" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
@@ -36,6 +41,11 @@
 						<title>My TruBox</title>
 						<sort_order>71</sort_order>               
 						<children>
+							<items module="trubox" translate="title">
+								<title>TruBox Items</title>
+								<sort_order>0</sort_order>
+								<action>truboxadmin/adminhtml_trubox</action>
+							</items>
 							<settings module="trubox" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>

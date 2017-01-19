@@ -198,8 +198,9 @@ var i = 0;
                             <?php else: ?>
                                 <a href="javascript:void(0);" class="addtocart outofstock" title="<?php echo $this->__('Out of stock') ?>"><?php echo $this->__('Out of stock') ?></span></a>
                             <?php endif; ?>
+
                             <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-                                <?php if(!Mage::helper('trubox')->isInExclusionList($product)){?>
+                                <?php if(!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing()){?>
                                     <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>" class="addtrubox addtowishlist"
                                        title="<?php echo $this->__('Add to TruBox') ?>">
                                         <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" />
@@ -421,7 +422,7 @@ var i = 0;
                             <a href="<?php if(Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)):?>javascript:void(0)<?php else: ?><?php echo $_compareUrl ?><?php endif; ?>" <?php if(Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)):?>onclick="ajaxCompare(this,'<?php echo $_compareUrl ?>','<?php echo $_product->getId()?>');"<?php endif; ?> class="comparelink" title="<?php echo $this->__('Add to Compare') ?>"><i class="icon-compare"></i></a>
                         <?php endif; ?>
                         <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-                            <?php if(!Mage::helper('trubox')->isInExclusionList($product)){?>
+                            <?php if(!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing()){?>
                             <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>" class="addtrubox addtowishlist"
                                title="<?php echo $this->__('Add to TruBox') ?>">
                                 <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" />

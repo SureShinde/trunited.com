@@ -55,6 +55,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return  Mage::getStoreConfig('trubox/general/product_exclusion_list');
     }
 
+    public function getEnableProductListing()
+    {
+        return  Mage::getStoreConfig('trubox/general/enable_product_listing');
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
@@ -110,12 +115,13 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->__('My TruBox');
     }
 
-    public function getCurrentTruBoxId() {
-        $customer = Mage::getSingleton('customer/session')->getCustomer();
-        $id = $customer->getId();
+    public function getCurrentTruBoxId($customer_id = null) {
+        if($customer_id == null)
+            $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+
         $truBox = Mage::getModel('trubox/trubox')->getCollection()
             ->addFieldToFilter('status', 'open')
-            ->addFieldToFilter('customer_id', $id)
+            ->addFieldToFilter('customer_id', $customer_id)
             ->getFirstItem()
         ;
 
@@ -123,10 +129,9 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
             $truBoxId = $truBox->getTruboxId();
         } else {
             $_truBox = Mage::getModel('trubox/trubox');
-            $_truBox->setData('customer_id', $id);
+            $_truBox->setData('customer_id', $customer_id);
             $_truBox->setData('status', 'open');
             $_truBox->save();
-
             $truBoxId = $_truBox->getId();
         }
 
