@@ -55,6 +55,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return  Mage::getStoreConfig('trubox/general/product_exclusion_list');
     }
 
+    public function getEnableProductListing()
+    {
+        return  Mage::getStoreConfig('trubox/general/enable_product_listing');
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
