@@ -34,13 +34,14 @@
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
         <?php echo $this->getChildHtml('', true, true) ?>
     </div>
-    <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-        <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
+
+<?php endif; ?>
+<?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
+    <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
         <a href="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>" class="addtrubox trubox_btn" title="<?php echo $this->__('Add to TruBox') ?>">
             <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" /></a>
-        <?php }?>
     <?php }?>
-<?php endif; ?>
+<?php }?>
 <script type="text/javascript">
     $j = jQuery.noConflict();
     $j(document).ready(function(){

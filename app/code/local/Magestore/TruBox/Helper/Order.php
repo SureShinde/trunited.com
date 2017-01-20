@@ -111,6 +111,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             ->addFieldToFilter('trubox_id', $truBox_id)
             ;
 
+        $customer = Mage::getModel('customer/customer')->load($customer_id);
         if(sizeof($address) > 0)
         {
             $flag = 0;
@@ -125,12 +126,12 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             if($flag != 2)
                 throw new Exception(
-                    Mage::helper('trubox')->__('Customer don\'t have address information !')
+                    Mage::helper('trubox')->__('%s don\'t have address information !', $customer->getName())
                 );
 
         } else {
             throw new Exception(
-                Mage::helper('trubox')->__('Customer don\'t have address information !')
+                Mage::helper('trubox')->__('%s don\'t have address information !', $customer->getName())
             );
         }
 
@@ -141,7 +142,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
         if(!$payment->getId())
             throw new Exception(
-                Mage::helper('trubox')->__('Customer don\'t have payment information !')
+                Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
             );
     }
 
@@ -206,6 +207,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
     public function getPaymentInformation($customer_id)
     {
+        $customer = Mage::getModel('customer/customer')->load($customer_id);
         $truBox_id = Mage::helper('trubox')->getCurrentTruBoxId($customer_id);
         if($truBox_id == null)
             throw new Exception(
@@ -219,7 +221,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
         if(!$payment->getId())
             throw new Exception(
-                Mage::helper('trubox')->__('Customer don\'t have payment information !')
+                Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
             );
 
         return $payment;
@@ -227,13 +229,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
     public function createOrder($customer_id, $data_items)
     {
-        $admin_session = Mage::getModel('adminhtml/session_quote');
         Mage::helper('catalog/product')->setSkipSaleableCheck(true);
-//        $admin_session->clear();
+        $customer = Mage::getModel('customer/customer')->load($customer_id);
         try{
 
             /* Check customer */
-            $customer = Mage::getModel('customer/customer')->load($customer_id);
             $truBox_id = Mage::helper('trubox')->getCurrentTruBoxId($customer->getId());
             if($truBox_id == null)
                 throw new Exception(
@@ -253,7 +253,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $products = $this->getProductParams($customer_id, $data_items);
             if (sizeof($products) == 0)
                 throw new Exception(
-                    Mage::helper('trubox')->__('No Items found !')
+                    Mage::helper('trubox')->__('%s - No Items found!', $customer->getName())
                 );
 
             $payment_information = $this->getPaymentInformation($customer_id);
@@ -322,7 +322,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 ->addData($billingAddress);
 
             //Add Shipping Address and set shipping method
-
             $quote->getShippingAddress()
                 ->addData($shippingAddress)
                 ->setCollectShippingRates(true)
@@ -334,10 +333,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $quote->getPayment()->importData($paymentData);
             $quote->collectTotals()->save();
-//            $reservedOrderId = Mage::getSingleton('eav/config')
-//                ->getEntityType('order')
-//                ->fetchNewIncrementId(0);
-//            $quote->setReservedOrderId(986547);
 
             //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);
@@ -364,10 +359,10 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             return true;
         } catch (Exception $ex) {
-            Mage::log($ex->getMessage(), null, '1.log');
-//            Mage::getSingleton('adminhtml/session')->addError(
-//                Mage::helper('trubox')->__($ex->getMessage())
-//            );
+//            Mage::log($ex->getMessage(), null, '1.log');
+            Mage::getSingleton('adminhtml/session')->addError(
+                'Email: '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
+            );
 
             return false;
         }

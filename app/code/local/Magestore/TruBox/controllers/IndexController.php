@@ -243,6 +243,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $options = $this->getRequest()->getParam('options');
         $str_option = json_encode($options);
 
+        $super_group = $this->getRequest()->getParam('super_group');
+
         try {
 
             if (!$product->getId())
@@ -301,6 +303,28 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 }
             }
 
+            if(isset($super_group) && sizeof($super_group) > 0)
+            {
+                $check = false;
+                foreach ($super_group as $id=>$qty)
+                {
+                    if($qty > 0)
+                    {
+                        $check = true;
+                        break;
+                    }
+                }
+
+                if(!$check)
+                {
+                    Mage::getSingleton('core/session')->addError(
+                        Mage::helper('trubox')->__('Please specify the quantity of product(s).')
+                    );
+                    $this->_redirectUrl($product->getProductUrl());
+                    return;
+                }
+            }
+
             $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
             $truBox = Mage::getModel('trubox/trubox');
             $customer = Mage::getSingleton('customer/session')->getCustomer();
@@ -311,54 +335,91 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
             }
 
-            $truBoxItems = Mage::getModel('trubox/item');
-            $checkItem = $truBoxItems->getCollection()
-                ->addFieldToFilter('trubox_id', $truBoxId)
-                ->addFieldToFilter('product_id', $productId)
-                ->addFieldToFilter('option_params', $str_encode != "null" ? $str_encode : $str_option)
-                ->getFirstItem()
-            ;
+            if(isset($super_group) && sizeof($super_group) > 0)
+            {
+                $transactionSave = Mage::getModel('core/resource_transaction');
+                foreach ($super_group as $pid => $pqty)
+                {
+                    if($pqty > 0){
+                        $truBoxItems = Mage::getModel('trubox/item');
+                        $checkItem = $truBoxItems->getCollection()
+                            ->addFieldToFilter('trubox_id', $truBoxId)
+                            ->addFieldToFilter('product_id', $pid)
+                            ->getFirstItem()
+                        ;
+                        if (!$checkItem->getItemId())
+                        {
+                            $_p = Mage::getModel('catalog/product')->load($pid);
+                            $itemData = array(
+                                'trubox_id' => $truBoxId,
+                                'product_id' => $pid,
+                                'qty' => $pqty,
+                                'origin_params' => '',
+                                'option_params' => '',
+                                'order_id' => '',
+                                'price' => $_p->getPirce()
 
-            $truBox_obj = null;
-            if (!$checkItem->getItemId()) {
-                $itemData = array(
-                    'trubox_id' => $truBoxId,
-                    'product_id' => $productId,
-                    'qty' => 1,
-                    'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
-                    'option_params' => $str_encode != "null" ? $str_encode : $str_option
-
-                );
-                $truBoxItems->setData($itemData)->save();
-                $truBox_obj = $truBoxItems;
+                            );
+                            $checkItem = Mage::getModel('trubox/item');
+                            $checkItem->setData($itemData);
+                        } else {
+                            $qtyCheckItem = $checkItem->getQty();
+                            $checkItem->setQty($qtyCheckItem + $pqty);
+                        }
+                        $transactionSave->addObject($checkItem);
+                    }
+                }
+                $transactionSave->save();
             } else {
+                $truBoxItems = Mage::getModel('trubox/item');
+                $checkItem = $truBoxItems->getCollection()
+                    ->addFieldToFilter('trubox_id', $truBoxId)
+                    ->addFieldToFilter('product_id', $productId)
+                    ->addFieldToFilter('option_params', $str_encode != "null" ? $str_encode : $str_option)
+                    ->getFirstItem()
+                ;
 
-                if ((strcasecmp($checkItem->getOptionParams(), $str_encode) == 0 && $str_encode != "null")
-                    || (strcasecmp($checkItem->getOptionParams(), $str_option) == 0 && $str_option != "null")
-                ) {
-                    $qtyCheckItem = $checkItem->getQty();
-                    $checkItem->setQty($qtyCheckItem + 1);
-                    $checkItem->save();
-                    $truBox_obj = $checkItem;
-                } else {
-                    $truBoxItems = Mage::getModel('trubox/item');
+                $truBox_obj = null;
+                if (!$checkItem->getItemId()) {
                     $itemData = array(
                         'trubox_id' => $truBoxId,
                         'product_id' => $productId,
                         'qty' => 1,
                         'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
-                        'option_params' => $str_encode != "null" ? $str_encode : $str_option,
+                        'option_params' => $str_encode != "null" ? $str_encode : $str_option
 
                     );
-
                     $truBoxItems->setData($itemData)->save();
                     $truBox_obj = $truBoxItems;
-                }
-            }
+                } else {
 
-            $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
-            $truBox_obj->setPrice($price);
-            $truBox_obj->save();
+                    if ((strcasecmp($checkItem->getOptionParams(), $str_encode) == 0 && $str_encode != "null")
+                        || (strcasecmp($checkItem->getOptionParams(), $str_option) == 0 && $str_option != "null")
+                    ) {
+                        $qtyCheckItem = $checkItem->getQty();
+                        $checkItem->setQty($qtyCheckItem + 1);
+                        $checkItem->save();
+                        $truBox_obj = $checkItem;
+                    } else {
+                        $truBoxItems = Mage::getModel('trubox/item');
+                        $itemData = array(
+                            'trubox_id' => $truBoxId,
+                            'product_id' => $productId,
+                            'qty' => 1,
+                            'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
+                            'option_params' => $str_encode != "null" ? $str_encode : $str_option,
+
+                        );
+
+                        $truBoxItems->setData($itemData)->save();
+                        $truBox_obj = $truBoxItems;
+                    }
+                }
+
+                $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
+                $truBox_obj->setPrice($price);
+                $truBox_obj->save();
+            }
 
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper('trubox')->__('%s was added to your TruBox.',$product->getName())
