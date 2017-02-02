@@ -30,7 +30,6 @@ $installer->startSetup();
 $installer->run("
 
 ALTER TABLE {$this->getTable('rewardpoints/customer')} MODIFY `product_credit` DECIMAL(10,2) NOT NULL default 0;
-
 ALTER TABLE {$this->getTable('rewardpoints/transaction')} MODIFY `product_credit` DECIMAL(10,2) NOT NULL default 0;
 
 ");
