@@ -1,0 +1,77 @@
+<?php 
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div>
+    <?php if (1 || $this->getCollection()->count()): ?>
+
+    <div class="grid">
+        <table class="data" id="admin-subscriptions-history-table-paid" cellspacing="0">
+            <col width="100"/>
+            <col/>
+            <col width="100"/>
+            <col width="100"/>
+            <thead>
+            <tr class="headings">
+                <th style="border-right:0;"><?php echo $this->__('Payment Date') ?></th>
+                <th style="border-left:0;width:55px;"><?php echo $this->__('') ?></th>
+                <th class="no-link"><?php echo $this->__('Order ID') ?></th>
+                <th class="no-link"  style="width:15%;" ><?php echo $this->__('Order Status') ?></th>
+                <th class="no-link last" style="width:12%;" ><?php echo $this->__('Order Amount') ?></th>
+				<th class="no-link last"><?php echo $this->__('Transaction Status') ?></th>
+            </tr>
+            </thead>
+            <tbody>
+               <?php foreach ($this->getPaidCollection() as $Item): ?>
+            <tr> 
+                <td style="border-right:0;"><?php echo date("m/d/y" ,strtotime($Item->getDate()));// $this->formatDate($Item->getDate());?>
+                </td>
+                <td style="border-left:0;">
+<?php                	
+					$ItemDate = ($Item->getDate());
+					$magento_date = (Mage::getModel('core/date')->date('Y-m-d'));
+				   
+				    if($magento_date > $ItemDate && ($Item->getStatus() == "pending" || $Item->getStatus() == "failed")):
+				//	if ($magento_date->compare($itemDate) > 0 && $Item->getStatus() == "pending" ): 
+					 ?>
+                       <a href="<?php echo Mage::getModel('adminhtml/url')->getUrl('*/*/pay', array('id' => $Item->getSubscriptionId(), 'seq' => $Item->getId())) ?>"><?php echo $this->__('Pay Now') ?></a>
+					<?php endif;    ?>
+                </td>
+                <td>
+                    <a href="<?php echo Mage::getUrl('adminhtml/sales_order/view', array('order_id' => $Item->getOrder()->getId()))?>">
+                        <?php echo $Item->getOrder()->getRealOrderId();?>
+                    </a>
+                </td>
+                <td><em><?php echo ucfirst($Item->getOrder()->getStatus()) ?></em></td>
+                <td class="a-right"><?php $grandtotal =$Item->getOrder()->getGrandTotal();		 ?>
+		<?php if($grandtotal != 0):
+				echo  $Item->getOrder()->formatPrice($grandtotal);
+			   endif ;  ?></td>
+				<td>
+                        <?php echo $Item->getTransactionStatus();?>
+               </td>
+            </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">decorateTable('admin-subscriptions-history-table-paid');</script>
+
+
+    <?php else: ?>
+    <?php echo $this->__("This customer has no completed payments yet."); ?>
+    <?php endif; ?>
+</div>

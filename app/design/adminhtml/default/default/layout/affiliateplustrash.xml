@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusTrash
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+<!--    Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->
+    <adminhtml_affiliateplustrash_transaction_deleted>
+        <reference name="content">
+            <block type="affiliateplustrash/adminhtml_transaction_deleted" name="transaction" />
+        </reference>
+    </adminhtml_affiliateplustrash_transaction_deleted>
+    <adminhtml_affiliateplustrash_transaction_deletedgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="affiliateplustrash/adminhtml_transaction_deleted_grid" name="transaction" />
+        </block>
+    </adminhtml_affiliateplustrash_transaction_deletedgrid>
+    
+    <adminhtml_affiliateplustrash_payment_deleted>
+        <reference name="content">
+            <block type="affiliateplustrash/adminhtml_payment_deleted" name="payment" />
+        </reference>
+    </adminhtml_affiliateplustrash_payment_deleted>
+    <adminhtml_affiliateplustrash_payment_deletedgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="affiliateplustrash/adminhtml_payment_deleted_grid" name="payment" />
+        </block>
+    </adminhtml_affiliateplustrash_payment_deletedgrid>
+</layout>

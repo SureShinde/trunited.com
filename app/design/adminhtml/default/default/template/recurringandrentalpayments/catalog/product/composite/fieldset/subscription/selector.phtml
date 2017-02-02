@@ -1,0 +1,52 @@
+<?php 
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-rental-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+$_product = $this->getProduct();
+$_id = $_product->getId();
+$planid=0;
+$symbole=Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+$plan1 = Mage::getModel('recurringandrentalpayments/plans')->getCollection()
+		->addFieldToFilter('product_id',$_product->getId());
+$isnormal=0;
+if ($plan1->getSize()>0):
+
+	foreach($plan1 as $p)
+	{
+		$planid=$p->getId();
+		$isnormal=$p->getIsNormal();
+	} 
+?>
+
+<?php  ?>
+
+<p class="recurringandrentalpayments-subscription">
+    <?php echo $this->__('Subscription type') ?>:
+   <select name="indies_recurringandrentalpayments_subscription_type" style="width:200px;">
+         <?php $type = Mage::getModel('recurringandrentalpayments/terms')->getCollection()
+				->addFieldToFilter('plan_id',$planid);?>
+          <?php if($isnormal==1):?>
+         <option value="0"><?php echo $this->__('No Subcrition')?></option>
+         <?php endif;?>
+		<?php foreach ($type as $item):
+		 ?>
+        <option value="<?php echo $item->getId()?>"><?php echo $item->getLabel().', Price:<span class="price">'.$symbole.$item->getPrice().'</span>' ?></option>
+        <?php endforeach; ?>
+    </select>
+    <span><input type="hidden" name="indies_recurringandrentalpayments_subscription_type"
+                 value="<?php echo $types[0]['value']?>"/><?php echo $types[0]['label']?></span>
+</p>
+
+<?php endif; ?>

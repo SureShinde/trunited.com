@@ -1,0 +1,69 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsTransfer
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Rewardpoints customer grid serializer select
+ * 
+ * @see Magestore_RewardPointsTransfer_Block_Adminhtml_Rewardpontstransfer_Edit_Tab_Customer_Serializer
+ */
+?>
+<?php $_id = 'customer_' . time() ?>
+<?php $_gridJsObject = $this->getGridBlock()->getJsObjectName() ?>
+
+<input type="hidden" name="<?php echo $this->getInputElementName() ?>" id="<?php echo $_id ?>" value="<?php echo $this->getGridBlock()->getSelectedCustomer() ?>" />
+
+<script type="text/javascript">
+
+<?php echo $_gridJsObject ?>.reloadParams = {selected_customer_id: <?php echo $this->getGridBlock()->getSelectedCustomer() ?>};
+    function customerObjectRowClick(grid, event) {
+//        alert('<?php echo $this->getGridBlock()->getInput() ?>');
+        var trElement = Event.findElement(event, 'tr');
+        if (trElement) {
+            var checkbox = Element.getElementsBySelector(trElement, 'input');
+            if (checkbox[0]) {
+                checkbox[0].checked = true;
+                $('<?php echo $_id ?>').value = checkbox[0].value;
+
+                if ('<?php echo $this->getGridBlock()->getInput() ?>' == 'sender')
+                {
+                    $('sender_id').value = checkbox[0].value;
+                    if (trElement.down('.customer_email').innerHTML != $('receiver_email').value)
+                    {
+                        $('sender_email').value = trElement.down('.customer_email').innerHTML;
+                        $('check_point').value = trElement.down('.point_balance').innerHTML;
+                    }
+
+                }
+                else
+                {
+                    $('receiver_id').value = checkbox[0].value;
+                    if (trElement.down('.customer_email').innerHTML != $('sender_email').value)
+                        $('receiver_email').value = trElement.down('.customer_email').innerHTML;
+                }
+
+<?php echo $_gridJsObject ?>.reloadParams = {selected_customer_id: checkbox[0].value};
+                // Hide after select customer account
+                TINY.box.hide();
+            }
+        }
+    }
+<?php echo $_gridJsObject ?>.rowClickCallback = customerObjectRowClick;
+
+</script>

@@ -1,0 +1,54 @@
+
+<?php
+/** 
+* 
+* Do not edit or add to this file if you wish to upgrade the module to newer 
+* versions in the future. If you wish to customize the module for your 
+* needs please contact us to https://www.milople.com/contact-us.html
+* 
+* @category		Ecommerce 
+* @package		Milople_Recurringandrentalpayments
+* @copyright	Copyright (c) 2016 Milople Technologies Pvt. Ltd. All Rights Reserved. 
+* @url			https://www.milople.com/magento-extensions/partial-payment.html
+* 
+**/
+?>
+
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="<?php echo $this->getHeaderWidth() ?>"><?php echo $this->getHeaderHtml() ?></td>
+            <td class="form-buttons"><?php echo $this->getButtonsHtml() ?></td>
+        </tr>
+    </table>
+</div>
+<div>
+    <?php echo $this->getChildHtml('store.switcher') ?>
+</div>
+<div>
+    <?php echo $this->getChildHtml('grid.filter.form') ?>
+</div>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    function filterFormSubmit() {
+		var filters = $$('#recurringandrentalpayments_reportdetail input');
+        var elements = new Array();
+		 var s = new Array();
+       	for(var i in filters){
+            if(filters[i].value && filters[i].value.length && !filters[i].disabled)
+			{
+				 elements.push(filters[i]);	 
+			}
+		}
+		var validator  = new Validation('recurringandrentalpayments_reportdetail');
+		if (validator.validate()) {
+            setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+encode_base64(Form.serializeElements(elements))+'/');
+       }
+    }
+//]]>
+</script>
+
+

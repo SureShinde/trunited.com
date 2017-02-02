@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<truboxadmin_adminhtml_items_index>
+		<reference name="content">
+			<block type="trubox/adminhtml_items" name="trubox.items" />
+		</reference>
+	</truboxadmin_adminhtml_items_index>
+</layout>
