@@ -13,7 +13,7 @@ class Magestore_Onestepcheckout_Block_Sales_Order_Totals_Giftwrap extends Mage_S
 		if($this->giftwrapAmount() > 0){
 			$total->setLabel('Get It Now');
 		}else{
-			$total->setLabel('TruBox This Order');
+			$total->setLabel('Ship With My TruBox');
 		}
 		$parent = $this->getParentBlock();
 		$parent->addTotal($total,'subtotal');

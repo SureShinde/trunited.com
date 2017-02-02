@@ -20,8 +20,8 @@ class Magestore_Onestepcheckout_Model_Freeshipping extends Mage_SalesRule_Model_
             return $this;
         }
 		/* Fix Shopping Cart Rule issue */
-		if($quote->getCustomerGroupId() == 0)
-			$quote->setCustomerGroupId(4);
+		// if($quote->getCustomerGroupId() == 0)
+			// $quote->setCustomerGroupId(4);
 		/* Fix Shopping Cart Rule issue */
         
 		$this->_calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());

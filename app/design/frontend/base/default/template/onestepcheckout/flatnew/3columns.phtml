@@ -302,7 +302,7 @@
 									<ul>
 										<li>
 											<input  checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);" name="delivery_type" type="radio" id="trubox" class="radio validate-one-required-by-name">
-											<label for="trubox"><?php echo $this->__('My Next TruBox Order (Or Gift Cards/Affiliate Fee)'); ?></label>
+											<label for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
 										</li>
 										<li>
 											<input  <?php if(Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"';?> onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);" name="delivery_type" type="radio" id="get_it_now" class="radio validate-one-required-by-name">

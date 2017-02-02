@@ -41,7 +41,6 @@ class Magestore_RewardPoints_Block_Adminhtml_Totals_Invoice_Point extends Mage_A
                 'code'  => 'rewardpoints_earn_label',
                 'label' => $this->__('Earn Points'),
                 'value' => $invoice->getRewardpointsEarn(),
-//                'strong'        => true,
                 'is_formated'   => true,
             )), 'subtotal');
         }

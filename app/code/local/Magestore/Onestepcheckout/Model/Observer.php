@@ -329,8 +329,10 @@ class Magestore_Onestepcheckout_Model_Observer extends Mage_Core_Controller_Vari
         //Save Order Note                
         $order = $observers->getEvent()->getOrder();
         $customerComment = $session->getData('customer_comment');
-		$isFirstOrder = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('customer_email',$order->getCustomerEmail());
-		if($isFirstOrder->getSize() == 1){
+		$isFirstOrder = Mage::getModel('sales/order')->getCollection()
+					  ->addFieldToFilter('customer_email',$order->getCustomerEmail());
+		
+		if(($isFirstOrder->getSize() == 1) || ($order->getOnestepcheckoutGiftwrapAmount() > 0)){
 			$customerComment = '*GET IT NOW*';
 		}
         if ($customerComment != "") {

@@ -99,14 +99,28 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));
+		
 		//TruBox Bonus Points
-		if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) 
-			&& (Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId()))){
-			$earningPoints = $address->getRewardpointsEarn();
-			$bonusPoints = ceil(0.1*$earningPoints);
-			$address->setRewardpointsBonus($bonusPoints);
-			$address->setRewardpointsEarn($earningPoints + $bonusPoints);
+		$bonusPoints = 0;
+		$earningPoints = $address->getRewardpointsEarn();
+		if(Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId())){
+			if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())){
+				$bonusPoints = ceil(0.1*$earningPoints);
+			}
 		}
+		
+        //Coupon Bonus Points
+		$checkCouponCode = Mage::getModel('salesrule/rule')->load(11)->getCouponCode();
+		if($quote->getCouponCode() == $checkCouponCode){
+			$bonusPoints += 5;
+		}
+		
+		//Shopping Cart Earning Rule Points
+		$shoppingCartRulePoints = Mage::helper('rewardpointsrule/calculation_earning')
+								->getShoppingCartPoints($quote);
+								
+		$address->setRewardpointsBonus($bonusPoints + $shoppingCartRulePoints);
+		$address->setRewardpointsEarn($earningPoints + $bonusPoints);
         
         return $this;
     }

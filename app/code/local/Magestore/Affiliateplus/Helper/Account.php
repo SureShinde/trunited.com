@@ -7,7 +7,9 @@ class Magestore_Affiliateplus_Helper_Account extends Mage_Core_Helper_Abstract {
     }
 
     public function customerLoggedIn() {
-        return Mage::getSingleton('customer/session')->isLoggedIn();
+        //disable Login tab by default
+		return true;
+		// return Mage::getSingleton('customer/session')->isLoggedIn();
     }
 
     public function accountNotRegistered() {
@@ -15,7 +17,9 @@ class Magestore_Affiliateplus_Helper_Account extends Mage_Core_Helper_Abstract {
     }
 
     public function isRegistered() {
-        return Mage::getSingleton('affiliateplus/session')->isRegistered();
+        //disable Register tab by default
+		return true;
+		// return Mage::getSingleton('affiliateplus/session')->isRegistered();
     }
 
     public function accountNotLogin() {
@@ -287,4 +291,23 @@ class Magestore_Affiliateplus_Helper_Account extends Mage_Core_Helper_Abstract {
     }
     //get affiliate information neu khong lay duoc tu cookie de save theo tier
     //customize by vietbq
+	
+	public function isPaidAffiliateFee(){
+		$fromDate = date('Y-m-d H:i:s', strtotime('-1 year'));
+		$customer = Mage::getSingleton('customer/session')->getCustomer();
+		$orders = Mage::getModel('sales/order')->getCollection()
+				->addAttributeToFilter('customer_id',$customer->getId())
+				->addAttributeToFilter('created_at', array('from'=>$fromDate));
+		
+		if($orders->getSize()){
+			foreach($orders as $order){
+				$items = $order->getAllVisibleItems();
+				foreach($items as $item):
+					  if($item->getSku() == '99AFFILIATE')
+						  return true;
+				endforeach;
+			}
+		}
+		return false;
+	}
 }

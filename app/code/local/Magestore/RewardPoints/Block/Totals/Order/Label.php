@@ -46,7 +46,7 @@ class Magestore_RewardPoints_Block_Totals_Order_Label extends Magestore_RewardPo
                 'label' => $this->__('Earn Points'),
                 'value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn()),
                 'is_formated'   => true,
-            )), 'first');
+            )), 'subtotal');
         }
         
         if ($order->getRewardpointsSpent()) {

@@ -11,7 +11,7 @@ class Smartwave_Ajaxcatalog_Model_Catalog_Layer extends Mage_Catalog_Model_Layer
 	*/
     public function getProductCollection()
     {
-        if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
+		if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
             $collection = $this->_productCollections[$this->getCurrentCategory()->getId()];
         } else {
             $collection = $this->getCurrentCategory()->getProductCollection();
