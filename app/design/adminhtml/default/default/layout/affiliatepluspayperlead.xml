@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+<!--    Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->
+    <adminhtml_affiliatepluspayperlead_affiliatepluspayperlead_index>
+        <reference name="content">
+            <block type="affiliatepluspayperlead/adminhtml_affiliatepluspayperlead" name="affiliatepluspayperlead" />
+        </reference>
+    </adminhtml_affiliatepluspayperlead_affiliatepluspayperlead_index>
+    <adminhtml_affiliatepluspayperlead_affiliatepluspayperlead_leadgrid>
+        <block type="core/text_list" name="root">
+            <block type="affiliatepluspayperlead/adminhtml_account_edit_tab_lead" name="account.edit.tab.lead"/>
+        </block>
+    </adminhtml_affiliatepluspayperlead_affiliatepluspayperlead_leadgrid>
+</layout>

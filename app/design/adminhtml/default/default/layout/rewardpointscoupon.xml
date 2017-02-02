@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsCoupon
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <adminhtml_reward_rewardpointscoupon_index>
+        <reference name="content">
+            <block type="rewardpointscoupon/adminhtml_rewardpointscoupon" name="rewardpointscoupon" />
+        </reference>
+    </adminhtml_reward_rewardpointscoupon_index>
+    <adminhtml_reward_rewardpointscoupon_edit>        
+        <reference name="left">
+            <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tabs" name="rewardpointscoupon_edit_tabs">                
+                <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tab_form" name="rewardpointscoupon_edit_tab_form"/>
+                <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tab_coupons" name="rewardpointscoupon_edit_tab_coupons">
+                    <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tab_coupons_form" name="rewardpointscoupon_edit_tab_coupons_form"/>
+                    <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tab_coupons_grid" name="rewardpointscoupon_edit_tab_coupons_grid"/>
+                </block>
+                <action method="addTab">
+                    <name>form_section</name>
+                    <block>rewardpointscoupon_edit_tab_form</block>                   
+                </action>
+                <action method="addTab">
+                    <name>coupons_section</name>
+                    <block>rewardpointscoupon_edit_tab_coupons</block>                   
+                </action>
+            </block>
+            <block type="adminhtml/template" template="rewardpointscoupon/couponjs.phtml" name="rewardpontscoupon_edit_jsinit"/>
+        </reference>
+        <reference name="content">
+            <block type="adminhtml/template" template="rewardpointscoupon/couponjs_gridajax.phtml" name="rewardpontscoupon_edit_jsinitb"/>
+            <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit" name="rewardpointscoupon_edit"></block>
+        </reference>
+    </adminhtml_reward_rewardpointscoupon_edit>
+    <adminhtml_reward_rewardpointscoupon_couponsgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="adminhtml/template" template="rewardpointscoupon/couponjs_gridajax.phtml" name="rewardpontscoupon_edit_jsinitb"/>
+            <block type="rewardpointscoupon/adminhtml_rewardpointscoupon_edit_tab_coupons_grid" name="rewardpointscoupon_edit_tab_coupons_grid" />
+        </block>
+    </adminhtml_reward_rewardpointscoupon_couponsgrid>
+</layout>

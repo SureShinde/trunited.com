@@ -1,0 +1,631 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+?>
+<?php
+/**
+ * @see Mage_Adminhtml_Block_Sales_Order_Create_Items_Grid
+ */
+?>
+<script type="text/javascript">
+window.dispdate = function dispdate(el,flag) {
+	var id = el.id;
+	var start_pos = id.indexOf('[') + 1;
+	var end_pos = id.indexOf(']',start_pos);
+
+	var text_to_get = id.substring(start_pos,end_pos);
+	if (flag == 0 )
+		text_to_get = el.id;
+    Calendar.setup({
+        inputField : 'item[' + text_to_get +'][indies_recurringandrentalpayments_subscription_start]',
+        ifFormat : '%m/%e/%Y',
+        button : id,
+        align : 'Bl',
+    });
+}
+window.showhide = function showhide(data)
+{
+	var term_id = data.value;
+	var div = data.id;
+	var start_pos = div.indexOf('[') + 1;
+	var end_pos = div.indexOf(']',start_pos);
+	var text_to_get = div.substring(start_pos,end_pos)
+	
+	var divId = 'datepicker_' + text_to_get;
+	if(term_id >= 1)
+	{
+		document.getElementById(divId).style.display = 'block';
+	}
+	else
+	{
+		document.getElementById(divId).style.display = 'none';
+	}
+	
+}
+window.radioButtonSelection = function radioButtonSelection(el)
+{
+ var item_id = el.id;
+ var term_id = el.value;
+ var id = 'item[' +  item_id +'][indies_recurringandrentalpayments_subscription_type]';
+
+ document.getElementById(id).value = term_id;
+ var calenderid = 'datepicker_' + item_id;
+ 
+ if(term_id >= 1)
+		document.getElementById(calenderid).style.display = 'block';
+ else
+		document.getElementById(calenderid).style.display = 'none';
+}
+
+
+</script>
+<?php  
+
+$recurringandrentalAuthentication = Mage::helper('recurringandrentalpayments/data');
+$isavailable = Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_GENERAL_ANONYMOUS_SUBSCRIPTIONS);	
+
+?>
+<?php $_items = $this->getItems() ?>
+<?php if (empty($_items)): ?>
+    <div class="grid" id="order-items_grid">
+        <table cellspacing="0" class="data order-tables">
+            <col />
+            <col width="100" />
+            <col width="40" />
+            <col width="100" />
+            <?php
+			//	if ($recurringandrentalAuthentication->canRun() && $recurringandrentalAuthentication->isEnabled() &&  $isavailable) {
+					echo '<col width="100" />';
+			//	}
+			?>
+            <col width="80" />
+            <col width="100" />
+            <col width="80" />
+            <thead>
+                <tr class="headings">
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Product') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Price') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Qty') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Subscription Type') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Subtotal') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Discount') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Row Subtotal') ?></th>
+
+                    <th class="no-link last"><?php echo $this->helper('sales')->__('Action') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="even">
+                    <td class="empty-text a-center" colspan="100"><?php echo $this->helper('sales')->__('No ordered items') ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<?php else: ?>
+<div>
+    <?php if(count($_items)>10): ?>
+    <p class="a-right">
+        <?php echo $this->getButtonHtml($this->helper('sales')->__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?>
+    </p>
+    <?php endif; ?>
+    <div class="grid" id="order-items_grid">
+        <table cellspacing="0" class="data order-tables">
+            <col />
+            <col width="100" />
+            <col width="100" />
+            <col width="40"  />
+            <?php
+				//if ($recurringandrentalAuthentication->canRun() && $recurringandrentalAuthentication->isEnabled() &&  $isavailable) {
+					echo '<col width="100" />';
+			//	}
+			?>
+            <col width="100" />
+            <col width="80"  />
+            <col width="100" />
+            <col width="80" />
+            <thead>
+                <tr class="headings">
+                    <th class="no-link" colspan="2"><?php echo $this->helper('sales')->__('Product') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Price') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Qty') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Subscription Type') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Subtotal') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Discount') ?></th>
+                    <th class="no-link"><?php echo $this->helper('sales')->__('Row Subtotal') ?></th>
+
+                    <th class="no-link last"><?php echo $this->helper('sales')->__('Action') ?></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td class="a-left" colspan="2"><?php echo $this->helper('sales')->__('Total %d product(s)', count($_items)) ?></td>
+					<?php
+					//	$postData = Mage::app()->getRequest()->getPost();
+					//	if ($recurringandrentalAuthentication->canRun() && $recurringandrentalAuthentication->isEnabled() &&  $isavailable) {
+                            echo '<td colspan="3" class="a-right">' . $this->helper('sales')->__('Subtotal:') . '</td>';
+                     /*   }
+						else {
+							echo '<td colspan="2" class="a-right">' . $this->helper('sales')->__('Subtotal:') . '</td>';
+						}*/
+                    ?>
+<!--  Task: Develop partial payment admin side functionality - End - Date: 23/04/2013 - By: Indies Services  -->
+                    <td class="price"><strong><?php echo $this->formatPrice($this->getSubtotal()) ?></strong></td>
+                    <td class="price"><strong><?php echo $this->formatPrice($this->getDiscountAmount()) ?></strong></td>
+                    <td class="price"><strong>
+                    <?php
+                        echo $this->formatPrice($this->getSubtotal() + $this->getDiscountAmount());
+                    ?></strong></td>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+            </tfoot>
+                <?php $i=0 ?>
+                <?php foreach ($_items as $_item):$i++ ?>
+                <tbody class="<?php echo ($i%2)?'even':'odd' ?>">
+                    <tr>
+                        <td class="first">
+                            <h5 class="title"><span id="order_item_<?php echo $_item->getId() ?>_title"><?php echo $this->htmlEscape($_item->getName()) ?></span></h5>
+                            <div>
+                                <strong><?php echo $this->helper('sales')->__('SKU') ?>:</strong>
+                                <?php echo implode('<br />', Mage::helper('catalog')->splitSku($this->escapeHtml($_item->getSku()))); ?>
+                            </div>
+                            <?php if($_item->getMessage(false)): ?>
+                                <?php foreach ($_item->getMessage(false) as $message): ?>
+                                <div class="<?php if($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
+                                    <div style="font-size:95%"><?php echo Mage::helper('core')->escapeHtml($message); ?></div>
+                                </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td class="a-center v-middle">
+                            <?php echo $this->getConfigureButtonHtml($_item) ?>
+                        </td>
+                        <td class="price">
+
+
+
+
+    <?php if ($this->helper('tax')->displayCartPriceExclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?>
+        <?php else: ?>
+            <?php echo $this->formatPrice($_item->getCalculationPrice()) ?>
+        <?php endif; ?>
+
+
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <br />
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+    <?php if ($this->helper('tax')->displayCartPriceInclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <br /><span class="label"><?php echo $this->__('Incl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+                <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedAmount()); ?>
+            <?php else: ?>
+                <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxDisposition()) ?>
+            <?php endif; ?>
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedAmount()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+
+
+                            <?php $_isCustomPrice = $this->usedCustomPriceForItem($_item) ?>
+                            <?php if($_tier = $this->getTierHtml($_item)): ?>
+                            <div id="item_tier_block_<?php echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> style="display:none"<?php endif; ?>>
+                                <a href="#" onclick="$('item_tier_<?php echo $_item->getId() ?>').toggle();return false;"><?php echo $this->helper('sales')->__('Tier Pricing') ?></a>
+                                <div style="display:none" id="item_tier_<?php echo $_item->getId() ?>"><?php echo $_tier ?></div>
+                            </div>
+                            <?php endif; ?>
+                            <?php if ($this->canApplyCustomPrice($_item)): ?>
+                            <div class="nobr">
+                            <input type="checkbox" id="item_use_custom_price_<?php echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?> onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php echo $_item->getId() ?>', 'item_tier_block_<?php echo $_item->getId() ?>');"/>
+                            <label class="normal" for="item_use_custom_price_<?php echo $_item->getId() ?>"><?php echo $this->helper('sales')->__('Custom Price') ?>*</label>
+                            </div>
+                            <?php endif; ?>
+                            <input id="item_custom_price_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][custom_price]" value="<?php echo sprintf("%.2f", $this->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?> style="display:none" disabled="disabled"<?php endif; ?> class="input-text item-price"/>
+                        </td>
+                        <td><input name="item[<?php echo $_item->getId() ?>][qty]" class="input-text item-qty" value="<?php echo $_item->getQty()*1 ?>" maxlength="12" /></td>
+                        <td>
+                       <?php   
+					   
+					   			$infoBuyRequest = $_item->getOptionByCode('info_buyRequest');
+								$buyRequest = new Varien_Object(unserialize($infoBuyRequest->getValue()));
+							 
+								$selected_type = '';
+								$date = new Zend_Date($this->formatDate(date(now()), Mage_Core_Model_Locale::FORMAT_TYPE_SHORT), null, Mage::app()->getLocale()->getLocaleCode());
+          						$selected_date = $date->toString(preg_replace(array('/M+/', '/d+/'), array('MM', 'dd'), Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT)));
+
+								if ($buyRequest->getIndiesRecurringandrentalpaymentsSubscriptionType()) {
+									$selected_type = $buyRequest->getIndiesRecurringandrentalpaymentsSubscriptionType();
+									$selected_date = $buyRequest->getIndiesRecurringandrentalpaymentsSubscriptionStart();
+								}
+							   $_id = $_item->getProductId();
+							   $planid=0;
+							   $plans_product = Mage::getModel('recurringandrentalpayments/plans_product')->load($_id);
+							   $planid = $plans_product->getPlanId();
+							  
+							   $plan = Mage::getModel('recurringandrentalpayments/plans')->load($plans_product->getPlanId());
+							   $subscription_start_date = $plan->getStartDate();
+							   $groupId = Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_GENERAL_ANONYMOUS_SUBSCRIPTIONS);
+								//$groupId = 0;
+								$customer_group = explode(',',Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_CUSTOMER_GROUP));
+								$current_cus_group = $this->getCustomer()->getGroupId();
+								if ($planid!= '' && $isavailable == 1 || $isavailable == 2 || $isavailable == 3 && in_array($current_cus_group,$customer_group) && $plan->getPlanStatus()==1)
+								{
+									if (Mage::getStoreConfig(Indies_Recurringandrentalpayments_Helper_Config::XML_PATH_DISPLAY_TYPE) == 1)
+									{   
+										// drop down 
+										if($subscription_start_date == 1):
+											echo'<select  name= "item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]"  style="width:200px;" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]" onchange="showhide(this);"/>';
+										else:
+											echo'<select  name= "item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]"  style="width:200px;" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]"/>';
+										endif;
+										$terms = Mage::getModel('recurringandrentalpayments/terms')->getCollection()->addFieldToFilter('plan_id',$planid);?>
+										  <?php if($plan->getIsNormal()==1):
+											 echo '<option value="-1"'.($selected_type == '' || $selected_type == '-1'?'selected="selected"':''). '>'. $this->__('No Subscription').'</option>';
+										  endif;
+										  foreach ($terms as $term): 
+										 	if ($selected_type == "" && $plan->getIsNormal() != 1) {
+												$selected_type = $term->getId();
+											}
+											echo '<option value="'. $term->getId().'"'.($selected_type == $term->getId()?' selected="selected"':'').'>'. $term->getLabel().'</option>';
+
+										 endforeach; 
+									  echo '</select>';
+									  
+									  if($subscription_start_date == 1):
+									 	 echo '<div class="datepicker" id="datepicker_'.$_item->getId().'"'.($selected_type == "" || $selected_type == "-1"?' style="display:none";':' style="display:block;"'). '>';
+										  echo '<label for="startfrom">'. $this->__('Subscription Start From: ') .'</label>';
+										  echo '<input size="10" name="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" value="'.$selected_date.'" type="text">&nbsp;&nbsp;&nbsp;'; 
+										  echo '<img  title="Select date" id="'.$_item->getId() .'" src="'.$this->getSkinUrl('images/grid-cal.gif').'" class="v-middle" onclick="dispdate(this,0);">';
+									  echo '</div>';
+									  else :
+									   if($subscription_start_date == 3 )  // First Day of Next Month
+									   {
+									      $startdate= date('Y-m-01');
+					  					  $selected_date = new Zend_Date(date('M-01-Y', strtotime("+1 months", strtotime(date("Y-m-d")))));			}
+									  	  echo '<input size="10" name="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" value="'.$selected_date.'" type="hidden">' ;
+ 									  endif;
+									}
+									else
+									{
+									  // radio button
+							          $terms = Mage::getModel('recurringandrentalpayments/terms')->getCollection()->addFieldToFilter('plan_id',$planid);
+									  if($plan->getIsNormal()==1):
+									      echo '<input '.($selected_type == '' || $selected_type == '-1'?'checked="checked"':'').' onchange="radioButtonSelection(this);" class="radio" type="radio" name= "item['. $_item->getId() . '][subscription_type_radio]" value="-1" id="'.$_item->getId().'"/>'. $this->__(' No Subscription').'<br>';
+									  endif;
+									  foreach ($terms as $term):
+									    echo '<input'.($selected_type == $term->getId() || $plan->getIsNormal() != 1 && $selected_type == ''?' checked="checked"':'').' onchange="radioButtonSelection(this);" class="radio" type="radio" name= "item['. $_item->getId() . '][subscription_type_radio]" value="'.$term->getId().'" id="'.$_item->getId().'"/>'.$term->getLabel().'<br>';
+										$id = $term->getId();
+									  endforeach;
+									 if($plan->getIsNormal()==1  && count($terms) > 1 && $selected_type == '')
+									 {
+										echo '<input type="hidden" name="item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]" id=item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]  value="-1"/>';
+									 }
+									 else
+									 {
+										echo '<input type="hidden" name="item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]" id=item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]  value="'.$id.'"/>';
+									 }
+									  //echo '<input type="hidden" name="item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]" id=item['. $_item->getId() . '][indies_recurringandrentalpayments_subscription_type]  value=""/>';
+								      echo '<div class="datepicker" id="datepicker_'.$_item->getId().'" '.($selected_type == '' || $selected_type == '-1'?'style="display:none";':'style="display:block;"'). '>';
+									  if($subscription_start_date == 1):
+									  	  echo '<label for="startfrom">'. $this->__('Subscription Start From: ') .'</label>';
+										  echo '<input size="10" name="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" value="'.$selected_date.'" type="text">'; 
+										  echo '<img  title="Select date" id="radiocal['.$_item->getId() .']" src="'.$this->getSkinUrl('images/grid-cal.gif').'" class="v-middle" onclick="dispdate(this,1);">';
+									  else :
+										   if($subscription_start_date == 3 )  // First Day of Next Month
+										   {
+											  $startdate= date('Y-m-01');
+											  $selected_date = new Zend_Date(date('M-01-Y', strtotime("+1 months", strtotime(date("Y-m-d")))));
+										   }
+										 echo '<input size="10" name="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" id="item[' . $_item->getId() . '][indies_recurringandrentalpayments_subscription_start]" value="'.$selected_date.'" type="hidden">'; 
+									   endif;
+									echo '</div>';
+					  		        }
+								}
+								
+?>
+                      	</td>
+                        <td class="price">
+
+
+    <?php if ($this->helper('tax')->displayCartPriceExclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php echo $this->formatPrice($_item->getRowTotal()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?>
+        <?php else: ?>
+            <?php echo $this->formatPrice($_item->getRowTotal()) ?>
+        <?php endif; ?>
+
+
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <br />
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+    <?php if ($this->helper('tax')->displayCartPriceInclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <br /><span class="label"><?php echo $this->__('Incl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+                <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?>
+            <?php else: ?>
+                <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxRowDisposition()) ?>
+            <?php endif; ?>
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+
+                        </td>
+                        <td class="price">
+                            <?php echo $this->formatPrice(-$_item->getDiscountAmount()) ?><br />
+                            <input id="item_use_discount_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][use_discount]"<?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?> value="1" type="checkbox" />
+                            <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo $this->helper('sales')->__('Apply') ?></label>
+                        </td>
+                        <td class="price">
+
+
+    <?php if ($this->helper('tax')->displayCartPriceExclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php $_rowTotalWithoutDiscount = $_item->getPriceInclTax() * $_item->getQty() - $_item->getDiscountAmount() - $_item->getTaxAmount(); ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <span class="label"><?php echo $this->__('Excl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition())); ?>
+        <?php else: ?>
+            <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+        <?php endif; ?>
+
+
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <br />
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total'); ?>:<br /> <?php echo $this->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedRowAmount()+$_item->getWeeeTaxRowDisposition()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+    <?php if ($this->helper('tax')->displayCartPriceInclTax($this->getStore()) || $this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+        <?php if ($this->helper('tax')->displayCartBothPrices($this->getStore())): ?>
+            <br /><span class="label"><?php echo $this->__('Incl. Tax'); ?>:</span>
+        <?php endif; ?>
+        <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getDiscountAmount(); ?>
+        <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales')): ?>
+            <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?>
+        <?php else: ?>
+            <?php echo $this->formatPrice($_incl-$_item->getWeeeTaxRowDisposition()) ?>
+        <?php endif; ?>
+        <?php if (Mage::helper('weee')->getApplied($_item)): ?>
+            <br />
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 1, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><small><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></small></span><br />
+                <?php endforeach; ?>
+            <?php elseif (Mage::helper('weee')->typeOfDisplay($_item, 4, 'sales')): ?>
+                <small>
+                <?php foreach (Mage::helper('weee')->getApplied($_item) as $tax): ?>
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span><br />
+                <?php endforeach; ?>
+                </small>
+            <?php endif; ?>
+
+            <?php if (Mage::helper('weee')->typeOfDisplay($_item, 2, 'sales')): ?>
+                <span class="nobr"><?php echo Mage::helper('weee')->__('Total incl. tax'); ?>:<br /> <?php echo $this->formatPrice($_incl+$_item->getWeeeTaxAppliedRowAmount()); ?></span>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+                        </td>
+                        <td class="last">
+                            <select name="item[<?php echo $_item->getId() ?>][action]" style="width:100px;">
+                                <option value=""></option>
+                                <option value="remove"><?php echo $this->helper('sales')->__('Remove') ?></option>
+                                <?php if($this->getCustomerId() && $this->getMoveToCustomerStorage()): ?>
+                                    <option value="cart"><?php echo $this->helper('sales')->__('Move to Shopping Cart') ?></option>
+                                    <?php if ($this->isMoveToWishlistAllowed($_item)): ?>
+                                        <?php $wishlists = $this->getCustomerWishlists();?>
+                                        <?php if (count($wishlists) <= 1):?>
+                                            <option value="wishlist"><?php echo $this->helper('sales')->__('Move to Wishlist') ?></option>
+                                        <?php else: ?>
+                                            <optgroup label="<?php echo $this->helper('sales')->__('Move to Wishlist') ?>">
+                                                <?php foreach ($wishlists as $wishlist):?>
+                                                    <option value="wishlist_<?php echo $wishlist->getId();?>"><?php echo $this->escapeHtml($wishlist->getName());?></option>
+                                                <?php endforeach;?>
+                                            </optgroup>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+					
+                    </tr>
+					
+                    <?php echo $this->getItemExtraInfo($_item)->toHtml(); ?>
+                </tbody>
+                <?php endforeach; ?>
+        </table>
+    </div>
+    <table cellspacing="0" width="100%">
+        <col width="50%" />
+        <col width="50%" />
+        <tr>
+            <td class="a-left"><small><?php echo $this->getInclExclTaxMessage(); ?></small></td>
+            <td class="a-right"><?php echo $this->getButtonHtml($this->helper('sales')->__('Update Items and Qty\'s'),'order.itemsUpdate()'); ?></td>
+        </tr>
+    </table>
+    <br />
+    <div id="order-coupons"><?php echo $this->getChildHtml();?></div>
+    <div class="clear"></div>
+    <script type="text/javascript">order.itemsOnchangeBind()</script>
+</div>
+
+<?php if ($this->isGiftMessagesAvailable()) : ?>
+<script type="text/javascript">
+//<![CDATA[
+    /**
+     * Retrieve gift options tooltip content
+     */
+    function getGiftOptionsTooltipContent(itemId) {
+        var contentLines = [];
+        var headerLine = null;
+        var contentLine = null;
+
+        $$('#gift_options_data_' + itemId + ' .gift-options-tooltip-content').each(function (element) {
+            if (element.down(0)) {
+                headerLine = element.down(0).innerHTML;
+                contentLine = element.down(0).next().innerHTML;
+                if (contentLine.length > 30) {
+                    contentLine = contentLine.slice(0,30) + '...';
+                }
+                contentLines.push(headerLine + ' ' + contentLine);
+            }
+        });
+        return contentLines.join('<br/>');
+    }
+    giftOptionsTooltip.setTooltipContentLoaderFunction(getGiftOptionsTooltipContent);
+
+//]]>
+</script>
+<?php endif; ?>
+<?php endif; ?>

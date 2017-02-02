@@ -1,0 +1,423 @@
+<?xml version="1.0"?>
+<!--
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+-->
+<layout version="0.1.0">
+	<adminhtml_recurringandrentalpayments_index>
+        <reference name="content">
+            <block type="recurringandrentalpayments/adminhtml_recurringandrentalpayments" name="recurringandrentalpayments" />
+        </reference>
+    </adminhtml_recurringandrentalpayments_index>
+	
+	 <recurringandrentalpayments_admin_alerts_edit>
+        <reference name="head">
+            <action method="addJs">
+                <script>recurringandrentalpayments/adminhtml/alerts.js</script>
+            </action>
+        </reference>
+    </recurringandrentalpayments_admin_alerts_edit>
+	
+	<adminhtml_report_index>
+        <reference name="content">
+			<block type="recurringandrentalpayments/adminhtml_report" template="recurringandrentalpayments/report.phtml" name="sales.report.grid.container">
+				<block type="recurringandrentalpayments/adminhtml_report_filter_form_form" name="grid.filter.form">
+					<action method="setFieldVisibility">
+                        <field>report_type</field>
+                        <visibility>0</visibility>
+                    </action>
+				 </block>
+            </block>
+        </reference>
+    </adminhtml_report_index>
+	<adminhtml_sales_order_view>
+	  <reference name="order_items">
+		  <action method="addItemRender">
+			  <type>simple</type>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_renderer_simple</block>
+			  <template>sales/order/view/items/renderer/default.phtml</template>
+		  </action>
+		  <action method="addColumnRender">
+			  <column>name</column>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+			  <template>sales/items/column/name.phtml</template>
+			  <type>simple</type>
+		  </action>
+		  <action method="addItemRender">
+			  <type>configurable</type>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_renderer_simple</block>
+			  <template>sales/order/view/items/renderer/default.phtml</template>
+		  </action>
+		  <action method="addColumnRender">
+			  <column>name</column>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+			  <template>sales/items/column/name.phtml</template>
+			  <type>configurable</type>
+		  </action>
+		  <action method="addItemRender">
+			  <type>downloadable</type>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_renderer_downloadable</block>
+			  <template>downloadable/sales/order/view/items/renderer/downloadable.phtml</template>
+		  </action>
+		  <action method="addColumnRender">
+			  <column>downloadable</column>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+			  <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+			  <type>downloadable</type>
+		  </action>
+		  <action method="addItemRender">
+			  <type>grouped</type>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_renderer_simple</block>
+			  <template>sales/order/view/items/renderer/default.phtml</template>
+		  </action>
+		  <action method="addItemRender">
+			  <type>bundle</type>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_bundle_name</block>
+			  <template>bundle/sales/order/view/items/renderer.phtml</template>
+		  </action>
+		  <action method="addColumnRender">
+			  <column>name</column>
+			  <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+			  <template>sales/items/column/name.phtml</template>
+			  <type>recurringandrentalpaymentsgrouped</type>
+		  </action>
+	  </reference>
+	  <reference name="order_tab_info">
+		  <action method="setTemplate">
+			  <template>recurringandrentalpayments/order/view/tab/info.phtml</template>
+		  </action>
+	  </reference>
+	  <reference name="order_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+				<action method="setAfterCondition"><condition>last</condition></action>
+            </block>
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments.refunded" template="recurringandrentalpayments/sales/order/refunded.phtml">
+                <action method="setAfterCondition"><condition>last</condition></action>
+            </block>
+        </reference>
+    </adminhtml_sales_order_view>
+	
+	<adminhtml_sales_order_invoice_new>
+         <reference name="invoice_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+            </block>
+        </reference> 	
+        <reference name="order_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+	
+	<adminhtml_sales_order_invoice_updateqty>
+        <reference name="order_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+		 <reference name="invoice_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+            </block>
+        </reference>
+    </adminhtml_sales_order_invoice_updateqty>
+	
+	<adminhtml_sales_order_invoice_view>
+        <reference name="invoice_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+		 <reference name="invoice_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+            </block>
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+	
+	<adminhtml_sales_order_shipment_new>
+        <reference name="order_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+        </reference>
+    </adminhtml_sales_order_shipment_new>
+	
+	<adminhtml_sales_order_shipment_view>
+        <reference name="shipment_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+        </reference>
+    </adminhtml_sales_order_shipment_view>
+	
+	<adminhtml_sales_order_creditmemo_new>
+        <reference name="creditmemo_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+            </block>
+        </reference>
+        <reference name="order_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+    </adminhtml_sales_order_creditmemo_new>
+	
+	<adminhtml_sales_order_creditmemo_updateqty>
+        <reference name="order_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+		<reference name="creditmemo_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments" template="recurringandrentalpayments/sales/order/total.phtml">
+            </block>
+        </reference>
+    </adminhtml_sales_order_creditmemo_updateqty>
+	
+	<adminhtml_sales_order_creditmemo_view>
+        <reference name="creditmemo_items">
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>simple</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_name</block>
+                <template>sales/items/column/name.phtml</template>
+                <type>configurable</type>
+            </action>
+            <action method="addColumnRender">
+                <column>name</column>
+                <block>recurringandrentalpayments/adminhtml_sales_order_view_items_column_downloadable_name</block>
+                <template>downloadable/sales/items/column/downloadable/name.phtml</template>
+                <type>downloadable</type>
+            </action>
+        </reference>
+		 <reference name="creditmemo_totals">
+            <block type="adminhtml/sales_order_totals_item" name="recurringandrentalpayments.refunded" template="recurringandrentalpayments/sales/order/refunded.phtml">
+                <action method="setDisplayArea"><area>footer</area></action>
+            </block>
+        </reference>
+    </adminhtml_sales_order_creditmemo_view>
+
+	<!--<PRODUCT_TYPE_simple>
+        <reference name="product.composite.fieldset">
+            <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_simple"
+                   name="product.composite.fieldset.subscription_simple" before="product.composite.fieldset.options"
+                   template="recurringandrentalpayments/catalog/product/composite/fieldset/type/subscription_simple.phtml">
+                <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_simple"
+                       name="product.info.sarp.subscription.selector" as="subscription_selector">
+                    <action method="applyTemplate"></action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_simple>
+
+    <PRODUCT_TYPE_virtual>
+        <reference name="product.composite.fieldset">
+            <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_virtual"
+                   name="product.composite.fieldset.subscription_virtual" before="product.composite.fieldset.options"
+                   template="recurringandrentalpayments/catalog/product/composite/fieldset/type/subscription_virtual.phtml">
+                <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_virtual"
+                       name="product.info.sarp.subscription.selector" as="subscription_selector">
+                    <action method="applyTemplate"></action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_virtual>
+
+    <PRODUCT_TYPE_configurable>
+        <reference name="product.composite.fieldset">
+            <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_configurable"
+                   name="product.composite.fieldset.subscription_configurable"
+                   before="product.composite.fieldset.options"
+                   template="recurringandrentalpayments/catalog/product/composite/fieldset/type/subscription_configurable.phtml">
+                <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_configurable"
+                       name="product.info.sarp.subscription.selector" as="subscription_selector">
+                    <action method="applyTemplate"></action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_configurable>
+
+    <PRODUCT_TYPE_grouped>
+        <reference name="product.composite.fieldset">
+            <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_grouped"
+                   name="product.composite.fieldset.subscription_grouped" before="product.composite.fieldset.options"
+                   template="recurringandrentalpayments/catalog/product/composite/fieldset/type/subscription_grouped.phtml">
+                <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_grouped"
+                       name="product.info.sarp.subscription.selector" as="subscription_selector">
+                    <action method="applyTemplate"></action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_grouped>
+	
+    <PRODUCT_TYPE_downloadable>
+        <reference name="product.composite.fieldset">
+            <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_downloadable"
+                   name="product.composite.fieldset.subscription_downloadable"
+                   before="product.composite.fieldset.options"
+                   template="recurringandrentalpayments/catalog/product/composite/fieldset/type/subscription_downloadable.phtml">
+                <block type="recurringandrentalpayments/adminhtml_catalog_product_composite_fieldset_subscription_downloadable"
+                       name="product.info.sarp.subscription.selector" as="subscription_selector">
+                    <action method="applyTemplate"></action>
+                </block>
+            </block>
+        </reference>
+    </PRODUCT_TYPE_downloadable>-->
+	
+	
+	<adminhtml_sales_order_create_index>
+    	<reference name="items">            
+			<block type="adminhtml/sales_order_create_items_grid" template="recurringandrentalpayments/sales/order/create/items/grid.phtml" name="items_grid">
+				<block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+					<block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+				</block>
+			</block>
+        </reference>
+    </adminhtml_sales_order_create_index>
+	<adminhtml_sales_order_create_load_block_data>
+
+    	<reference name="items">            
+
+			<block type="adminhtml/sales_order_create_items_grid" template="recurringandrentalpayments/sales/order/create/items/grid.phtml" name="items_grid">
+
+				<block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+
+					<block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+
+				</block>
+
+			</block>
+
+        </reference>
+
+    </adminhtml_sales_order_create_load_block_data>
+
+	<adminhtml_sales_order_create_load_block_items>
+
+    	<reference name="items">            
+
+			<block type="adminhtml/sales_order_create_items_grid" template="recurringandrentalpayments/sales/order/create/items/grid.phtml" name="items_grid">
+
+				<block type="adminhtml/sales_order_create_coupons" template="sales/order/create/coupons/form.phtml" name="coupons">
+
+					<block type="adminhtml/sales_order_create_coupons_form" template="sales/order/create/coupons/form.phtml" name="form" />
+
+				</block>
+
+			</block>
+
+        </reference>
+
+    </adminhtml_sales_order_create_load_block_items>
+	
+
+</layout>

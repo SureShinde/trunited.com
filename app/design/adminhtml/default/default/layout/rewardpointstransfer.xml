@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPointsTransfer
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+    <adminhtml_reward_rewardpointstransfer_index>
+        <reference name="content">
+            <block type="rewardpointstransfer/adminhtml_rewardpointstransfer" name="rewardpointstransfer" />
+        </reference>
+    </adminhtml_reward_rewardpointstransfer_index>
+    <adminhtml_reward_rewardpointstransfer_edit>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/magestore/rewardpoints.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/tinybox/style.css</stylesheet>
+            </action>
+            <action method="addJs">
+                <script>tinybox/tinybox.js</script>
+            </action>
+        </reference>
+    </adminhtml_reward_rewardpointstransfer_edit>
+    <adminhtml_reward_rewardpointstransfer_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="rewardpointstransfer/adminhtml_rewardpointstransfer_grid" name="rewardpoints_tranfer" />
+        </block>
+    </adminhtml_reward_rewardpointstransfer_grid>
+    <adminhtml_reward_rewardpointstransfer_customer>
+        <block type="core/text_list" name="root">
+            <block type="adminhtml/template" template="rewardpointstransfer/transfer/customer/header.phtml" name="transaction.popup.header" />
+            <block type="rewardpointstransfer/adminhtml_rewardpointstransfer_edit_tab_customer" name="transaction.popup.customer" />
+            <block type="rewardpointstransfer/adminhtml_rewardpointstransfer_edit_tab_customer_serializer" name="transaction.popup.serializer">
+                <action method="initSerializerBlock">
+                    <grid_name>transaction.popup.customer</grid_name>
+                    <hidden_input_name>selected_customer_id</hidden_input_name>
+                </action>
+            </block>
+        </block>
+    </adminhtml_reward_rewardpointstransfer_customer>
+    <adminhtml_reward_rewardpointstransfer_customergrid>
+        <block type="core/text_list" name="root">
+             <block type="rewardpointstransfer/adminhtml_rewardpointstransfer_edit_tab_customer" name="transaction.popup.customer" /> 
+        </block>
+    </adminhtml_reward_rewardpointstransfer_customergrid>
+</layout>

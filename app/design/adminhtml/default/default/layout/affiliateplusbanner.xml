@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_AffiliateplusBanner
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+-->
+<layout version="0.1.0">
+<!--    Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->
+    <adminhtml_affiliateplusbanner_banner_index>
+        <reference name="content">
+            <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm"><params>0</params></action>
+            </block>
+            <block type="affiliateplusbanner/adminhtml_banner" name="affiliateplusbanner" />
+        </reference>
+    </adminhtml_affiliateplusbanner_banner_index>
+    <adminhtml_affiliateplusbanner_banner_edit>
+        <reference name="left">
+            <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm"><params>1</params></action>
+            </block>
+        </reference>
+    </adminhtml_affiliateplusbanner_banner_edit>
+    
+    <adminhtml_affiliateplusbanner_banner_banner>
+        <block type="core/text_list" name="root">
+            <block type="affiliateplusbanner/adminhtml_banner_edit_tab_banner" name="tab.banner" />
+            <block type="adminhtml/widget_grid_serializer" name="related_grid_serializer">
+                <action method="initSerializerBlock">
+                    <grid_block_name>tab.banner</grid_block_name>
+                    <data_callback>getSelectedRelatedBanners</data_callback>
+                    <hidden_input_name>banners</hidden_input_name>
+                    <reload_param_name>obanner</reload_param_name>
+                </action>
+                <action method="addColumnInputName">
+                    <input_name>position</input_name>
+                </action>
+            </block>
+        </block>
+    </adminhtml_affiliateplusbanner_banner_banner>
+    <adminhtml_affiliateplusbanner_banner_bannergrid>
+        <block type="core/text_list" name="root">
+            <block type="affiliateplusbanner/adminhtml_banner_edit_tab_banner" name="tab.banner" />
+        </block>
+    </adminhtml_affiliateplusbanner_banner_bannergrid>
+</layout>

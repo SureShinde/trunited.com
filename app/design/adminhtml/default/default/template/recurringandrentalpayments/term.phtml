@@ -1,0 +1,278 @@
+<?php
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-subscription-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+	$_htmlId = 'recurringandrentalpayments';
+	$terms_day 	= Indies_Recurringandrentalpayments_Model_Terms::TERMSPER_DAY;
+	$terms_week	= Indies_Recurringandrentalpayments_Model_Terms::TERMSPER_WEEK;
+	$terms_month= Indies_Recurringandrentalpayments_Model_Terms::TERMSPER_MONTH;
+	$terms_year = Indies_Recurringandrentalpayments_Model_Terms::TERMSPER_YEAR;
+	$price_calc_type_fix = Indies_Recurringandrentalpayments_Model_Terms::PRICE_CALC_TYPE_FIXED;
+	$price_calc_type_per = Indies_Recurringandrentalpayments_Model_Terms::PRICE_CALC_TYPE_PER;
+	
+?>
+<script type="text/javascript">
+//<![CDATA[
+	var courcesControl = null;
+//]]>
+</script>
+<div id="product_info_tabs_group_courses_content">
+	<div class="entry-edit">
+		<div class="entry-edit-head">
+			<h4 class="icon-head head-edit-form fieldset-legend">Terms</h4>
+		</div>
+		<div class="fieldset fieldset-wide" id="group_fields_courses">
+			<div class="hor-scroll">
+				<table class="form-list" cellspacing="0">
+					<tbody>
+						<tr>
+							<td class="grid">
+								<table class="data border" id="<?php echo $_htmlId; ?>_table" cellspacing="0">
+									<col width="250" />
+									<col width="100" />
+									<col width="100" />
+									<col width="100" />
+                                    <col width="100" />
+                                    <col width="100" />
+                                    <col width="100" />
+                                    <col width="100" />
+									<thead>
+										<tr class="headings">
+							<th ><?php echo Mage::helper('recurringandrentalpayments')->__('Term Title') ?>
+                            <span class="required">*</span></th>
+							<th style="width: 135px;border-right:0"><?php echo Mage::helper('recurringandrentalpayments')->__('Repeat Each') ?>
+                            <span class="required">*</span>&nbsp;&nbsp;&nbsp;</th>
+							<th style="border-left:0"><?php echo Mage::helper('recurringandrentalpayments')->__('') ?></th>
+                            
+                            <th><?php echo Mage::helper('recurringandrentalpayments')->__('Payment Before Days') ?></th>
+							<th style="width: 135px;border-right:0"><?php echo Mage::helper('recurringandrentalpayments')->__('Price Per Term') ?>
+                            <span class="required">*</span>&nbsp;&nbsp;&nbsp;</th>
+                           	<th style="border-left:0"><?php echo Mage::helper('recurringandrentalpayments')->__('') ?></th>
+
+                            <th><?php echo Mage::helper('recurringandrentalpayments')->__('Number of Terms') ?>
+                            <span class="required">*</span></th>
+							<th><?php echo Mage::helper('recurringandrentalpayments')->__('Sort Order') ?></th>											
+                            <th class="last">Action</th>
+										</tr>
+									</thead>
+									<tbody id="<?php echo $_htmlId; ?>_container">
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="9" class="a-right">
+												<button id="btn_add_course" type="button" class="scalable add" onclick="return courcesControl.addItem()"><span><?php echo Mage::helper('recurringandrentalpayments')->__('Add Term') ?></span></button>												
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+
+var coursesRowTemplate = ''
++'<tr>'
++'	<td>'
++'		<input name="plan[terms][{{index}}][id]" value="{{id}}" id="terms_row_{{index}}_id" type="hidden" />'
++'		<input  class="input-text required-entry " name="plan[terms][{{index}}][label]" value="{{label}}" id="terms_row_{{index}}_label" type="text" />'
++'	</td>'
++'	<td style="border-right:0">'
++'	<input class="input-text required-entry validate-greater-than-zero "  name="plan[terms][{{index}}][repeateach]" value="{{repeateach}}" id="terms_row_{{index}}_repeateach" type="text"  /></td>'
++'	<td style="border-left:0"><select name="plan[terms][{{index}}][termsper]" id="terms_row_{{index}}_termsper" onchange="buildPaymentBeforeDays(this.value, \'terms_row_{{index}}_paymentbeforedays\')" >'
++'  <option value="<?php echo $terms_day ?>"><?php echo ucwords($terms_day).'(s)' ?></option>'
++'  <option value="<?php echo $terms_week ?>"><?php echo ucwords($terms_week).'(s)' ?></option>'
++' <option value="<?php echo $terms_month ?>"><?php echo ucwords($terms_month).'(s)' ?></option>'
++' <option value="<?php echo $terms_year ?>"><?php echo ucwords($terms_year).'(s)' ?></option>'
++'</select>'
++'	</td>'
++'	<td>'
++'	<select name="plan[terms][{{index}}][paymentbeforedays]" id="terms_row_{{index}}_paymentbeforedays" style="display:none;">'
++'  <option value="0">0</option>'
++'</select>'
++'	</td>'
++'	<td style="border-right:0">'
++'      <input class="input-text validate-greater-than-zero required-entry" name="plan[terms][{{index}}][price]" value="{{price}}" id="terms_row_{{index}}_price" type="text" />'
++'	    <td style="border-left:0"><select name="plan[terms][{{index}}][pricecalculationtype]" id="terms_row_{{index}}_pricecalculationtype"  style="width:95px;">'
++' 		<option value="<?php echo $price_calc_type_fix ?>"><?php echo 'Fixed' ?></option>'
++' 		<option value="<?php echo $price_calc_type_per ?>"><?php echo 'Percentage' ?></option>'
++'      </td></select>'
++'	</td>'
++'	<td>'
++'      <input class="input-text validate-zero-or-greater required-entry" name="plan[terms][{{index}}][noofterms]" value="{{noofterms}}" id="terms_row_{{index}}_noofterms" type="text" />'
++'		<label>Set 0 for Infinity </label>'
++'	</td>'
++'  <td class="last" style="text-align:center;">'
++'		{{delegates}} '
++'		<input class="input-text validate-zero-or-greater" name="plan[terms][{{index}}][sortorder]" value="{{sortorder}}" id="courses_row_{{index}}_sortorder" type="text" />'
++'	</td>'
++'  <td class="last">'
++'		<input name="plan[terms][{{index}}][delete]" class="delete" value="" id="terms_row_{{index}}_delete" type="hidden" />'
++'		<input name="plan[terms][{{index}}][delete]" class="delete" value="" id="terms_row_{{index}}_delete" type="hidden" />'
++'		<button title="Delete Term" type="button" class="scalable delete icon-btn delete-product-option" id="terms_row_{{index}}_delete_button" onclick="return courcesControl.deleteItem(event);"><span><?php echo Mage::helper('recurringandrentalpayments')->__('Delete') ?></span></button>'
++'	</td>'
++'</tr>';
+
+payment_before_days = new Array();
+
+function buildPaymentBeforeDays (term, control_id) {
+	for (var i = document.getElementById(control_id).options.length - 1; i >= 0; i--) {
+		document.getElementById(control_id).remove(i);
+	}
+
+	if (term == 'day') {
+		maximum_days = 0;
+	}
+
+	if (term == 'week') {
+		maximum_days = 5;
+	}
+
+	if (term == 'month') {
+		maximum_days = 10;
+	}
+
+	if (term == 'year') {
+		maximum_days = 30;
+	}
+
+	for(i = 0; i <= maximum_days; i++) {
+		document.getElementById(control_id).add(new Option(i, i));
+	}
+
+	if (maximum_days > 0) {
+		document.getElementById(control_id).style.display = 'block';
+		document.getElementById(control_id).value = payment_before_days[control_id];
+	}
+	else {
+		document.getElementById(control_id).style.display = 'none';
+	}
+}
+
+courcesControl = {
+    template: new Template(coursesRowTemplate, new RegExp('(^|.|\\r|\\n)({{\\s*(\\w+)\\s*}})', "")),
+    itemsCount: 0,
+    addItem : function () {
+		var data = {
+            id: '',
+            label: '',
+			repeateach: '',
+			termsper: '',
+			paymentbeforedays: '',
+			price: '',
+			pricecalculationtype: '',
+            noofterms: '',
+            sortorder: '',           
+            index: this.itemsCount++
+        };
+        if(arguments.length >= 9) {
+            data.id 					= arguments[0];
+            data.label   				= arguments[1];
+            data.repeateach	        	= arguments[2];
+            data.termsper	          	= arguments[3];
+			data.paymentbeforedays	    = arguments[4];
+            data.price        			= arguments[5];
+			data.pricecalculationtype   = arguments[6];
+            data.noofterms              = arguments[7];
+            data.sortorder             	= arguments[8];
+            
+        }
+
+        var el = Element.insert($('<?php echo $_htmlId ?>_container'), {
+            bottom : this.template.evaluate(data)
+        });
+		if(data.termsper == "<?php echo $terms_day ?>") {	
+            var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[2].select('select')[0]).value = "<?php echo $terms_day ?>";
+        }
+		if(data.termsper == "<?php echo $terms_week ?>") {			
+            var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[2].select('select')[0]).value = "<?php echo $terms_week ?>";
+			payment_before_days[$(tds[3].select('select')[0]).id] = data.paymentbeforedays;
+			buildPaymentBeforeDays(data.termsper, $(tds[3].select('select')[0]).id);
+        }
+		if(data.termsper == "<?php echo $terms_month ?>") {			
+            var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[2].select('select')[0]).value = "<?php echo $terms_month ?>";
+			payment_before_days[$(tds[3].select('select')[0]).id] = data.paymentbeforedays;
+			buildPaymentBeforeDays(data.termsper, $(tds[3].select('select')[0]).id);
+        }
+		if(data.termsper == "<?php echo $terms_year ?>") {			
+            var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[2].select('select')[0]).value = "<?php echo $terms_year ?>";
+			payment_before_days[$(tds[3].select('select')[0]).id] = data.paymentbeforedays;
+			buildPaymentBeforeDays(data.termsper, $(tds[3].select('select')[0]).id);
+        }
+		
+		if(data.pricecalculationtype ==  <?php echo $price_calc_type_per; ?>)
+		{
+			var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[5].select('select')[0]).value = "<?php echo $price_calc_type_per; ?>";
+		}
+		if(data.pricecalculationtype ==  <?php echo $price_calc_type_fix; ?>)
+		{
+			var tr = el.select('tr');
+			var tds = tr[tr.length-1].select('td');
+			$(tds[5].select('select')[0]).value = "<?php echo $price_calc_type_fix; ?>";
+		}
+    },
+
+    disableElement: function(el) {
+        el.disabled = true;
+        el.addClassName('disabled');
+    },
+
+    setReadOnly : function(el) {
+        el.addClassName('disabled');
+    },
+
+    deleteItem: function(event) {
+        var tr = Event.findElement(event, 'tr');
+        if (tr) {
+            Element.select(tr, '.delete').each(function(elem){elem.value='1'});
+            Element.select(tr, ['input', 'select']).each(function(elem){elem.hide()});
+            Element.hide(tr);
+            Element.addClassName(tr, 'no-display template');
+        }
+        return false;
+    }
+};
+<?php 
+$col=$this->getTermsCollection($this->getRequest()->getParam('id'));
+
+foreach ($col as $course):?>
+	courcesControl.addItem(	
+		'<?php echo addslashes($course->getId())?>',	
+		'<?php echo addslashes($course->getLabel())?>',
+		'<?php echo addslashes($course->getRepeateach())?>',
+		'<?php echo addslashes($course->getTermsper())?>',
+		'<?php echo addslashes($course->getPaymentBeforeDays())?>',
+        '<?php echo addslashes($course->getPrice())?>',
+		'<?php echo addslashes($course->getPriceCalculationType())?>',
+		'<?php echo addslashes($course->getNoofterms())?>',
+        '<?php echo addslashes($course->getSortorder()); ?>'
+	);
+<?php endforeach; ?>
+</script>

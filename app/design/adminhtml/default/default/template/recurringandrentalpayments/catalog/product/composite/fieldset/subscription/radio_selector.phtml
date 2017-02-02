@@ -1,0 +1,51 @@
+<?php 
+/**
+*
+* Do not edit or add to this file if you wish to upgrade the module to newer
+* versions in the future. If you wish to customize the module for your
+* needs please contact us to https://www.milople.com/magento-extensions/contacts/
+*
+* @category     Ecommerce
+* @package      Indies_Recurringandrentalpayments
+* @copyright    Copyright (c) 2015 Milople Technologies Pvt. Ltd. All Rights Reserved.
+* @url          https://www.milople.com/magento-extensions/recurring-and-rental-payments.html
+*
+* Milople was known as Indies Services earlier.
+*
+**/
+
+$_product = $this->getProduct();
+$_id = $_product->getId();
+$planid=0;
+$symbole=Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+$plan1 = Mage::getModel('recurringandrentalpayments/plans')->load($_product->getId(),'product_id');		
+$isnormal=0;		
+if ($plan1):
+$planid=$plan1->getId(); 
+$isnormal=$plan1->getIsNormal();
+?>
+
+<ul class="recurringandrentalpayments-subscription options-list">
+    <?php echo $this->__('Subscription type') ?>:
+	<?php $types = Mage::getModel('recurringandrentalpayments/terms')->getCollection()
+				->addFieldToFilter('plan_id',$planid);?>
+       <?php if($isnormal==1):?>
+         <li><input class="radio" type="radio" name="indies_recurringandrentalpayments_subscription_type" value="-1" id="recurringandrentalpayments_period_type_id-1 " checked="checked"/><span class="label regular-price" style="text-transform: capitalize;"><?php echo $this->__(' No Subscription')?></span>
+    <?php foreach ($types as $item): ?>
+        <li>
+        		<input class="radio" type="radio" name="indies_recurringandrentalpayments_subscription_type"
+                	  value="<?php echo $item->getId()?>"
+                      id="recurringandrentalpayments_term_type_id<?php echo $item->getId()?>" <?php if ($isnormal==0 && $count==0): ?> checked="checked"<?php endif;?>/>
+                   <span class="label">
+                  <label for="recurringandrentalpayments_term_type_id<?php echo $item->getId()?>" class="price-label regular-price" style="text-transform: capitalize;"> <?php echo $item->getLabel().' , Price:<span class="price">'.$symbole.$item->getPrice().'</span>' ?></label>
+                  </span>
+         </li>
+        <?php endforeach; ?>
+
+    <?php elseif ($types && (count($types) == 1)): ?>
+    <span><input type="hidden" name="indies_recurringandrentalpayments_subscription_type"
+                 value="<?php echo $types[0]['value']?>"/><?php echo $types[0]['label']?></span>
+    <?php endif;?>
+</ul>
+
+<?php endif; ?>
