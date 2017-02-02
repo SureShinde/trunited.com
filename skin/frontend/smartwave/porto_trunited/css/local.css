@@ -84,7 +84,7 @@ body.boxed .page{overflow:hidden;border-radius:8px;width:1180px;margin-left:auto
 body.boxed .header-container .top-links-container{border-radius:4px 4px 0 0}
 
 /* BreadCrumbs */
-.top-container >.breadcrumbs{padding-top:12px;padding-bottom:12px;font-size:13px;line-height:1;color:#fff;background-color:#171717}
+.top-container >.breadcrumbs{padding-top:12px;padding-bottom:12px;font-size:13px;line-height:1;color:#fff;background-color:#4e4949}
 .breadcrumbs ul{padding:0}
 .breadcrumbs li{display:inline;vertical-align:top}
 .breadcrumbs li strong{font-weight:400;vertical-align:middle}
@@ -2410,7 +2410,7 @@ hr.tall{margin:30px 0;background-image:-webkit-linear-gradient(left,transparent,
 .history .featured-box .box-content{border-top-color:#08c}
 .history h4{float:left;margin:15px 0;padding:0;color:#08c;line-height:27px}
 .featured-box h4{font-size:1.3em;font-weight:400;letter-spacing:-0.7px;text-transform:uppercase}
-.history p{margin:0 0 20px;margin-left:55px;line-height:24px}
+.history p{margin:0 0 20px;margin-left:0px;line-height:24px}
 .featured-box .block-flickr-photos{border:0}
 .featured-box .block-flickr-photos .block-title{display:none}
 .featured-box .block-flickr-photos a.flickr-image{margin:5px;display:inline-block;border:1px solid #dcdcdc;padding:5px;border-radius:5px}

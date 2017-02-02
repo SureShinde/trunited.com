@@ -42,11 +42,12 @@ class Magestore_Onestepcheckout_Model_Source_Payment {
 		$store = $quote ? $quote->getStoreId() : null;
 		$methods = Mage::helper('payment')->getStoreMethods($store, $quote);
 		foreach ($methods as $key => $method) {
-			$options[] = array(
-			  'label' => $method->getTitle(),
-				'value' => $method->getCode()
-			);
-		}		       
+			// Zend_Debug::dump($method->getData());
+			// $options[] = array(
+			  // 'label' => $method->getTitle(),
+				// 'value' => $method->getCode()
+			// );
+		}	//die;	       
 		return $options;
 	}
 }

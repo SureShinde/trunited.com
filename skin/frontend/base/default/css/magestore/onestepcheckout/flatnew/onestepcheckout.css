@@ -385,3 +385,6 @@ p.forgot-link{float:left;width:100%;padding-top:15px;padding-bottom:5px;border-t
 #delivery-type input.radio {
     margin-top: 1px;
 }
+#delivery-type label {
+    font-size: 12.5px!important;
+}

@@ -51,7 +51,7 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 		if($amount)
 			$title = Mage::helper('sales')->__('Get It Now');
 		else
-			$title = Mage::helper('sales')->__('TruBox This Order');
+			$title = Mage::helper('sales')->__('Ship With My TruBox');
 		
 		$address->addTotal(array(
 				'code'=>$this->getCode(),

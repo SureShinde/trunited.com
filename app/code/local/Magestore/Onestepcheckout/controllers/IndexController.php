@@ -10,6 +10,13 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             $this->_redirect('checkout/onepage');
             return;
         }
+		// Redirect to login page if customer not login
+		if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+			Mage::getSingleton('customer/session')->addNotice(Mage::helper('onestepcheckout')->__('Please Login or Register to checkout.'));
+			Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('onestepcheckout/index/index'));
+			$this->_redirect('customer/account/login');
+            return;		
+		}
         $this->enableCustomerFields();
         $quote = $this->getOnepage()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
@@ -1361,14 +1368,7 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
     }
 	
 	public function testAction(){
-		$installer =  new Mage_Core_Model_Resource_Setup('core_setup');
-			
-		$installer->startSetup();
-		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
-		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
-		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'rewardpoints_bonus', 'int(11) NOT NULL default 0');
-		$installer->endSetup();
+		Zend_Debug::dump(Mage::getSingleton('checkout/session')->getQuote()->getData());
 		die('aaa');
 	}
-
 }

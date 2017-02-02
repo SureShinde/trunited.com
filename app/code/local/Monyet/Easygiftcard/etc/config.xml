@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <modules>
+        <Monyet_Easygiftcard>
+            <version>0.1.2</version>
+        </Monyet_Easygiftcard>
+    </modules>
+	<admin>
+        <routers>
+			<easygiftcard>
+				<use>admin</use>
+				<args>
+					<module>Monyet_Easygiftcard</module>
+					<frontName>easygiftcard_admin</frontName>
+				</args>
+			</easygiftcard>
+        </routers>
+    </admin>
+    <global>
+        <blocks>
+            <monyet_easygiftcard>
+                <class>Monyet_Easygiftcard_Block</class>
+            </monyet_easygiftcard>
+        </blocks>
+        <helpers>
+            <monyet_easygiftcard>
+                <class>Monyet_Easygiftcard_Helper</class>
+            </monyet_easygiftcard>
+        </helpers>
+        <models>
+            <monyet_easygiftcard>
+                <class>Monyet_Easygiftcard_Model</class>
+            </monyet_easygiftcard>
+			<core>
+                <rewrite>
+                    <email_template_mailer>Monyet_Easygiftcard_Model_Core_Email_Template_Mailer</email_template_mailer>
+                    <email_queue>Monyet_Easygiftcard_Model_Core_Email_Queue</email_queue>
+                </rewrite>
+            </core>
+        </models>
+        <resources>
+            <monyet_easygiftcard_setup>
+                <setup>
+                    <module>Monyet_Easygiftcard</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </monyet_easygiftcard_setup>
+        </resources>
+		<events>
+            <monyet_easygiftcard_before_send_queue>
+                <observers>
+                    <monyet_easygiftcard_before_send_queue>
+                        <class>Monyet_Easygiftcard_Model_Observer</class>
+                        <method>beforeSendQueuedOrder</method>
+                    </monyet_easygiftcard_before_send_queue>
+                </observers>
+            </monyet_easygiftcard_before_send_queue>
+            <aschroder_smtppro_queue_before_send>
+                <observers>
+                    <monyet_easygiftcard_before_send_queue>
+                        <class>Monyet_Easygiftcard_Model_Observer</class>
+                        <method>beforeSendQueuedOrder</method>
+                    </monyet_easygiftcard_before_send_queue>
+                </observers>
+            </aschroder_smtppro_queue_before_send>
+            <monyet_easygiftcard_before_send_order>
+                <observers>
+                    <monyet_easygiftcard_before_send_order>
+                        <class>Monyet_Easygiftcard_Model_Observer</class>
+                        <method>beforeSendOrder</method>
+                    </monyet_easygiftcard_before_send_order>
+                </observers>
+            </monyet_easygiftcard_before_send_order>
+
+        </events>
+    </global>
+	<adminhtml>
+		<menu>
+			<system>
+				<children>
+					<manualstockemail>
+						<title>Manual Stock Alert Email</title>
+						<sort_order>0</sort_order>
+						<action>easygiftcard_admin/adminhtml_easygiftcard/sendstock</action>
+					</manualstockemail>
+				</children>
+					
+			</system>
+		</menu>
+
+		<acl>
+			<resources>
+				<all>Allow everything</all>
+				<admin>
+					<children>
+						<system>
+
+							<children>
+								<manualstockemail translate="title">
+									<title>Manual Stock Alert Email</title>
+								</manualstockemail>
+							</children>
+											
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+        <events>
+            <controller_action_layout_render_before_adminhtml_catalog_product_edit>
+                <observers>
+                    <herve_producteditbutton_add_button>
+                        <class>Monyet_Easygiftcard_Model_Observer</class>
+                        <method>addButton</method>
+                    </herve_producteditbutton_add_button>
+                </observers>
+            </controller_action_layout_render_before_adminhtml_catalog_product_edit>
+        </events>
+    </adminhtml>
+</config>

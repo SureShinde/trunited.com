@@ -52,7 +52,7 @@ class Magestore_RewardPoints_Block_Adminhtml_Totals_Order_Label extends Mage_Adm
         if ($bonusPoints) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'rewardpoints_bonus_label',
-                'label' => $this->__('TruBox Bonus'),
+                'label' => $this->__('Bonus'),
                 'value' => $bonusPoints,
                 'strong'        => true,
                 'is_formated'   => true,

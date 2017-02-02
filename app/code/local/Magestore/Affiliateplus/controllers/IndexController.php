@@ -59,8 +59,8 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         if ($this->_getAccountHelper()->isRegistered() && $this->_getAccountHelper()->accountNotLogin()) {
             if ($this->_getAccountHelper()->getAccount()->getApproved() == 1)
                 $this->_getCoreSession()->addError($this->_getHelper()->__('Your affiliate account is currently disabled. Please contact us to resolve this issue.'));
-            elseif (!$this->_getCoreSession()->getData('has_been_signup'))
-                $this->_getCoreSession()->addNotice($this->_getHelper()->__('Your affiliate registration is awaiting for approval. Please be patient.'));
+            // elseif (!$this->_getCoreSession()->getData('has_been_signup'))
+                // $this->_getCoreSession()->addNotice($this->_getHelper()->__('Your affiliate registration is awaiting for approval. Please be patient.'));
         }
         $this->loadLayout();
         $page = Mage::getSingleton('cms/page');
@@ -179,6 +179,18 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                             , $baseCurrency->format($this->_getConfigHelper()->getPaymentConfig('payment_release'), array(), false)));
             return $this->_redirect('affiliateplus/index/listTransaction');
         }
+		//is purchased 99affiliate product?
+        if (!$this->_getAccountHelper()->isPaidAffiliateFee()) {
+			$affiliateFeeProduct = Mage::getModel('catalog/product')->load(177);
+			if($affiliateFeeProduct)
+				$url = $affiliateFeeProduct->getProductUrl();
+			else
+				$url = Mage::helper('core/url')->getCurrentUrl();
+            
+			$this->_getCoreSession()->addError($this->__('A signed affiliate agreement is required to withdraw affiliate funds. Please <a href="%s">click here</a>.',$url));
+            return $this->_redirect('affiliateplus/index/listTransaction');
+        }
+		//is purchased 99affiliate product?
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('Request Payment'));
         $this->renderLayout();
