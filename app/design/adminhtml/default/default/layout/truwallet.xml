@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<truwalletadmin_adminhtml_truwallet_index>
+		<reference name="content">
+			<block type="truwallet/adminhtml_truwallet" name="truwallet" />
+		</reference>
+	</truwalletadmin_adminhtml_truwallet_index>
+	<truwalletadmin_adminhtml_customer_index>
+		<reference name="content">
+			<block type="truwallet/adminhtml_customer" name="truwallet.customer" />
+		</reference>
+	</truwalletadmin_adminhtml_customer_index>
+	<truwalletadmin_adminhtml_transaction_index>
+		<reference name="content">
+			<block type="truwallet/adminhtml_transaction" name="truwallet.transaction" />
+		</reference>
+	</truwalletadmin_adminhtml_transaction_index>
+</layout>
