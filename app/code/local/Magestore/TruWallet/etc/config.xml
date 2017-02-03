@@ -60,6 +60,17 @@
                 </Magestore_TruWallet>
             </modules>
         </translate>
+        <events>
+            <customer_save_after>
+                <observers>
+                    <truwallet_adminhtml_observers>
+                        <type>singleton</type>
+                        <class>truwallet/admin_observer</class>
+                        <method>customerSaveAfter</method>
+                    </truwallet_adminhtml_observers>
+                </observers>
+            </customer_save_after>
+        </events>
     </adminhtml>   
     <global>
         <models>
