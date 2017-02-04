@@ -60,6 +60,17 @@
                 </Magestore_TruWallet>
             </modules>
         </translate>
+        <events>
+            <customer_save_after>
+                <observers>
+                    <truwallet_adminhtml_observers>
+                        <type>singleton</type>
+                        <class>truwallet/admin_observer</class>
+                        <method>customerSaveAfter</method>
+                    </truwallet_adminhtml_observers>
+                </observers>
+            </customer_save_after>
+        </events>
     </adminhtml>   
     <global>
         <models>
@@ -109,5 +120,65 @@
                 <class>Magestore_TruWallet_Helper</class>
             </truwallet>
         </helpers>
+        <events>
+            <customer_register_success>
+                <observers>
+                    <truwallet_customer_register_success>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>customerRegisterSuccess</method>
+                    </truwallet_customer_register_success>
+                </observers>
+            </customer_register_success>
+        </events>
+        <template>
+            <email>
+                <truwallet_email_share_email_customer>
+                    <label>Email template sent to receiver when sharing truWallet</label>
+                    <file>truwallet/share_email_customer.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_customer>
+                <truwallet_email_share_email_non_customer>
+                    <label>Email template sent who non customer when sharing truWallet</label>
+                    <file>truwallet/share_email_non_customer.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_non_customer>
+                <truwallet_email_share_email_before_expiry_date>
+                    <label>Email template sent to sender before the transaction is expired date</label>
+                    <file>truwallet/share_email_before_expiry_date.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_before_expiry_date>
+                <truwallet_email_share_email_expiry_date>
+                    <label>Email template sent to sender when the transaction is expired date</label>
+                    <file>truwallet/share_email_expiry_date.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_expiry_date>
+            </email>
+        </template>
     </global>
+    <crontab>
+        <jobs>
+            <truwallet_check_expiry_date_sharing_truWallet>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>truwallet/observer::checkExpiryDate</model>
+                </run>
+            </truwallet_check_expiry_date_sharing_truWallet>
+        </jobs>
+    </crontab>
+    <default>
+        <truwallet>
+            <sharewallet>
+                <expire_date>7</expire_date>
+            </sharewallet>
+            <email>
+                <enable>1</enable>
+                <share_email_customer>truwallet_email_share_email_customer</share_email_customer>
+                <share_email_non_customer>truwallet_email_share_email_non_customer</share_email_non_customer>
+                <share_email_expiry_date>truwallet_email_share_email_expiry_date</share_email_expiry_date>
+            </email>
+        </truwallet>
+    </default>
 </config>

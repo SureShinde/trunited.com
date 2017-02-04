@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/magestore/truwallet.css</stylesheet>
+            </action>
+        </reference>
+    </default>
+    <truwallet_index_index>
+        <reference name="content">
+            <block type="truwallet/truwallet" name="truwallet" template="truwallet/truwallet.phtml"/>
+        </reference>
+    </truwallet_index_index>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="truwallet" ifconfig="truwallet/general/enable">
+                <name>truwallet</name>
+                <path>truwallet</path>
+                <label helper="truwallet/getMyTruWalletLabel"/>
+            </action>
+        </reference>
+    </customer_account>
+    <customer_account_index>
+        <reference name="customer_account_dashboard">
+            <block type="core/text_list" name="customer_account_dashboard_top" as="top">
+                <block type="rewardpoints/account" name="rewardpoints.account_dashboard"
+                       template="rewardpoints/account.phtml"/>
+                <block type="truwallet/account" name="truwallet.account_dashboard" template="truwallet/account.phtml"/>
+                <block type="sales/order_recent" name="sales.order_recent" template="sales/order/recent.phtml"/>
+            </block>
+        </reference>
+    </customer_account_index>
+
+    <truwallet_default>
+        <update handle="page_two_columns_left"/>
+        <reference name="left">
+            <block type="truwallet/account_navigation" before="-" name="truwallet.navigation"
+                   template="truwallet/account/navigation.phtml">
+                <action method="addLink" translate="label" module="truwallet">
+                    <name>account_dashboard</name>
+                    <path>customer/account</path>
+                    <label>Account Dashboard</label>
+                    <enable>true</enable>
+                </action>
+                <action method="addLink" translate="label" module="truwallet">
+                    <name>truwallet_dashboard</name>
+                    <path>truwallet</path>
+                    <label helper="truwallet/getMyTruWalletLabel"/>
+                    <enable>true</enable>
+                    <order>10</order>
+                </action>
+                <action method="addLink" translate="label" module="truwallet">
+                    <name>truwallet_dashboard</name>
+                    <path>truwallet/index/shareTruWallet</path>
+                    <label helper="truwallet/getShareTruWalletLabel"/>
+                    <enable>true</enable>
+                    <order>20</order>
+                </action>
+                <action method="addLink" translate="label" module="truwallet">
+                    <name>truwallet_transactions</name>
+                    <path>truwallet/index/transactions</path>
+                    <label>Transactions</label>
+                    <enable>true</enable>
+                    <order>30</order>
+                </action>
+            </block>
+        </reference>
+    </truwallet_default>
+
+    <truwallet_index_index>
+        <update handle="truwallet_default"/>
+        <reference name="content">
+            <block type="truwallet/account_dashboard" name="truwallet.dashboard"
+                   template="truwallet/account/dashboard.phtml">
+
+                <block type="core/text_list" name="truwallet.dashboard.other" as="other">
+                    <block type="truwallet/account_dashboard_transactions" name="dashboard.transactions"
+                           template="truwallet/account/dashboard/transactions.phtml"/>
+                </block>
+            </block>
+        </reference>
+    </truwallet_index_index>
+
+    <truwallet_index_transactions>
+        <update handle="truwallet_default" />
+        <reference name="content">
+            <block type="truwallet/account_transactions" name="truwallet.transactions" template="truwallet/account/transactions.phtml" />
+        </reference>
+    </truwallet_index_transactions>
+
+    <truwallet_index_sharetruwallet>
+        <update handle="truwallet_default" />
+        <reference name="content">
+            <block type="truwallet/account_shareTruWallet" name="truwallet.shareTruWallet" template="truwallet/account/shareTruWallet.phtml" />
+        </reference>
+    </truwallet_index_sharetruwallet>
+</layout>

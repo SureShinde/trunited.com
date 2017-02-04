@@ -9,14 +9,18 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Edit extends Mage_Adminhtm
 		$this->_blockGroup = 'truwallet';
 		$this->_controller = 'adminhtml_transaction';
 		
-		$this->_updateButton('save', 'label', Mage::helper('truwallet')->__('Save Transaction'));
-		$this->_updateButton('delete', 'label', Mage::helper('truwallet')->__('Delete Transaction'));
-		
-		$this->_addButton('saveandcontinue', array(
-			'label'		=> Mage::helper('adminhtml')->__('Save And Continue Edit'),
-			'onclick'	=> 'saveAndContinueEdit()',
-			'class'		=> 'save',
-		), -100);
+//		$this->_updateButton('save', 'label', Mage::helper('truwallet')->__('Save Transaction'));
+//		$this->_updateButton('delete', 'label', Mage::helper('truwallet')->__('Delete Transaction'));
+//
+//		$this->_addButton('saveandcontinue', array(
+//			'label'		=> Mage::helper('adminhtml')->__('Save And Continue Edit'),
+//			'onclick'	=> 'saveAndContinueEdit()',
+//			'class'		=> 'save',
+//		), -100);
+
+		$this->_removeButton('save');
+		$this->_removeButton('delete');
+		$this->_removeButton('reset');
 
 		$this->_formScripts[] = "
 			function toggleEditor() {

@@ -15,4 +15,19 @@
 			<block type="truwallet/adminhtml_transaction" name="truwallet.transaction" />
 		</reference>
 	</truwalletadmin_adminhtml_transaction_index>
+
+	<adminhtml_customer_edit>
+		<reference name="customer_edit_tabs">
+			<action method="addTab">
+				<name>truwallet_tab</name>
+				<block>truwallet/adminhtml_customer_edit_tab_truwallet</block>
+			</action>
+		</reference>
+	</adminhtml_customer_edit>
+	<truwalletadmin_adminhtml_customer_grid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="truwallet/adminhtml_customer_edit_tab_history" name="truwallet_history" />
+		</block>
+	</truwalletadmin_adminhtml_customer_grid>
+
 </layout>

@@ -75,6 +75,13 @@ class Magestore_RewardPoints_Block_Adminhtml_Customer_Edit_Tab_Rewardpoints
             'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
                 $this->getRewardAccount()->getHoldingBalance()) . '</strong>',
         ));
+
+        $fieldset->addField('spent_point', 'note', array(
+            'label' => Mage::helper('rewardpoints')->__('Spent Points'),
+            'title' => Mage::helper('rewardpoints')->__('Spent Points'),
+            'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
+                    $this->getRewardAccount()->getSpentBalance()) . '</strong>',
+        ));
         
         $fieldset->addField('change_balance', 'text', array(
             'label' => Mage::helper('rewardpoints')->__('Change Balance'),
@@ -90,33 +97,33 @@ class Magestore_RewardPoints_Block_Adminhtml_Customer_Edit_Tab_Rewardpoints
             'style' => 'height: 5em;'
         ));
 
-        $fieldset->addField('product_credit_balance', 'note', array(
-            'label' => Mage::helper('rewardpoints')->__('Product Credit Balance'),
-            'title' => Mage::helper('rewardpoints')->__('Product Credit Balance'),
-            'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
-                    $this->getRewardAccount()->getProductCredit()) . '</strong>',
-        ));
+//        $fieldset->addField('product_credit_balance', 'note', array(
+//            'label' => Mage::helper('rewardpoints')->__('Product Credit Balance'),
+//            'title' => Mage::helper('rewardpoints')->__('Product Credit Balance'),
+//            'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
+//                    $this->getRewardAccount()->getProductCredit()) . '</strong>',
+//        ));
 
-        $fieldset->addField('spent_point', 'note', array(
-            'label' => Mage::helper('rewardpoints')->__('Spent Product Credit'),
-            'title' => Mage::helper('rewardpoints')->__('Spent Product Credit'),
-            'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
-                    $this->getRewardAccount()->getSpentBalance()) . '</strong>',
-        ));
+//        $fieldset->addField('spent_point', 'note', array(
+//            'label' => Mage::helper('rewardpoints')->__('Spent Product Credit'),
+//            'title' => Mage::helper('rewardpoints')->__('Spent Product Credit'),
+//            'text'  => '<strong>' . Mage::helper('rewardpoints/point')->format(
+//                    $this->getRewardAccount()->getSpentBalance()) . '</strong>',
+//        ));
 
-        $fieldset->addField('product_credit', 'text', array(
-            'label' => Mage::helper('rewardpoints')->__('Change Product Credit'),
-            'title' => Mage::helper('rewardpoints')->__('Change Product Credit'),
-            'name'  => 'rewardpoints[product_credit]',
-            'note'  => Mage::helper('rewardpoints')->__('Add or subtract customer\'s product credit balance. For ex: 99 or -99 product credit.'),
-        ));
+//        $fieldset->addField('product_credit', 'text', array(
+//            'label' => Mage::helper('rewardpoints')->__('Change Product Credit'),
+//            'title' => Mage::helper('rewardpoints')->__('Change Product Credit'),
+//            'name'  => 'rewardpoints[product_credit]',
+//            'note'  => Mage::helper('rewardpoints')->__('Add or subtract customer\'s product credit balance. For ex: 99 or -99 product credit.'),
+//        ));
 
-        $fieldset->addField('change_title_credit', 'textarea', array(
-            'label' => Mage::helper('rewardpoints')->__('Change Product Credit Title'),
-            'title' => Mage::helper('rewardpoints')->__('Change Product Credit Title'),
-            'name'  => 'rewardpoints[change_title_credit]',
-            'style' => 'height: 5em;'
-        ));
+//        $fieldset->addField('change_title_credit', 'textarea', array(
+//            'label' => Mage::helper('rewardpoints')->__('Change Product Credit Title'),
+//            'title' => Mage::helper('rewardpoints')->__('Change Product Credit Title'),
+//            'name'  => 'rewardpoints[change_title_credit]',
+//            'style' => 'height: 5em;'
+//        ));
 
         $fieldset->addField('expiration_day', 'text', array(
             'label' => Mage::helper('rewardpoints')->__('Points Expire On'),
@@ -125,12 +132,12 @@ class Magestore_RewardPoints_Block_Adminhtml_Customer_Edit_Tab_Rewardpoints
             'note'  => Mage::helper('rewardpoints')->__('day(s) since the transaction date. If empty or zero, there is no limitation.')
         ));
 
-        $fieldset->addField('expiration_day_credit', 'text', array(
-            'label' => Mage::helper('rewardpoints')->__('Credits Expire On'),
-            'title' => Mage::helper('rewardpoints')->__('Credits Expire On'),
-            'name'  => 'rewardpoints[expiration_day_credit]',
-            'note'  => Mage::helper('rewardpoints')->__('day(s) since the transaction date. If empty or zero, there is no limitation.')
-        ));
+//        $fieldset->addField('expiration_day_credit', 'text', array(
+//            'label' => Mage::helper('rewardpoints')->__('Credits Expire On'),
+//            'title' => Mage::helper('rewardpoints')->__('Credits Expire On'),
+//            'name'  => 'rewardpoints[expiration_day_credit]',
+//            'note'  => Mage::helper('rewardpoints')->__('day(s) since the transaction date. If empty or zero, there is no limitation.')
+//        ));
 
 
         $fieldset->addField('admin_editing', 'hidden', array(
@@ -165,12 +172,12 @@ class Magestore_RewardPoints_Block_Adminhtml_Customer_Edit_Tab_Rewardpoints
     
     public function getTabLabel()
     {
-        return Mage::helper('rewardpoints')->__('Reward Points & Product Credit');
+        return Mage::helper('rewardpoints')->__('Reward Points');
     }
     
     public function getTabTitle()
     {
-        return Mage::helper('rewardpoints')->__('Reward Points & Product Credit');
+        return Mage::helper('rewardpoints')->__('Reward Points');
     }
     
     public function canShowTab()
