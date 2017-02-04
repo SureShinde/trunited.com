@@ -120,5 +120,28 @@
                 <class>Magestore_TruWallet_Helper</class>
             </truwallet>
         </helpers>
+        <events>
+            <customer_register_success>
+                <observers>
+                    <truwallet_customer_register_success>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>customerRegisterSuccess</method>
+                    </truwallet_customer_register_success>
+                </observers>
+            </customer_register_success>
+        </events>
     </global>
+    <crontab>
+        <jobs>
+            <rewardpoints_check_expiry_date_sharing_truWallet>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>truwallet/observer::checkExpiryDate</model>
+                </run>
+            </rewardpoints_check_expiry_date_sharing_truWallet>
+        </jobs>
+    </crontab>
 </config>

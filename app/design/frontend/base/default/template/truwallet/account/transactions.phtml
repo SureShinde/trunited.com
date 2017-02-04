@@ -1,0 +1,97 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints All Transactions
+ *
+ * @see Magestore_RewardPoints_Block_Account_Transactions
+ */
+?>
+
+<div class="page-title">
+    <h1><?php echo $this->__('truWallet Transactions') ?></h1>
+</div>
+
+<?php $_collection = $this->getCollection() ?>
+<?php echo $this->getPagerHtml() ?>
+<table class="data-table" id="recent-transactions-history">
+    <colgroup>
+        <col class="title"/>
+        <col class="type"/>
+        <col class="current_credit"/>
+        <col class="updated_on"/>
+        <col class="expiration_on"/>
+        <col class="order_id"/>
+        <col class="receiver_email"/>
+        <col class="status"/>
+    </colgroup>
+    <thead>
+    <tr>
+        <th><?php echo $this->__('Title') ?></th>
+        <th><?php echo $this->__('Type') ?></th>
+        <th><?php echo $this->__('Balance') ?></th>
+        <th><?php echo $this->__('Updated On') ?></th>
+        <th><?php echo $this->__('Expiration On') ?></th>
+        <th><?php echo $this->__('Order') ?></th>
+        <th><?php echo $this->__('Email') ?></th>
+        <th><?php echo $this->__('Status') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if (count($_collection)): ?>
+        <?php
+        $types = Magestore_TruWallet_Model_Type::getOptionArray();
+        $statuses = Magestore_TruWallet_Model_Status::getTransactionOptionArray();
+        ?>
+        <?php foreach ($_collection as $_transaction): ?>
+            <tr>
+                <td><h2><?php echo $this->__($_transaction->getTitle()) ?></h2></td>
+                <td class="a-right"><h2><?php echo $types[$_transaction->getActionType()]; ?></h2></td>
+                <td class="a-right">
+                    <h2><?php echo Mage::helper('core')->currency($_transaction->getCurrentCredit(), true, false); ?></h2>
+                </td>
+                <td><?php echo $this->formatTime($_transaction->getUpdatedTime(), 'medium', true) ?></td>
+                <td><?php echo $this->formatTime($_transaction->getExpirationDate(), 'medium', true) ?></td>
+                <td>
+                    <?php if ($_transaction->getOrderId() > 0) { ?>
+                        <a href="<?php echo $this->getUrl('sales/order/view', array('order_id' => $_transaction->getOrderId())); ?>"><?php echo $_transaction->getOrderId(); ?></a>
+                    <?php } ?>
+                </td>
+
+                <td>
+                    <a href="mailto:<?php echo $_transaction->getReceiverEmail(); ?>"><?php echo $_transaction->getReceiverEmail(); ?></a>
+                </td>
+                <td><?php echo $statuses[$_transaction->getStatus()]; ?></td>
+            </tr>
+            <!-- End -->
+        <?php endforeach ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="6">
+                <div>
+                    <?php echo $this->__('No transaction found!') ?>
+                </div>
+            </td>
+        </tr>
+    <?php endif ?>
+    </tbody>
+</table>
+<?php echo $this->getPagerHtml() ?>

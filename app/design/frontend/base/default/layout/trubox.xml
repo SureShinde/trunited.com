@@ -45,14 +45,6 @@
             </block>
         </reference>
     </customer_account>
-    <customer_account_index>
-        <reference name="customer_account_dashboard">
-            <block type="core/text_list" name="customer_account_dashboard_top" as="top">
-                <block type="rewardpoints/account" name="rewardpoints.account_dashboard" template="rewardpoints/account.phtml" />
-                <block type="sales/order_recent" name="sales.order_recent" template="sales/order/recent.phtml"/>
-            </block>
-        </reference>
-    </customer_account_index>
     <trubox_index_index>
         <update handle="customer_account"/>
         <reference name="content">

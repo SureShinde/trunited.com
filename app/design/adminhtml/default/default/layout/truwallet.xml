@@ -24,4 +24,10 @@
 			</action>
 		</reference>
 	</adminhtml_customer_edit>
+	<truwalletadmin_adminhtml_customer_grid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="truwallet/adminhtml_customer_edit_tab_history" name="truwallet_history" />
+		</block>
+	</truwalletadmin_adminhtml_customer_grid>
+
 </layout>

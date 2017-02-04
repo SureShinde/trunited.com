@@ -165,13 +165,13 @@
                     <enable>true</enable>
                     <order>10</order>
                 </action>
-                <action method="addLink" translate="label" module="rewardpoints">
-                    <name>rewardpoints_dashboard</name>
-                    <path>rewardpoints/index/shareTruWallet</path>
-                    <label helper="rewardpoints/getShareTruWalletLabel" />
-                    <enable>true</enable>
-                    <order>20</order>
-                </action>
+                <!--<action method="addLink" translate="label" module="rewardpoints">-->
+                    <!--<name>rewardpoints_dashboard</name>-->
+                    <!--<path>rewardpoints/index/shareTruWallet</path>-->
+                    <!--<label helper="rewardpoints/getShareTruWalletLabel" />-->
+                    <!--<enable>true</enable>-->
+                    <!--<order>20</order>-->
+                <!--</action>-->
                 <action method="addLink" translate="label" module="rewardpoints">
                     <name>rewardpoints_transactions</name>
                     <path>rewardpoints/index/transactions</path>

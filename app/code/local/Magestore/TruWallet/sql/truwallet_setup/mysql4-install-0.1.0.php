@@ -11,7 +11,7 @@ $installer->run("
   CREATE TABLE {$this->getTable('truwallet/customer')} (
     `truwallet_id` int(11) unsigned NOT NULL auto_increment,
     `customer_id` int(10) unsigned NOT NULL,
-    `truwallet_credit` DECIMAL(10,2) NOT NULL default 0,
+    `truwallet_credit` DECIMAL(10,2) unsigned NOT NULL default 0,
     `created_time` datetime NULL,
     `updated_time` datetime NULL,
     PRIMARY KEY (`truwallet_id`)
@@ -30,7 +30,7 @@ $installer->run("
     `updated_time` datetime NULL,
     `expiration_date` datetime NULL,
     `order_id` int(10) unsigned NULL,
-    `current_credit` DECIMAL(10,2) NOT NULL default 0,
+    `current_credit` DECIMAL(10,2) unsigned NOT NULL default 0,
     `changed_credit` DECIMAL(10,2) NOT NULL default 0,
     `receiver_email` varchar(255) NULL,
     `receiver_customer_id` INT unsigned NULL,

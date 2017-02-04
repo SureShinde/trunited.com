@@ -30,22 +30,65 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'index'	 => 'title',
 		));
 
-		$this->addColumn('content', array(
-			'header'	=> Mage::helper('truwallet')->__('Item Content'),
-			'width'	 => '150px',
-			'index'	 => 'content',
+		$this->addColumn('action_type', array(
+			'header'    => Mage::helper('truwallet')->__('Action'),
+			'align'     => 'left',
+			'index'     => 'action_type',
+			'type'      => 'options',
+			'options'   => Mage::getSingleton('truwallet/type')->getOptionArray(),
+		));
+
+		$this->addColumn('current_credit', array(
+			'header'    => Mage::helper('truwallet')->__('Current Credits'),
+			'align'     => 'right',
+			'index'     => 'current_credit',
+			'type'      => 'number',
+		));
+
+		$this->addColumn('changed_credit', array(
+			'header'    => Mage::helper('truwallet')->__('Updated Credits'),
+			'align'     => 'right',
+			'index'     => 'changed_credit',
+			'type'      => 'number',
+		));
+
+		$this->addColumn('created_time', array(
+			'header'    => Mage::helper('truwallet')->__('Created On'),
+			'index'     => 'created_time',
+			'type'      => 'datetime',
+		));
+
+		$this->addColumn('updated_time', array(
+			'header'    => Mage::helper('truwallet')->__('Updated On'),
+			'index'     => 'updated_time',
+			'type'      => 'datetime',
+		));
+
+		$this->addColumn('expiration_date', array(
+			'header'    => Mage::helper('truwallet')->__('Expires On'),
+			'index'     => 'expiration_date',
+			'type'      => 'datetime',
+		));
+
+		$this->addColumn('receiver_email', array(
+			'header'    => Mage::helper('truwallet')->__('Receiver Email'),
+			'index'     => 'receiver_email',
 		));
 
 		$this->addColumn('status', array(
-			'header'	=> Mage::helper('truwallet')->__('Status'),
-			'align'	 => 'left',
-			'width'	 => '80px',
-			'index'	 => 'status',
-			'type'		=> 'options',
-			'options'	 => array(
-				1 => 'Enabled',
-				2 => 'Disabled',
-			),
+			'header'    => Mage::helper('truwallet')->__('Status'),
+			'align'     => 'left',
+			'index'     => 'status',
+			'type'      => 'options',
+			'options'   => Mage::getSingleton('truwallet/status')->getTransactionOptionArray(),
+		));
+
+		$this->addColumn('store_id', array(
+			'header'    => Mage::helper('truwallet')->__('Store View'),
+			'align'     => 'left',
+			'index'     => 'store_id',
+			'type'      => 'options',
+			'options'   => Mage::getModel('adminhtml/system_store')->getStoreOptionHash(true),
 		));
 
 		$this->addColumn('action',
@@ -82,8 +125,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'confirm'	=> Mage::helper('truwallet')->__('Are you sure?')
 		));
 
-		$statuses = Mage::getSingleton('truwallet/status')->getOptionArray();
-
+		$statuses = Magestore_TruWallet_Model_Status::getTransactionOptionArray();
 		array_unshift($statuses, array('label'=>'', 'value'=>''));
 		$this->getMassactionBlock()->addItem('status', array(
 			'label'=> Mage::helper('truwallet')->__('Change status'),

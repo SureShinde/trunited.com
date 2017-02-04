@@ -87,6 +87,13 @@ class Magestore_TruWallet_Block_Adminhtml_Customer_Edit_Tab_History
             'type'      => 'number',
         ));
 
+        $this->addColumn('changed_credit', array(
+            'header'    => Mage::helper('truwallet')->__('Updated Credits'),
+            'align'     => 'right',
+            'index'     => 'changed_credit',
+            'type'      => 'number',
+        ));
+
         $this->addColumn('created_time', array(
             'header'    => Mage::helper('truwallet')->__('Created On'),
             'index'     => 'created_time',
@@ -104,12 +111,12 @@ class Magestore_TruWallet_Block_Adminhtml_Customer_Edit_Tab_History
             'index'     => 'expiration_date',
             'type'      => 'datetime',
         ));
-
-        $this->addColumn('order_id', array(
-            'header'    => Mage::helper('truwallet')->__('Order'),
-            'index'     => 'order_id',
-        ));
-
+//
+//        $this->addColumn('order_id', array(
+//            'header'    => Mage::helper('truwallet')->__('Order'),
+//            'index'     => 'order_id',
+//        ));
+//
         $this->addColumn('receiver_email', array(
             'header'    => Mage::helper('truwallet')->__('Receiver Email'),
             'index'     => 'receiver_email',
@@ -160,7 +167,7 @@ class Magestore_TruWallet_Block_Adminhtml_Customer_Edit_Tab_History
      */
     public function getRowUrl($row)
     {
-//        return $this->getUrl('adminhtml/reward_transaction/edit', array('id' => $row->getId()));
+        return Mage::helper('adminhtml')->getUrl('truwalletadmin/adminhtml_transaction/edit', array('id' => $row->getId()));
     }
     
     /**
@@ -170,6 +177,6 @@ class Magestore_TruWallet_Block_Adminhtml_Customer_Edit_Tab_History
      */
     public function getGridUrl()
     {
-//       return $this->getUrl('adminhtml/reward_customer/grid', array('_current' => true));
+        return Mage::helper('adminhtml')->getUrl('truwalletadmin/adminhtml_customer/grid', array('_current' => true));
     }
 }

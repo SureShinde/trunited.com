@@ -173,4 +173,10 @@ class Magestore_TruWallet_Adminhtml_CustomerController extends Mage_Adminhtml_Co
 		$content	= $this->getLayout()->createBlock('truwallet/adminhtml_customer_grid')->getXml();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
+
+	public function gridAction()
+	{
+		$this->loadLayout();
+		$this->renderLayout();
+	}
 }

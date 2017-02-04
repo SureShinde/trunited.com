@@ -3,7 +3,12 @@
 class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Action
 {
 	public function indexAction(){
+		$customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
+		if($customer->getId())
+			Mage::helper('truwallet/transaction')->checkCreditFromSharing($customer);
+
 		$this->loadLayout();
+		$this->_title(Mage::helper('truwallet')->__('My truWallet'));
 		$this->renderLayout();
 	}
 
@@ -18,7 +23,7 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 			  CREATE TABLE {$setup->getTable('truwallet/customer')} (
 				`truwallet_id` int(11) unsigned NOT NULL auto_increment,
 				`customer_id` int(10) unsigned NOT NULL,
-				`truwallet_credit` DECIMAL(10,2) NOT NULL default 0,
+				`truwallet_credit` DECIMAL(10,2) unsigned NOT NULL default 0,
 				`created_time` datetime NULL,
 				`updated_time` datetime NULL,
 				PRIMARY KEY (`truwallet_id`)
@@ -37,7 +42,7 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 				`updated_time` datetime NULL,
 				`expiration_date` datetime NULL,
 				`order_id` int(10) unsigned NULL,
-				`current_credit` DECIMAL(10,2) NOT NULL default 0,
+				`current_credit` DECIMAL(10,2) unsigned NOT NULL default 0,
 				`changed_credit` DECIMAL(10,2) NOT NULL default 0,
 				`receiver_email` varchar(255) NULL,
 				`receiver_customer_id` INT unsigned NULL,
@@ -46,6 +51,28 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
         ");
 		$installer->endSetup();
 		echo "success";
+	}
+
+	public function synchAction()
+	{
+		Mage::helper('truwallet')->synchronizeCredit();
+	}
+
+	public function synchTransactionAction()
+	{
+		Mage::helper('truwallet')->synchronizeTransaction();
+	}
+
+	public function transactionsAction(){
+		$this->loadLayout();
+		$this->_title(Mage::helper('truwallet')->__('truWallet Transactions'));
+		$this->renderLayout();
+	}
+
+	public function shareTruWalletAction(){
+		$this->loadLayout();
+		$this->_title(Mage::helper('truwallet')->__('Share TruWallet Money'));
+		$this->renderLayout();
 	}
 
 }

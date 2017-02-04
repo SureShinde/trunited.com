@@ -75,15 +75,16 @@ class Magestore_TruWallet_Block_Adminhtml_Customer_Edit_Tab_Truwallet
         ));
 
         $fieldset->addField('truwallet_credit', 'text', array(
-            'label' => Mage::helper('truwallet')->__('Change Product Credit'),
-            'title' => Mage::helper('truwallet')->__('Change Product Credit'),
+            'label' => Mage::helper('truwallet')->__('Change truWallet Balance'),
+            'title' => Mage::helper('truwallet')->__('Change truWallet Balance'),
             'name'  => 'truWallet[credit]',
-            'note'  => Mage::helper('truwallet')->__('Add or subtract customer\'s product credit balance. For ex: 99 or -99 product credit.'),
+            'class' => 'validate-number',
+            'note'  => Mage::helper('truwallet')->__('Add or subtract customer\'s truwallet balance. For ex: 99 or -99 truwallet balance.'),
         ));
 
         $fieldset->addField('title_credit', 'textarea', array(
-            'label' => Mage::helper('truwallet')->__('Change truWallet Title'),
-            'title' => Mage::helper('truwallet')->__('Change truWallet Title'),
+            'label' => Mage::helper('truwallet')->__('Change Transaction Title'),
+            'title' => Mage::helper('truwallet')->__('Change Transaction Title'),
             'name'  => 'truWallet[title]',
             'style' => 'height: 5em;'
         ));

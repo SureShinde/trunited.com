@@ -1,0 +1,23 @@
+<div class="page-title">
+    <h1><?php echo $this->__('My truWallet') ?></h1>
+</div>
+
+<div class="box-account box-info box-truwallet-summary">
+    <div class="box-head">
+        <h2><?php echo $this->__('truWallet Information') ?></h2>
+    </div>
+    <div class="info-summary">
+        <p><strong>
+                <?php echo $this->__('Your truWallet balance is') ?>
+                <strong class="truwallet-money">
+                    <?php echo $this->getTruWalletCredit()?>
+                </strong>
+                <img src="<?php echo $this->getSkinUrl('images/truwallet/truwallet.png') ?>" alt="truWallet"
+                     style="display: inline-block;">
+            </strong>
+            <br/>
+        </p>
+    </div>
+</div>
+
+<?php echo $this->getChildHtml('other') ?>
