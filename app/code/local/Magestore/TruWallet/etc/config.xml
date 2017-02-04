@@ -131,17 +131,54 @@
                 </observers>
             </customer_register_success>
         </events>
+        <template>
+            <email>
+                <truwallet_email_share_email_customer>
+                    <label>Email template sent to receiver when sharing truWallet</label>
+                    <file>truwallet/share_email_customer.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_customer>
+                <truwallet_email_share_email_non_customer>
+                    <label>Email template sent who non customer when sharing truWallet</label>
+                    <file>truwallet/share_email_non_customer.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_non_customer>
+                <truwallet_email_share_email_before_expiry_date>
+                    <label>Email template sent to sender before the transaction is expired date</label>
+                    <file>truwallet/share_email_before_expiry_date.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_before_expiry_date>
+                <truwallet_email_share_email_expiry_date>
+                    <label>Email template sent to sender when the transaction is expired date</label>
+                    <file>truwallet/share_email_expiry_date.html</file>
+                    <type>html</type>
+                </truwallet_email_share_email_expiry_date>
+            </email>
+        </template>
     </global>
     <crontab>
         <jobs>
-            <rewardpoints_check_expiry_date_sharing_truWallet>
+            <truwallet_check_expiry_date_sharing_truWallet>
                 <schedule>
                     <cron_expr>* * */1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>truwallet/observer::checkExpiryDate</model>
                 </run>
-            </rewardpoints_check_expiry_date_sharing_truWallet>
+            </truwallet_check_expiry_date_sharing_truWallet>
         </jobs>
     </crontab>
+    <default>
+        <truwallet>
+            <sharewallet>
+                <expire_date>7</expire_date>
+            </sharewallet>
+            <email>
+                <enable>1</enable>
+                <share_email_customer>truwallet_email_share_email_customer</share_email_customer>
+                <share_email_non_customer>truwallet_email_share_email_non_customer</share_email_non_customer>
+                <share_email_expiry_date>truwallet_email_share_email_expiry_date</share_email_expiry_date>
+            </email>
+        </truwallet>
+    </default>
 </config>

@@ -122,7 +122,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
     public function sendEmailExpiryDate($transaction)
     {
-        if (!Mage::getStoreConfigFlag(Magestore_RewardPoints_Model_Transaction::XML_PATH_EMAIL_ENABLE, Mage::app()->getStore()->getId())) {
+        if (!Mage::getStoreConfigFlag(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_ENABLE, Mage::app()->getStore()->getId())) {
             return $this;
         }
 
@@ -133,7 +133,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         if(!$customer->getId())
             return $this;
 
-        $email_path =  Mage::getStoreConfig(Magestore_RewardPoints_Model_Transaction::XML_PATH_EMAIL_SHARE_EMAIL_EXPIRY_DATE, $store);
+        $email_path =  Mage::getStoreConfig(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_SHARE_EMAIL_EXPIRY_DATE, $store);
 
 
         $data = array(
@@ -148,7 +148,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
                 'store' => $store->getId()
             ))->sendTransactional(
                 $email_path,
-                Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store),
+                Mage::getStoreConfig(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_SENDER, $store),
                 $customer->getEmail(),
                 $customer->getName(),
                 $data
