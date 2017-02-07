@@ -199,8 +199,8 @@ class Magestore_TruWallet_Adminhtml_TransactionController extends Mage_Adminhtml
 
 		if (!empty($_FILES['csv_store']['tmp_name'])) {
 			try {
-				$number = Mage::getResourceModel('truwallet/transaction')->import($this->getRequest()->getParam('overwrite_store'));
-				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('truwallet')->__('You\'ve successfully imported ') . $number['insert'] . Mage::helper('truwallet')->__(' new transaction(s) and updated ') . $number['update'] . ' ' . Mage::helper('truwallet')->__('transaction(s)'));
+				$number = Mage::helper('truwallet/transaction')->import();
+				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('truwallet')->__('You\'ve successfully imported ') . $number . Mage::helper('truwallet')->__(' new transaction(s)'));
 			} catch (Mage_Core_Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			} catch (Exception $e) {

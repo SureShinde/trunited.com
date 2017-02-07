@@ -6,7 +6,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 		parent::__construct();
 		$this->setId('transactionGrid');
 		$this->setDefaultSort('transaction_id');
-		$this->setDefaultDir('ASC');
+		$this->setDefaultDir('DESC');
 		$this->setSaveParametersInSession(true);
 
 	}
@@ -22,7 +22,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'header'	=> Mage::helper('truwallet')->__('ID'),
 			'align'	 =>'right',
 			'width'	 => '50px',
-			'index'	 => 'truwallet_id',
+			'index'	 => 'transaction_id',
 		));
 
 		$this->addColumn('title', array(
