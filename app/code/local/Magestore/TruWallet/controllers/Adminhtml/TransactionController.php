@@ -173,4 +173,45 @@ class Magestore_TruWallet_Adminhtml_TransactionController extends Mage_Adminhtml
 		$content	= $this->getLayout()->createBlock('truwallet/adminhtml_transaction_grid')->getXml();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
+
+	public function importAction() {
+		$this->loadLayout();
+		$this->_setActiveMenu('truwallet/transaction');
+
+		$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+		$this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+
+		$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+		$editBlock = $this->getLayout()->createBlock('truwallet/adminhtml_transaction_import');
+		$editBlock->removeButton('delete');
+		$editBlock->removeButton('saveandcontinue');
+		$editBlock->removeButton('reset');
+		$editBlock->updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/*/') . '\')');
+		$editBlock->setData('form_action_url', $this->getUrl('*/*/importSave', array()));
+
+		$this->_addContent($editBlock)
+			->_addLeft($this->getLayout()->createBlock('truwallet/adminhtml_transaction_import_tabs'));
+
+		$this->renderLayout();
+	}
+
+	public function importSaveAction() {
+
+		if (!empty($_FILES['csv_store']['tmp_name'])) {
+			try {
+				$number = Mage::getResourceModel('truwallet/transaction')->import($this->getRequest()->getParam('overwrite_store'));
+				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('truwallet')->__('You\'ve successfully imported ') . $number['insert'] . Mage::helper('truwallet')->__(' new transaction(s) and updated ') . $number['update'] . ' ' . Mage::helper('truwallet')->__('transaction(s)'));
+			} catch (Mage_Core_Exception $e) {
+				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+			} catch (Exception $e) {
+				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('truwallet')->__('Invalid file upload attempt'));
+			}
+			$this->_redirect('*/*/');
+		} else {
+			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('truwallet')->__('Invalid file upload attempt'));
+			$this->_redirect('*/*/importstore');
+		}
+
+	}
+
 }

@@ -8,6 +8,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 		$this->setDefaultSort('transaction_id');
 		$this->setDefaultDir('ASC');
 		$this->setSaveParametersInSession(true);
+
 	}
 
 	protected function _prepareCollection(){
