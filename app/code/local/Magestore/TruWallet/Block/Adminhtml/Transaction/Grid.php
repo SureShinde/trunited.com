@@ -25,6 +25,18 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'index'	 => 'transaction_id',
 		));
 
+		$this->addColumn('customer_id', array(
+			'header'	=> Mage::helper('truwallet')->__('Customer ID'),
+			'align'	 =>'left',
+			'index'	 => 'customer_id',
+		));
+
+		$this->addColumn('customer_email', array(
+			'header'	=> Mage::helper('truwallet')->__('Customer Email'),
+			'align'	 =>'left',
+			'index'	 => 'customer_email',
+		));
+
 		$this->addColumn('title', array(
 			'header'	=> Mage::helper('truwallet')->__('Title'),
 			'align'	 =>'left',

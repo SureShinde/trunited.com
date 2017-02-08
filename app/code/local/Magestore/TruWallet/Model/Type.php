@@ -14,7 +14,7 @@ class Magestore_TruWallet_Model_Type extends Varien_Object
 			self::TYPE_TRANSACTION_SHARING   => Mage::helper('truwallet')->__('Sharing truWallet money'),
 			self::TYPE_TRANSACTION_RECEIVE_FROM_SHARING   => Mage::helper('truwallet')->__('Received truWallet money from Sharing'),
 			self::TYPE_TRANSACTION_TRANSFER   => Mage::helper('truwallet')->__('Transfer dollars from balance to truWallet'),
-			self::TYPE_TRANSACTION_PAYOUT_EARNING   => Mage::helper('truwallet')->__('Earnings for payout period'),
+			self::TYPE_TRANSACTION_PAYOUT_EARNING   => Mage::helper('truwallet')->__('Payout earnings'),
 		);
 	}
 	

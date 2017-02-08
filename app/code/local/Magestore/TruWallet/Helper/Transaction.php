@@ -176,10 +176,10 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         $import_count = 0;
 
         $transactionSave = Mage::getModel('core/resource_transaction');
-//        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
         try {
-//            $connection->beginTransaction();
+            $connection->beginTransaction();
 
             if (sizeof($csvData) > 0) {
                 $current_symbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
@@ -226,9 +226,9 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             }
 
             $transactionSave->save();
-//            $connection->commit();
+            $connection->commit();
         } catch (Exception $e) {
-//            $connection->rollback();
+            $connection->rollback();
             zend_debug::dump($e->getMessage());
             exit;
         }

@@ -49,7 +49,7 @@
         <th><?php echo $this->__('Type') ?></th>
         <th><?php echo $this->__('Balance') ?></th>
         <th><?php echo $this->__('Updated On') ?></th>
-        <th><?php echo $this->__('Expiration On') ?></th>
+<!--        <th>--><?php //echo $this->__('Expiration On') ?><!--</th>-->
         <th><?php echo $this->__('Order') ?></th>
         <th><?php echo $this->__('Email') ?></th>
         <th><?php echo $this->__('Status') ?></th>
@@ -69,7 +69,7 @@
                     <h2><?php echo Mage::helper('core')->currency($_transaction->getCurrentCredit(), true, false); ?></h2>
                 </td>
                 <td><?php echo $this->formatTime($_transaction->getUpdatedTime(), 'medium', true) ?></td>
-                <td><?php echo $this->formatTime($_transaction->getExpirationDate(), 'medium', true) ?></td>
+<!--                <td>--><?php //echo $this->formatTime($_transaction->getExpirationDate(), 'medium', true) ?><!--</td>-->
                 <td>
                     <?php if ($_transaction->getOrderId() > 0) { ?>
                         <a href="<?php echo $this->getUrl('sales/order/view', array('order_id' => $_transaction->getOrderId())); ?>"><?php echo $_transaction->getOrderId(); ?></a>
