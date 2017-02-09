@@ -34,7 +34,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<comment></comment>
-						</enable>						
+						</enable>
 					</fields>				
 				</general>
 				<sharewallet>
@@ -56,6 +56,35 @@
 						</expire_date>
 					</fields>
 				</sharewallet>
+				<spending>
+					<label>Spending Points Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>30</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<tax translate="label">
+							<label>Apply Credit</label>
+							<frontend_type>select</frontend_type>
+							<source_model>truwallet/aftertax</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</tax>
+						<shipping translate="label">
+							<label>Shipping Fee</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>Choose Yes if you allow using credit for Shipping Fee.</comment>
+						</shipping>
+					</fields>
+				</spending>
 				<email>
 					<label>Email Configuration</label>
 					<frontend_type>text</frontend_type>

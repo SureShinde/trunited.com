@@ -57,23 +57,35 @@ class Magestore_TruWallet_Helper_Account extends Mage_Core_Helper_Abstract
         }
     }
 
-    public function getTruWalletCredit()
+    public function getCurrentAccount()
     {
         $customer_id = $this->getCustomerId();
-        if($customer_id != null)
-        {
+        if ($customer_id != null) {
             $account = $this->loadByCustomerId($customer_id);
 
-            if($account != null)
-            {
+            if ($account != null) {
+                return $account;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public function getTruWalletCredit($is_format = true)
+    {
+        $account = $this->getCurrentAccount();
+        if($account != null)
+        {
+            if ($is_format)
                 return Mage::helper('core')->currency(
                     $account->getTruwalletCredit(),
                     true,
                     false
                 );
-            } else {
-                return null;
-            }
+            else
+                return $account->getTruwalletCredit();
         } else {
             return null;
         }

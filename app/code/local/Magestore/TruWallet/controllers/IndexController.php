@@ -53,6 +53,41 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		echo "success";
 	}
 
+	public function updateV2Action()
+	{
+		$setup = new Mage_Core_Model_Resource_Setup();
+		$installer = $setup;
+		$installer->startSetup();
+		$installer->run("");
+
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_discount_for_shipping', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_discount_for_shipping', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_shipping_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_shipping_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->endSetup();
+		echo "success";
+	}
+
 	public function synchAction()
 	{
 		Mage::helper('truwallet')->synchronizeCredit();

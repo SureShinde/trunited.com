@@ -31,6 +31,17 @@
                 </Magestore_TruWallet>
             </modules>
         </translate>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <truwallet_block_to_html>
+                        <type>singleton</type>
+                        <class>truwallet/frontend_observer</class>
+                        <method>truwalletPaymentMethod</method>
+                    </truwallet_block_to_html>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
     </frontend>
     <admin>
         <routers>
@@ -73,6 +84,18 @@
         </events>
     </adminhtml>   
     <global>
+        <pdf>
+            <totals>
+                <customer_credit>
+                    <title>Use credits on spend</title>
+                    <source_field>truwallet_discount</source_field>
+                    <model>truwallet/pdf</model>
+                    <font_size>7</font_size>
+                    <display_zero>1</display_zero>
+                    <sort_order>200</sort_order>
+                </customer_credit>
+            </totals>
+        </pdf>
         <models>
             <truwallet>
                 <class>Magestore_TruWallet_Model</class>
@@ -119,6 +142,11 @@
             <truwallet>
                 <class>Magestore_TruWallet_Helper</class>
             </truwallet>
+            <payment>
+                <rewrite>
+                    <data>Magestore_TruWallet_Helper_Payment</data>
+                </rewrite>
+            </payment>
         </helpers>
         <events>
             <customer_register_success>
@@ -130,6 +158,68 @@
                     </truwallet_customer_register_success>
                 </observers>
             </customer_register_success>
+            <paypal_prepare_line_items>
+                <observers>
+                    <truwallet_paypal>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>paypal_prepare_line_items</method>
+                    </truwallet_paypal>
+                </observers>
+            </paypal_prepare_line_items>
+            <sales_order_load_after>
+                <observers>
+                    <truwallet_sales_order_load_after>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>salesOrderLoadAfter</method>
+                    </truwallet_sales_order_load_after>
+                </observers>
+            </sales_order_load_after>
+            <sales_order_place_after>
+                <observers>
+                    <truwallet_sales_order_place_after>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>orderPlaceAfter</method>
+                    </truwallet_sales_order_place_after>
+                </observers>
+            </sales_order_place_after>
+            <sales_order_save_after>
+                <observers>
+                    <truwallet_order_save_after>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>orderSaveAfter</method>
+                    </truwallet_order_save_after>
+                </observers>
+            </sales_order_save_after>
+            <order_cancel_after>
+                <observers>
+                    <truwallet_order_save_after>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>orderCancelAfter</method>
+                    </truwallet_order_save_after>
+                </observers>
+            </order_cancel_after>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <truwallet_sales_order_creditmemo_save_after>
+                        <class>truwallet/observer</class>
+                        <method>creditmemoSaveAfter</method>
+                    </truwallet_sales_order_creditmemo_save_after>
+                </observers>
+            </sales_order_creditmemo_save_after>
+            <controller_action_predispatch>
+                <observers>
+                    <truwallet_controller_action_predispatch>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>checkAutoApplyCredits</method>
+                    </truwallet_controller_action_predispatch>
+                </observers>
+            </controller_action_predispatch>
         </events>
         <template>
             <email>
@@ -155,6 +245,108 @@
                 </truwallet_email_share_email_expiry_date>
             </email>
         </template>
+        <sales>
+            <quote>
+                <totals>
+                    <truwallet>
+                        <class>truwallet/total_quote_discount</class>
+                        <after>tax,rewardpoints_label</after>
+                        <before>grand_total</before>
+                    </truwallet>
+                    <truwalletbeforetax>
+                        <class>truwallet/total_quote_discountbeforetax</class>
+                        <after>wee,discount,subtotal</after>
+                        <before>tax</before>
+                    </truwalletbeforetax>
+                </totals>
+            </quote>
+            <order_invoice>
+                <totals>
+                    <truwallet>
+                        <class>truwallet/total_order_invoice_discount</class>
+                        <after>wee,discount,tax,tax_subtotal,grand_total</after>
+                    </truwallet>
+                </totals>
+            </order_invoice>
+            <order_creditmemo>
+                <totals>
+                    <truwallet>
+                        <class>truwallet/total_order_creditmemo_discount</class>
+                        <after>wee,discount,tax,tax_subtotal,grand_total</after>
+                    </truwallet>
+                </totals>
+            </order_creditmemo>
+        </sales>
+        <fieldsets>
+            <sales_convert_quote_address>
+                <base_truwallet_discount>
+                    <to_order>*</to_order>
+                </base_truwallet_discount>
+                <truwallet_discount>
+                    <to_order>*</to_order>
+                </truwallet_discount>
+                <base_truwallet_discount_for_shipping>
+                    <to_order>*</to_order>
+                </base_truwallet_discount_for_shipping>
+                <truwallet_discount_for_shipping>
+                    <to_order>*</to_order>
+                </truwallet_discount_for_shipping>
+                <base_truwallet_hidden_tax>
+                    <to_order>*</to_order>
+                </base_truwallet_hidden_tax>
+                <truwallet_hidden_tax>
+                    <to_order>*</to_order>
+                </truwallet_hidden_tax>
+                <base_truwallet_shipping_hidden_tax>
+                    <to_order>*</to_order>
+                </base_truwallet_shipping_hidden_tax>
+                <truwallet_shipping_hidden_tax>
+                    <to_order>*</to_order>
+                </truwallet_shipping_hidden_tax>
+            </sales_convert_quote_address>
+
+            <sales_convert_quote_item>
+                <base_truwallet_discount>
+                    <to_order_item>*</to_order_item>
+                </base_truwallet_discount>
+                <truwallet_discount>
+                    <to_order_item>*</to_order_item>
+                </truwallet_discount>
+                <base_truwallet_hidden_tax>
+                    <to_order_item>*</to_order_item>
+                </base_truwallet_hidden_tax>
+                <truwallet_hidden_tax>
+                    <to_order_item>*</to_order_item>
+                </truwallet_hidden_tax>
+            </sales_convert_quote_item>
+
+            <sales_convert_order_address>
+                <base_truwallet_discount>
+                    <to_quote_address>*</to_quote_address>
+                </base_truwallet_discount>
+                <truwallet_discount>
+                    <to_quote_address>*</to_quote_address>
+                </truwallet_discount>
+                <base_truwallet_discount_for_shipping>
+                    <to_quote_address>*</to_quote_address>
+                </base_truwallet_discount_for_shipping>
+                <truwallet_discount_for_shipping>
+                    <to_quote_address>*</to_quote_address>
+                </truwallet_discount_for_shipping>
+                <base_truwallet_hidden_tax>
+                    <to_quote_address>*</to_quote_address>
+                </base_truwallet_hidden_tax>
+                <truwallet_hidden_tax>
+                    <to_quote_address>*</to_quote_address>
+                </truwallet_hidden_tax>
+                <base_truwallet_shipping_hidden_tax>
+                    <to_quote_address>*</to_quote_address>
+                </base_truwallet_shipping_hidden_tax>
+                <truwallet_shipping_hidden_tax>
+                    <to_quote_address>*</to_quote_address>
+                </truwallet_shipping_hidden_tax>
+            </sales_convert_order_address>
+        </fieldsets>
     </global>
     <crontab>
         <jobs>
@@ -170,9 +362,16 @@
     </crontab>
     <default>
         <truwallet>
+            <general>
+                <enable>1</enable>
+            </general>
             <sharewallet>
                 <expire_date>7</expire_date>
             </sharewallet>
+            <spend>
+                <tax>1</tax>
+                <shipping>1</shipping>
+            </spend>
             <email>
                 <enable>1</enable>
                 <share_email_customer>truwallet_email_share_email_customer</share_email_customer>

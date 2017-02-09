@@ -2,6 +2,17 @@
 
 class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_ENABLE = 'truwallet/general/enable';
+
+    public function isEnable($store = null)
+    {
+        return Mage::getStoreConfigFlag(self::XML_PATH_ENABLE, $store);
+    }
+
+    public function isEnableModule(){
+        return Mage::helper('core')->isModuleOutputEnabled('Magestore_TruWallet');
+    }
+
     public function getMyTruWalletLabel()
     {
         $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/truwallet/point.png').'" />';
@@ -12,6 +23,16 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/truwallet/point.png').'" />';
         return $this->__('Share truWallet Money') . ' ' . $image;
+    }
+
+    public function formatTruwallet($credit)
+    {
+        return Mage::helper('core')->currency($credit, true, false);
+    }
+
+    public function getSpendConfig($code, $store = null)
+    {
+        return Mage::getStoreConfig('truwallet/spend/' . $code, $store);
     }
 
 

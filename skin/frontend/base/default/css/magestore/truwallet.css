@@ -1,0 +1,53 @@
+.dashboard .truwallet, .box-truwallet-summary .info-summary
+{
+    padding-top: 5px;
+}
+
+.dashboard .box-truwallet-summary, .box-truwallet-summary {
+    color: #333;
+    font-size: 13px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #cecece;
+    margin-bottom: 15px;
+}
+
+.dashboard .box-truwallet-summary .box-head h2, .box-truwallet-summary .box-head h2 {
+    background: url(images/rewards.png) no-repeat scroll 0 0 transparent;
+    padding: 5px 0 5px 25px;
+    font-size: 15px;
+}
+
+.truwallet-money {
+    color: #3182be;
+    font-size: 13px;
+}
+
+.box-truwallet-history .box-head h2 {
+    background: url(images/transactions.png) no-repeat scroll 0 center transparent;
+    padding: 5px 0 5px 25px;
+    font-size: 15px;
+}
+
+#truwallet-payment-form #checkout-cc-button, #truwallet-payment-form #checkout-cc-button-cancel {
+    border-radius: 3px;
+}
+
+#truwallet-payment-form #checkout-cc-button span, #truwallet-payment-form #checkout-cc-button-cancel span {
+    background-color: #59c9aa !important;
+    height: 30px;
+    padding: 0 15px;
+    line-height: 29px;
+    border-radius: 3px;
+}
+
+#truwallet-payment-form .btn-truwallet {
+    padding-top: 10px;
+    clear: both;
+}
+
+#truwallet-payment-form #checkout_cc_input_alert {
+    float: left;
+    clear: both;
+    margin-top: 10px;
+    width: 100%;
+}
