@@ -1,18 +1,18 @@
 <?php
 /**
  * Magestore
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Magestore.com license that is
  * available through the world-wide-web at this URL:
  * http://www.magestore.com/license-agreement.html
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPointsEvent
  * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
@@ -21,7 +21,7 @@
 
 /**
  * RewardPointsEvent Observer Model
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPointsEvent
  * @author      Magestore Developer
@@ -38,19 +38,21 @@ class Magestore_RewardPointsEvent_Model_Observer
         $action = $observer->getEvent()->getControllerAction();
         return $this;
     }
-    public function customerCsvSaveAfter($observer){
-        if(!Mage::getStoreConfig('rewardpoints/eventplugin/enable')) return;
+
+    public function customerCsvSaveAfter($observer)
+    {
+        if (!Mage::getStoreConfig('rewardpoints/eventplugin/enable')) return;
         $customer = $observer->getCustomer();
         $evented_points = Mage::getResourceModel('rewardpoints/transaction_collection')
-                ->addFieldToFilter('action', 'event')
-                ->addFieldToFilter('customer_id', $customer->getId());
+            ->addFieldToFilter('action', 'event')
+            ->addFieldToFilter('customer_id', $customer->getId());
         if (count($evented_points))
             return;
         $events = Mage::getModel('rewardpointsevent/rewardpointsevent')->getCollection()
-                ->addFieldToFilter('is_running', true)
-                ->addFieldToFilter('is_apply', true);
-        foreach($events as $event){
-            if(!$this->_checkRuleCustomer($customer, $event)) continue;
+            ->addFieldToFilter('is_running', true)
+            ->addFieldToFilter('is_apply', true);
+        foreach ($events as $event) {
+            if (!$this->_checkRuleCustomer($customer, $event)) continue;
             $this->addEventTransaction($customer, $event);
         }
         return $this;
@@ -71,25 +73,26 @@ class Magestore_RewardPointsEvent_Model_Observer
 //        }
 //        return $this;
 //    }
-    public function customerCommitSaveAfter($observer) {
+    public function customerCommitSaveAfter($observer)
+    {
         $customer_reg = $observer->getCustomer();
 //        if (version_compare(Mage::getVersion(), '1.6.0.0', '>=')) {
 //            if($customer_reg->getStoreId()!= '0') return;
 //        }
-        if(!Mage::getStoreConfig('rewardpoints/eventplugin/enable')) return;
+        if (!Mage::getStoreConfig('rewardpoints/eventplugin/enable')) return;
         $customer = Mage::getModel('customer/customer')->load($customer_reg->getId());
         if (!$customer->getId() || Mage::app()->getRequest()->getActionName() == 'editPost')
             return;
         $evented_points = Mage::getResourceModel('rewardpoints/transaction_collection')
-                ->addFieldToFilter('action', 'event')
-                ->addFieldToFilter('customer_id', $customer->getId());
+            ->addFieldToFilter('action', 'event')
+            ->addFieldToFilter('customer_id', $customer->getId());
         if (count($evented_points))
             return;
         $events = Mage::getModel('rewardpointsevent/rewardpointsevent')->getCollection()
-                ->addFieldToFilter('is_running', true)
-                ->addFieldToFilter('is_apply', true);
-        foreach($events as $event){
-            if(!$this->_checkRuleCustomer($customer, $event)) continue;
+            ->addFieldToFilter('is_running', true)
+            ->addFieldToFilter('is_apply', true);
+        foreach ($events as $event) {
+            if (!$this->_checkRuleCustomer($customer, $event)) continue;
             $this->addEventTransaction($customer, $event);
         }
     }
@@ -111,32 +114,36 @@ class Magestore_RewardPointsEvent_Model_Observer
 //
 //        if($this->checkEventRule($dateApply, $dateApplyTo, $timeLeter, $repeatTime, $dateCommit)) $this->addEventTransaction($customer, $event);
 //    }
-    public function addEventTransaction($customer, $event){
-        Mage::helper('rewardpoints/action')->addTransaction('event', $customer, $event, array('event_id'=>$event->getId()));
-        if($event->getEnableEmail()){
+    public function addEventTransaction($customer, $event)
+    {
+        Mage::helper('rewardpoints/action')->addTransaction('event', $customer, $event, array('event_id' => $event->getId()));
+        if ($event->getEnableEmail()) {
             $emailTemplate = $event->getEmailTemplateId();
-            if($emailTemplate == '') $emailTemplate = 'rewardpoints_eventplugin_email_event';
-            if($customer->getStoreId()) $store_id = $customer->getStoreId();
+            if ($emailTemplate == '') $emailTemplate = 'rewardpoints_eventplugin_email_event';
+            if ($customer->getStoreId()) $store_id = $customer->getStoreId();
             else $store_id = Mage::app()->getDefaultStoreView()->getId();
             $store = Mage::app()->getStore($store_id);
             if (!Mage::getStoreConfigFlag(Magestore_RewardPoints_Model_Transaction::XML_PATH_EMAIL_ENABLE, $store_id)) {
-                continue;
+//                continue;
             }
             $sender = Mage::getStoreConfig(Magestore_RewardPoints_Model_Transaction::XML_PATH_EMAIL_SENDER, $store);
-            try{
+            try {
                 $event->sendEventEmail($sender, $customer->getEmail(), $customer->getName(), $emailTemplate, $event->getPointAmount(), $event->getTitle(), $event->getMessage(), $store);
-            }catch(Exception $e){}
+            } catch (Exception $e) {
+            }
         }
     }
-    protected function _checkRuleCustomer($customer, $event){
+
+    protected function _checkRuleCustomer($customer, $event)
+    {
         $select = $event->getCustomerApply();
-        if($select == Magestore_RewardPointsEvent_Model_Scope::SCOPE_GROUPS){
+        if ($select == Magestore_RewardPointsEvent_Model_Scope::SCOPE_GROUPS) {
             $group = explode(',', $event->getCustomerGroupIds());
-            if(in_array($customer->getGroupId(), $group)) return true;
+            if (in_array($customer->getGroupId(), $group)) return true;
             else return false;
-        }elseif($select == Magestore_RewardPointsEvent_Model_Scope::SCOPE_CUSTOMER){
+        } elseif ($select == Magestore_RewardPointsEvent_Model_Scope::SCOPE_CUSTOMER) {
             return $event->checkRule($customer);
-        }else return true;
+        } else return true;
     }
 //    public function compareDateEvent($date1, $date2=null){
 //        return Mage::getModel('rewardpointsevent/cron')->compareDateEvent($date1, $date2);

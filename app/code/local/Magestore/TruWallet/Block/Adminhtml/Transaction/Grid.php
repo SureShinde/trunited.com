@@ -41,6 +41,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'header'	=> Mage::helper('truwallet')->__('Title'),
 			'align'	 =>'left',
 			'index'	 => 'title',
+			'width'	=> '100'
 		));
 
 		$this->addColumn('action_type', array(
@@ -48,6 +49,7 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'align'     => 'left',
 			'index'     => 'action_type',
 			'type'      => 'options',
+			'width'		=> '100px',
 			'options'   => Mage::getSingleton('truwallet/type')->getOptionArray(),
 		));
 
@@ -77,11 +79,11 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'type'      => 'datetime',
 		));
 
-		$this->addColumn('expiration_date', array(
+		/*$this->addColumn('expiration_date', array(
 			'header'    => Mage::helper('truwallet')->__('Expires On'),
 			'index'     => 'expiration_date',
 			'type'      => 'datetime',
-		));
+		));*/
 
 		$this->addColumn('receiver_email', array(
 			'header'    => Mage::helper('truwallet')->__('Receiver Email'),
