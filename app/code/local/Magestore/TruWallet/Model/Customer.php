@@ -16,4 +16,24 @@ class Magestore_TruWallet_Model_Customer extends Mage_Core_Model_Abstract
 			$this->save();
 		}
 	}
+
+	/**
+	 * @param $credit_amount
+	 * @return mixed
+	 */
+	public function getConvertedFromBaseTruwalletCredit($credit_amount)
+	{
+		$store = Mage::app()->getStore();
+		return $store->convertPrice($credit_amount);
+	}
+
+	/**
+	 * @param $credit_amount
+	 * @return string
+	 */
+	public function getConvertedToBaseTruwalletCredit($credit_amount)
+	{
+		$rate = Mage::app()->getStore()->convertPrice(1);
+		return number_format($credit_amount / $rate,2);
+	}
 }

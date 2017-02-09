@@ -56,6 +56,30 @@ $installer->getConnection()->addColumn($this->getTable('sales/invoice'), 'truwal
 $installer->getConnection()->addColumn($this->getTable('sales/creditmemo'), 'truwallet_base_discount', 'decimal(12,4) NOT NULL default 0');
 $installer->getConnection()->addColumn($this->getTable('sales/creditmemo'), 'truwallet_discount', 'decimal(12,4) NOT NULL default 0');
 
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_discount_for_shipping', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_discount_for_shipping', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'base_truwallet_shipping_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order'), 'truwallet_shipping_hidden_tax', 'decimal(12,4) NULL');
+
+$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/invoice'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
+$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/creditmemo'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
+$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'base_truwallet_discount', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'base_truwallet_hidden_tax', 'decimal(12,4) NULL');
+$installer->getConnection()->addColumn($installer->getTable('sales/order_item'), 'truwallet_hidden_tax', 'decimal(12,4) NULL');
+
 
 
 

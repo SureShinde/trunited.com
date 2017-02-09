@@ -27,3 +27,27 @@
     padding: 5px 0 5px 25px;
     font-size: 15px;
 }
+
+#truwallet-payment-form #checkout-cc-button, #truwallet-payment-form #checkout-cc-button-cancel {
+    border-radius: 3px;
+}
+
+#truwallet-payment-form #checkout-cc-button span, #truwallet-payment-form #checkout-cc-button-cancel span {
+    background-color: #59c9aa !important;
+    height: 30px;
+    padding: 0 15px;
+    line-height: 29px;
+    border-radius: 3px;
+}
+
+#truwallet-payment-form .btn-truwallet {
+    padding-top: 10px;
+    clear: both;
+}
+
+#truwallet-payment-form #checkout_cc_input_alert {
+    float: left;
+    clear: both;
+    margin-top: 10px;
+    width: 100%;
+}

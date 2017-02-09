@@ -5,6 +5,9 @@
             <action method="addCss">
                 <stylesheet>css/magestore/truwallet.css</stylesheet>
             </action>
+            <action method="addJs">
+                <script>magestore/truwallet/truwallet.js</script>
+            </action>
         </reference>
     </default>
     <truwallet_index_index>
@@ -96,4 +99,72 @@
             <block type="truwallet/account_shareTruWallet" name="truwallet.shareTruWallet" template="truwallet/account/shareTruWallet.phtml" />
         </reference>
     </truwallet_index_sharetruwallet>
+
+    <truwallet_checkout_setamountpost>
+        <block type="checkout/onepage_payment_methods" name="root" output="toHtml" template="checkout/onepage/payment/methods.phtml">
+            <action method="setMethodFormTemplate">
+                <method>purchaseorder</method>
+                <template>payment/form/purchaseorder.phtml</template>
+            </action>
+        </block>
+    </truwallet_checkout_setamountpost>
+
+
+    <sales_order_view>
+        <reference name="order_items">
+        </reference>
+        <reference name="order_totals">
+            <block type="truwallet/order_totals" name="truwallet.order.totals" />
+        </reference>
+    </sales_order_view>
+
+    <sales_order_print>
+        <reference name="sales.order.print">
+        </reference>
+        <reference name="order_totals">
+            <block type="truwallet/order_totals" name="truwallet.order.totals" />
+        </reference>
+    </sales_order_print>
+
+    <sales_email_order_items>
+        <reference name="order_totals">
+            <block type="truwallet/order_totals" name="truwallet.order.totals" />
+        </reference>
+    </sales_email_order_items>
+
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block type="truwallet/order_invoice_totals" name="truwallet.order.invoice.totals" />
+        </reference>
+    </sales_order_invoice>
+
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block type="truwallet/order_invoice_totals" name="truwallet.order.invoice.totals" />
+        </reference>
+    </sales_order_printinvoice>
+
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+            <block type="truwallet/order_invoice_totals" name="truwallet.order.invoice.totals" />
+        </reference>
+    </sales_email_order_invoice_items>
+
+    <sales_order_creditmemo>
+        <reference name="creditmemo_totals">
+            <block type="truwallet/order_creditmemo_totals" name="truwallet.order.creditmemo.totals" />
+        </reference>
+    </sales_order_creditmemo>
+
+    <sales_order_printcreditmemo>
+        <reference name="creditmemo_totals">
+            <block type="truwallet/order_creditmemo_totals" name="truwallet.creditmemo.order.totals" />
+        </reference>
+    </sales_order_printcreditmemo>
+
+    <sales_email_order_creditmemo_items>
+        <reference name="creditmemo_totals">
+            <block type="truwallet/order_creditmemo_totals" name="truwallet.creditmemo.order.totals" />
+        </reference>
+    </sales_email_order_creditmemo_items>
 </layout>

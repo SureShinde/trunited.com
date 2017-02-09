@@ -7,6 +7,9 @@ class Magestore_TruWallet_Model_Type extends Varien_Object
 	const TYPE_TRANSACTION_RECEIVE_FROM_SHARING	= 3;
 	const TYPE_TRANSACTION_TRANSFER	= 4;
 	const TYPE_TRANSACTION_PAYOUT_EARNING	= 5;
+	const TYPE_TRANSACTION_CANCEL_ORDER	= 6;
+	const TYPE_TRANSACTION_CHECKOUT_ORDER = 7;
+	const TYPE_TRANSACTION_REFUND_ORDER = 8;
 
 	static public function getOptionArray(){
 		return array(
@@ -15,6 +18,9 @@ class Magestore_TruWallet_Model_Type extends Varien_Object
 			self::TYPE_TRANSACTION_RECEIVE_FROM_SHARING   => Mage::helper('truwallet')->__('Received truWallet money from Sharing'),
 			self::TYPE_TRANSACTION_TRANSFER   => Mage::helper('truwallet')->__('Transfer dollars from balance to truWallet'),
 			self::TYPE_TRANSACTION_PAYOUT_EARNING   => Mage::helper('truwallet')->__('Payout earnings'),
+			self::TYPE_TRANSACTION_CANCEL_ORDER   => Mage::helper('truwallet')->__('Retrieve truWallet balance spent on cancelled order'),
+			self::TYPE_TRANSACTION_CHECKOUT_ORDER   => Mage::helper('truwallet')->__('Spend truWallet balance to purchase order'),
+			self::TYPE_TRANSACTION_REFUND_ORDER   => Mage::helper('truwallet')->__('Retrieve truWallet balance spent on refunded order'),
 		);
 	}
 	

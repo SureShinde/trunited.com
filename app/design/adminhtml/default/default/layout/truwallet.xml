@@ -30,4 +30,81 @@
 		</block>
 	</truwalletadmin_adminhtml_customer_grid>
 
+	<!-- SHOW DISCOUNT ORDER, INVOICE, PDF, EMAIL -->
+
+	<adminhtml_sales_order_view>
+		<reference name="order_totals">
+			<block type="truwallet/order_totals" />
+		</reference>
+	</adminhtml_sales_order_view>
+
+	<adminhtml_sales_order_invoice_new>
+		<reference name="invoice_totals">
+			<block type="truwallet/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_new>
+	<adminhtml_sales_order_invoice_updateqty>
+		<reference name="invoice_totals">
+			<block type="truwallet/order_invoice_totals"/>
+		</reference>
+	</adminhtml_sales_order_invoice_updateqty>
+	<adminhtml_sales_order_invoice_view>
+		<reference name="invoice_totals">
+			<block type="truwallet/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_view>
+
+	<adminhtml_sales_order_invoice_print>
+		<reference name="invoice_totals">
+			<block type="truwallet/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_print>
+
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/order_creditmemo_totals" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_updateqty>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/order_creditmemo_totals" />
+		</reference>
+		<reference name="submit_before">
+			<block type="truwallet/order_creditmemo_controls" name="truwallet.balance" template="truwallet/sales/creditmemo/refund.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_updateqty>
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="submit_before">
+			<block type="truwallet/order_creditmemo_controls" name="truwallet.balance" template="truwallet/sales/creditmemo/refund.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_view>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/order_creditmemo_totals" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_view>
+
+	<adminhtml_sales_order_create_index>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/magestore/truwallet.js</name>
+				<params/>
+			</action>
+		</reference>
+		<reference name="items_grid">
+			<block type="truwallet/order_create_credit" template="truwallet/form.phtml" name="truwallet.using" />
+		</reference>
+	</adminhtml_sales_order_create_index>
+	<adminhtml_sales_order_create_load_block_data>
+		<reference name="items_grid">
+			<block type="truwallet/order_create_credit" template="truwallet/form.phtml" name="truwallet.using" />
+		</reference>
+	</adminhtml_sales_order_create_load_block_data>
+	<adminhtml_sales_order_create_load_block_items>
+		<reference name="items_grid">
+			<block type="truwallet/order_create_credit" template="truwallet/form.phtml" name="truwallet.using" />
+		</reference>
+	</adminhtml_sales_order_create_load_block_items>
+
 </layout>
