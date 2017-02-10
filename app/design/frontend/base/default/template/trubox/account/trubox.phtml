@@ -203,6 +203,11 @@
                     <p><?php echo $this->__('Total Price <span>%s</span>', Mage::helper('core')->currency($totalPrice, true, false)) ?></p>
                 </div>
                 <div class="buttons-set">
+                    <?php if(sizeof($collection) > 0){?>
+                    <button class="button btn-cart clear-trubox-items" type="button" id="clear-trubox-items">
+                        <span><span><?php echo $this->__('Clear TruBox Items') ?></span></span>
+                    </button>
+                    <?php }?>
                     <button class="button btn-cart" type="submit">
                         <span><span><?php echo $this->__('Save Items') ?></span></span>
                     </button>
@@ -570,6 +575,14 @@
         var rs = confirm('<?php echo $this->__('Are you sure?');?>');
         if(!rs)
             return false;
+    });
+
+    $j('#clear-trubox-items').click(function(){
+        var rs = confirm('<?php echo $this->__('Are you sure?');?>');
+        if(!rs)
+            return false;
+        else
+            window.location.href = '<?php echo $this->getUrl('trubox/index/clearItems');?>';
     });
 
     $j('#billing_region').change(function(){

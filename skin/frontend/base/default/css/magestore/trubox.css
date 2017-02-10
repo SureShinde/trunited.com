@@ -178,3 +178,9 @@
 a.addtrubox{
     border: none !important;
 }
+
+.clear-trubox-items
+{
+    float: none !important;
+    display: inline-block !important;
+}

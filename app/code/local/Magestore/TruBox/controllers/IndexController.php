@@ -178,6 +178,28 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $this->_redirectUrl(Mage::getUrl('*/*/index'));
     }
 
+    public function clearItemsAction()
+    {
+        try{
+            $items = Mage::helper('trubox')->getCurrentTruBoxCollection();
+            if(sizeof($items) > 0)
+            {
+                foreach ($items as $item)
+                    $item->delete();
+            }
+
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('You have deleted all items successfully !')
+            );
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
+        }
+
+        $this->_redirectUrl(Mage::getUrl('*/*/index'));
+    }
+
     public function saveItemsAction() {
         $data = $this->getRequest()->getParams();
         try{
