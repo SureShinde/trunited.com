@@ -35,6 +35,15 @@
 							<show_in_store>1</show_in_store>
 							<comment></comment>
 						</enable>
+						<warning_message translate="label">
+							<label>The warning message in TruBox page</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Display a warning message when the truWallet balance is smaller than total price of items in TruBox page</comment>
+						</warning_message>
 					</fields>				
 				</general>
 				<sharewallet>

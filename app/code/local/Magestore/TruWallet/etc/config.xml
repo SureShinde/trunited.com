@@ -364,6 +364,7 @@
         <truwallet>
             <general>
                 <enable>1</enable>
+                <warning_message>The default warning message!</warning_message>
             </general>
             <sharewallet>
                 <expire_date>7</expire_date>

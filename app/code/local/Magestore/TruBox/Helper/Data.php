@@ -37,35 +37,34 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getEnableTestingMode()
     {
-        return  Mage::getStoreConfig('trubox/general/enable_testing_mode');
+        return Mage::getStoreConfig('trubox/general/enable_testing_mode');
     }
 
     public function getEmailTestingMode()
     {
-        return  Mage::getStoreConfig('trubox/general/email_testing_mode');
+        return Mage::getStoreConfig('trubox/general/email_testing_mode');
     }
 
     public function isEnableOrdersSection()
     {
-        return  Mage::getStoreConfig('trubox/general/enable_orders_section');
+        return Mage::getStoreConfig('trubox/general/enable_orders_section');
     }
 
     public function getProductExclusionList()
     {
-        return  Mage::getStoreConfig('trubox/general/product_exclusion_list');
+        return Mage::getStoreConfig('trubox/general/product_exclusion_list');
     }
 
     public function getEnableProductListing()
     {
-        return  Mage::getStoreConfig('trubox/general/enable_product_listing');
+        return Mage::getStoreConfig('trubox/general/enable_product_listing');
     }
 
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
         $result = array();
-        if($list != null)
-        {
+        if ($list != null) {
             $data = explode(',', $list);
             foreach ($data as $sku) {
                 $result[] = trim(strtolower($sku));
@@ -81,10 +80,10 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
 
         $product_exclusion = $this->getExclusionList();
 
-        if(sizeof($product_exclusion) == 0)
+        if (sizeof($product_exclusion) == 0)
             return false;
         else {
-            if(in_array(strtolower(trim($product->getSku())), $product_exclusion))
+            if (in_array(strtolower(trim($product->getSku())), $product_exclusion))
                 return true;
             else
                 return false;
@@ -96,9 +95,8 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         $enable_test_mode = $this->getEnableTestingMode();
         $email_test_mode = $this->getEmailTestingMode();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
-        if($enable_test_mode)
-        {
-            if($customer->getEmail() == $email_test_mode)
+        if ($enable_test_mode) {
+            if ($customer->getEmail() == $email_test_mode)
                 return true;
             else
                 return false;
@@ -115,17 +113,17 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->__('My TruBox');
     }
 
-    public function getCurrentTruBoxId($customer_id = null) {
-        if($customer_id == null)
+    public function getCurrentTruBoxId($customer_id = null)
+    {
+        if ($customer_id == null)
             $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
 
         $truBox = Mage::getModel('trubox/trubox')->getCollection()
             ->addFieldToFilter('status', 'open')
             ->addFieldToFilter('customer_id', $customer_id)
-            ->getFirstItem()
-        ;
+            ->getFirstItem();
 
-        if($truBox->getId()){
+        if ($truBox->getId()) {
             $truBoxId = $truBox->getTruboxId();
         } else {
             $_truBox = Mage::getModel('trubox/trubox');
@@ -136,6 +134,17 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return $truBoxId;
+    }
+
+    public function getCurrentTruBoxCollection()
+    {
+        $truBoxId = $this->getCurrentTruBoxId();
+        $collection = Mage::getModel('trubox/item')
+            ->getCollection()
+            ->addFieldToFilter('trubox_id', $truBoxId)
+            ->setOrder('item_id','desc')
+        ;
+        return $collection;
     }
 
     public function firstCheckAddress()

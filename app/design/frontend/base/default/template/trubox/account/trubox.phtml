@@ -29,9 +29,22 @@
     $collection = $this->getTruBox();
     $logo = $this->getLogo();
     $orders = $this->getCollection();
+
 ?>
 <div class="trubox-page">
     <?php echo $this->getChildHtml('global_messages'); ?>
+    <?php if (Mage::helper('core')->isModuleOutputEnabled('Magestore_TruWallet') && Mage::helper('truwallet')->isShowWarningMessage()) { ?>
+        <?php if (Mage::helper('truwallet')->getWarningMessage() != null) { ?>
+            <ul class="messages">
+                <li class="notice-msg">
+                    <ul>
+                        <li><span><?php echo Mage::helper('truwallet')->getWarningMessage(); ?></span></li>
+                    </ul>
+                </li>
+            </ul>
+
+        <?php } ?>
+    <?php } ?>
     <div class="page-title" tabindex="1">
         <h1><?php echo $this->__('My TruBox') ?></h1>
     </div>
@@ -151,10 +164,7 @@
                                                 <dt><?php echo $this->escapeHtml($o->getTitle()) ?></dt>
                                                 <dd>
                                                     <?php
-                                                    	/*if($_SERVER['REMOTE_ADDR'] == '101.99.23.40'){
-							                            	zend_debug::dump(in_array($val->getOptionTypeId(), $_attribute_value));
-							                            }*/
-                                                        foreach($values as $val){
+                                                    foreach ($values as $val) {
                                                         	if(is_array($_attribute_value)){
 																if(in_array($val->getOptionTypeId(), $_attribute_value)) {
 																	echo $val->getTitle().' ';

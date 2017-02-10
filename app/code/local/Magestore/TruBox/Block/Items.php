@@ -66,13 +66,7 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     }
 
     public function getTruBox() {
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $collection = Mage::getModel('trubox/item')
-            ->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)
-            ->setOrder('item_id','desc')
-        ;
-        return $collection;
+        return Mage::helper('trubox')->getCurrentTruBoxCollection();
     }
 
     public function saveItemsUrl() {

@@ -35,6 +35,80 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/spend/' . $code, $store);
     }
 
+    public function getWarningMessage($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/general/warning_message', $store);
+    }
+
+    public function isShowWarningMessage()
+    {
+        if(Mage::helper('core')->isModuleOutputEnabled('Magestore_TruBox'))
+        {
+            $truBoxCollection = Mage::helper('trubox')->getCurrentTruBoxCollection();
+            if(sizeof($truBoxCollection) <= 0)
+                return false;
+
+            $totalPrice = 0;
+            foreach ($truBoxCollection as $item) {
+                $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                $option_params = json_decode($item->getOptionParams(), true);
+                $price_options = 0;
+
+                if($product->getTypeId() != 'configurable')
+                {
+                    foreach ($product->getOptions() as $o)
+                    {
+                        $values = $o->getValues();
+                        $_attribute_value = 0;
+
+                        foreach($option_params as $k=>$v)
+                        {
+                            if($k == $o->getOptionId())
+                            {
+                                $_attribute_value = $v;
+                                break;
+                            }
+                        }
+                        if($_attribute_value > 0)
+                        {
+                            foreach ($values as $val) {
+                                if(is_array($_attribute_value)){
+                                    if(in_array($val->getOptionTypeId(), $_attribute_value)) {
+                                        echo $val->getTitle().' ';
+                                        $price_options += $val->getPrice();
+
+                                    }
+                                } else if($val->getOptionTypeId() == $_attribute_value){
+                                    echo $val->getTitle().' ';
+                                    $price_options += $val->getPrice();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $itemPrice = ($product->getFinalPrice() + $price_options) * $item->getQty();
+                $totalPrice += $itemPrice;
+            }
+
+            if($totalPrice == 0)
+                return false;
+
+            $current_truWallet_balance = Mage::helper('truwallet/account')->getTruWalletCredit(false);
+            if($current_truWallet_balance == null)
+                return false;
+
+            if($current_truWallet_balance < $totalPrice)
+                return true;
+            else
+                return false;
+        } else {
+            return false;
+        }
+
+
+    }
+
 
     public function synchronizeCredit()
     {

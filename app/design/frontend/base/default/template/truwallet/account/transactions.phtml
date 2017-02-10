@@ -47,7 +47,7 @@
     <tr>
         <th><?php echo $this->__('Title') ?></th>
         <th><?php echo $this->__('Type') ?></th>
-        <th><?php echo $this->__('Balance') ?></th>
+        <th><?php echo $this->__('Amount') ?></th>
         <th><?php echo $this->__('Updated On') ?></th>
 <!--        <th>--><?php //echo $this->__('Expiration On') ?><!--</th>-->
 <!--        <th>--><?php //echo $this->__('Order') ?><!--</th>-->
@@ -66,7 +66,7 @@
                 <td><h2><?php echo $this->__($_transaction->getTitle()) ?></h2></td>
                 <td class="a-right"><h2><?php echo $types[$_transaction->getActionType()]; ?></h2></td>
                 <td class="a-right">
-                    <h2><?php echo Mage::helper('core')->currency($_transaction->getCurrentCredit(), true, false); ?></h2>
+                    <h2><?php echo Mage::helper('core')->currency($_transaction->getChangedCredit(), true, false); ?></h2>
                 </td>
                 <td><?php echo $this->formatTime($_transaction->getUpdatedTime(), 'medium', true) ?></td>
 <!--                <td>--><?php //echo $this->formatTime($_transaction->getExpirationDate(), 'medium', true) ?><!--</td>-->

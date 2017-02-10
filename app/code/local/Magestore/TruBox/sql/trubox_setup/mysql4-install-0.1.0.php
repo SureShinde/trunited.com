@@ -36,6 +36,7 @@ $installer->run("
 DROP TABLE IF EXISTS {$this->getTable('trubox/trubox')};
 DROP TABLE IF EXISTS {$this->getTable('trubox/address')};
 DROP TABLE IF EXISTS {$this->getTable('trubox/payment')};
+DROP TABLE IF EXISTS {$this->getTable('trubox/item')};
 
 CREATE TABLE {$this->getTable('trubox/trubox')} (
   `trubox_id` int(10) unsigned NOT NULL auto_increment,
