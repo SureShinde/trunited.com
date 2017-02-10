@@ -14,9 +14,9 @@ class Magestore_Affiliateplus_Block_Payment_Transfer extends Mage_Core_Block_Tem
     protected function _construct() {
         parent::_construct();
         $account = Mage::getSingleton('affiliateplus/session')->getAccount();
-        $collection = Mage::getModel('rewardpoints/transaction')->getCollection()
+        $collection = Mage::getModel('truwallet/transaction')->getCollection()
                 ->addFieldToFilter('customer_id', $account->getCustomerId())
-                ->addFieldToFilter('action_type', Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_TRANSFER)
+                ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_TRANSFER)
                 ->setOrder('transaction_id', 'DESC');
 
         $this->setCollection($collection);
@@ -48,11 +48,11 @@ class Magestore_Affiliateplus_Block_Payment_Transfer extends Mage_Core_Block_Tem
             'searchable' => true,
         ));
 
-        $grid->addColumn('product_credit', array(
+        $grid->addColumn('changed_credit', array(
             'header' => $this->__('Amount'),
             'align' => 'left',
             'type' => 'baseprice',
-            'index' => 'product_credit',
+            'index' => 'changed_credit',
             'searchable' => true,
             'width' => '100px',
         ));
@@ -72,12 +72,7 @@ class Magestore_Affiliateplus_Block_Payment_Transfer extends Mage_Core_Block_Tem
             'align' => 'left',
             'index' => 'status',
             'type' => 'options',
-            'options' => array(
-                1 => $this->__('Pending'),
-                2 => $this->__('Processing'),
-                3 => $this->__('Complete'),
-                4 => $this->__('Canceled'),
-            ),
+            'options' => Magestore_TruWallet_Model_Status::getTransactionOptionArray(),
             'width' => '95px',
             'searchable' => true,
         ));

@@ -234,14 +234,29 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
 
         try{
             $customer = Mage::getModel('customer/customer')->load($affiliate_account->getCustomerId());
-            $transferObject = new Varien_Object();
+            /*$transferObject = new Varien_Object();
             $transferObject->setData('product_credit', $transfer_amount);
             $transferObject->setData('point_amount', 0);
-
             Mage::helper('rewardpoints/action')
                 ->addTransaction(
                     'transfer_credit', $customer, $transferObject
+                );*/
+
+            $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer->getId(), $transfer_amount);
+            $params = array(
+                'credit' => $transfer_amount,
+                'title' => Mage::helper('truwallet')->__('Transfer dollars from balance to truWallet'),
+                'receiver_email' => '',
+                'receiver_customer_id' => '',
+            );
+            if ($truWalletAccount != null) {
+                Mage::helper('truwallet/transaction')->createTransaction(
+                    $truWalletAccount,
+                    $params,
+                    Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_TRANSFER,  // type
+                    Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED
                 );
+            }
 
 
             $storeId = Mage::app()->getStore()->getStoreId();
