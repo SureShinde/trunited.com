@@ -114,8 +114,18 @@ class Magestore_TruWallet_Model_Observer
 
         // Add earning point for customer
         $truWallet_order_status = Mage::helper('truwallet')->getTruWalletOrderStatus();
-
-        if ($order->getState() == $truWallet_order_status || $order->getStatus() == $truWallet_order_status) {
+        $items = $order->getAllItems();
+        $is_only_virtual = 0;
+        foreach($items as $item)
+        {
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            if($product->getTypeId() != 'virtual')
+            {
+                $is_only_virtual++;
+            }
+        }
+        if ($order->getState() == $truWallet_order_status || $order->getStatus() == $truWallet_order_status
+            || (strcasecmp($order->getStatus(),'complete') == 0 && $is_only_virtual == 0)) {
             Mage::helper('truwallet/transaction')->addTruWalletFromProduct($order);
         }
 

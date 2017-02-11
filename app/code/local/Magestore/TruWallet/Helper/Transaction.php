@@ -267,7 +267,18 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
         $flag = $this->checkAddedTransaction($order->getEntityId(), $customer->getId());
 
-        if(strcasecmp($order->getStatus(),$order_status_configure) == 0 && !$flag){
+        $items = $order->getAllItems();
+        $is_only_virtual = 0;
+        foreach($items as $item)
+        {
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            if($product->getTypeId() != 'virtual')
+            {
+                $is_only_virtual++;
+            }
+        }
+
+        if((strcasecmp($order->getStatus(),$order_status_configure) == 0 || (strcasecmp($order->getStatus(),'complete') == 0 && $is_only_virtual == 0)) && !$flag){
             $items = $order->getAllItems();
             try{
                 foreach($items as $orderItem) {
