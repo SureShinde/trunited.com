@@ -82,7 +82,7 @@ class Magestore_TruWallet_Model_Observer
         }
         $session = Mage::getSingleton('checkout/session');
         $amount = $session->getBaseTruwalletCreditAmount();
-        if ($amount) {
+        if ($amount > 0) {
             $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer_id, -$amount);
             $data = array(
                 'title' => Mage::helper('truwallet')->__('Checkout by truWallet balance for order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getId())).'">'. $order->getIncrementId().'</a>'),

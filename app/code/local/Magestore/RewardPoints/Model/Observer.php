@@ -135,7 +135,18 @@ class Magestore_RewardPoints_Model_Observer
         $earning_order_status = Mage::getStoreConfig('rewardpoints/earning/order_status', Mage::app()->getStore()->getId());
         if($order->getRewardpointsEarn())
         {
-            if ($order->getState() == $earning_order_status || $order->getStatus() == $earning_order_status)
+            $items = $order->getAllItems();
+            $is_only_virtual = 0;
+            foreach($items as $item)
+            {
+                $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                if($product->getTypeId() != 'virtual')
+                {
+                    $is_only_virtual++;
+                }
+            }
+            if ($order->getState() == $earning_order_status || $order->getStatus() == $earning_order_status
+            || (strcasecmp($order->getStatus(),'complete') == 0 && $is_only_virtual == 0))
             {
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
                 if (!$customer->getId()) {
