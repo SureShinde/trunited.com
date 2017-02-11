@@ -130,4 +130,15 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		Mage::helper('truwallet')->synchPurchaseGiftCard();
 	}
 
+	public function synchOrderAction()
+	{
+		Mage::helper('truwallet')->synchOrder();
+	}
+
+	public function synchTruwalletAction()
+	{
+		Mage::helper('truwallet/account')->updateCredit(6053, -500);
+		echo 'success';
+	}
+
 }
