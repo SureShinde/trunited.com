@@ -32,13 +32,20 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
-        $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Mage::getSingleton('core/session')->addError(
                 Mage::helper('truwallet')->__($email . ' is not a valid email address')
+            );
+            $this->_redirectUrl(Mage::getUrl('*/index/shareTruWallet'));
+            return;
+        }
+
+        if (strcasecmp($email, $customer->getEmail()) == 0) {
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('truwallet')->__('You cannot share truWallet balance to your email')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruWallet'));
             return;
