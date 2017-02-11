@@ -366,6 +366,13 @@
                 <enable>1</enable>
                 <warning_message>The default warning message!</warning_message>
             </general>
+            <product>
+                <enable>1</enable>
+                <truwallet_sku>TWGIFTCARD</truwallet_sku>
+                <truwallet_value>50</truwallet_value>
+                <order_status>complete</order_status>
+                <notify_message>Important: truWallet cannot be used as a payment option for Gift Cards.</notify_message>
+            </product>
             <sharewallet>
                 <expire_date>7</expire_date>
             </sharewallet>

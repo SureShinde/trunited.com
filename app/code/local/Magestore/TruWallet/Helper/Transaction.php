@@ -235,4 +235,62 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         return $import_count;
     }
 
+    public function checkAddedTransaction($order_id, $customer_id)
+    {
+        $collection = Mage::getModel('truwallet/transaction')->getCollection()
+            ->addFieldToFilter('customer_id',$customer_id)
+            ->addFieldToFilter('order_id',$order_id)
+            ->addFieldToFilter('action_type',Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD)
+            ->setOrder('transaction_id','desc')
+            ->getFirstItem()
+        ;
+
+        if($collection->getId())
+            return true;
+        else
+            return false;
+    }
+
+    public function addTruWalletFromProduct($order)
+    {
+        $helper = Mage::helper('truwallet');
+        if(!$helper->isEnableTruWalletProduct())
+            return $this;
+
+        $order_status_configure = $helper->getTruWalletOrderStatus();
+        $product_configure = $helper->getTruWalletSku();
+        $value_configure = $helper->getTruWalletValue();
+
+        if($order_status_configure == '')
+            return $this;
+
+        $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+        $flag = $this->checkAddedTransaction($order->getEntityId(), $customer->getId());
+
+        if(strcasecmp($order->getStatus(),$order_status_configure) == 0 && !$flag){
+            $items = $order->getAllItems();
+            try{
+                foreach($items as $orderItem) {
+                    if(strcasecmp($orderItem->getSku(),$product_configure) == 0)
+                    {
+                        $credit = $value_configure * (int)$orderItem->getQtyOrdered();
+                        $receiverAccount = Mage::helper('truwallet/account')->updateCredit($customer->getId(), $credit);
+                        $params = array(
+                            'credit' => $credit,
+                            'title' => Mage::helper('truwallet')->__('Purchased truWallet Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getEntityId())).'">'.$order->getIncrementId().'</a>'),
+                        );
+                        Mage::helper('truwallet/transaction')->createTransaction(
+                            $receiverAccount,
+                            $params,
+                            Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD,  // type
+                            Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED
+                        );
+                    }
+                }
+            } catch (Exception $ex) {
+
+            }
+        }
+    }
+
 }

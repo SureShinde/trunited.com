@@ -75,7 +75,7 @@
 						</max_customers>
 					</fields>				
 				</general>
-				<product translate="label">
+				<!-- <product translate="label">
 					<label>truWallet Gift Card Product Configuration</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>2</sort_order>
@@ -131,7 +131,7 @@
 							<comment></comment>
 						</notify_message>
 					</fields>
-				</product>
+				</product> -->
                 <shipment translate="label">
                     <label>ShipStation Configuration</label>
                     <frontend_type>text</frontend_type>

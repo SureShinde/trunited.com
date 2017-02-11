@@ -46,10 +46,67 @@
 						</warning_message>
 					</fields>				
 				</general>
+				<product translate="label">
+					<label>truWallet Gift Card Product Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enable translate="label">
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable>
+						<truwallet_sku translate="label">
+							<label>truWallet Gift Card SKU</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</truwallet_sku>
+						<truwallet_value translate="label">
+							<label>truWallet Gift Card Value</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</truwallet_value>
+						<order_status translate="label">
+							<label>Add truWallet balance when order status is</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</order_status>
+						<notify_message translate="label">
+							<label>Notify message when the cart contains Gift Card Product</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</notify_message>
+					</fields>
+				</product>
 				<sharewallet>
 					<label>Share truWallet Configuration</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>40</sort_order>
+					<sort_order>3</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -68,7 +125,7 @@
 				<spending>
 					<label>Spending Points Configuration</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>30</sort_order>
+					<sort_order>4</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -97,7 +154,7 @@
 				<email>
 					<label>Email Configuration</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>50</sort_order>
+					<sort_order>5</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>

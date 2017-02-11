@@ -107,6 +107,18 @@ class Magestore_TruWallet_Model_Observer
     public function orderSaveAfter($observer)
     {
 
+        $order = $observer['order'];
+        if ($order->getCustomerIsGuest() || !$order->getCustomerId()) {
+            return $this;
+        }
+
+        // Add earning point for customer
+        $truWallet_order_status = Mage::helper('truwallet')->getTruWalletOrderStatus();
+
+        if ($order->getState() == $truWallet_order_status || $order->getStatus() == $truWallet_order_status) {
+            Mage::helper('truwallet/transaction')->addTruWalletFromProduct($order);
+        }
+
     }
 
     public function orderCancelAfter($observer)

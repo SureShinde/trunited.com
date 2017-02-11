@@ -127,13 +127,12 @@ class Magestore_Custompromotions_Model_Observer
         }
 
         // Add earning point for customer
-        $truWallet_order_status = Mage::getStoreConfig('custompromotions/product/order_status', Mage::app()->getStore()->getId());
+        /*$truWallet_order_status = Mage::getStoreConfig('custompromotions/product/order_status', Mage::app()->getStore()->getId());
 
         if ($order->getState() == $truWallet_order_status || $order->getStatus() == $truWallet_order_status) {
-            /* process truWallet Gift card Product */
             Mage::helper('custompromotions')->addTruWalletFromProduct($order);
-        }
-        
+        }*/
+
         /* Process partially shipment status when order has created shipment */
         $shipstation_enable = Mage::helper('custompromotions/configuration')->getShipStationEnable();
         if($shipstation_enable){

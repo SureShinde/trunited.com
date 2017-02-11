@@ -40,6 +40,26 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/general/warning_message', $store);
     }
 
+    public function isEnableTruWalletProduct($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/product/enable', $store);
+    }
+
+    public function getTruWalletOrderStatus($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/product/order_status', $store);
+    }
+
+    public function getTruWalletSku($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/product/truwallet_sku', $store);
+    }
+
+    public function getTruWalletValue($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/product/truwallet_value', $store);
+    }
+
     public function isShowWarningMessage()
     {
         if(Mage::helper('core')->isModuleOutputEnabled('Magestore_TruBox'))
@@ -446,6 +466,85 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
                         }
 
                         $_data['action_type'] = Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_TRANSFER;
+
+                        $_data['created_time'] = $transaction->getCreatedTime();
+                        $_data['updated_time'] = $transaction->getUpdatedTime();
+                        $_data['expiration_date'] = $transaction->getExpirationDate();
+                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
+                        $_data['current_credit'] = $truwallet_account->getTruwalletCredit();
+                        $_data['changed_credit'] = $transaction->getProductCredit();
+                        $_data['receiver_email'] = $transaction->getReceiverEmail();
+                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
+
+                        $truWallet_transaction->setData($_data);
+                        $transactionSave->addObject($truWallet_transaction);
+                    }
+                }
+
+                $transactionSave->save();
+                $connection->commit();
+                echo 'success';
+            } catch (Exception $e) {
+                $connection->rollback();
+                zend_debug::dump($e->getMessage());
+            }
+        } else {
+            echo 'Empty';
+        }
+    }
+
+     public function synchPurchaseGiftCard()
+    {
+        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToFilter('action_type',8)
+            ->addFieldToFilter('customer_id',array('gt' => 0))
+            ->addFieldToFilter('transaction_id',array('in' => array(8902,9245,10648)))
+            ->setOrder('transaction_id','desc')
+        ;
+
+        if(count($reward_transactions) > 0)
+        {
+            $transactionSave = Mage::getModel('core/resource_transaction');
+            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+            try {
+                $connection->beginTransaction();
+                foreach ($reward_transactions as $transaction)
+                {
+                    $truwallet_account = Mage::helper('truwallet/account')->updateCredit($transaction->getCustomerId(), $transaction->getProductCredit());
+                    if($transaction->getCustomerId() != null && $truwallet_account != null)
+                    {
+                        $truWallet_transaction = Mage::getModel('truwallet/transaction');
+                        $_data = array();
+                        $_data['truwallet_id'] = $truwallet_account->getId();
+                        $_data['customer_id'] = $transaction->getCustomerId();
+                        $_data['customer_email'] = $transaction->getCustomerEmail();
+                        $_data['title'] = $this->__('Purchased truWallet Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$transaction->getOrderId())).'">'.$transaction->getOrderIncrementId().'</a>');
+                        $_data['store_id'] = $transaction->getStoreId();
+
+                        switch($transaction->getStatus())
+                        {
+                            case 3:
+                                $_data['status'] = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED;
+                                break;
+
+                            case 4:
+                                $_data['status'] = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED;
+                                break;
+
+                            case 1:
+                                $_data['status'] = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING;
+                                break;
+
+                            case 2:
+                                $_data['status'] = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_ON_HOLD;
+                                break;
+
+                            case 5:
+                                $_data['status'] = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_EXPIRED;
+                                break;
+                        }
+
+                        $_data['action_type'] = Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD;
 
                         $_data['created_time'] = $transaction->getCreatedTime();
                         $_data['updated_time'] = $transaction->getUpdatedTime();
