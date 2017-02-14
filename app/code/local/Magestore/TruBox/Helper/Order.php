@@ -34,7 +34,8 @@
 class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 {
     protected $_shippingMethod = 'freeshipping_freeshipping';
-    protected $_paymentMethod = 'ccsave';
+    protected $_paymentMethod = 'authorizenet';
+    protected $_freePaymentMethod = 'free';
 
     protected $_customer;
 
@@ -233,6 +234,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
         $customer = Mage::getModel('customer/customer')->load($customer_id);
         try{
 
+            Mage::getSingleton('adminhtml/session')->setIsOrderBackend(true);
+            Mage::getSingleton('adminhtml/session')->setOrderCustomerId($customer->getId());
+
             /* Check customer */
             $truBox_id = Mage::helper('trubox')->getCurrentTruBoxId($customer->getId());
             if($truBox_id == null)
@@ -257,16 +261,18 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 );
 
             $payment_information = $this->getPaymentInformation($customer_id);
+
             $paymentData = array(
-                'method' => 'ccsave',
+                'truwallet' => 'on',
+                'method' => $this->_paymentMethod,
                 'cc_type' => $payment_information->getCardType(),
-                'cc_owner' => $payment_information->getNameOnCard(),
-                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
+//                'cc_owner' => $payment_information->getNameOnCard(),
+//                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
                 'cc_number' => $payment_information->getCardNumber(),
                 'cc_exp_month' => $payment_information->getMonthExpire(),
                 'cc_exp_year' => $payment_information->getYearExpire(),
                 'cc_cid' => $payment_information->getCvv(),
-                'checks' => 179
+//                'checks' => 179
             );
 
             $billingAddress = array(
@@ -307,14 +313,27 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'vat_id' => '',
             );
 
-            $quote      = Mage::getModel('sales/quote')->setStoreId(1);
+            $quote = Mage::getModel('sales/quote')->setStoreId(1);
 
             //Load Product and add to cart
+            $before_grandTotal = 0;
             foreach ($products as $itemid => $pro){
+                $item_price = Mage::helper('trubox/item')->getItemPrice(Mage::getModel('trubox/item')->load($itemid));
+                $before_grandTotal += $item_price;
                 foreach ($pro as $k => $v){
                     $product    = Mage::getModel('catalog/product')->load($k);
                     $quote->addProduct($product, new Varien_Object($v));
                 }
+            }
+
+            $is_no_need_payment = $this->checkApplyBalanceToPayment($customer, $before_grandTotal);
+            if($is_no_need_payment)
+            {
+                $paymentData = array(
+                    'method' => $this->_freePaymentMethod,
+                );
+
+                $this->_paymentMethod = $this->_freePaymentMethod;
             }
 
             // Add Billing Address
@@ -325,14 +344,21 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $quote->getShippingAddress()
                 ->addData($shippingAddress)
                 ->setCollectShippingRates(true)
-                ->setShippingMethod('freeshipping_freeshipping')
+                ->setShippingMethod($this->_shippingMethod)
+                ->setPaymentMethod($this->_paymentMethod)
                 ->collectTotals();
 
             //Set Customer group As Guest
             $quote->setCustomer($customer);
 
+            if ($quote->isVirtual()) {
+                $quote->getBillingAddress()->setPaymentMethod($this->_paymentMethod);
+            }
+
             $quote->getPayment()->importData($paymentData);
-            $quote->collectTotals()->save();
+            $quote->collectTotals();
+//            $quote->save();
+
 
             //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);
@@ -357,6 +383,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $truBox_order->save();
             /* END update table trubox order */
 
+            Mage::getSingleton('adminhtml/session')->unsIsOrderBackend();
+            Mage::getSingleton('adminhtml/session')->unsOrderCustomerId();
+
             return true;
         } catch (Exception $ex) {
 //            Mage::log($ex->getMessage(), null, '1.log');
@@ -364,6 +393,22 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'Email: '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
             );
 
+            return false;
+        }
+    }
+
+    public function checkApplyBalanceToPayment($customer, $grandTotal)
+    {
+
+        $account = Mage::helper('truwallet/account')->loadByCustomerId($customer->getId());
+
+        if($account->getId())
+        {
+            if(floatval($account->getTruwalletCredit()) >= floatval($grandTotal))
+                return true;
+            else
+                return false;
+        } else {
             return false;
         }
     }

@@ -65,7 +65,24 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
 
         $helper = Mage::helper('truwallet');
         
-        $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
+
+
+        $is_backend =  Mage::getSingleton('adminhtml/session')->setIsOrderBackend(true);
+        if(isset($is_backend) && $is_backend)
+        {
+            $account = Mage::helper('truwallet/account')->loadByCustomerId(Mage::getSingleton('adminhtml/session')->getOrderCustomerId());
+            if($account->getId())
+                $creditAmountEntered = $account->getTruwalletCredit();
+            else
+                $creditAmountEntered = 0;
+
+            $truwalletBalance = $creditAmountEntered;
+        } else {
+            $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
+            $account = Mage::helper('truwallet/account')->getCurrentAccount();
+            $truwalletBalance = $account->getTruwalletCredit();
+        }
+
         if(!$creditAmountEntered)
             return $this;
         
@@ -96,10 +113,10 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $baseDiscountTotal += $shippingDiscount;
         }
 
-        $account = Mage::helper('truwallet/account')->getCurrentAccount();
-        $truwalletBalance = $account->getTruwalletCredit();
-        
+
         $baseTruWalletDiscount = min($creditAmountEntered, $baseDiscountTotal, $truwalletBalance);
+        zend_debug::dump($baseTruWalletDiscount);
+        exit;
         $truwalletDiscount = Mage::getModel('truwallet/customer')
                 ->getConvertedFromBaseTruwalletCredit($baseTruWalletDiscount);
         
