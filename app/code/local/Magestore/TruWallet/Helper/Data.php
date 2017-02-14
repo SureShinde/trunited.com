@@ -634,7 +634,7 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
                         $_data['changed_credit'] = $qty * $this->getTruWalletValue();
                         $_data['receiver_email'] = '';
                         $_data['receiver_customer_id'] = '';
-
+                        
                         $truWallet_transaction->setData($_data);
                         $transactionSave->addObject($truWallet_transaction);
                     }
