@@ -73,10 +73,10 @@ class Magestore_TruWallet_Block_Adminhtml_Transaction_Grid extends Mage_Adminhtm
 			'type'      => 'datetime',
 		));
 
-		$this->addColumn('updated_time', array(
-			'header'    => Mage::helper('truwallet')->__('Updated On'),
-			'index'     => 'updated_time',
-			'type'      => 'datetime',
+		$this->addColumn('order_id', array(
+			'header'    => Mage::helper('truwallet')->__('Order ID'),
+			'index'     => 'order_id',
+			'renderer'  => 'Magestore_TruWallet_Block_Adminhtml_Renderer_Transaction_Grid',
 		));
 
 		/*$this->addColumn('expiration_date', array(
