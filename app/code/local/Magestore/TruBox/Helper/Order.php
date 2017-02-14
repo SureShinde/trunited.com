@@ -232,10 +232,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
     {
         Mage::helper('catalog/product')->setSkipSaleableCheck(true);
         $customer = Mage::getModel('customer/customer')->load($customer_id);
+        $admin_session = Mage::getSingleton('adminhtml/session');
         try{
 
-            Mage::getSingleton('adminhtml/session')->setIsOrderBackend(true);
-            Mage::getSingleton('adminhtml/session')->setOrderCustomerId($customer->getId());
+            $admin_session->setIsOrderBackend(true);
+            $admin_session->setOrderCustomerId($customer->getId());
 
             /* Check customer */
             $truBox_id = Mage::helper('trubox')->getCurrentTruBoxId($customer->getId());
@@ -326,6 +327,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 }
             }
 
+            $admin_session->setGrandTotalOrder($before_grandTotal);
+
             $is_no_need_payment = $this->checkApplyBalanceToPayment($customer, $before_grandTotal);
             if($is_no_need_payment)
             {
@@ -335,6 +338,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
                 $this->_paymentMethod = $this->_freePaymentMethod;
             }
+
 
             // Add Billing Address
             $quote->getBillingAddress()
@@ -383,8 +387,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $truBox_order->save();
             /* END update table trubox order */
 
-            Mage::getSingleton('adminhtml/session')->unsIsOrderBackend();
-            Mage::getSingleton('adminhtml/session')->unsOrderCustomerId();
+            $admin_session->unsIsOrderBackend();
+            $admin_session->unsOrderCustomerId();
+            $admin_session->unsGrandTotalOrder();
 
             return true;
         } catch (Exception $ex) {

@@ -26,7 +26,7 @@
 
 /**
  * TruWallet Model
- * 
+ *
  * @category    Magestore
  * @package     Magestore_TruWallet
  * @author      Magestore Developer
@@ -49,7 +49,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $quote = $address->getQuote();
         $items = $address->getAllItems();
         $session = Mage::getSingleton('checkout/session');
-        
+
         if (!count($items))
             return $this;
         if (Mage::getStoreConfig('truwallet/spend/tax', $quote->getStoreId()) == '0') {
@@ -64,31 +64,14 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         }
 
         $helper = Mage::helper('truwallet');
-        
 
-
-        $is_backend =  Mage::getSingleton('adminhtml/session')->setIsOrderBackend(true);
-        if(isset($is_backend) && $is_backend)
-        {
-            $account = Mage::helper('truwallet/account')->loadByCustomerId(Mage::getSingleton('adminhtml/session')->getOrderCustomerId());
-            if($account->getId())
-                $creditAmountEntered = $account->getTruwalletCredit();
-            else
-                $creditAmountEntered = 0;
-
-            $truwalletBalance = $creditAmountEntered;
-        } else {
-            $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
-            $account = Mage::helper('truwallet/account')->getCurrentAccount();
-            $truwalletBalance = $account->getTruwalletCredit();
-        }
-
+        $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
         if(!$creditAmountEntered)
             return $this;
-        
+
         $baseDiscountTotal = 0;
         $baseTruWalletForShipping = 0;
-        
+
         foreach ($address->getAllItems() as $item) {
             if ($item->getParentItemId()) {
                 continue;
@@ -113,13 +96,13 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $baseDiscountTotal += $shippingDiscount;
         }
 
+        $account = Mage::helper('truwallet/account')->getCurrentAccount();
+        $truwalletBalance = $account->getTruwalletCredit();
 
         $baseTruWalletDiscount = min($creditAmountEntered, $baseDiscountTotal, $truwalletBalance);
-        zend_debug::dump($baseTruWalletDiscount);
-        exit;
         $truwalletDiscount = Mage::getModel('truwallet/customer')
-                ->getConvertedFromBaseTruwalletCredit($baseTruWalletDiscount);
-        
+            ->getConvertedFromBaseTruwalletCredit($baseTruWalletDiscount);
+
         if ($baseTruWalletDiscount < $baseItemsPrice)
             $rate = $baseTruWalletDiscount / $baseItemsPrice;
         else {
@@ -128,13 +111,13 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         }
         //update session
         $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
-        
+
         //update address
         $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount);
         $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseTruWalletDiscount);
         $address->setTruwalletDiscount($truwalletDiscount);
         $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
-        
+
         //distribute discount
         $this->_prepareDiscountCreditForAmount($address, $rate, $baseTruWalletForShipping);
         return $this;
@@ -186,7 +169,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                         $itemDiscount = Mage::app()->getStore()->convertPrice($itemBaseDiscount);
                         $child->setMagestoreBaseDiscount($child->getMagestoreBaseDiscount() + $itemBaseDiscount);
                         $child->setBaseTruwalletDiscount($itemBaseDiscount)
-                                ->setTruwalletDiscount($itemDiscount);
+                            ->setTruwalletDiscount($itemDiscount);
                     }
                 }
             } else if ($item->getProduct()) {
@@ -196,7 +179,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                     $itemDiscount = Mage::app()->getStore()->convertPrice($itemBaseDiscount);
                     $item->setMagestoreBaseDiscount($item->getMagestoreBaseDiscount() + $itemBaseDiscount);
                     $item->setBaseTruwalletDiscount($itemBaseDiscount)
-                            ->setTruwalletDiscount($itemDiscount);
+                        ->setTruwalletDiscount($itemDiscount);
                 }
             }
         }
