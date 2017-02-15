@@ -40,7 +40,10 @@ class Magestore_TruWallet_Helper_Account extends Mage_Core_Helper_Abstract
         $model->setData('created_time', now());
         $model->setData('updated_time', now());
         try{
-            $model->save();
+            if($customer_id != 0)
+                $model->save();
+            else
+                return null;
         } catch (Exception $ex){
             return null;
         }

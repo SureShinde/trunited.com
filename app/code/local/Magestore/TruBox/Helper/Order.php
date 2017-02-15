@@ -339,6 +339,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $this->_paymentMethod = $this->_freePaymentMethod;
             }
 
+//            zend_debug::dump($paymentData);
+//            exit;
+
 
             // Add Billing Address
             $quote->getBillingAddress()
@@ -376,7 +379,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $order_mail = new Mage_Sales_Model_Order();
             $order_mail->loadByIncrementId($increment_id);
-//            $order_mail->sendNewOrderEmail();
+            $order_mail->sendNewOrderEmail();
 
             /* update table trubox order */
             $truBox_order = Mage::getModel('trubox/order');
@@ -393,7 +396,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             return true;
         } catch (Exception $ex) {
-//            Mage::log($ex->getMessage(), null, '1.log');
             Mage::getSingleton('adminhtml/session')->addError(
                 'Email: '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
             );

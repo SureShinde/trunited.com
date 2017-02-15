@@ -40,6 +40,11 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $this->setCode('truwallet_after_tax');
     }
 
+    public function checkIsAdmin()
+    {
+        return Mage::app()->getStore()->isAdmin();
+    }
+
     /**
      * @param Mage_Sales_Model_Quote_Address $address
      * @return $this
@@ -49,13 +54,13 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $quote = $address->getQuote();
         $items = $address->getAllItems();
         $session = Mage::getSingleton('checkout/session');
+        $admin_session = Mage::getSingleton('adminhtml/session');
 
         if (!count($items))
             return $this;
         if (Mage::getStoreConfig('truwallet/spend/tax', $quote->getStoreId()) == '0') {
             return $this;
         }
-
         if (!$quote->isVirtual() && $address->getAddressType() == 'billing') {
             return $this;
         }
@@ -65,7 +70,15 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
 
         $helper = Mage::helper('truwallet');
 
-        $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
+        if($this->checkIsAdmin())
+        {
+            $account = Mage::helper('truwallet/account')->loadByCustomerId($admin_session->getOrderCustomerId());
+            $creditAmountEntered = $account->getTruwalletCredit();
+        } else {
+            $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
+            $account = Mage::helper('truwallet/account')->getCurrentAccount();
+        }
+
         if(!$creditAmountEntered)
             return $this;
 
@@ -96,7 +109,6 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $baseDiscountTotal += $shippingDiscount;
         }
 
-        $account = Mage::helper('truwallet/account')->getCurrentAccount();
         $truwalletBalance = $account->getTruwalletCredit();
 
         $baseTruWalletDiscount = min($creditAmountEntered, $baseDiscountTotal, $truwalletBalance);
