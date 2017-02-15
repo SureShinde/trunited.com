@@ -127,6 +127,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         //update address
         $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount);
         $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseTruWalletDiscount);
+
         $address->setTruwalletDiscount($truwalletDiscount);
         $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
 

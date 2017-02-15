@@ -102,6 +102,9 @@ class Magestore_TruWallet_Model_Observer
         } else {
             $session->setBaseTruwalletCreditAmount(null);
         }
+
+        Mage::getSingleton('checkout/session')->clear();
+        Mage::getSingleton('checkout/cart')->truncate()->save();
     }
 
     public function orderSaveAfter($observer)

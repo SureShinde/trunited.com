@@ -48,6 +48,11 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         }
     }
 
+    public function checkIsAdmin()
+    {
+        return Mage::app()->getStore()->isAdmin();
+    }
+
     /**
      * collect reward points that customer earned (per each item and address) total
      * 
@@ -56,13 +61,19 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
      * @return Magestore_RewardPoints_Model_Total_Quote_Point
      */
     public function collect($address, $quote) {
+        $admin_session = Mage::getSingleton('adminhtml/session');
+
         if (!Mage::helper('rewardpoints')->isEnable($quote->getStoreId())) {
             return $this;
         }
+
+
         if (Mage::helper('rewardpoints/calculation_spending')->getTotalPointSpent() && !Mage::getStoreConfigFlag('rewardpoints/earning/earn_when_spend', Mage::app()->getStore()->getId())) {
             $address->setRewardpointsEarn(0);
             return $this;
         }
+
+
         // get points that customer can earned by Rates
         if ($quote->isVirtual()) {
             $address = $quote->getBillingAddress();
@@ -72,7 +83,8 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_before', array(
             'address' => $address,
-        )); 
+        ));
+
         if(!$address->getRewardpointsEarn()){
             $baseGrandTotal = $quote->getBaseGrandTotal();
             if (!Mage::getStoreConfigFlag(Magestore_RewardPoints_Helper_Calculation_Earning::XML_PATH_EARNING_BY_SHIPPING, $quote->getStoreId())) {
@@ -102,9 +114,12 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
 		
 		//TruBox Bonus Points
 		$bonusPoints = 0;
+
 		$earningPoints = $address->getRewardpointsEarn();
+        $customer_id = $admin_session->getOrderCustomerId();
 		if(Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId())){
-			if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())){
+			if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())
+            || ($this->checkIsAdmin() && isset($customer_id) && $customer_id > 0)){
 				$bonusPoints = ceil(0.1*$earningPoints);
 			}
 		}
