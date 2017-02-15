@@ -379,6 +379,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $order_mail = new Mage_Sales_Model_Order();
             $order_mail->loadByIncrementId($increment_id);
+            $order_mail->setCreatedBy(Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES)->save();
             $order_mail->sendNewOrderEmail();
 
             /* update table trubox order */

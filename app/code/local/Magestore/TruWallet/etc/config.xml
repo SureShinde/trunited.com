@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Magestore_TruWallet>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Magestore_TruWallet>
     </modules>
     <frontend>
@@ -81,6 +81,15 @@
                     </truwallet_adminhtml_observers>
                 </observers>
             </customer_save_after>
+            <sales_order_grid_collection_load_before>
+                <observers>
+                    <truwallet_sales_order_grid_collection_load_before>
+                        <type>model</type>
+                        <class>truwallet/admin_observer</class>
+                        <method>salesOrderGridCollectionLoadBefore</method>
+                    </truwallet_sales_order_grid_collection_load_before>
+                </observers>
+            </sales_order_grid_collection_load_before>
         </events>
     </adminhtml>   
     <global>

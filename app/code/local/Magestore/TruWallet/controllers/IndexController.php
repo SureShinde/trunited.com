@@ -141,4 +141,14 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		echo 'success';
 	}
 
+	public function addSalesAction()
+	{
+		$setup = new Mage_Core_Model_Resource_Setup('core_setup');
+		$installer = $setup;
+		$installer->startSetup();
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'created_by', 'tinyint NULL default 2');
+		$installer->endSetup();
+		echo "success";
+	}
+
 }

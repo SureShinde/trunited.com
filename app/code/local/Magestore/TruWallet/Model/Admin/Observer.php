@@ -48,4 +48,14 @@ class Magestore_TruWallet_Model_Admin_Observer
 
     }
 
+    public function salesOrderGridCollectionLoadBefore($observer)
+    {
+        $collection = $observer->getOrderGridCollection();
+        $select = $collection->getSelect();
+        $select->joinLeft(array(
+            'order'=>$collection->getTable('sales/order')),
+            'order.entity_id=main_table.entity_id',
+            array('created_by'=>'created_by')
+        );
+    }
 }

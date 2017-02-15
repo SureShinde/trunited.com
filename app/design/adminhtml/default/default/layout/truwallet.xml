@@ -107,4 +107,28 @@
 		</reference>
 	</adminhtml_sales_order_create_load_block_items>
 
+
+	<sales_order_grid_update_handle>
+		<reference name="sales_order.grid">
+			<action method="addColumnAfter">
+				<columnId>created_by</columnId>
+				<arguments>
+					<header>Created By Admin</header>
+					<index>order.created_by</index>
+					<filter>Magestore_TruBox_Block_Adminhtml_Sales_Order_Grid</filter>
+					<type>options</type>
+					<width>50</width>
+					<renderer>Magestore_TruBox_Block_Adminhtml_Renderer_Sales_Order_Grid</renderer>
+				</arguments>
+				<after>grand_total</after>
+			</action>
+		</reference>
+	</sales_order_grid_update_handle>
+	<adminhtml_sales_order_grid>
+		<update handle="sales_order_grid_update_handle" />
+	</adminhtml_sales_order_grid>
+	<adminhtml_sales_order_index>
+		<update handle="sales_order_grid_update_handle" />
+	</adminhtml_sales_order_index>
+
 </layout>
