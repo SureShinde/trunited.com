@@ -341,6 +341,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $this->_paymentMethod = $this->_freePaymentMethod;
             }
 
+
+
             // Add Billing Address
             $quote->getBillingAddress()
                 ->addData($billingAddress);
@@ -367,7 +369,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $quote->getPayment()->importData($paymentData);
             $quote->collectTotals();
 //            $quote->save();
-
 
             //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);

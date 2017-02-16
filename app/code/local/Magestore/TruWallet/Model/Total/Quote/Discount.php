@@ -42,7 +42,12 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
 
     public function checkIsAdmin()
     {
-        return Mage::app()->getStore()->isAdmin();
+        $admin_session = Mage::getSingleton('adminhtml/session');
+        $customer_id = $admin_session->getOrderCustomerId();
+        if(isset($customer_id) && $customer_id > 0 && Mage::app()->getStore()->isAdmin())
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -112,6 +117,11 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $truwalletBalance = $account->getTruwalletCredit();
 
         $baseTruWalletDiscount = min($creditAmountEntered, $baseDiscountTotal, $truwalletBalance);
+        if($this->checkIsAdmin() && strcasecmp(Mage::helper('trubox')->getShippingMethod(),'flatrate_flatrate') == 0)
+        {
+            $baseTruWalletDiscount += Mage::helper('trubox')->getShippingAmount();
+        }
+
         $truwalletDiscount = Mage::getModel('truwallet/customer')
             ->getConvertedFromBaseTruwalletCredit($baseTruWalletDiscount);
 
