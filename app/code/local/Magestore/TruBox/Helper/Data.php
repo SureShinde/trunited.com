@@ -60,6 +60,16 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/general/enable_product_listing');
     }
 
+    public function getShippingMethod($store = null)
+    {
+        return Mage::getStoreConfig('trubox/shipping/shipping_method', $store);
+    }
+
+    public function getShippingAmount($store = null)
+    {
+        return Mage::getStoreConfig('trubox/shipping/shipping_amount', $store);
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();

@@ -121,6 +121,11 @@
                     </transaction>
                 </entities>
             </truwallet_mysql4>
+            <shipping>
+                <rewrite>
+                    <carrier_flatrate>Magestore_TruWallet_Model_Admin_Shipping_Carrier_Flatrate</carrier_flatrate>
+                </rewrite>
+            </shipping>
         </models>
         <resources>
             <truwallet_setup>
@@ -389,6 +394,7 @@
                 <tax>1</tax>
                 <shipping>1</shipping>
             </spend>
+
             <email>
                 <enable>1</enable>
                 <share_email_customer>truwallet_email_share_email_customer</share_email_customer>

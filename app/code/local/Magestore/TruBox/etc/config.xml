@@ -149,6 +149,10 @@
                 <enable_orders_section>1</enable_orders_section>
                 <enable_product_listing>1</enable_product_listing>
             </general>
+            <shipping>
+                <shipping_method>freeshipping_freeshipping</shipping_method>
+                <shipping_amount>5</shipping_amount>
+            </shipping>
         </trubox>
     </default>
 </config>

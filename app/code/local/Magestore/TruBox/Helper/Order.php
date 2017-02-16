@@ -341,13 +341,13 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $this->_paymentMethod = $this->_freePaymentMethod;
             }
 
-//            zend_debug::dump($paymentData);
-//            exit;
-
-
             // Add Billing Address
             $quote->getBillingAddress()
                 ->addData($billingAddress);
+
+            $_shipping = Mage::helper('trubox')->getShippingMethod();
+            if($_shipping != null)
+                $this->_shippingMethod = $_shipping;
 
             //Add Shipping Address and set shipping method
             $quote->getShippingAddress()

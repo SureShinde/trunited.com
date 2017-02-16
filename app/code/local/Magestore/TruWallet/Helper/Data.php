@@ -60,6 +60,8 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/product/truwallet_value', $store);
     }
 
+
+
     public function isShowWarningMessage()
     {
         if(Mage::helper('core')->isModuleOutputEnabled('Magestore_TruBox'))
