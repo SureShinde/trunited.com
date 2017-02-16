@@ -542,6 +542,18 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         Mage::helper('trubox/item')->updatePrice();
     }
 
+    //ALTER TABLE tablename MODIFY columnname INTEGER;
+    public function cvvAction(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+			ALTER TABLE {$setup->getTable('trubox/payment')} MODIFY cvv VARCHAR(10);
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
+
     public function createOrderAction()
     {
         $order = Mage::helper('trubox/order')->createOrder(

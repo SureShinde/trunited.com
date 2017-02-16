@@ -81,7 +81,7 @@
                     </truwallet_adminhtml_observers>
                 </observers>
             </customer_save_after>
-            <sales_order_grid_collection_load_before>
+            <!--sales_order_grid_collection_load_before>
                 <observers>
                     <truwallet_sales_order_grid_collection_load_before>
                         <type>model</type>
@@ -89,7 +89,7 @@
                         <method>salesOrderGridCollectionLoadBefore</method>
                     </truwallet_sales_order_grid_collection_load_before>
                 </observers>
-            </sales_order_grid_collection_load_before>
+            </sales_order_grid_collection_load_before-->
         </events>
     </adminhtml>   
     <global>

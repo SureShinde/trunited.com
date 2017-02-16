@@ -136,15 +136,15 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             );
         }
 
-        $payment = Mage::getModel('trubox/payment')->getCollection()
-                ->addFieldToFilter('trubox_id', $truBox_id)
-                ->getFirstItem()
-            ;
-
-        if(!$payment->getId())
-            throw new Exception(
-                Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
-            );
+//        $payment = Mage::getModel('trubox/payment')->getCollection()
+//                ->addFieldToFilter('trubox_id', $truBox_id)
+//                ->getFirstItem()
+//            ;
+//
+//        if(!$payment->getId())
+//            throw new Exception(
+//                Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
+//            );
     }
 
     public function getProductParams($customer_id, $data_items)
@@ -206,7 +206,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
         return $data;
     }
 
-    public function getPaymentInformation($customer_id)
+    public function getPaymentInformation($customer_id, $is_no_need_payment)
     {
         $customer = Mage::getModel('customer/customer')->load($customer_id);
         $truBox_id = Mage::helper('trubox')->getCurrentTruBoxId($customer_id);
@@ -220,7 +220,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             ->getFirstItem()
         ;
 
-        if(!$payment->getId())
+        if(!$payment->getId() && !$is_no_need_payment)
             throw new Exception(
                 Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
             );
@@ -261,20 +261,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                     Mage::helper('trubox')->__('%s - No Items found!', $customer->getName())
                 );
 
-            $payment_information = $this->getPaymentInformation($customer_id);
-
-            $paymentData = array(
-                'truwallet' => 'on',
-                'method' => $this->_paymentMethod,
-                'cc_type' => $payment_information->getCardType(),
-//                'cc_owner' => $payment_information->getNameOnCard(),
-//                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
-                'cc_number' => $payment_information->getCardNumber(),
-                'cc_exp_month' => $payment_information->getMonthExpire(),
-                'cc_exp_year' => $payment_information->getYearExpire(),
-                'cc_cid' => $payment_information->getCvv(),
-//                'checks' => 179
-            );
 
             $billingAddress = array(
                 'prefix' => '',
@@ -330,6 +316,22 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $admin_session->setGrandTotalOrder($before_grandTotal);
 
             $is_no_need_payment = $this->checkApplyBalanceToPayment($customer, $before_grandTotal);
+            $payment_information = $this->getPaymentInformation($customer_id, $is_no_need_payment);
+
+            $paymentData = array(
+                'truwallet' => 'on',
+                'method' => $this->_paymentMethod,
+                'cc_type' => $payment_information->getCardType(),
+//                'cc_owner' => $payment_information->getNameOnCard(),
+//                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
+                'cc_number' => $payment_information->getCardNumber(),
+                'cc_exp_month' => $payment_information->getMonthExpire(),
+                'cc_exp_year' => $payment_information->getYearExpire(),
+                'cc_cid' => $payment_information->getCvv(),
+//                'checks' => 179
+            );
+
+
             if($is_no_need_payment)
             {
                 $paymentData = array(
