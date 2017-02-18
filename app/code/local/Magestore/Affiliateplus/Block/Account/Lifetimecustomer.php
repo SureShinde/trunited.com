@@ -14,9 +14,20 @@ class Magestore_Affiliateplus_Block_Account_Lifetimecustomer extends Mage_Core_B
 	protected function _construct() {
 
 		parent::_construct();
+		/*$fn = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'firstname');
+		$ln = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'lastname');
+		$customer_table = Mage::getSingleton('core/resource')->getTableName('customer_entity_varchar');*/
+
 		$account = Mage::getSingleton('affiliateplus/session')->getAccount();
 		$collection = Mage::getResourceModel('affiliateplus/tracking_collection')
 			->addFieldToFilter('account_id', $account->getId());
+
+		/*$collection->getSelect()
+			->join(array('ce1' => $customer_table), 'ce1.entity_id=main_table.customer_id', array('firstname' => 'value'))
+			->where('ce1.attribute_id='.$fn->getAttributeId())
+			->join(array('ce2' => $customer_table), 'ce2.entity_id=main_table.customer_id', array('lastname' => 'value'))
+			->where('ce2.attribute_id='.$ln->getAttributeId())
+			->columns(new Zend_Db_Expr("CONCAT(`ce1`.`value`, ' ',`ce2`.`value`) AS customer_name"));*/
 
 		$this->setCollection($collection);
 	}
@@ -31,14 +42,14 @@ class Magestore_Affiliateplus_Block_Account_Lifetimecustomer extends Mage_Core_B
 		$grid = $this->getLayout()->createBlock('affiliateplus/grid', 'lifetimecustomer_grid');
 
 		// prepare column
-		$grid->addColumn('tracking_id', array(
+		/*$grid->addColumn('tracking_id', array(
 			'header' => $this->__('No.'),
 			'align' => 'left',
 			'index' => 'tracking_id',
 			'type' => 'number',
 			'render' => 'getNoNumber',
 			'searchable' => true,
-		));
+		));*/
 
 		$grid->addColumn('customer_name', array(
 			'header' => $this->__('Customer Name'),
@@ -48,7 +59,7 @@ class Magestore_Affiliateplus_Block_Account_Lifetimecustomer extends Mage_Core_B
 			'filter_index'  =>  'if (main_table.customer_name IS NULL, "N/A", main_table.customer_name)',
 			'render'  => 'getCustomerName'
 		));
-
+		
 		$grid->addColumn('customer_email', array(
 			'header' => $this->__('Customer Email'),
 			'index' => 'customer_email',
@@ -65,12 +76,10 @@ class Magestore_Affiliateplus_Block_Account_Lifetimecustomer extends Mage_Core_B
 	}
 
 	public function getCustomerName($row) {
-//		return sprintf('#%d', $row->getId());
-		if($row->getCustomerName()){
-			return sprintf('%s', $row->getCustomerName());
+		if($row->getCustomerId()){
+			$customer = Mage::getModel('customer/customer')->load($row->getCustomerId());
+			return sprintf('%s', $customer->getName());
 		}  else {
-			/*Changed By Adam 08/10/2014*/
-//            return sprintf('%s', $row->getOrderItemNames());
 			return sprintf('%s', 'N/A');
 		}
 	}

@@ -176,10 +176,11 @@ strong.rewardpoints-title{ text-transform: uppercase;}
 }
 
 .error_refers_me{
-	color: red;
+	color: #eb340a;
     font-weight: bold;
     margin-bottom: 11px;
 	display: none;
+    font-size: 12px;
 }
 
 .verify_mobile .send_code{

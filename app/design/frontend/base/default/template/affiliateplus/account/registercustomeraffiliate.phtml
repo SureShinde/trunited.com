@@ -1,11 +1,17 @@
 <head>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
+<!--    <link rel="stylesheet" href="/resources/demos/style.css">-->
     <style>
         #project-label {
             display: block;
             font-weight: bold;
             margin-bottom: 1em;
+        }
+
+        .form-list .input-box label{
+            padding-top: 5px;
+            font-size: 12px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -42,9 +48,7 @@
 </script>
 <div class="fieldset">
     <h2 class="legend"><?php echo $this->__('Affiliate Referral Information') ?></h2>
-
-    <div
-        class="error_refers_me"><?php echo $this->__('You must select an Affiliate Name or check the box ‘no one referred me'); ?></div>
+    <div class="error_refers_me"><?php echo $this->__('You must select an Affiliate or check the box ‘no one referred me'); ?></div>
     <ul class="form-list">
         <li class="fields">
             <div class="field">
@@ -79,7 +83,7 @@
                            placeholder="<?php echo $this->__('Enter Affiliate Name'); ?>"
                            onchange="checkAffiliateCouponCodeExisting('<?php echo $this->getUrl('affiliateplus/account/checkAffiliateName') ?>', this)"
                            value="<?php echo $default_name ?>" title="<?php echo $this->__('Affiliate Name') ?>"
-                           class="input-text wrm"/>
+                           class="input-text validate-number wrm"/>
                     <br/><label for="affiliate_name"
                                 class=""><?php echo $this->__('Please type at least 3 characters') ?></label>
                     <input type="hidden" id="affiliate_id" name="affiliate_id" value="<?php echo $default_id ?>">
@@ -135,16 +139,29 @@
         var affiliate_name = $('affiliate_name').value;
         var no_refers_me = $('no_refers_me').checked;
         if (affiliate_name == '' && no_refers_me === false) {
-            $j('.error_refers_me').slideDown().delay(3000).slideUp();
+            $j('.error_refers_me').slideDown().delay(30000).slideUp();
             // $j('#form-validate').find('button[type="submit"]').prop('disabled',true);
             return false;
         }
-
     });
+
+    $("input").keyup(function(){
+        $("input").css("background-color", "pink");
+    });
+
     function checkAffiliateCouponCodeExisting(requestUrl, el) {
         var affiliate_name = $('affiliate_name').value;
         var affiliate_id = $('affiliate_id').value;
         var no_refers_me = $('no_refers_me').checked;
+        var er = /^\d+$/;
+
+        console.log(!er.test(affiliate_name));
+        if(!er.test(affiliate_name))
+        {
+            console.log(!er.test(affiliate_name));
+            $j('.error_refers_me').slideDown().delay(3000).slideUp();
+            return false;
+        }
 
         var params = {affiliate_name: affiliate_name, affiliate_id: affiliate_id};
         $('affiliate-please-wait-email').show();
