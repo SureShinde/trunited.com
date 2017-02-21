@@ -89,11 +89,15 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         $collection = Mage::getModel('truwallet/transaction')->getCollection()
             ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_SHARING)
             ->addFieldToFilter('status', Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING)
-            ->setOrder('transaction_id', 'desc');
+            ->setOrder('transaction_id', 'desc')
+        ;
 
+        Mage::log('Check Expiry Date - '.date('d-m-Y H:i:s',time()).' - Quantity: '.sizeof($collection), null, 'expiryDate.log');
         if (sizeof($collection) > 0) {
+
             $timestamp = Mage::getModel('core/date')->timestamp(time());
             $expiry_date = Mage::getStoreConfig('truwallet/sharewallet/expire_date', Mage::app()->getStore()->getId());
+
             foreach ($collection as $transaction) {
                 $updated_time = strtotime($transaction->getUpdatedTime());
                 $compare_time = $this->compareTime($updated_time, $timestamp);
@@ -114,11 +118,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
     public function sendEmailExpiryDate($transaction)
     {
-        if (!Mage::getStoreConfigFlag(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_ENABLE, Mage::app()->getStore()->getId())) {
-            return $this;
-        }
-
-        $store = Mage::app()->getStore($this->getStoreId());
+        $storeId = Mage::app()->getStore()->getId();
         $translate = Mage::getSingleton('core/translate');
         $translate->setTranslateInline(false);
         $customer = Mage::getModel('customer/customer')->load($transaction->getCustomerId());
@@ -127,17 +127,16 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
         $email_path = Mage::getStoreConfig(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_SHARE_EMAIL_EXPIRY_DATE, $store);
 
-
         $data = array(
             'store' => $store,
             'customer_name' => $customer->getName(),
-            'amount' => Mage::helper('core')->currency(abs($transaction->getProductCredit()), true, false),
+            'amount' => Mage::helper('core')->currency(abs($transaction->getChangedCredit()), true, false),
         );
 
         Mage::getModel('core/email_template')
             ->setDesignConfig(array(
                 'area' => 'frontend',
-                'store' => $store->getId()
+                'store' => $storeId
             ))->sendTransactional(
                 $email_path,
                 Mage::getStoreConfig(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_SENDER, $store),
@@ -147,6 +146,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             );
 
         $translate->setTranslateInline(true);
+
         return $this;
     }
 

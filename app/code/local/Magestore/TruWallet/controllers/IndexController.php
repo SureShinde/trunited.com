@@ -151,4 +151,9 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		echo "success";
 	}
 
+	public function checkAction()
+	{
+		Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();
+	}
+
 }

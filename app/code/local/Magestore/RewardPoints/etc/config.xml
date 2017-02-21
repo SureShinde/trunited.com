@@ -551,14 +551,14 @@
                     <model>rewardpoints/cron::processTransactions</model>
                 </run>
             </rewardpoints>
-            <rewardpoints_check_expiry_date_sharing_truWallet>
+            <!--<rewardpoints_check_expiry_date_sharing_truWallet>
                 <schedule>
                     <cron_expr>* * */1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>rewardpoints/observer::checkExpiryDate</model>
                 </run>
-            </rewardpoints_check_expiry_date_sharing_truWallet>
+            </rewardpoints_check_expiry_date_sharing_truWallet>-->
         </jobs>
     </crontab>
 </config>
