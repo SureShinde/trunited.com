@@ -36,7 +36,8 @@ class Magestore_Custompromotions_Model_Observer
         $code = Mage::getSingleton('core/session')->getCodeActive();
         if($is_verified != null && $is_verified){
             $phone = Mage::getSingleton('core/session')->getPhoneActive();
-            $customer_reg->setPhoneNumber($phone);
+            $_phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($phone);
+            $customer_reg->setPhoneNumber($_phone);
             $customer_reg->save();
 
             $mobile = Mage::helper('custompromotions/verify')->getVerifyByPhoneCode($phone, $code);

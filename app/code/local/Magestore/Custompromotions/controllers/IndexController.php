@@ -33,6 +33,35 @@ class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Fr
 		$this->renderLayout();
 	}
 
+	public function testAction()
+	{
+		$collection = Mage::getModel('customer/customer')->getCollection()
+			->addAttributeToSelect('*')
+			->setOrder('entity_id','desc')
+//			->getFirstItem()
+		;
+		$check = 0;
+		$_check = 0;
+
+		$transactionSave = Mage::getModel('core/resource_transaction');
+		foreach($collection as $customer)
+		{
+			if($customer->getPhoneNumber() != null){
+				$check++;
+				zend_debug::dump($customer->getId().' - '.$customer->getPhoneNumber());
+			} else {
+				$_check++;
+				$customer->setPhoneNumber('');
+				$transactionSave->addObject($customer);
+			}
+		}
+//		$transactionSave->save();
+
+		zend_debug::dump(sizeof($collection));
+		zend_debug::dump($check);
+		zend_debug::dump($_check);
+	}
+
 	public function installDbAction() {
 		$setup = new Mage_Core_Model_Resource_Setup();
 		$installer = $setup;

@@ -4,13 +4,20 @@ class Magestore_Custompromotions_Helper_Verify extends Mage_Core_Helper_Abstract
 {
     public function getPhoneNumberFormat($prefix, $number)
     {
-        return '+'.$prefix.''.$number;
+        $_number = $this->formatPhoneToDatabase($number);
+        return '+'.$prefix.''.$_number;
+    }
+
+    public function formatPhoneToDatabase($phone)
+    {
+        return trim(str_replace(array('(',')','-',' '),array('','','',''), $phone));
     }
 
     public function isVerified($phone)
     {
+        $_phone = $this->formatPhoneToDatabase($phone);
         $collection = Mage::getModel('custompromotions/verifymobile')->getCollection()
-            ->addFieldToFilter('phone',$phone)
+            ->addFieldToFilter('phone',$_phone)
             ->getFirstItem()
             ;
 
@@ -125,7 +132,7 @@ class Magestore_Custompromotions_Helper_Verify extends Mage_Core_Helper_Abstract
 
     public function getMobileCode()
     {
-        return Mage::getStoreConfig('custompromotions/verify/mobile_code') != null ? Mage::getStoreConfig('custompromotions/verify/mobile_code') : '+1';
+        return Mage::getStoreConfig('custompromotions/verify/mobile_code') != null ? Mage::getStoreConfig('custompromotions/verify/mobile_code') : '1';
     }
 
     public function generateRandomString()

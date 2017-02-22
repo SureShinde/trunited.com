@@ -579,28 +579,61 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
     public function checkAffiliateNameAction() {
         $affiliateId = $this->getRequest()->getParam('affiliate_id');
         $affiliateName = $this->getRequest()->getParam('affiliate_name');
-//        zend_Debug::dump($affiliateId);
-//        zend_Debug::dump($affiliateName);
-//        die('fdsf');
-        $checkName = Mage::getModel('affiliateplus/account')->getCollection()->addFieldToFilter('name',$affiliateName);
-        $error = false;
-        if(!$checkName->getData()){
-            $html = "<div class='success-msg'>" . $this->__('Affiliate name incorrect. Please check affiliate name again!') . "</div>";
+
+        $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($affiliateName);
+        /*$customerCollection = Mage::getModel('customer/customer')->getCollection()
+            -> addAttributeToSelect('entity_id')
+            -> addAttributeToSelect('phone_number')
+            -> addAttributeToSelect('email')
+            -> addAttributeToFilter('phone_number',array('like'=>'%'.$phone.'%'))
+            -> setOrder('entity_id','desc')
+        ;
+
+        if(sizeof($customerCollection) == 0) {
+            $html = "<div class='error-msg'>" . $this->__('The mobile number incorrect. Please check it again!') . "</div>";
             $html .= '<input type="hidden" id="is_valid_email" value="0"/>';
             return $this->getResponse()->setBody($html);
         }
-        $email = Mage::getModel('affiliateplus/account')->load($affiliateId);
-        /* end edit */
-        if ($email->getId()) {
-            $error = true;
-        }
-        if ($error != '') {
-            $html = "<div class='success-msg'>" . $this->__('Affiliate name correct') . "</div>";
-            $html .= '<input type="hidden" id="is_valid_email" value="1"/>';
-        } else {
+
+        $customer_ids = $customerCollection->getColumnValues('entity_id');
+
+        $checkName = Mage::getModel('affiliateplus/account')->getCollection()
+            ->addFieldToFilter('customer_id',array('in'=>$customer_ids))
+        ;*/
+
+        $collection = Mage::getModel('customer/customer')->getCollection()
+            ->addAttributeToSelect('entity_id')
+            ->addAttributeToSelect('phone_number')
+            ->addAttributeToFilter('phone_number',$phone)
+            ->setOrder('entity_id','desc')
+        ;
+
+        $affiliate_table = Mage::getSingleton('core/resource')->getTableName('affiliateplus/account');
+        $collection->getSelect()->join(
+            array('account'=> $affiliate_table),
+            '`account`.customer_id = `e`.entity_id',
+            array(
+                'account_id'=>'account_id',
+                'account_name'=>'name',
+            )
+        );
+
+        if(sizeof($collection) == 0){
             $html = "<div class='error-msg'>" . $this->__('Affiliate name incorrect. Please check affiliate name again!') . "</div>";
             $html .= '<input type="hidden" id="is_valid_email" value="0"/>';
+            return $this->getResponse()->setBody($html);
         }
+
+        $email = Mage::getModel('affiliateplus/account')->load($affiliateId);
+        /* end edit */
+        $html = '';
+        if (!$email->getId()) {
+            $html .= '<input type="hidden" id="is_valid_account_id" value="'.$collection->getFirstItem()->getAccountId().'"/>';
+        }
+
+        $html .= "<div class='success-msg'>" . $this->__('Affiliate name correct') . "</div>";
+        $html .= '<input type="hidden" id="is_valid_email" value="1"/>';
+
         $this->getResponse()->setBody($html);
     }
 }

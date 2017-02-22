@@ -6,6 +6,8 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 {
 	public function sendCodeAction()
 	{
+		$mobile_code = Mage::helper('custompromotions/verify')->getMobileCode();
+
 		if(!Mage::helper('custompromotions/verify')->isEnable()){
 			Mage::getSingleton('customer/session')->addError(
 				Mage::helper('custompromotions')->__('This feature is disabled')
@@ -14,9 +16,16 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 			return;
 		}
 		$data = $this->getRequest()->getParams();
+
 		if(!$data['phone_number']){
 			Mage::getSingleton('customer/session')->addError(
 				Mage::helper('custompromotions')->__('Something was wrong with this action.')
+			);
+			$this->_redirectUrl(Mage::getUrl('customer/account/create'));
+			return;
+		} else if(substr($data['phone_number'],1,1) == $mobile_code) {
+			Mage::getSingleton('customer/session')->addError(
+				Mage::helper('custompromotions')->__('The mobile number only has 10 digits and don\'t allow begin with %s',$mobile_code)
 			);
 			$this->_redirectUrl(Mage::getUrl('customer/account/create'));
 			return;
@@ -26,9 +35,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		$phone = Mage::helper('custompromotions/verify')->getPhoneNumberFormat($mobile_prefix,$data['phone_number']);
 
 		$is_verified = Mage::helper('custompromotions/verify')->isVerified($data['phone_number']);
+
 		if($is_verified){
 			Mage::getSingleton('customer/session')->addError(
-				Mage::helper('custompromotions')->__('This mobile number was verified with exist account.')
+				Mage::helper('custompromotions')->__('This mobile number already exists on a customer account. Please enter a new mobile number.')
 			);
 			$this->_redirectUrl(Mage::getUrl('customer/account/create'));
 			return;
@@ -40,16 +50,16 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				$from = Mage::helper('custompromotions/verify')->getSenderNumber();
 				$new_code = Mage::helper('custompromotions/verify')->generateRandomString();
 				$message = Mage::helper('custompromotions')->__('Here is your Trunited verification code: %s',$new_code);
-				$client = new Client($sid, $token);
-				$client->messages->create(
-					$phone,
-					array(
-						'from' => $from,
-						'body' => $message
-					)
-				);
+//				$client = new Client($sid, $token);
+//				$client->messages->create(
+//					$phone,
+//					array(
+//						'from' => $from,
+//						'body' => $message
+//					)
+//				);
 				/* end sending sms */
-
+				Mage::log('Mobile Code - '.date('d-m-Y H:i:s',time()).' - Quantity: '.$new_code, null, 'mobileCode.log');
 				/* save to database: customer_verify_mobile table */
 				Mage::helper('custompromotions/verify')->saveVerify($data['phone_number'], $new_code);
 				/* end save to database: customer_verify_mobile table */
@@ -134,7 +144,7 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		$is_verified = Mage::helper('custompromotions/verify')->isVerified($phone_number);
 		if($is_verified){
 			Mage::getSingleton('customer/session')->addError(
-				Mage::helper('custompromotions')->__('This mobile number was verified with exist account.')
+				Mage::helper('custompromotions')->__('This mobile number already exists on a customer account. Please enter a new mobile number.')
 			);
 			$this->_redirectUrl(Mage::getUrl('customer/account/create'));
 			return;
