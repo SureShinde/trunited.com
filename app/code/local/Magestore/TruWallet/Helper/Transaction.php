@@ -4,6 +4,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 {
     public function createTransaction($account, $data, $type, $status)
     {
+        $result = null;
         try {
             if (!$account->getId())
                 throw new Exception(
@@ -33,11 +34,16 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             $transaction->setData($_data);
             $transaction->save();
 
+            $result = $transaction;
+
         } catch (Exception $ex) {
             Mage::getSingleton('adminhtml/session')->addError(
                 Mage::helper('truwallet')->__($ex->getMessage())
             );
+            $result = null;
         }
+
+        return $result;
     }
 
     public function getReceiveCreditTransaction($email)
@@ -119,7 +125,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
     public function sendEmailExpiryDate($transaction)
     {
-        $storeId = Mage::app()->getStore()->getId();
+        $store = Mage::app()->getStore();
         $translate = Mage::getSingleton('core/translate');
         $translate->setTranslateInline(false);
         $customer = Mage::getModel('customer/customer')->load($transaction->getCustomerId());
@@ -137,7 +143,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         Mage::getModel('core/email_template')
             ->setDesignConfig(array(
                 'area' => 'frontend',
-                'store' => $storeId
+                'store' => $store->getId(),
             ))->sendTransactional(
                 $email_path,
                 Mage::getStoreConfig(Magestore_TruWallet_Model_Transaction::XML_PATH_EMAIL_SENDER, $store),

@@ -32,6 +32,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
+        $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
 
@@ -111,12 +112,23 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                     'receiver_customer_id' => $customer->getId(),
                 );
                 if ($receiverAccount != null) {
-                    Mage::helper('truwallet/transaction')->createTransaction(
+                    $receiver_transaction = Mage::helper('truwallet/transaction')->createTransaction(
                         $receiverAccount,
                         $params,
                         Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
                         $status
                     );
+
+                    if($receiver_transaction != null)
+                    {
+                        $receiver_transaction->sendEmailWhenSharingTruWallet(
+                            $customer_receiver->getId(),
+                            $amount,
+                            $is_exist,
+                            $customer->getEmail(),
+                            $message
+                        );
+                    }
                 }
             }
 
@@ -172,6 +184,14 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
         }
 
         $this->_redirectUrl(Mage::getUrl('*/index/shareTruWallet'));
+    }
+
+    public function registerAction()
+    {
+        $email = $this->getRequest()->getParam('email');
+        Mage::getSingleton('core/session')->setEmailRefer($email);
+        $this->_redirectUrl(Mage::getUrl('customer/account/create/'));
+        return;
     }
 
 }
