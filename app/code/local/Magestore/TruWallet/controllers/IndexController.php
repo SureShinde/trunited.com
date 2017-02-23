@@ -156,4 +156,11 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();
 	}
 
+	public function testEmailAction()
+	{
+		$msg = "First line of text\nSecond line of text";
+		$msg = wordwrap($msg,70);
+		zend_debug::dump(mail("longvuxuan1989@gmail.com","My subject",$msg));
+	}
+
 }

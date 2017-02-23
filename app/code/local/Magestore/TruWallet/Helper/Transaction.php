@@ -102,7 +102,8 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
                 $updated_time = strtotime($transaction->getUpdatedTime());
                 $compare_time = $this->compareTime($updated_time, $timestamp);
                 if ($compare_time > $expiry_date) {
-                    $transaction->setUpdatedTime(now());
+                    zend_debug::dump($transaction->debug());
+                    /*$transaction->setUpdatedTime(now());
                     $transaction->setStatus(Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED);
                     $transaction->save();
 
@@ -110,7 +111,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
                     $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($transaction->getChangedCredit()));
                     $rewardAccount->save();
 
-                    $this->sendEmailExpiryDate($transaction);
+                    $this->sendEmailExpiryDate($transaction);*/
                 }
             }
         }

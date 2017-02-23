@@ -131,4 +131,26 @@
 		<update handle="sales_order_grid_update_handle" />
 	</adminhtml_sales_order_index>
 
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/adminhtml_totals_creditmemo_point" name="truwallet.total.point" />
+		</reference>
+		<reference name="submit_before">
+			<block type="truwallet/adminhtml_totals_creditmemo_rewards" name="truwallet.total.earned" template="truwallet/totals/creditmemo/rewards.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_updateqty>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/adminhtml_totals_creditmemo_point" name="truwallet.total.point" />
+		</reference>
+		<reference name="submit_before">
+			<block type="truwallet/adminhtml_totals_creditmemo_rewards" name="truwallet.total.earned" template="truwallet/totals/creditmemo/rewards.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_updateqty>
+	<adminhtml_sales_order_creditmemo_view>
+		<reference name="creditmemo_totals">
+			<block type="truwallet/adminhtml_totals_creditmemo_point" name="truwallet.total.point" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_view>
+
 </layout>
