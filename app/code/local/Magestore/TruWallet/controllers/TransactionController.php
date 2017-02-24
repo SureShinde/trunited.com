@@ -35,6 +35,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
         $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
+        $transaction_helper = Mage::helper('truwallet/transaction');
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             Mage::getSingleton('core/session')->addError(
@@ -95,7 +96,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                 'receiver_customer_id' => $is_exist ? $customer_receiver->getId() : '',
             );
             if ($truWalletAccount != null) {
-                Mage::helper('truwallet/transaction')->createTransaction(
+                $transaction_helper->createTransaction(
                     $truWalletAccount,
                     $params,
                     Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_SHARING,  // type
@@ -108,29 +109,27 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                 $params = array(
                     'credit' => $amount,
                     'title' => '',
-                    'receiver_email' => $customer->getEmail(),
-                    'receiver_customer_id' => $customer->getId(),
+                    'receiver_email' => $customer_receiver->getEmail(),
+                    'receiver_customer_id' => $customer_receiver->getId(),
                 );
                 if ($receiverAccount != null) {
-                    $receiver_transaction = Mage::helper('truwallet/transaction')->createTransaction(
+                    $transaction_helper->createTransaction(
                         $receiverAccount,
                         $params,
                         Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
                         $status
                     );
-
-                    if($receiver_transaction != null)
-                    {
-                        $receiver_transaction->sendEmailWhenSharingTruWallet(
-                            $customer_receiver->getId(),
-                            $amount,
-                            $is_exist,
-                            $customer->getEmail(),
-                            $message
-                        );
-                    }
                 }
             }
+
+            $transaction_helper->sendEmailWhenSharingTruWallet(
+                $customer->getId(),
+                $amount,
+                $is_exist,
+                $customer_receiver->getEmail(),
+                $message,
+                $status
+            );
 
             $transactionSave->save();
             $connection->commit();

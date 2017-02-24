@@ -2,6 +2,12 @@
 
 class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_EMAIL_ENABLE = 'truwallet/email/enable';
+    const XML_PATH_EMAIL_SENDER = 'truwallet/email/sender';
+    const XML_PATH_EMAIL_SHARE_EMAIL_CUSTOMER = 'truwallet/email/share_email_customer';
+    const XML_PATH_EMAIL_SHARE_EMAIL_NON_CUSTOMER = 'truwallet/email/share_email_non_customer';
+    const XML_PATH_EMAIL_SHARE_EMAIL_EXPIRY_DATE = 'truwallet/email/share_email_expiry_date';
+
     public function createTransaction($account, $data, $type, $status)
     {
         $result = null;
@@ -44,6 +50,89 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         }
 
         return $result;
+    }
+
+    /**
+     * @param $sender_id
+     * @param $amount
+     * @param $customer_exist
+     * @param $receiver_email
+     * @param $message
+     * @param $status
+     * @return $this
+     */
+    public function sendEmailWhenSharingTruWallet($sender_id, $amount, $customer_exist, $receiver_email, $message, $status)
+    {
+        $store = Mage::app()->getStore();
+        if (!Mage::getStoreConfigFlag(self::XML_PATH_EMAIL_ENABLE, $store->getId())) {
+            return $this;
+        }
+
+        $translate = Mage::getSingleton('core/translate');
+        $translate->setTranslateInline(false);
+        $sender = Mage::getModel('customer/customer')->load($sender_id);
+
+        $name = Mage::helper('truwallet')->__('There');
+        $current_credit = 0;
+        $link = '';
+        if($customer_exist) {
+            $email_path = Mage::getStoreConfig(self::XML_PATH_EMAIL_SHARE_EMAIL_CUSTOMER, $store);
+            $receiver = Mage::getModel("customer/customer");
+            $receiver->setWebsiteId($store->getWebsiteId());
+            $receiver->loadByEmail($receiver_email);
+            if($receiver->getId()){
+                $name = $receiver->getName();
+                $truWalletAccount = Mage::helper('truwallet/account')->loadByCustomerId($receiver->getId());
+                if($truWalletAccount->getId())
+                    $current_credit = $truWalletAccount->getTruwalletCredit();
+            }
+
+        } else {
+            $email_path =  Mage::getStoreConfig(self::XML_PATH_EMAIL_SHARE_EMAIL_NON_CUSTOMER, $store);
+            $link = Mage::getUrl('truwallet/transaction/register',array('email'=>$sender->getEmail()));
+        }
+
+        $types = Magestore_TruWallet_Model_Type::getOptionArray();
+        $data = array(
+            'store' => $store,
+            'customer_name' => $name,
+            'amount' => Mage::helper('core')->currency(abs($amount), true, false),
+            'sender_email' => $sender->getEmail(),
+            'title' => $types[Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING],
+            'point_balance' => Mage::helper('core')->currency(abs($current_credit), true, false),
+            'status' => $this->getStatusLabel($status),
+            'register_link' => $link,
+            'message' => $message,
+        );
+
+
+        Mage::getModel('core/email_template')
+            ->setDesignConfig(array(
+                'area' => 'frontend',
+                'store' => Mage::app()->getStore()->getId()
+            ))->sendTransactional(
+                $email_path,
+                Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()),
+                $receiver_email,
+                $name,
+                $data
+            );
+
+        $translate->setTranslateInline(true);
+
+        return $this;
+    }
+
+    /**
+     * @param $status
+     * @return string
+     */
+    public function getStatusLabel($status) {
+        $statusHash = Magestore_TruWallet_Model_Status::getTransactionOptionArray();
+        if (isset($statusHash[$status])) {
+            return $statusHash[$status];
+        }
+        return '';
     }
 
     public function getReceiveCreditTransaction($email)
