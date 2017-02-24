@@ -164,4 +164,9 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		zend_debug::dump(mail("longvuxuan1989@gmail.com","My subject",$msg));
 	}
 
+	public function dbAction()
+	{
+		Mage::helper('truwallet/db')->getCronTableData();
+	}
+
 }
