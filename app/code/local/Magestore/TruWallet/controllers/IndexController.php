@@ -158,6 +158,7 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 
 	public function testEmailAction()
 	{
+		var_dump($_SERVER['REMOTE_ADDR']);
 		$msg = "First line of text\nSecond line of text";
 		$msg = wordwrap($msg,70);
 		zend_debug::dump(mail("longvuxuan1989@gmail.com","My subject",$msg));

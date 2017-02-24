@@ -63,6 +63,9 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
      */
     public function sendEmailWhenSharingTruWallet($sender_id, $amount, $customer_exist, $receiver_email, $message, $status)
     {
+
+    	
+
         $store = Mage::app()->getStore();
         if (!Mage::getStoreConfigFlag(self::XML_PATH_EMAIL_ENABLE, $store->getId())) {
             return $this;
@@ -105,6 +108,18 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             'message' => $message,
         );
 
+        /*if($_SERVER['REMOTE_ADDR'] == '101.99.23.40')
+    	{
+    		zend_debug::dump($sender->debug());
+        	zend_debug::dump($amount);
+        	zend_debug::dump($customer_exist);
+        	zend_debug::dump($receiver_email);
+        	zend_debug::dump($message);
+        	zend_debug::dump($status);
+        	zend_debug::dump($data);
+        	zend_debug::dump($email_path);
+        	exit;
+    	}*/
 
         Mage::getModel('core/email_template')
             ->setDesignConfig(array(
@@ -197,8 +212,8 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
                 $updated_time = strtotime($transaction->getUpdatedTime());
                 $compare_time = $this->compareTime($updated_time, $timestamp);
                 if ($compare_time > $expiry_date) {
-                    zend_debug::dump($transaction->debug());
-                    /*$transaction->setUpdatedTime(now());
+                    // zend_debug::dump($transaction->debug());
+                    $transaction->setUpdatedTime(now());
                     $transaction->setStatus(Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED);
                     $transaction->save();
 
@@ -206,7 +221,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
                     $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($transaction->getChangedCredit()));
                     $rewardAccount->save();
 
-                    $this->sendEmailExpiryDate($transaction);*/
+                    $this->sendEmailExpiryDate($transaction);
                 }
             }
         }

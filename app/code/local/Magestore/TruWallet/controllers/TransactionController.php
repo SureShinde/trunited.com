@@ -126,7 +126,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                 $customer->getId(),
                 $amount,
                 $is_exist,
-                $customer_receiver->getEmail(),
+                $email,
                 $message,
                 $status
             );
@@ -192,5 +192,6 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
         $this->_redirectUrl(Mage::getUrl('customer/account/create/'));
         return;
     }
+
 
 }
