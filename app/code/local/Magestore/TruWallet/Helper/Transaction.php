@@ -63,9 +63,6 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
      */
     public function sendEmailWhenSharingTruWallet($sender_id, $amount, $customer_exist, $receiver_email, $message, $status)
     {
-
-    	
-
         $store = Mage::app()->getStore();
         if (!Mage::getStoreConfigFlag(self::XML_PATH_EMAIL_ENABLE, $store->getId())) {
             return $this;
