@@ -65,3 +65,9 @@
 #refers_error, #refers_mobile_error{
     margin: 10px 0 0 0;
 }
+
+.account-create .no_referred_me_check
+{
+    background-color: #afafaf;
+    cursor: not-allowed;
+}
