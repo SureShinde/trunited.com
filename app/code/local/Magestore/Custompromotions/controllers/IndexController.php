@@ -49,11 +49,16 @@ class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Fr
 			if($customer->getPhoneNumber() != null){
 				$check++;
 				zend_debug::dump($customer->getId().' - '.$customer->getPhoneNumber());
+				$phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($customer->getPhoneNumber());
+//				zend_debug::dump($phone);
+				$customer->setPhoneNumber($phone);
 			} else {
 				$_check++;
 				$customer->setPhoneNumber('');
-				$transactionSave->addObject($customer);
 			}
+
+			$transactionSave->addObject($customer);
+
 		}
 //		$transactionSave->save();
 

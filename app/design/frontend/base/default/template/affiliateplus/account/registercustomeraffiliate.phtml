@@ -1,7 +1,7 @@
 <head>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <!--    <link rel="stylesheet" href="/resources/demos/style.css">-->
-    <style>
+    <style type="text/css">
         #project-label {
             display: block;
             font-weight: bold;
@@ -17,6 +17,7 @@
 </head>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <?php $names = $this->getAffiliateName(); ?>
 
 <div class="fieldset">
@@ -39,7 +40,6 @@
                         if ($customer_refer->getId()) {
                             $affiliate_account = Mage::getModel('affiliateplus/account')->loadByCustomerId($customer_refer->getId());
                         }
-
                     }
 
                     $default_name = '';
@@ -57,8 +57,9 @@
                            onchange="checkAffiliateCouponCodeExisting('<?php echo $this->getUrl('affiliateplus/account/checkAffiliateName') ?>', this)"
                            value="<?php echo $default_name ?>" title="<?php echo $this->__('Affiliate Name') ?>"
                            class="input-text wrm"/>
+
                     <br/><label for="affiliate_name"
-                                class=""><?php echo $this->__('Please type at least 3 characters') ?></label>
+                                class=""><?php echo $this->__('Please enter the mobile # of the person who referred you and type at least 7 characters') ?></label>
 
                     <div id="refers_error"
                          class="error_refers_me"><?php echo $this->__('You must select an Affiliate or check the box ‘no one referred me'); ?></div>
@@ -82,165 +83,5 @@
         </li>
     </ul>
 </div>
-<script type="text/javascript">
-    $j = jQuery.noConflict();
-    if ($j('.wrm').val() == '') {
-        $j('.close-icon').css({display: "none"});
-    }
 
-    $j(".wrm").on("input", function (e) {
-        var value = $j(this).val();
-        if ($j(this).data("lastval") != value) {
-            $j(this).data("lastval", value);
-        }
-
-        if (value == '') {
-            $j('.close-icon').css({display: "none"});
-        } else {
-            $j('.close-icon').css({display: "inline-block"});
-        }
-    });
-
-    $j('.close-icon').click(function () {
-        $j('.close-icon').hide();
-        $('affiliate_name').value = '';
-        $('affiliate_id').value = '';
-    });
-
-    function hideClose(el){
-        $j(el).hide();
-        $('affiliate_name').value = '';
-        $('affiliate_id').value = '';
-    }
-
-    $j('#form-validate').submit(function () {
-        var affiliate_name = $('affiliate_name').value;
-        var no_refers_me = $('no_refers_me').checked;
-        if (affiliate_name == '' && no_refers_me === false) {
-            $j('.error_refers_me').slideDown().delay(30000).slideUp();
-            // $j('#form-validate').find('button[type="submit"]').prop('disabled',true);
-            return false;
-        }
-    });
-
-    //    $("input").keyup(function(){
-    //        $("input").css("background-color", "pink");
-    //    });
-    function checkMobileNumber(e)
-    {
-        var er = /^\d+$/;
-
-        if (!er.test(e.val().replace(/[\(\)-\s]/g,''))) {
-            if (e.val().length >= 3) {
-                e.val('');
-                $j('#refers_mobile_error').slideDown().delay(3000).slideUp();
-            } else {
-                $j('#refers_mobile_error').show();
-            }
-            return false;
-        } else {
-            $j('#refers_mobile_error').hide();
-        }
-
-        var _number = e.val().replace(/^(\d{3})(\d{3})(\d{4})+$/, "($1) $2-$3");
-        if (_number.length <= 14)
-            e.val(_number);
-        else {
-            e.val(_number.substr(0, 14));
-        }
-    }
-
-    $j(function () {
-        $j("#affiliate_name").keyup(function (e) {
-            var checklength = $j('#affiliate_name').val().length;
-            checkMobileNumber($j(this));
-
-            if (checklength >= 6) {
-                var projects = btoa(<?php echo $names; ?>);
-                $j("#affiliate_name").autocomplete({
-                    minLength: 3,
-                    source: projects,
-                    focus: function (event, ui) {
-                        $j("#affiliate_name").val(ui.item.desc);
-                        return false;
-                    },
-                    select: function (event, ui) {
-                        $j("#affiliate_name").val(ui.item.desc);
-                        $j("#affiliate_id").val(ui.item.value);
-                        $j("#affiliate_message_hidden_email").hide();
-                        $j('#no_refers_me').attr('checked', false);
-                        return false;
-                    }
-                }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                    return $j( "<li>" )
-                        .append( "<div>" + item.label + "<br /><b>" + item.desc + "</b></div>" )
-                        .appendTo( ul );
-                };
-            }
-        });
-    });
-
-    $j('#affiliate_name').keyup(function () {
-//        checkMobileNumber($j(this));
-    });
-
-    function checkAffiliateCouponCodeExisting(requestUrl, el) {
-        var affiliate_name = $('affiliate_name').value;
-        var affiliate_id = $('affiliate_id').value;
-        var no_refers_me = $('no_refers_me').checked;
-
-        checkMobileNumber($j("#affiliate_name"));
-
-        var params = {affiliate_name: affiliate_name, affiliate_id: affiliate_id};
-        $('affiliate-please-wait-email').show();
-        $('affiliate_message_hidden_email').hide();
-
-        $j('#form-validate').find('button[type="submit"]').prop('disabled', true);
-        new Ajax.Updater(
-            'affiliate_message_hidden_email',
-            requestUrl,
-            {
-                method: 'get',
-                onComplete: function () {
-                    endCheckEmailRegister();
-                    if (affiliate_name == '' && no_refers_me === false)
-                        $j('.error_refers_me').show();
-                    else
-                        $j('#form-validate').find('button[type="submit"]').removeProp('disabled');
-
-                },
-                onSuccess: '',
-                onFailure: '',
-                parameters: params,
-                postBody: params
-            }
-        );
-
-
-    }
-
-    function endCheckEmailRegister() {
-        setTimeout(function(){
-            console.log($j('#is_valid_account_id').val());
-            $j('#affiliate_id').val($j('#is_valid_account_id').val());
-            console.log($j('#affiliate_id').val());
-        },2000);
-        $('affiliate-please-wait-email').hide();
-        $('affiliate_message_hidden_email').show();
-        if ($('is_valid_email').value == '0') {
-//            $('affiliate_name').value = '';
-//            $('no_refers_me').checked=true;
-        }
-    }
-    function checkNoRefer() {
-        $('affiliate_name').value = '';
-        $('affiliate_id').value = '';
-        $j('.close-icon').hide();
-        if ($('no_refers_me').checked == false) {
-            $('affiliate_name').addClassName('required-entry');
-        } else {
-            $('affiliate_name').removeClassName('required-entry');
-            $('affiliate_message_hidden_email').hide();
-        }
-    }
-</script>
+<script type="text/javascript" scr="<?php echo $this->getSkinUrl('js/magestore/customize.js');?>"></script>

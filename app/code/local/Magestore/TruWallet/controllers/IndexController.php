@@ -169,4 +169,18 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		Mage::helper('truwallet/db')->getCronTableData();
 	}
 
+	public function customerAction()
+	{
+		$customers = Mage::getModel('customer/customer')->getCollection()
+			->addAttributeToSelect('*')
+			->setOrder('entity_id','desc')
+		;
+
+		foreach ($customers as $customer)
+		{
+			if($customer->getPhoneNumber() != null)
+				zend_debug::dump($customer->getName() .' - '. $customer->getPhoneNumber());
+		}
+	}
+
 }

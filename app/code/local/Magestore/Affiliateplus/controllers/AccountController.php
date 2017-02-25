@@ -581,26 +581,7 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         $affiliateName = $this->getRequest()->getParam('affiliate_name');
 
         $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($affiliateName);
-        /*$customerCollection = Mage::getModel('customer/customer')->getCollection()
-            -> addAttributeToSelect('entity_id')
-            -> addAttributeToSelect('phone_number')
-            -> addAttributeToSelect('email')
-            -> addAttributeToFilter('phone_number',array('like'=>'%'.$phone.'%'))
-            -> setOrder('entity_id','desc')
-        ;
-
-        if(sizeof($customerCollection) == 0) {
-            $html = "<div class='error-msg'>" . $this->__('The mobile number incorrect. Please check it again!') . "</div>";
-            $html .= '<input type="hidden" id="is_valid_email" value="0"/>';
-            return $this->getResponse()->setBody($html);
-        }
-
-        $customer_ids = $customerCollection->getColumnValues('entity_id');
-
-        $checkName = Mage::getModel('affiliateplus/account')->getCollection()
-            ->addFieldToFilter('customer_id',array('in'=>$customer_ids))
-        ;*/
-
+       
         $collection = Mage::getModel('customer/customer')->getCollection()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('phone_number')
@@ -625,14 +606,20 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         }
 
         $email = Mage::getModel('affiliateplus/account')->load($affiliateId);
+        
         /* end edit */
         $html = '';
+        $name = '';
         if (!$email->getId()) {
             $html .= '<input type="hidden" id="is_valid_account_id" value="'.$collection->getFirstItem()->getAccountId().'"/>';
+            $name .= $collection->getFirstItem()->getAccountName();
+        } else {
+            $name .= $email->getName();
         }
 
         $html .= "<div class='success-msg'>" . $this->__('Affiliate name correct') . "</div>";
         $html .= '<input type="hidden" id="is_valid_email" value="1"/>';
+        $html .= '<input type="hidden" id="valid_name" value="'.$name.'"/>';
 
         $this->getResponse()->setBody($html);
     }

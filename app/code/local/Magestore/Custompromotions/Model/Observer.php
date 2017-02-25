@@ -1,55 +1,64 @@
 <?php
-/**
- * Magestore
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Magestore.com license that is
- * available through the world-wide-web at this URL:
- * http://www.magestore.com/license-agreement.html
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- *
- * @category    Magestore
- * @package     Magestore_RewardPoints
- * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
- * @license     http://www.magestore.com/license-agreement.html
- */
+require_once   Mage::getBaseDir('lib').'/Twilio/autoload.php';
+use Twilio\Rest\Client;
 
-/**
- * RewardPoints Observer Model
- *
- * @category    Magestore
- * @package     Magestore_RewardPoints
- * @author      Magestore Developer
- */
 class Magestore_Custompromotions_Model_Observer
 {
     public function customerRegisterSuccess($observer)
     {
         $customer_reg = $observer->getCustomer();
+        $core_session = Mage::getSingleton('core/session');
+        $verify_helper = Mage::helper('custompromotions/verify');
         /* Save customer phone number */
-        $is_verified = Mage::getSingleton('core/session')->getVerify();
-        $code = Mage::getSingleton('core/session')->getCodeActive();
+        $is_verified = $core_session->getVerify();
+        $code = $core_session->getCodeActive();
+
         if($is_verified != null && $is_verified){
-            $phone = Mage::getSingleton('core/session')->getPhoneActive();
-            $_phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($phone);
+            $phone = $core_session->getPhoneActive();
+            $_phone = $verify_helper->formatPhoneToDatabase($phone);
             $customer_reg->setPhoneNumber($_phone);
             $customer_reg->save();
 
-            $mobile = Mage::helper('custompromotions/verify')->getVerifyByPhoneCode($phone, $code);
-            if($mobile != null)
+            $mobile = $verify_helper->getVerifyByPhoneCode($phone, $code);
+            if($mobile != null && $customer_reg->getId() > 0)
             {
                 $mobile->setCustomerId($customer_reg->getId());
                 $mobile->setUpdatedTime(now());
                 $mobile->save();
+                
+                /** Send sms to affiliate mobile  **/
+                $data = Mage::app()->getRequest()->getParams();
+                if($data['affiliate_id'] != null)
+                {
+                    $affiliate = Mage::getModel('affiliateplus/account')->load($data['affiliate_id']);
+                    if($affiliate->getId())
+                    {
+                        $affiliate_customer = Mage::getModel('customer/customer')->load($affiliate->getCustomerId());
+                        if($affiliate_customer->getId())
+                        {
+                            $sid = Mage::helper('custompromotions/verify')->getAccountSID();
+                            $token = Mage::helper('custompromotions/verify')->getAuthToken();
+                            $from = Mage::helper('custompromotions/verify')->getSenderNumber();
+                            $mobile_prefix = Mage::helper('custompromotions/verify')->getMobileCode();
+                            $phone = Mage::helper('custompromotions/verify')->getPhoneNumberFormat($mobile_prefix, $affiliate_customer->getPhoneNumber());
+                            $message = Mage::helper('custompromotions')->__('Congratulations! %s %s just completed registration as your new connection on Trunited.com. Divided We Fall. Trunited We Stand.', $customer_reg->getFirstname(), $customer_reg->getLastname());
+                            $client = new Client($sid, $token);
+                            /*$client->messages->create(
+                                $phone,
+                                array(
+                                    'from' => $from,
+                                    'body' => $message
+                                )
+                            );*/
+                        }
+
+                    }
+                }
+                /** END send sms to affiliate mobile  **/
             }
-            Mage::getSingleton('core/session')->unsPhoneActive();
-            Mage::getSingleton('core/session')->unsCodeActive();
-            Mage::getSingleton('core/session')->unsVerify();
+            $core_session->unsPhoneActive();
+            $core_session->unsCodeActive();
+            $core_session->unsVerify();
         }
         /* End save customer phone number */
 
