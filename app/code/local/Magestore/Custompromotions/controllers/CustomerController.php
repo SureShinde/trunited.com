@@ -98,7 +98,8 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		}
 
 		$phone = Mage::getSingleton('core/session')->getPhoneActive();
-		$check_verified = $verify_helper->verify($phone, $data['verify_code']);
+		$phone_to_database = $verify_helper->formatPhoneToDatabase($phone);
+		$check_verified = $verify_helper->verify($phone_to_database, $data['verify_code']);
 		if($check_verified == Magestore_Custompromotions_Model_Verifymobile::VERIFY_SUCCESS)
 		{
 			Mage::getSingleton('core/session')->setVerify(true);
