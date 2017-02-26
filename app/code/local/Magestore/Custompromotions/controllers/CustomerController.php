@@ -6,9 +6,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 {
 	public function sendCodeAction()
 	{
-		$mobile_code = Mage::helper('custompromotions/verify')->getMobileCode();
+		$verify_helper = Mage::helper('custompromotions/verify');
+		$mobile_code = $verify_helper->getMobileCode();
 
-		if(!Mage::helper('custompromotions/verify')->isEnable()){
+		if(!$verify_helper->isEnable()){
 			Mage::getSingleton('customer/session')->addError(
 				Mage::helper('custompromotions')->__('This feature is disabled')
 			);
@@ -31,10 +32,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 			return;
 		}
 
-		$mobile_prefix = Mage::helper('custompromotions/verify')->getMobileCode();
-		$phone = Mage::helper('custompromotions/verify')->getPhoneNumberFormat($mobile_prefix,$data['phone_number']);
+		$mobile_prefix = $verify_helper->getMobileCode();
+		$phone = $verify_helper->getPhoneNumberFormat($mobile_prefix,$data['phone_number']);
 
-		$is_verified = Mage::helper('custompromotions/verify')->isVerified($data['phone_number']);
+		$is_verified = $verify_helper->isVerified($data['phone_number']);
 
 		if($is_verified){
 			Mage::getSingleton('customer/session')->addError(
@@ -45,10 +46,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		} else {
 			try{
 				/* sending code to customer */
-				$sid = Mage::helper('custompromotions/verify')->getAccountSID();
-				$token = Mage::helper('custompromotions/verify')->getAuthToken();
-				$from = Mage::helper('custompromotions/verify')->getSenderNumber();
-				$new_code = Mage::helper('custompromotions/verify')->generateRandomString();
+				$sid = $verify_helper->getAccountSID();
+				$token = $verify_helper->getAuthToken();
+				$from = $verify_helper->getSenderNumber();
+				$new_code = $verify_helper->generateRandomString();
 				$message = Mage::helper('custompromotions')->__('Here is your Trunited verification code: %s',$new_code);
 //				$client = new Client($sid, $token);
 //				$client->messages->create(
@@ -61,7 +62,8 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				/* end sending sms */
 				Mage::log('Mobile Code - '.date('d-m-Y H:i:s',time()).' - Quantity: '.$new_code, null, 'mobileCode.log');
 				/* save to database: customer_verify_mobile table */
-				Mage::helper('custompromotions/verify')->saveVerify($data['phone_number'], $new_code);
+				$phone_to_database = $verify_helper->formatPhoneToDatabase($data['phone_number']);
+				$verify_helper->saveVerify($phone_to_database, $new_code);
 				/* end save to database: customer_verify_mobile table */
 			} catch (Exception $ex){
 				Mage::getSingleton('customer/session')->addError(
@@ -84,6 +86,7 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 
 	public function verifyCodeAction()
 	{
+		$verify_helper = Mage::helper('custompromotions/verify');
 		$data = $this->getRequest()->getParams();
 		if(!isset($data['verify_code']) || $data['verify_code'] == null)
 		{
@@ -95,7 +98,7 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		}
 
 		$phone = Mage::getSingleton('core/session')->getPhoneActive();
-		$check_verified = Mage::helper('custompromotions/verify')->verify($phone, $data['verify_code']);
+		$check_verified = $verify_helper->verify($phone, $data['verify_code']);
 		if($check_verified == Magestore_Custompromotions_Model_Verifymobile::VERIFY_SUCCESS)
 		{
 			Mage::getSingleton('core/session')->setVerify(true);
@@ -129,6 +132,7 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 
 	public function resendAction()
 	{
+		$verify_helper = Mage::helper('custompromotions/verify');
 		$phone_number = Mage::getSingleton('core/session')->getPhoneActive();
 		if($phone_number == null){
 			Mage::getSingleton('customer/session')->addError(
@@ -138,10 +142,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 			return;
 		}
 
-		$mobile_prefix = Mage::helper('custompromotions/verify')->getMobileCode();
-		$phone = Mage::helper('custompromotions/verify')->getPhoneNumberFormat($mobile_prefix,$phone_number);
+		$mobile_prefix = $verify_helper->getMobileCode();
+		$phone = $verify_helper->getPhoneNumberFormat($mobile_prefix,$phone_number);
 
-		$is_verified = Mage::helper('custompromotions/verify')->isVerified($phone_number);
+		$is_verified = $verify_helper->isVerified($phone_number);
 		if($is_verified){
 			Mage::getSingleton('customer/session')->addError(
 				Mage::helper('custompromotions')->__('This mobile number already exists on a customer account. Please enter a new mobile number.')
@@ -151,10 +155,10 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 		} else {
 			try{
 				/* sending code to customer */
-				$sid = Mage::helper('custompromotions/verify')->getAccountSID();
-				$token = Mage::helper('custompromotions/verify')->getAuthToken();
-				$from = Mage::helper('custompromotions/verify')->getSenderNumber();
-				$new_code = Mage::helper('custompromotions/verify')->generateRandomString();
+				$sid = $verify_helper->getAccountSID();
+				$token = $verify_helper->getAuthToken();
+				$from = $verify_helper->getSenderNumber();
+				$new_code = $verify_helper->generateRandomString();
 				$message = Mage::helper('custompromotions')->__('Here is your Trunited verification code: %s',$new_code);
 				$client = new Client($sid, $token);
 				$client->messages->create(
@@ -167,7 +171,7 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				/* end sending sms */
 
 				/* save to database: customer_verify_mobile table */
-				Mage::helper('custompromotions/verify')->saveVerify($phone_number, $new_code);
+				$verify_helper->saveVerify($phone_number, $new_code);
 				/* end save to database: customer_verify_mobile table */
 			} catch (Exception $ex){
 				Mage::getSingleton('customer/session')->addError(
