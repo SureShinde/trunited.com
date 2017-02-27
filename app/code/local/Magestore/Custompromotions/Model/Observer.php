@@ -19,7 +19,7 @@ class Magestore_Custompromotions_Model_Observer
             $customer_reg->setPhoneNumber($_phone);
             $customer_reg->save();
 
-            $mobile = $verify_helper->getVerifyByPhoneCode($phone, $code);
+            $mobile = $verify_helper->getVerifyByPhoneCode($_phone, $code);
             if($mobile != null && $customer_reg->getId() > 0)
             {
                 $mobile->setCustomerId($customer_reg->getId());
@@ -36,20 +36,20 @@ class Magestore_Custompromotions_Model_Observer
                         $affiliate_customer = Mage::getModel('customer/customer')->load($affiliate->getCustomerId());
                         if($affiliate_customer->getId())
                         {
-                            $sid = Mage::helper('custompromotions/verify')->getAccountSID();
-                            $token = Mage::helper('custompromotions/verify')->getAuthToken();
-                            $from = Mage::helper('custompromotions/verify')->getSenderNumber();
-                            $mobile_prefix = Mage::helper('custompromotions/verify')->getMobileCode();
-                            $phone = Mage::helper('custompromotions/verify')->getPhoneNumberFormat($mobile_prefix, $affiliate_customer->getPhoneNumber());
+                            $sid = $verify_helper->getAccountSID();
+                            $token = $verify_helper->getAuthToken();
+                            $from = $verify_helper->getSenderNumber();
+                            $mobile_prefix = $verify_helper->getMobileCode();
+                            $phone = $verify_helper->getPhoneNumberFormat($mobile_prefix, $affiliate_customer->getPhoneNumber());
                             $message = Mage::helper('custompromotions')->__('Congratulations! %s %s just completed registration as your new connection on Trunited.com. Divided We Fall. Trunited We Stand.', $customer_reg->getFirstname(), $customer_reg->getLastname());
                             $client = new Client($sid, $token);
-                            /*$client->messages->create(
+                            $client->messages->create(
                                 $phone,
                                 array(
                                     'from' => $from,
                                     'body' => $message
                                 )
-                            );*/
+                            );
                         }
 
                     }

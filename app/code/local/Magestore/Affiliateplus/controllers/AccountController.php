@@ -617,7 +617,7 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
             $name .= $email->getName();
         }
 
-        $html .= "<div class='success-msg'>" . $this->__('Affiliate name correct') . "</div>";
+        $html .= "<div class='success-msg'>" . $this->__('Person found: <b>%s</b>',$name) . "</div>";
         $html .= '<input type="hidden" id="is_valid_email" value="1"/>';
         $html .= '<input type="hidden" id="valid_name" value="'.$name.'"/>';
 
