@@ -87,10 +87,6 @@
     </ul>
 </div>
 
-<<<<<<< HEAD
-=======
-<!--<script type="text/javascript" src="<?php /*echo $this->getSkinUrl('js/magestore/customize.js');*/?>"></script>-->
->>>>>>> 204925acd3f515a7daffebb9aba34f604ba2734e
 <script type="text/javascript">
     $j = jQuery.noConflict();
     $j(document).ready(function(){
@@ -191,7 +187,6 @@
 
     $j(function () {
         $j("#affiliate_name").keyup(function (e) {
-<<<<<<< HEAD
             checkMobileNumber($j(this));
         });
     });
@@ -207,87 +202,18 @@
             $('affiliate_name').removeClassName('required-entry');
             $('affiliate_message_hidden_email').hide();
             changeClassSubmitButton(false);
-=======
-            var checklength = $j('#affiliate_name').val().length;
-            checkMobileNumber($j(this));
-            if (checklength >= 6) {
-                var projects = <?php echo $names; ?>;
-                $j("#affiliate_name").autocomplete({
-                    minLength: 6,
-                    source: projects,
-                    focus: function (event, ui) {
-                        $j("#affiliate_name").val(ui.item.desc);
-                        return false;
-                    },
-                    select: function (event, ui) {
-                        $j("#affiliate_name").val(ui.item.desc);
-                        $j("#affiliate_id").val(ui.item.value);
-                        $j("#affiliate_message_hidden_email").hide();
-                        $j('#no_refers_me').attr('checked', false);
-                        $j('#refers_error').hide();
-                        $j('#refers_mobile_error').hide();
-                        changeClassSubmitButton(false);
-                        return false;
-                    }
-                }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-                    return $j( "<li>" )
-                        .append( "<div>" + item.label + "<br /><b>" + item.desc + "</b></div>" )
-                        .appendTo( ul );
-                };
-            }
-        });
-    });
-
-    function checkAffiliateCouponCodeExisting(requestUrl, el) {
-        var affiliate_name = $('affiliate_name').value;
-        var affiliate_id = $('affiliate_id').value;
-        var no_refers_me = $('no_refers_me').checked;
-
-        if(affiliate_id == '')
-        {
-            checkMobileNumber($j("#affiliate_name"));
-            var params = {affiliate_name: affiliate_name, affiliate_id: affiliate_id};
-            $('affiliate-please-wait-email').show();
-            $('affiliate_message_hidden_email').hide();
-
-            $j('#form-validate').find('button[type="submit"]').prop('disabled', true);
-            new Ajax.Updater(
-                'affiliate_message_hidden_email',
-                requestUrl,
-                {
-                    method: 'get',
-                    onComplete: function () {
-                        endCheckEmailRegister();
-                        if (affiliate_name == '' && no_refers_me === false)
-                            $j('.error_refers_me').show();
-                        else{
-                            changeClassSubmitButton(false);
-                        }
-                    },
-                    onSuccess: '',
-                    onFailure: '',
-                    parameters: params,
-                    postBody: params
-                }
-            );
->>>>>>> 204925acd3f515a7daffebb9aba34f604ba2734e
         }
     }
 
     function endCheckEmailRegister() {
         setTimeout(function(){
             $j('#affiliate_id').val($j('#is_valid_account_id').val());
-<<<<<<< HEAD
             /*$j('#affiliate_name').val($j('#valid_name').val());*/
-=======
-            $j('#affiliate_name').val($j('#valid_name').val());
->>>>>>> 204925acd3f515a7daffebb9aba34f604ba2734e
         },1000);
         $('affiliate-please-wait-email').hide();
         $('affiliate_message_hidden_email').show();
         if ($('is_valid_email').value == '0') {}
     }
-<<<<<<< HEAD
     
     function searchPerson() {
         var affiliate_name = $('affiliate_name').value;
@@ -334,19 +260,3 @@
         return false;
     }
 </script>
-=======
-    function checkNoRefer() {
-        $j('#affiliate_name').val('');
-        $j('#affiliate_id').val('');
-        $j('.close-icon').hide();
-        if ($('no_refers_me').checked == false) {
-            $('affiliate_name').addClassName('required-entry');
-            changeClassSubmitButton(true);
-        } else {
-            $('affiliate_name').removeClassName('required-entry');
-            $('affiliate_message_hidden_email').hide();
-            changeClassSubmitButton(false);
-        }
-    }
-</script>
->>>>>>> 204925acd3f515a7daffebb9aba34f604ba2734e
