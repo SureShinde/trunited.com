@@ -86,3 +86,8 @@
 {
     padding-left: 60px;
 }
+
+.account-create .for_affiliate_name
+{
+    white-space: normal !important;
+}

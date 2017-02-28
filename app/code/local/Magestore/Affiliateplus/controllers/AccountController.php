@@ -605,17 +605,11 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
             return $this->getResponse()->setBody($html);
         }
 
-        $email = Mage::getModel('affiliateplus/account')->load($affiliateId);
-        
         /* end edit */
         $html = '';
         $name = '';
-        if (!$email->getId()) {
-            $html .= '<input type="hidden" id="is_valid_account_id" value="'.$collection->getFirstItem()->getAccountId().'"/>';
-            $name .= $collection->getFirstItem()->getAccountName();
-        } else {
-            $name .= $email->getName();
-        }
+        $html .= '<input type="hidden" id="is_valid_account_id" value="'.$collection->getFirstItem()->getAccountId().'"/>';
+        $name .= $collection->getFirstItem()->getAccountName();
 
         $html .= "<div class='success-msg'>" . $this->__('Person found: <b>%s</b>',$name) . "</div>";
         $html .= '<input type="hidden" id="is_valid_email" value="1"/>';

@@ -41,7 +41,7 @@ class Magestore_Custompromotions_Model_Observer
                             $from = $verify_helper->getSenderNumber();
                             $mobile_prefix = $verify_helper->getMobileCode();
                             $phone = $verify_helper->getPhoneNumberFormat($mobile_prefix, $affiliate_customer->getPhoneNumber());
-                            $message = Mage::helper('custompromotions')->__('Congratulations! %s %s just completed registration as your new connection on Trunited.com. Divided We Fall. Trunited We Stand.', $customer_reg->getFirstname(), $customer_reg->getLastname());
+                            $message = Mage::helper('custompromotions')->__('Congratulations! %s %s just completed registration as your new connection on Trunited.com.', $customer_reg->getFirstname(), $customer_reg->getLastname());
                             $client = new Client($sid, $token);
                             $client->messages->create(
                                 $phone,

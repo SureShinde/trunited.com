@@ -59,7 +59,7 @@
                     <button class="search_icon button" onClick="searchPerson();return false;"><i class="fa fa-search"></i></button>
 
                     <br/><label for="affiliate_name"
-                                class=""><?php echo $this->__('Please enter the mobile # of the p person who referred you and click the search icon') ?></label>
+                                class="for_affiliate_name"><?php echo $this->__('Please enter the mobile # of the person who referred you and click the search icon') ?></label>
 
                     <div id="refers_error"
                          class="error_refers_me"><?php echo $this->__('You must select an Affiliate or check the box ‘no one referred me'); ?></div>
@@ -135,6 +135,7 @@
         $j('#refers_error').hide();
         $j('#refers_mobile_error').hide();
         $j("#affiliate_message_hidden_email").hide();
+        $j(".success-msg").hide();
 
         if(!$j('#no_refers_me').is(":checked"))
             changeClassSubmitButton(true);
@@ -147,6 +148,7 @@
         $j('#refers_error').hide();
         $j('#refers_mobile_error').hide();
         $j("#affiliate_message_hidden_email").hide();
+        $j(".success-msg").hide();
         if(!$j('#no_refers_me').is(":checked"))
             changeClassSubmitButton(true);
     }
@@ -172,6 +174,7 @@
             } else {
                 $j('#refers_mobile_error').show();
             }
+            $j(".success-msg").hide();
             return false;
         } else {
             $j('#refers_mobile_error').hide();
