@@ -23,7 +23,7 @@ class Magestore_Custompromotions_Helper_Verify extends Mage_Core_Helper_Abstract
 
         if($collection->getId())
         {
-            if($collection->getStatus() == Magestore_Custompromotions_Model_Verifymobile::STATUS_VERIFIED)
+            if($collection->getStatus() == Magestore_Custompromotions_Model_Verifymobile::STATUS_VERIFIED && $collection->getCustomerId() > 0)
             {
                 return true;
             } else {
@@ -38,6 +38,7 @@ class Magestore_Custompromotions_Helper_Verify extends Mage_Core_Helper_Abstract
     {
         $model = Mage::getModel('custompromotions/verifymobile')->getCollection()
             ->addFieldToFilter('phone',$phone)
+            ->addFieldToFilter('customer_id',array('null' => true))
             ->getFirstItem()
         ;
 

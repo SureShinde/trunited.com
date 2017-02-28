@@ -49,13 +49,11 @@ class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Fr
 			if($customer->getPhoneNumber() != null){
 				$check++;
 				$phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($customer->getPhoneNumber());
+                zend_debug::dump($customer->getId().' - '.$customer->getName().' - '.$customer->getPhoneNumber().' - '.$customer->getAlternateNumber());
 				if(strpos($customer->getPhoneNumber(),'-') > 0){
-					zend_debug::dump($phone);
-					zend_debug::dump($customer->getId().' - '.$customer->getPhoneNumber());
 					$customer->setPhoneNumber($phone);
 					$customer->save();
 				}
-				zend_debug::dump($customer->getId().' - '.$customer->getName().' - '.$customer->getPhoneNumber());
 			} else {
 				$_check++;
 				$customer->setPhoneNumber('');
@@ -452,5 +450,70 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
 		$installer->endSetup();
 		echo "success";
 	}
+
+    public function alternateMobileAction()
+    {
+        $setup = new Mage_Eav_Model_Entity_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("");
+
+        $entityTypeId     = $setup->getEntityTypeId('customer');
+        $attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
+        $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
+
+        $installer->addAttribute("customer", "alternate_number",  array(
+            "type"     => "varchar",
+            "backend"  => "",
+            "label"    => "Alternate mobile",
+            "input"    => "text",
+            "source"   => "",
+            "visible"  => true,
+            "required" => false,
+            "default" => "",
+            "frontend" => "",
+            "unique"     => true,
+            "note"       => "Alternate mobile of customers"
+
+        ));
+
+        $attribute   = Mage::getSingleton("eav/config")->getAttribute("customer", "alternate_number");
+        $setup->addAttributeToGroup(
+            $entityTypeId,
+            $attributeSetId,
+            $attributeGroupId,
+            'alternate_number',
+            '101'
+        );
+
+        $used_in_forms=array();
+        $used_in_forms[]="adminhtml_customer";
+        $used_in_forms[]="checkout_register";
+        $used_in_forms[]="customer_account_create";
+        $used_in_forms[]="customer_account_edit";
+        $used_in_forms[]="adminhtml_checkout";
+
+        $attribute->setData("used_in_forms", $used_in_forms)
+            ->setData("is_used_for_customer_segment", true)
+            ->setData("is_system", 0)
+            ->setData("is_user_defined", 1)
+            ->setData("is_visible", 1)
+            ->setData("sort_order", 101)
+        ;
+        $attribute->save();
+
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function addColumnAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup('core_setup');
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->getConnection()->addColumn($setup->getTable('customer_verify_mobile'), 'alternate_number', 'varchar(25)');
+        $installer->endSetup();
+        echo "success";
+    }
 
 }

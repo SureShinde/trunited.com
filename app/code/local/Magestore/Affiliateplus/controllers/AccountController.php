@@ -575,9 +575,9 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         $this->getResponse()->setBody($html);
     }
 
-    //customize by vietBQ assign customer cho affiliate(check tren trang customer regiseter)
+
     public function checkAffiliateNameAction() {
-        $affiliateId = $this->getRequest()->getParam('affiliate_id');
+
         $affiliateName = $this->getRequest()->getParam('affiliate_name');
 
         $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($affiliateName);
@@ -585,9 +585,19 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         $collection = Mage::getModel('customer/customer')->getCollection()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('phone_number')
-            ->addAttributeToFilter('phone_number',$phone)
+            ->addAttributeToSelect('alternate_number')
+//            ->addAttributeToFilter('phone_number', $phone)
+            ->addAttributeToFilter(
+                array(
+                    array('attribute' => 'phone_number', 'eq' => $phone),
+                    array('attribute' => 'alternate_number', 'eq' => $phone),
+                )
+            )
             ->setOrder('entity_id','desc')
         ;
+
+        echo ($collection->getSelect());
+        exit;
 
         $affiliate_table = Mage::getSingleton('core/resource')->getTableName('affiliateplus/account');
         $collection->getSelect()->join(
@@ -600,7 +610,7 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         );
 
         if(sizeof($collection) == 0){
-            $html = "<div class='error-msg'>" . $this->__('Affiliate name incorrect. Please check affiliate name again!') . "</div>";
+            $html = "<div class='error-msg'>" . $this->__('Mobile # not found. Please check the # and search again.') . "</div>";
             $html .= '<input type="hidden" id="is_valid_email" value="0"/>';
             return $this->getResponse()->setBody($html);
         }

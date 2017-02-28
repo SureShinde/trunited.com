@@ -247,9 +247,10 @@
                 method: 'get',
                 onComplete: function () {
                     endCheckEmailRegister();
-                    if (affiliate_name == '' && no_refers_me === false)
-                        $j('.error_refers_me').show();
-                    else{
+                    if ($j('#is_valid_email').val() == 0 && no_refers_me === false){
+//                        $j('.error_refers_me').show();
+                        changeClassSubmitButton(true);
+                    } else{
                         changeClassSubmitButton(false);
                     }
                 },
