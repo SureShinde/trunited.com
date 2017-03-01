@@ -581,26 +581,30 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         $affiliateName = $this->getRequest()->getParam('affiliate_name');
 
         $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($affiliateName);
-       
-        $collection = Mage::getModel('customer/customer')->getCollection()
-            ->addAttributeToSelect('entity_id')
-            ->addAttributeToSelect('phone_number')
-            ->addAttributeToSelect('alternate_number')
-//            ->addAttributeToFilter('phone_number', $phone)
-            ->addAttributeToFilter(
-                array(
-                    array('attribute' => 'phone_number', 'eq' => $phone),
-                    array('attribute' => 'alternate_number', 'eq' => $phone),
-                )
-            )
-            ->setOrder('entity_id','desc')
-        ;
 
-        echo ($collection->getSelect());
-        exit;
+        $customer_entity_varchar = Mage::getSingleton('core/resource')->getTableName('customer_entity_varchar');
+
+        $first = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'firstname');
+        $last = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'lastname');
+
+
+        $_collection = Mage::getModel('customer/customer')->getCollection()
+            ->addAttributeToSelect('entity_id')
+            ->setOrder('entity_id','desc')
+            ;
+
+        $_collection->getSelect()->join(['ce1' => $customer_entity_varchar], 'ce1.entity_id=e.entity_id', ['firstname' => 'value'])
+            ->where('ce1.attribute_id='.$first->getAttributeId())
+            ->join(['ce2' => $customer_entity_varchar], 'ce2.entity_id=e.entity_id', ['lastname' => 'value'])
+            ->where('ce2.attribute_id='.$last->getAttributeId())
+            ->columns(new Zend_Db_Expr("CONCAT(`ce1`.`value`, ' ',`ce2`.`value`) AS customer_name"));
+
+        $_collection->getSelect()->joinLeft(array("cev" => $customer_entity_varchar), "e.entity_id = cev.entity_id", array("mobile" => "cev.value"))
+            ->where("(cev.attribute_id = 197 and cev.value = '".$phone."') or (cev.attribute_id = 180 and cev.value = '".$phone."') ");
+
 
         $affiliate_table = Mage::getSingleton('core/resource')->getTableName('affiliateplus/account');
-        $collection->getSelect()->join(
+        $_collection->getSelect()->join(
             array('account'=> $affiliate_table),
             '`account`.customer_id = `e`.entity_id',
             array(
@@ -609,7 +613,7 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
             )
         );
 
-        if(sizeof($collection) == 0){
+        if(sizeof($_collection) == 0){
             $html = "<div class='error-msg'>" . $this->__('Mobile # not found. Please check the # and search again.') . "</div>";
             $html .= '<input type="hidden" id="is_valid_email" value="0"/>';
             return $this->getResponse()->setBody($html);
@@ -618,8 +622,8 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
         /* end edit */
         $html = '';
         $name = '';
-        $html .= '<input type="hidden" id="is_valid_account_id" value="'.$collection->getFirstItem()->getAccountId().'"/>';
-        $name .= $collection->getFirstItem()->getAccountName();
+        $html .= '<input type="hidden" id="is_valid_account_id" value="'.$_collection->getFirstItem()->getAccountId().'"/>';
+        $name .= $_collection->getFirstItem()->getAccountName() != ' ' ? $_collection->getFirstItem()->getAccountName() : $_collection->getFirstItem()->getCustomerName();
 
         $html .= "<div class='success-msg'>" . $this->__('Person found: <b>%s</b>',$name) . "</div>";
         $html .= '<input type="hidden" id="is_valid_email" value="1"/>';

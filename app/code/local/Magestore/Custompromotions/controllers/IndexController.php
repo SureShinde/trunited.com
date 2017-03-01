@@ -2,8 +2,9 @@
 
 class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Front_Action
 {
-	public function indexAction(){
-		$order = Mage::getModel('sales/order')->load('100020151','increment_id');
+    public function indexAction()
+    {
+        $order = Mage::getModel('sales/order')->load('100020151', 'increment_id');
 //		zend_debug::dump($order->debug());
 //        $order->setStatus('partially_shipped');
 //        $order->save();
@@ -30,50 +31,49 @@ class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Fr
 
 
         $this->loadLayout();
-		$this->renderLayout();
-	}
+        $this->renderLayout();
+    }
 
-	public function testAction()
-	{
-		$collection = Mage::getModel('customer/customer')->getCollection()
-			->addAttributeToSelect('*')
-			->setOrder('entity_id','desc')
-//			->getFirstItem()
-		;
-		$check = 0;
-		$_check = 0;
+    public function testAction()
+    {
+        $collection = Mage::getModel('customer/customer')->getCollection()
+            ->addAttributeToSelect('*')
+            ->setOrder('entity_id', 'desc')//			->getFirstItem()
+        ;
+        $check = 0;
+        $_check = 0;
 
-		$transactionSave = Mage::getModel('core/resource_transaction');
-		foreach($collection as $customer)
-		{
-			if($customer->getPhoneNumber() != null){
-				$check++;
-				$phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($customer->getPhoneNumber());
-                zend_debug::dump($customer->getId().' - '.$customer->getName().' - '.$customer->getPhoneNumber().' - '.$customer->getAlternateNumber());
-				if(strpos($customer->getPhoneNumber(),'-') > 0){
-					$customer->setPhoneNumber($phone);
-					$customer->save();
-				}
-			} else {
-				$_check++;
-				$customer->setPhoneNumber('');
-			}
+        $transactionSave = Mage::getModel('core/resource_transaction');
+        foreach ($collection as $customer) {
+            if ($customer->getPhoneNumber() != null) {
+                $check++;
+                $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($customer->getPhoneNumber());
+                zend_debug::dump($customer->getId() . ' - ' . $customer->getName() . ' - ' . $customer->getPhoneNumber() . ' - ' . $customer->getAlternateNumber());
+                if (strpos($customer->getPhoneNumber(), '-') > 0) {
+                    $customer->setPhoneNumber($phone);
+                    $customer->save();
+                }
+            } else {
+                $_check++;
+                $customer->setPhoneNumber('');
+            }
 
-			$transactionSave->addObject($customer);
+            $transactionSave->addObject($customer);
 
-		}
+        }
 //		$transactionSave->save();
 
-		zend_debug::dump(sizeof($collection));
-		zend_debug::dump($check);
-		zend_debug::dump($_check);
-	}
+        zend_debug::dump(sizeof($collection));
+        zend_debug::dump($check);
+        zend_debug::dump($_check);
+    }
 
-	public function installDbAction() {
-		$setup = new Mage_Core_Model_Resource_Setup();
-		$installer = $setup;
-		$installer->startSetup();
-		$installer->run("
+    public function installDbAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
 
 			DROP TABLE IF EXISTS {$setup->getTable('customer_verify_mobile')};
 			CREATE TABLE {$setup->getTable('customer_verify_mobile')} (
@@ -87,85 +87,85 @@ class Magestore_Custompromotions_IndexController extends Mage_Core_Controller_Fr
 			  PRIMARY KEY (`verify_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
-		$installer->endSetup();
-		echo "success";
-	}
-	
-	public function addTransactionAction()
-	{
-		$order_id = '100020269';
-		$order = Mage::getModel('sales/order')->load($order_id,'increment_id');
-	
-		Mage::helper('custompromotions')->addTruWalletFromProduct($order);
-	}
+        $installer->endSetup();
+        echo "success";
+    }
 
-	public function notifyAction()
-	{
-		Mage::getSingleton('core/session')->addNotice(Mage::helper('custompromotions/configuration')->getNotifyMessage());
-		$this->_redirectUrl(Mage::getUrl('checkout/cart/'));
-	}
+    public function addTransactionAction()
+    {
+        $order_id = '100020269';
+        $order = Mage::getModel('sales/order')->load($order_id, 'increment_id');
 
-	public function checkAction()
-	{
-		$setup = new Mage_Eav_Model_Entity_Setup();
-		$installer = $setup;
-		$installer->startSetup();
-		$installer->run("");
+        Mage::helper('custompromotions')->addTruWalletFromProduct($order);
+    }
 
-		$entityTypeId     = $setup->getEntityTypeId('customer');
-		$attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
-		$attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
+    public function notifyAction()
+    {
+        Mage::getSingleton('core/session')->addNotice(Mage::helper('custompromotions/configuration')->getNotifyMessage());
+        $this->_redirectUrl(Mage::getUrl('checkout/cart/'));
+    }
 
-		$installer->addAttribute("customer", "phone_number",  array(
-			"type"     => "varchar",
-			"backend"  => "",
-			"label"    => "Phone Number",
-			"input"    => "text",
-			"source"   => "",
-			"visible"  => true,
-			"required" => false,
-			"default" => "",
-			"frontend" => "",
-			"unique"     => true,
-			"note"       => "Phone number of customers"
+    public function checkAction()
+    {
+        $setup = new Mage_Eav_Model_Entity_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("");
 
-		));
+        $entityTypeId = $setup->getEntityTypeId('customer');
+        $attributeSetId = $setup->getDefaultAttributeSetId($entityTypeId);
+        $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-		$attribute   = Mage::getSingleton("eav/config")->getAttribute("customer", "phone_number");
-		$setup->addAttributeToGroup(
-			$entityTypeId,
-			$attributeSetId,
-			$attributeGroupId,
-			'phone_number',
-			'100'
-		);
+        $installer->addAttribute("customer", "phone_number", array(
+            "type" => "varchar",
+            "backend" => "",
+            "label" => "Phone Number",
+            "input" => "text",
+            "source" => "",
+            "visible" => true,
+            "required" => false,
+            "default" => "",
+            "frontend" => "",
+            "unique" => true,
+            "note" => "Phone number of customers"
 
-		$used_in_forms=array();
-		$used_in_forms[]="adminhtml_customer";
-		$used_in_forms[]="checkout_register";
-		$used_in_forms[]="customer_account_create";
-		$used_in_forms[]="customer_account_edit";
-		$used_in_forms[]="adminhtml_checkout";
+        ));
 
-		$attribute->setData("used_in_forms", $used_in_forms)
-			->setData("is_used_for_customer_segment", true)
-			->setData("is_system", 0)
-			->setData("is_user_defined", 1)
-			->setData("is_visible", 1)
-			->setData("sort_order", 100)
-		;
-		$attribute->save();
+        $attribute = Mage::getSingleton("eav/config")->getAttribute("customer", "phone_number");
+        $setup->addAttributeToGroup(
+            $entityTypeId,
+            $attributeSetId,
+            $attributeGroupId,
+            'phone_number',
+            '100'
+        );
 
-		$installer->endSetup();
-		echo "success";
-	}
+        $used_in_forms = array();
+        $used_in_forms[] = "adminhtml_customer";
+        $used_in_forms[] = "checkout_register";
+        $used_in_forms[] = "customer_account_create";
+        $used_in_forms[] = "customer_account_edit";
+        $used_in_forms[] = "adminhtml_checkout";
 
-	public function insertMobileCodeAction() {
-		$setup = new Mage_Core_Model_Resource_Setup();
-		$installer = $setup;
-		$installer->startSetup();
+        $attribute->setData("used_in_forms", $used_in_forms)
+            ->setData("is_used_for_customer_segment", true)
+            ->setData("is_system", 0)
+            ->setData("is_user_defined", 1)
+            ->setData("is_visible", 1)
+            ->setData("sort_order", 100);
+        $attribute->save();
 
-		$installer->run("
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function insertMobileCodeAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+
+        $installer->run("
 			DROP TABLE IF EXISTS {$setup->getTable('customer_verify_mobile')};
 			CREATE TABLE {$setup->getTable('customer_verify_mobile')} (
 			  `verify_id` int(11) unsigned NOT NULL auto_increment,
@@ -446,10 +446,10 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
 (253, 'SS', 'SOUTH SUDAN', 'South Sudan', 'SSD', 728, 211);
 		");
 
-		
-		$installer->endSetup();
-		echo "success";
-	}
+
+        $installer->endSetup();
+        echo "success";
+    }
 
     public function alternateMobileAction()
     {
@@ -458,26 +458,26 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
         $installer->startSetup();
         $installer->run("");
 
-        $entityTypeId     = $setup->getEntityTypeId('customer');
-        $attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
+        $entityTypeId = $setup->getEntityTypeId('customer');
+        $attributeSetId = $setup->getDefaultAttributeSetId($entityTypeId);
         $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-        $installer->addAttribute("customer", "alternate_number",  array(
-            "type"     => "varchar",
-            "backend"  => "",
-            "label"    => "Alternate mobile",
-            "input"    => "text",
-            "source"   => "",
-            "visible"  => true,
+        $installer->addAttribute("customer", "alternate_number", array(
+            "type" => "varchar",
+            "backend" => "",
+            "label" => "Alternate mobile",
+            "input" => "text",
+            "source" => "",
+            "visible" => true,
             "required" => false,
             "default" => "",
             "frontend" => "",
-            "unique"     => true,
-            "note"       => "Alternate mobile of customers"
+            "unique" => true,
+            "note" => "Alternate mobile of customers"
 
         ));
 
-        $attribute   = Mage::getSingleton("eav/config")->getAttribute("customer", "alternate_number");
+        $attribute = Mage::getSingleton("eav/config")->getAttribute("customer", "alternate_number");
         $setup->addAttributeToGroup(
             $entityTypeId,
             $attributeSetId,
@@ -486,20 +486,19 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
             '101'
         );
 
-        $used_in_forms=array();
-        $used_in_forms[]="adminhtml_customer";
-        $used_in_forms[]="checkout_register";
-        $used_in_forms[]="customer_account_create";
-        $used_in_forms[]="customer_account_edit";
-        $used_in_forms[]="adminhtml_checkout";
+        $used_in_forms = array();
+        $used_in_forms[] = "adminhtml_customer";
+        $used_in_forms[] = "checkout_register";
+        $used_in_forms[] = "customer_account_create";
+        $used_in_forms[] = "customer_account_edit";
+        $used_in_forms[] = "adminhtml_checkout";
 
         $attribute->setData("used_in_forms", $used_in_forms)
             ->setData("is_used_for_customer_segment", true)
             ->setData("is_system", 0)
             ->setData("is_user_defined", 1)
             ->setData("is_visible", 1)
-            ->setData("sort_order", 101)
-        ;
+            ->setData("sort_order", 101);
         $attribute->save();
 
         $installer->endSetup();
@@ -514,6 +513,41 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
         $installer->getConnection()->addColumn($setup->getTable('customer_verify_mobile'), 'alternate_number', 'varchar(25)');
         $installer->endSetup();
         echo "success";
+    }
+
+    public function saveCustomerAction()
+    {
+        $customers = Mage::getModel('customer/customer')->getCollection();
+        $transactionSave = Mage::getModel('core/resource_transaction');
+        foreach ($customers as $customer) {
+            $customer->setAlternateNumber('');
+            $transactionSave->addObject($customer);
+        }
+        $transactionSave->save();
+        echo 'success';
+    }
+
+    public function saveCustomer2Action()
+    {
+        $customers = Mage::getModel('customer/customer')->load(2094);
+        $customers->setAlternateNumber('')->save();
+        echo 'success';
+    }
+
+    public function uppercaseAction()
+    {
+        $customers = Mage::getModel('customer/customer')->getCollection()->addAttributeToSelect(array('alternate_number'), 'inner');
+        Mage::getSingleton('core/resource_iterator')->walk($customers->getSelect(), array(array($this, 'customerCallback')));
+        echo 'success';
+    }
+
+    public function customerCallback($args)
+    {
+        $customer = Mage::getModel('customer/customer');
+        $customer->setData($args['row']);
+//        $customer->setAlternateNumber('1');
+//        $customer->getResource()->saveAttribute($customer, 'alternate_number');
+        $customer->save();
     }
 
 }
