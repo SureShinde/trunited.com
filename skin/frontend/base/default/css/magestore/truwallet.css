@@ -71,3 +71,23 @@
     background-color: #afafaf;
     cursor: not-allowed;
 }
+.account-create .search_icon
+{
+    height: 38px;
+    width: 50px;
+    background-color: #00b5cb;
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 0%;
+}
+
+.account-create #affiliate_name
+{
+    padding-left: 60px;
+}
+
+.account-create .for_affiliate_name
+{
+    white-space: normal !important;
+}
