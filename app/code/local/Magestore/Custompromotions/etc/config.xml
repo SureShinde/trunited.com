@@ -14,6 +14,13 @@
                     <frontName>custompromotions</frontName>
                 </args>
             </custompromotions>
+            <customer>
+                <args>
+                    <modules>
+                        <Magestore_Custompromotions before="Mage_Customer">Magestore_Custompromotions</Magestore_Custompromotions>
+                    </modules>
+                </args>
+            </customer>
         </routers>
         <layout>
             <updates>
@@ -149,6 +156,15 @@
                     </custompromotions_sales_order_shipment_save_after>
                 </observers>
             </sales_order_shipment_save_after>
+            <adminhtml_customer_prepare_save>
+                <observers>
+                    <custompromotions_adminhtml_customer_prepare_save>
+                        <type>singleton</type>
+                        <class>custompromotions/observer</class>
+                        <method>customerPrepareSave</method>
+                    </custompromotions_adminhtml_customer_prepare_save>
+                </observers>
+            </adminhtml_customer_prepare_save>
         </events>
     </global>
 

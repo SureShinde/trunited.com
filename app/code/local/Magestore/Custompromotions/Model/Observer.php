@@ -206,4 +206,28 @@ class Magestore_Custompromotions_Model_Observer
         return $this;
     }
 
+    public function customerPrepareSave($observer)
+    {
+        $customer = $observer->getCustomer();
+        $request = $observer->getRequest();
+        $data = $request->getParams();
+        if($data['account']['phone_number'] != '')
+            $data['account']['phone_number'] = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($data['account']['phone_number']);
+
+        if($data['account']['alternate_number'] != '')
+            $data['account']['alternate_number'] = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($data['account']['alternate_number']);
+
+        $customer->setData('phone_number', $data['account']['phone_number']);
+        $customer->setData('alternate_number', $data['account']['alternate_number']);
+
+        if($data['account']['phone_number'][0] == 1 || $data['account']['alternate_number'][0] == 1 ||
+            sizeof($data['account']['phone_number']) > 10 ||  sizeof($data['account']['alternate_number']) > 10)
+        {
+           Mage::throwException(
+                Mage::helper('custompromotions')->__('The mobile number only has 10 digits and don\'t allow begin with 1')
+            );
+            return;
+        }
+    }
+
 }

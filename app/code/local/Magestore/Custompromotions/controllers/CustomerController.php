@@ -52,15 +52,18 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				$new_code = $verify_helper->generateRandomString();
 				$message = Mage::helper('custompromotions')->__('Here is your Trunited verification code: %s',$new_code);
 				$client = new Client($sid, $token);
-				/*$client->messages->create(
-					$phone,
-					array(
-						'from' => $from,
-						'body' => $message
-					)
-				);*/
+				if($_SERVER['REMOTE_ADDR'] != '101.99.23.40')
+                {
+                    $client->messages->create(
+                        $phone,
+                        array(
+                            'from' => $from,
+                            'body' => $message
+                        )
+                    );
+                }
 				/* end sending sms */
-				Mage::log('Mobile Code - '.date('d-m-Y H:i:s',time()).' - Quantity: '.$new_code, null, 'mobileCode.log');
+				Mage::log('Mobile Code: - '.$phone.' - Quantity: '.$new_code, null, 'mobileCode.log');
 				/* save to database: customer_verify_mobile table */
 				$phone_to_database = $verify_helper->formatPhoneToDatabase($data['phone_number']);
 				$verify_helper->saveVerify($phone_to_database, $new_code);

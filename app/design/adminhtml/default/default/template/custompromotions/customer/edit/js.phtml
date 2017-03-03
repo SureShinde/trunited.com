@@ -1,0 +1,56 @@
+<script type="text/javascript">
+    //<![CDATA[
+    var $j = jQuery.noConflict();
+    function checkMobileNumber(e)
+    {
+        var er = /^\d+$/;
+
+        if (!er.test(e.val().replace(/[\(\)-\s]/g,''))) {
+            if (e.val().length >= 3) {
+                e.val('');
+            } else {
+                $j('#refers_mobile_error').show();
+            }
+            return false;
+        } else {
+            $j('#refers_mobile_error').hide();
+        }
+
+        e.val(formatMobile(e.val()));
+    }
+
+    function formatMobile(phone) {
+        var _number = phone.replace(/^(\d{3})(\d{3})(\d{4})+$/, "($1) $2-$3");
+        if (_number.length <= 14)
+            return _number;
+        else {
+            return _number.substr(0, 14);
+        }
+    }
+
+    $j(function () {
+        $j("#_accountphone_number").keyup(function (e) {
+            checkMobileNumber($j(this));
+        });
+
+        $j("#_accountalternate_number").keyup(function (e) {
+            checkMobileNumber($j(this));
+        });
+
+        $j(document).ready(function(){
+            var phone_number = $j('#_accountphone_number');
+            var alternate_number = $j('#_accountalternate_number');
+            if(phone_number.val() != '')
+            {
+                phone_number.val(formatMobile(phone_number.val()));
+            }
+
+            if(alternate_number.val() != '')
+            {
+                alternate_number.val(formatMobile(alternate_number.val()));
+            }
+        });
+    });
+
+    //]]>
+</script>

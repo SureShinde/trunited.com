@@ -550,4 +550,11 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
         $customer->save();
     }
 
+    public function customerInfoAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $customers = Mage::getModel('customer/customer')->load($id);
+        zend_debug::dump($customers->debug());
+    }
+
 }

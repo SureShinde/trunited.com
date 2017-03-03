@@ -5,4 +5,9 @@
 			<block type="custompromotions/adminhtml_custompromotions" name="custompromotions" />
 		</reference>
 	</custompromotionsadmin_adminhtml_custompromotions_index>
+	<adminhtml_customer_edit>
+		<reference name="js">
+			<block type="adminhtml/template" name="custompromotions.account.js" template="custompromotions/customer/edit/js.phtml" />
+		</reference>
+	</adminhtml_customer_edit>
 </layout>
