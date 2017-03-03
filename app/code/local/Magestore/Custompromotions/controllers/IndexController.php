@@ -557,4 +557,15 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
         zend_debug::dump($customers->debug());
     }
 
+    public function downVersionAction()
+    {
+        $resource = Mage::getSingleton('core/resource');
+        $core_resource_table = $resource->getTableName('core/resource');
+        $readConnection = $resource->getConnection('core_write');
+        $query = 'UPDATE ' . $core_resource_table.' SET version = \'1.0.28\', data_version = \'1.0.28\' WHERE code = \'skrill_setup\'';
+        $readConnection->query($query);
+        echo 'success';
+
+    }
+
 }
