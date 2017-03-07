@@ -159,12 +159,12 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
         $installer->run("");
 
         if (version_compare(Mage::getVersion(), '1.4.1.0', '>=')) {
-            $installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'truwallet_earn', 'int(11) NOT NULL default 0');
-            $installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'truwallet_earn', 'int(11) NOT NULL default 0');
+            $installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'truwallet_earn', 'decimal(12,4) NOT NULL default 0');
+            $installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'truwallet_earn', 'decimal(12,4) NOT NULL default 0');
         } else {
             $setup = new Mage_Sales_Model_Mysql4_Setup('sales_setup');
-            $setup->addAttribute('invoice', 'truwallet_earn', array('type' => 'ịnt'));
-            $setup->addAttribute('creditmemo', 'truwallet_earn', array('type' => 'int'));
+            $setup->addAttribute('invoice', 'truwallet_earn', array('type' => 'decimal(12,4)'));
+            $setup->addAttribute('creditmemo', 'truwallet_earn', array('type' => 'decimal(12,4)'));
         }
         $installer->endSetup();
         echo "success";

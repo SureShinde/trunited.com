@@ -181,7 +181,7 @@ class Magestore_TruWallet_Model_Observer
 
         // Refund point to customer (that he used to spend)
         if (isset($input['refund_truWallet']) && $input['refund_truWallet'] > 0) {
-            $refundTruWallet = (int)$input['refund_truWallet'];
+            $refundTruWallet = $input['refund_truWallet'];
             $maxPoint  = $order->getData('truwallet_discount');
             $refundBalances = min($refundTruWallet, $maxPoint);
             $creditmemo->setTruwalletEarn(max($refundBalances, 0));
