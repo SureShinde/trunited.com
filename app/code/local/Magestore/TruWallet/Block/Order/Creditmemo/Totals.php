@@ -38,6 +38,7 @@ class Magestore_TruWallet_Block_Order_Creditmemo_Totals extends Mage_Core_Block_
     {
         $totalsBlock = $this->getParentBlock();
         $creditmemo = $totalsBlock->getCreditmemo();
+
         if ($creditmemo->getTruwalletDiscount() > 0.0001) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code' => $this->getCode(),

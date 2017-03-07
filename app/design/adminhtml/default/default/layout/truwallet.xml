@@ -130,6 +130,11 @@
 	<adminhtml_sales_order_index>
 		<update handle="sales_order_grid_update_handle" />
 	</adminhtml_sales_order_index>
+	<adminhtml_sales_order_view>
+		<reference name="order_totals">
+			<block type="truwallet/adminhtml_totals_order_point" name="truwallet.total.point" />
+		</reference>
+	</adminhtml_sales_order_view>
 
 	<adminhtml_sales_order_creditmemo_new>
 		<reference name="creditmemo_totals">

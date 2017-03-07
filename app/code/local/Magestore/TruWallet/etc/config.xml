@@ -217,14 +217,7 @@
                     </truwallet_order_save_after>
                 </observers>
             </order_cancel_after>
-            <sales_order_creditmemo_save_after>
-                <observers>
-                    <truwallet_sales_order_creditmemo_save_after>
-                        <class>truwallet/observer</class>
-                        <method>creditmemoSaveAfter</method>
-                    </truwallet_sales_order_creditmemo_save_after>
-                </observers>
-            </sales_order_creditmemo_save_after>
+
             <controller_action_predispatch>
                 <observers>
                     <truwallet_controller_action_predispatch>
@@ -234,6 +227,25 @@
                     </truwallet_controller_action_predispatch>
                 </observers>
             </controller_action_predispatch>
+
+            <adminhtml_sales_order_creditmemo_register_before>
+                <observers>
+                    <truwallet_adminhtml_sales_order_creditmemo_register_before>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>salesOrderCreditmemoRegisterBefore</method>
+                    </truwallet_adminhtml_sales_order_creditmemo_register_before>
+                </observers>
+            </adminhtml_sales_order_creditmemo_register_before>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <truwallet_sales_order_creditmemo_save_after>
+                        <class>truwallet/observer</class>
+                        <method>creditmemoSaveAfter</method>
+                    </truwallet_sales_order_creditmemo_save_after>
+                </observers>
+            </sales_order_creditmemo_save_after>
+
         </events>
         <template>
             <email>

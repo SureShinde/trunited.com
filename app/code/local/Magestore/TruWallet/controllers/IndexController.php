@@ -151,6 +151,25 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		echo "success";
 	}
 
+    public function addRefundAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("");
+
+        if (version_compare(Mage::getVersion(), '1.4.1.0', '>=')) {
+            $installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'truwallet_earn', 'int(11) NOT NULL default 0');
+            $installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'truwallet_earn', 'int(11) NOT NULL default 0');
+        } else {
+            $setup = new Mage_Sales_Model_Mysql4_Setup('sales_setup');
+            $setup->addAttribute('invoice', 'truwallet_earn', array('type' => 'ịnt'));
+            $setup->addAttribute('creditmemo', 'truwallet_earn', array('type' => 'int'));
+        }
+        $installer->endSetup();
+        echo "success";
+    }
+
 	public function checkAction()
 	{
 		Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();

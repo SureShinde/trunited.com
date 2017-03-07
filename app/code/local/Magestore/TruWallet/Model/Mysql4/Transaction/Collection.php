@@ -6,4 +6,18 @@ class Magestore_TruWallet_Model_Mysql4_Transaction_Collection extends Mage_Core_
 		parent::_construct();
 		$this->_init('truwallet/transaction');
 	}
+
+    public function getFieldTotal($field = 'changed_credit') {
+        $this->_renderFilters();
+
+        $sumSelect = clone $this->getSelect();
+        $sumSelect->reset(Zend_Db_Select::ORDER);
+        $sumSelect->reset(Zend_Db_Select::LIMIT_COUNT);
+        $sumSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $sumSelect->reset(Zend_Db_Select::COLUMNS);
+
+        $sumSelect->columns("SUM(`$field`)");
+
+        return $this->getConnection()->fetchOne($sumSelect, $this->_bindParams);
+    }
 }

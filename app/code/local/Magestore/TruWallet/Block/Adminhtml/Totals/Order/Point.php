@@ -26,25 +26,34 @@
  * @package     Magestore_RewardPoints
  * @author      Magestore Developer
  */
-class Magestore_TruWallet_Block_Adminhtml_Totals_Creditmemo_Point
-    extends Mage_Adminhtml_Block_Sales_Order_Totals_Item
+class Magestore_TruWallet_Block_Adminhtml_Totals_Order_Point extends Mage_Adminhtml_Block_Sales_Order_Totals_Item
 {
     /**
-     * add points value into creditmemo total
+     * add points value into order total
      *     
      */
     public function initTotals()
     {
         $totalsBlock = $this->getParentBlock();
-        $creditmemo = $totalsBlock->getCreditmemo();
+        $order = $totalsBlock->getOrder();
 
-        if ($creditmemo->getTruwalletEarn() > 0) {
+        $refundEarnedTruWallet = Mage::getResourceModel('truwallet/transaction_collection')
+            ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_REFUND_ORDER)
+            ->addFieldToFilter('changed_credit', array('gt' => 0))
+            ->addFieldToFilter('order_id', $order->getId())
+            ->getFieldTotal()
+            ;
+
+        $display_balance = Mage::helper('core')->currency($refundEarnedTruWallet, true, false);
+
+        if ($refundEarnedTruWallet > 0) {
             $totalsBlock->addTotal(new Varien_Object(array(
-                'code'  => 'truwallet_earn_label',
-                'label' => $this->__('Refund truWallet Balances'),
-                'value' => $creditmemo->getTruwalletEarn(),
+                'code'  => 'truWallet_refund_earned',
+                'label' => $this->__('Refund truWallet Funds'),
+                'value' => $display_balance,
                 'is_formated'   => true,
-            )), 'subtotal');
+                'area'  => 'footer',
+            )));
         }
     }
 }

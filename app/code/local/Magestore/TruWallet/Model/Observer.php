@@ -169,6 +169,32 @@ class Magestore_TruWallet_Model_Observer
         }
     }
 
+    public function salesOrderCreditmemoRegisterBefore($observer)
+    {
+        $request    = $observer['request'];
+        if($request->getActionName() == "updateQty") return $this;
+
+        $creditmemo = $observer['creditmemo'];
+
+        $input      = $request->getParam('creditmemo');
+        $order      = $creditmemo->getOrder();
+
+        // Refund point to customer (that he used to spend)
+        if (isset($input['refund_truWallet']) && $input['refund_truWallet'] > 0) {
+            $refundTruWallet = (int)$input['refund_truWallet'];
+            $maxPoint  = $order->getData('truwallet_discount');
+            $refundBalances = min($refundTruWallet, $maxPoint);
+            $creditmemo->setTruwalletEarn(max($refundBalances, 0));
+        }
+
+        //Brian allow creditmemo when creditmemo total equal zero
+        if (Mage::app()->getStore()->roundPrice($creditmemo->getGrandTotal()) <= 0) {
+            $creditmemo->setAllowZeroGrandTotal(true);
+        }
+
+        return $this;
+    }
+
     public function creditmemoSaveAfter(Varien_Event_Observer $observer)
     {
         //declare variables
@@ -176,32 +202,13 @@ class Magestore_TruWallet_Model_Observer
         $order_id = $creditmemo->getOrderId();
         $order = Mage::getSingleton('sales/order');
         $order->load($order_id);
-        $amount_credit = $creditmemo->getTruwalletDiscount();
+        $amount_credit = $creditmemo->getTruwalletEarn();
         $customer_id = $creditmemo->getCustomerId();
 
-        $check_memo = 0;
-        $check_order = 0;
-
         $memo_items = $creditmemo->getAllItems();
-        $order_items = $order->getAllItems();
         if(sizeof($memo_items) > 0)
         {
-            foreach ($memo_items as $memo)
-            {
-                if (!$memo->getParentItemId()) {
-                    $check_memo += $memo->getQty();
-                }
-            }
-
-            foreach ($order_items as $_order)
-            {
-                if (!$_order->getParentItemId()) {
-                    $check_order += $_order->getQtyOrdered();
-                }
-            }
-
-            if($check_memo == $check_order)
-            {
+            if ($creditmemo->getTruwalletEarn() > 0) {
                 $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer_id, $amount_credit);
                 $data = array(
                     'title' => Mage::helper('truwallet')->__('Refund order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getId())).'">'. $order->getIncrementId().'</a>'),
