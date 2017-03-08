@@ -578,6 +578,7 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
 
     public function checkAffiliateNameAction() {
 
+
         $affiliateName = $this->getRequest()->getParam('affiliate_name');
 
         $phone = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($affiliateName);
@@ -586,6 +587,8 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
 
         $first = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'firstname');
         $last = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'lastname');
+
+        if($_SERVER['REMOTE_ADDR'] == '101.99.23.40'){}
 
 
         $_collection = Mage::getModel('customer/customer')->getCollection()
@@ -612,6 +615,8 @@ class Magestore_Affiliateplus_AccountController extends Mage_Core_Controller_Fro
                 'account_name'=>'name',
             )
         );
+        $_collection->getSelect()->limit(1);
+
 
         if(sizeof($_collection) == 0){
             $html = "<div class='error-msg'>" . $this->__('Mobile # not found. Please check the # and search again.') . "</div>";
