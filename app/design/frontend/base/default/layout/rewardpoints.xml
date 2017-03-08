@@ -65,11 +65,11 @@
     </catalog_product_view>
     
     <!-- Checkout using Reward Points -->
-    <!--<checkout_cart_index>
+    <!-- <checkout_cart_index>
         <reference name="checkout.cart.coupon">
             <block type="rewardpoints/checkout_cart_point" name="checkout.cart.rewardpoints" template="rewardpoints/checkout/cart/point.phtml" />
         </reference>
-    </checkout_cart_index>-->
+    </checkout_cart_index> -->
     
     <!-- Order View -->
     <sales_order_view>

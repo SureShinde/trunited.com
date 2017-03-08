@@ -60,6 +60,11 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/product/truwallet_value', $store);
     }
 
+    public function getEnableChangeBalance($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/general/enable_change_balance', $store);
+    }
+
 
 
     public function isShowWarningMessage()

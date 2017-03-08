@@ -391,6 +391,7 @@
             <general>
                 <enable>1</enable>
                 <warning_message>The default warning message!</warning_message>
+                <enable_change_balance>0</enable_change_balance>
             </general>
             <product>
                 <enable>1</enable>

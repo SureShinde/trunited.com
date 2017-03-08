@@ -119,7 +119,7 @@ class Magestore_RewardPoints_Model_Adminhtml_Observer {
 
     /**
      * transfer reward points discount to Paypal gateway
-     *
+     * 
      * @param type $observer
      */
     public function paypalPrepareLineItems($observer) {

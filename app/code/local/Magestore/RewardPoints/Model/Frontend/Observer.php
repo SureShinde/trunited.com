@@ -37,29 +37,24 @@ class Magestore_RewardPoints_Model_Frontend_Observer {
     public function rewardpointsPaymentMethod($observer) {
         $block = $observer['block'];
         if (($block instanceof Mage_Checkout_Block_Onepage_Payment_Methods ||  $block instanceof Magestore_Webpos_Block_Onepage_Payment_Methods)  && Mage::helper('rewardpoints')->isEnableOutput()) {
-            $requestPath = $block->getRequest()->getRequestedRouteName()
+            /*$requestPath = $block->getRequest()->getRequestedRouteName()
                     . '_' . $block->getRequest()->getRequestedControllerName()
                     . '_' . $block->getRequest()->getRequestedActionName();
             if ($requestPath == 'checkout_onepage_index' &&  ! Mage::helper('core')->isModuleOutputEnabled('Amasty_Scheckout')) {
                 return;
             }
-//            hiepdd use max points default
             $checkoutSession = Mage::getSingleton('checkout/session');
             $spendingHelper = Mage::helper('rewardpoints/calculation_spending');
             if ($checkoutSession->getData('use_max') !==0 && $spendingHelper->isUseMaxPointsDefault()) {
                 $checkoutSession->setData('use_point', 1);
                 $checkoutSession->setData('use_max', 1);
             } 
-//            hiepdd end
             $transport = $observer['transport'];
             $html_addrewardpoints = $block->getLayout()->createBlock('rewardpoints/checkout_onepage_payment_rewrite_methods')->renderView();
             $html = $transport->getHtml();
-//            if (version_compare(Mage::getVersion(), '1.8.0', '>=') && Mage::app()->getRequest()->getRouteName() == 'checkout') {
-//                $html = '<dl class="sp-methods" id="checkout-payment-method-load">' . $html . '</dl>';
-//            }
             $html .= '<script type="text/javascript">checkOutLoadRewardpoints(' . Mage::helper('core')->jsonEncode(array('html' => $html_addrewardpoints)) . ');</script>';
 
-            $transport->setHtml($html);
+            $transport->setHtml($html);*/
         }
     }
 
