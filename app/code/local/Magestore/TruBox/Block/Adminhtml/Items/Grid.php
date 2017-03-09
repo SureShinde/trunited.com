@@ -14,6 +14,16 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
     protected function _prepareCollection()
     {
         $truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/trubox');
+        $productsTableName = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_varchar');
+        $customerTableName = Mage::getSingleton('core/resource')->getTableName('customer_entity');
+        $customerVarcharTableName = Mage::getSingleton('core/resource')->getTableName('customer_entity_varchar');
+
+        $entityTypeId = Mage::getModel('eav/entity')
+            ->setType('catalog_product')
+            ->getTypeId();
+        $prodNameAttrId = Mage::getModel('eav/entity_attribute')
+            ->loadByCode($entityTypeId, 'name')
+            ->getAttributeId();
 
         $collection = Mage::getModel('trubox/item')->getCollection();
         $collection->getSelect()
@@ -22,6 +32,25 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
                 "main_table.trubox_id = tb.trubox_id",
                 array("customer_id" => "tb.customer_id")
             );
+
+        $collection->getSelect()->joinLeft(
+            array('cpev' => $productsTableName),
+            'cpev.entity_id=main_table.product_id AND cpev.attribute_id=' . $prodNameAttrId . '',
+            array('product_name' => 'value')
+        );
+
+        $collection->getSelect()
+            ->join(array('ce1' => $customerTableName), 'ce1.entity_id=tb.customer_id', array('customer_email' => 'email'));
+
+        $fn = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'firstname');
+        $ln = Mage::getModel('eav/entity_attribute')->loadByCode('1', 'lastname');
+        $collection->getSelect()
+            ->join(array('ce2' => $customerVarcharTableName), 'ce2.entity_id=tb.customer_id', array('firstname' => 'value'))
+            ->where('ce2.attribute_id=' . $fn->getAttributeId())
+            ->join(array('ce3' => $customerVarcharTableName), 'ce3.entity_id=tb.customer_id', array('lastname' => 'value'))
+            ->where('ce3.attribute_id=' . $ln->getAttributeId())
+            ->columns(new Zend_Db_Expr("CONCAT(`ce2`.`value`, ' ',`ce3`.`value`) AS customer_name"));
+
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -40,6 +69,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             'header' => Mage::helper('trubox')->__('Customer Name'),
             'index' => 'customer_name',
             'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_Customer_Name',
+            'filter_name' => 'customer_name',
             'filter_condition_callback' => array($this, '_filterCustomerNameCallback')
         ));
 
@@ -61,7 +91,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
         $this->addColumn('price', array(
             'header' => Mage::helper('trubox')->__('Price'),
             'width' => '200px',
-            'type'  => 'price',
+            'type' => 'price',
             'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
             'index' => 'price',
         ));
@@ -127,19 +157,18 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             return $this;
         }
 
+        $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
+
         if (!empty($value)) {
             $_customers = Mage::getModel('customer/customer')->getCollection()
                 ->addAttributeToSelect('entity_id')
-                ->addAttributeToFilter('firstname', array('like' => '%'.$value.'%'))
-            ;
+                ->addAttributeToSelect('firstname')
+                ->addAttributeToFilter('firstname', array('like' => '%' . $value . '%'))
+                ->setOrder('firstname', $dir);
 
-            $rs = array();
-            if (sizeof($_customers) > 0) {
-                foreach ($_customers as $_customer) {
-                    $rs[] = $_customer->getId();
-                }
-            }
-            if(sizeof($rs) == 0)
+            $rs = $_customers->getColumnValues('entity_id');
+
+            if (sizeof($rs) == 0)
                 $collection->getSelect()->where('tb.customer_id IS NULL');
             else
                 $collection->getSelect()->where('tb.customer_id IN (' . implode(',', $rs) . ')');
@@ -159,8 +188,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             $_customers = Mage::getModel('customer/customer')->getCollection()
                 ->addAttributeToSelect('entity_id')
                 ->addAttributeToSelect('email')
-                ->addAttributeToFilter('email', array('like' => '%'.$value.'%'))
-            ;
+                ->addAttributeToFilter('email', array('like' => '%' . $value . '%'));
 
             $rs = array();
             if (sizeof($_customers) > 0) {
@@ -168,7 +196,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
                     $rs[] = $_customer->getId();
                 }
             }
-            if(sizeof($rs) == 0)
+            if (sizeof($rs) == 0)
                 $collection->getSelect()->where('tb.customer_id IS NULL');
             else
                 $collection->getSelect()->where('tb.customer_id IN (' . implode(',', $rs) . ')');
@@ -187,8 +215,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
         if (!empty($value)) {
             $products = Mage::getModel('catalog/product')->getCollection()
                 ->addAttributeToSelect('entity_id')
-                ->addAttributeToFilter('name', array('like' => '%'.$value.'%'))
-            ;
+                ->addAttributeToFilter('name', array('like' => '%' . $value . '%'));
 
             $rs = array();
             if (sizeof($products) > 0) {
@@ -196,7 +223,7 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
                     $rs[] = $product->getId();
                 }
             }
-            if(sizeof($rs) == 0)
+            if (sizeof($rs) == 0)
                 $collection->getSelect()->where('main_table.product_id IS NULL');
             else
                 $collection->getSelect()->where('main_table.product_id IN (' . implode(',', $rs) . ')');
