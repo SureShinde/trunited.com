@@ -51,7 +51,8 @@ class Magestore_TruWallet_Model_Observer
     {
         $order = $observer['order'];
         if ($order->getTruwalletDiscount() < 0.0001 || Mage::app()->getStore()->roundPrice($order->getGrandTotal()) > 0
-            || $order->getState() === Mage_Sales_Model_Order::STATE_CLOSED || $order->isCanceled() || $order->canUnhold()) {
+            || $order->getState() === Mage_Sales_Model_Order::STATE_CLOSED || $order->isCanceled() || $order->canUnhold()
+        ) {
             return $this;
         }
         foreach ($order->getAllItems() as $item) {
@@ -85,7 +86,7 @@ class Magestore_TruWallet_Model_Observer
         if ($amount > 0) {
             $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer_id, -$amount);
             $data = array(
-                'title' => Mage::helper('truwallet')->__('Checkout by truWallet balance for order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getId())).'">'. $order->getIncrementId().'</a>'),
+                'title' => Mage::helper('truwallet')->__('Checkout by truWallet balance for order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
                 'order_id' => $order->getEntityId(),
                 'credit' => -$amount,
             );
@@ -103,6 +104,30 @@ class Magestore_TruWallet_Model_Observer
             $session->setBaseTruwalletCreditAmount(null);
         }
 
+        /* Calculate points from eCheck payment */
+        $payment_reward = Mage::helper('truwallet')->getTruWalletPayment();
+        if ($payment_reward != '' && strcasecmp($order->getPayment()->getMethod(), $payment_reward) == 0) {
+            $reward_points = Mage::helper('truwallet/payment')->calculatePoints($order);
+
+            if ($reward_points > 0) {
+                $customer = Mage::getModel('customer/customer')->load($customer_id);
+
+                $receiveObject = new Varien_Object();
+                $receiveObject->setData('product_credit', 0);
+                $receiveObject->setData('point_amount', $reward_points);
+                $receiveObject->setData('customer_exist', true);
+                $receiveObject->setData('order_id', $order->getIncrementId());
+
+                Mage::helper('rewardpoints/action')
+                    ->addTransaction(
+                        'earning_payment', $customer, $receiveObject
+                    );
+            }
+
+        }
+
+        /* END Calculate points from eCheck payment */
+
         Mage::getSingleton('checkout/session')->clear();
         Mage::getSingleton('checkout/cart')->truncate()->save();
     }
@@ -119,16 +144,15 @@ class Magestore_TruWallet_Model_Observer
         $truWallet_order_status = Mage::helper('truwallet')->getTruWalletOrderStatus();
         $items = $order->getAllItems();
         $is_only_virtual = 0;
-        foreach($items as $item)
-        {
+        foreach ($items as $item) {
             $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if($product->getTypeId() != 'virtual')
-            {
+            if ($product->getTypeId() != 'virtual') {
                 $is_only_virtual++;
             }
         }
         if ($order->getState() == $truWallet_order_status || $order->getStatus() == $truWallet_order_status
-            || (strcasecmp($order->getStatus(),'complete') == 0 && $is_only_virtual == 0)) {
+            || (strcasecmp($order->getStatus(), 'complete') == 0 && $is_only_virtual == 0)
+        ) {
             Mage::helper('truwallet/transaction')->addTruWalletFromProduct($order);
         }
 
@@ -155,7 +179,7 @@ class Magestore_TruWallet_Model_Observer
 
             $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer_id, $amount_credit);
             $data = array(
-                'title' => Mage::helper('truwallet')->__('Cancel order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getId())).'">'. $order->getIncrementId().'</a>'),
+                'title' => Mage::helper('truwallet')->__('Cancel order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
                 'order_id' => $order->getEntityId(),
                 'credit' => $amount_credit,
             );
@@ -171,18 +195,18 @@ class Magestore_TruWallet_Model_Observer
 
     public function salesOrderCreditmemoRegisterBefore($observer)
     {
-        $request    = $observer['request'];
-        if($request->getActionName() == "updateQty") return $this;
+        $request = $observer['request'];
+        if ($request->getActionName() == "updateQty") return $this;
 
         $creditmemo = $observer['creditmemo'];
 
-        $input      = $request->getParam('creditmemo');
-        $order      = $creditmemo->getOrder();
+        $input = $request->getParam('creditmemo');
+        $order = $creditmemo->getOrder();
 
         // Refund point to customer (that he used to spend)
         if (isset($input['refund_truWallet']) && $input['refund_truWallet'] > 0) {
             $refundTruWallet = $input['refund_truWallet'];
-            $maxPoint  = $order->getData('truwallet_discount');
+            $maxPoint = $order->getData('truwallet_discount');
             $refundBalances = min($refundTruWallet, $maxPoint);
             $creditmemo->setTruwalletEarn(max($refundBalances, 0));
         }
@@ -206,12 +230,11 @@ class Magestore_TruWallet_Model_Observer
         $customer_id = $creditmemo->getCustomerId();
 
         $memo_items = $creditmemo->getAllItems();
-        if(sizeof($memo_items) > 0)
-        {
+        if (sizeof($memo_items) > 0) {
             if ($creditmemo->getTruwalletEarn() > 0) {
                 $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer_id, $amount_credit);
                 $data = array(
-                    'title' => Mage::helper('truwallet')->__('Refund order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getId())).'">'. $order->getIncrementId().'</a>'),
+                    'title' => Mage::helper('truwallet')->__('Refund order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
                     'order_id' => $order->getEntityId(),
                     'credit' => $amount_credit,
                 );
@@ -232,20 +255,58 @@ class Magestore_TruWallet_Model_Observer
         $router_name = Mage::app()->getRequest()->getRouteName();
         $module_name = Mage::app()->getRequest()->getModuleName();
 
-        if(Mage::helper('core')->isModuleOutputEnabled('Magestore_Onestepcheckout'))
-        {
-            if(strcasecmp($module_name,'onestepcheckout') == 0 && strcasecmp($action_name,'index') == 0
-                && strcasecmp($controller_name,'index') == 0 && strcasecmp($router_name,'onestepcheckout') == 0)
-            {
+        if (Mage::helper('core')->isModuleOutputEnabled('Magestore_Onestepcheckout')) {
+            if (strcasecmp($module_name, 'onestepcheckout') == 0 && strcasecmp($action_name, 'index') == 0
+                && strcasecmp($controller_name, 'index') == 0 && strcasecmp($router_name, 'onestepcheckout') == 0
+            ) {
                 Mage::getSingleton('checkout/session')->setCancelCredit(false);
             }
         } else {
-            if(strcasecmp($router_name,'checkout') == 0 && strcasecmp($action_name,'index') == 0
-                && strcasecmp($controller_name,'onepage') == 0)
-            {
+            if (strcasecmp($router_name, 'checkout') == 0 && strcasecmp($action_name, 'index') == 0
+                && strcasecmp($controller_name, 'onepage') == 0
+            ) {
                 Mage::getSingleton('checkout/session')->setCancelCredit(false);
             }
         }
 
+    }
+
+    public function predispatchCheckoutCartAdd(Varien_Event_Observer $observer)
+    {
+        if ($observer->getEvent()->getControllerAction()->getFullActionName() == 'checkout_cart_add') {
+            $productId = Mage::app()->getRequest()->getParam('product');
+            $product = Mage::getModel('catalog/product')->load($productId);
+
+            if (Mage::helper('custompromotions')->truWalletInCart() && strcasecmp($product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) != 0) {
+                Mage::app()->getResponse()->setRedirect(Mage::app()->getRequest()->getServer('HTTP_REFERER'));
+                Mage::getSingleton('checkout/session')->addError(
+                    Mage::helper('checkout')->__('Sorry, you can\'t add this product to cart while has truWallet Gift Card product')
+                );
+                $observer->getControllerAction()->setFlag("", Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
+            } else if (strcasecmp($product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0) {
+                $oCheckout = Mage::getSingleton('checkout/session');
+                $oQuote = $oCheckout->getQuote();
+                $oCart = $oQuote->getAllItems();
+                if (!empty($oCart)) {
+                    foreach ($oCart as $oItem) {
+                        if (strcasecmp($oItem->getProduct()->getSku(), Mage::helper('truwallet')->getTruWalletSku()) != 0) {
+                            $oQuote->removeItem($oItem->getId())->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function paymentMethodIsActive(Varien_Event_Observer $observer)
+    {
+        $methodInstance = $observer->getMethodInstance();
+        $result = $observer->getResult();
+        if ($methodInstance->getCode() == Mage::helper('truwallet')->getTruWalletPayment()) {
+            if(Mage::helper('custompromotions')->truWalletInCart())
+                $result->isAvailable = true;
+            else
+                $result->isAvailable = false;
+        }
     }
 }

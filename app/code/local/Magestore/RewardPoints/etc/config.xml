@@ -433,7 +433,8 @@
                 <earning_invoice>rewardpoints/action_earning_invoice</earning_invoice>
                 <earning_creditmemo>rewardpoints/action_earning_creditmemo</earning_creditmemo>
                 <earning_cancel>rewardpoints/action_earning_cancel</earning_cancel>
-                
+                <earning_payment>rewardpoints/action_earning_payment</earning_payment>
+
                 <!-- Sales - Spending Actions -->
                 <spending_order>rewardpoints/action_spending_order</spending_order>
                 <spending_creditmemo>rewardpoints/action_spending_creditmemo</spending_creditmemo>

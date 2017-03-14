@@ -1,5 +1,11 @@
 <?php $_product = $this->getProduct(); ?>
-<?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php
+if(strcasecmp($_product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0 && Mage::helper('truwallet')->isEnableModule())
+    $buttonTitle = $this->__('BUY NOW');
+else
+    $buttonTitle = $this->__('Add to Cart');
+
+?>
 <?php $isRequiredCondition = $_product->getData('conditional_agreements');?>
 <?php $agreement = Mage::getModel('checkout/agreement')->load(1); ?>
 <?php if($isRequiredCondition && $agreement->getIsActive()):?>
