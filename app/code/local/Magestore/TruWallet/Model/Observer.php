@@ -273,19 +273,19 @@ class Magestore_TruWallet_Model_Observer
 
     public function predispatchCheckoutCartAdd(Varien_Event_Observer $observer)
     {
+        $session = Mage::getSingleton('checkout/session');
         if ($observer->getEvent()->getControllerAction()->getFullActionName() == 'checkout_cart_add') {
             $productId = Mage::app()->getRequest()->getParam('product');
             $product = Mage::getModel('catalog/product')->load($productId);
 
             if (Mage::helper('custompromotions')->truWalletInCart() && strcasecmp($product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) != 0) {
                 Mage::app()->getResponse()->setRedirect(Mage::app()->getRequest()->getServer('HTTP_REFERER'));
-                Mage::getSingleton('checkout/session')->addError(
+                $session->addError(
                     Mage::helper('checkout')->__('Sorry, you can\'t add this product to cart while has truWallet Gift Card product')
                 );
                 $observer->getControllerAction()->setFlag("", Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
             } else if (strcasecmp($product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0) {
-                $oCheckout = Mage::getSingleton('checkout/session');
-                $oQuote = $oCheckout->getQuote();
+                $oQuote = $session->getQuote();
                 $oCart = $oQuote->getAllItems();
                 if (!empty($oCart)) {
                     foreach ($oCart as $oItem) {
@@ -293,6 +293,9 @@ class Magestore_TruWallet_Model_Observer
                             $oQuote->removeItem($oItem->getId())->save();
                         }
                     }
+
+                    $session->setBaseTruwalletCreditAmount(0);
+                    $session->setUseTruwalletCredit(false);
                 }
             }
         }

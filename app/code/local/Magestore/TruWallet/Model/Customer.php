@@ -25,6 +25,7 @@ class Magestore_TruWallet_Model_Customer extends Mage_Core_Model_Abstract
 	{
 		$store = Mage::app()->getStore();
 		return $store->convertPrice($credit_amount);
+		//return  Mage::helper('core')->currency($credit_amount, true, false);
 	}
 
 	/**

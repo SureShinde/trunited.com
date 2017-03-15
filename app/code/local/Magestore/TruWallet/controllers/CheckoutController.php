@@ -50,10 +50,7 @@ class Magestore_TruWallet_CheckoutController extends Mage_Core_Controller_Front_
                 else 
                     $amount = $request->getParam('credit_amount');
 
-                if($amount == 0)
-                {
-                    $session->setCancelCredit(true);
-                }
+                $session->setCancelCredit(true);
 
                 $base_amount = Mage::getModel('truwallet/customer')
                     ->getConvertedToBaseTruwalletCredit($amount);
@@ -62,8 +59,8 @@ class Magestore_TruWallet_CheckoutController extends Mage_Core_Controller_Front_
                 $base_credit_amount = ($base_amount > $base_customer_credit) ? $base_customer_credit : $base_amount;
 
                 $session->setBaseTruwalletCreditAmount($base_credit_amount);
-
                 $session->setUseTruwalletCredit(true);
+                
                 $result = array();
                 $result['success'] = 1;
                 $result['price0'] = 0;
@@ -84,7 +81,6 @@ class Magestore_TruWallet_CheckoutController extends Mage_Core_Controller_Front_
 
                     $result['current_balance'] = $account->getTruwalletCredit() - $amount <= 0 ? 0 : $account->getTruwalletCredit() - $amount;
                 } else {
-                    //update lai payment khi khong co one step
                     Mage::getSingleton('checkout/type_onepage')->getQuote()->collectTotals()->save();
                     $result['amount'] = Mage::getModel('truwallet/customer')
                         ->getConvertedFromBaseTruwalletCredit($session->getBaseTruwalletCreditAmount());

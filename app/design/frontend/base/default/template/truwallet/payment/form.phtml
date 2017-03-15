@@ -11,16 +11,16 @@
 
                 <label for="<?php echo $_code ?>"
                        style="font-weight: bold; color: #666;display:inline;float:none;padding-left:10px">
-                    <?php echo $this->__('Use truWallet balance to check out  (') ?>
-                    <b id="truwallet_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b> <?php echo $this->__(" available )"); ?>
+                    <?php echo $this->__('truWallet current balance: ') ?>
+                    <b id="truwallet_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b>
                 </label>
             <form action="" method="post" onsubmit="return false;" id="truwallet-payment-form">
                 <div id="cc_checkout">
                     <div class="checkout-credit-use">
                             <span style="float:left;margin-right: 5px;"><strong
-                                    style="margin-left: 7px;"> <?php echo $this->__('You\'re using:') ?></strong></span>
+                                    style="margin-left: 7px;"> <?php echo $this->__('Apply to this order:') ?></strong></span>
                             <span style="float: left"
-                                  id="checkout-cc-input"><strong><?php echo $this->getCurrentCreditAmountLabel(); ?></strong></span>
+                                  id="checkout-cc-input"><strong><?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false); ?></strong></span>
 
                         <div style="display: none"
                              class="checkout_cc_input_alert" id="checkout_cc_input_alert">
