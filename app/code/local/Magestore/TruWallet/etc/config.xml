@@ -246,6 +246,25 @@
                 </observers>
             </sales_order_creditmemo_save_after>
 
+            <controller_action_predispatch_checkout_cart_add>
+                <observers>
+                    <truwallet_controller_action_predispatch_checkout_cart_add>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>predispatchCheckoutCartAdd</method>
+                    </truwallet_controller_action_predispatch_checkout_cart_add>
+                </observers>
+            </controller_action_predispatch_checkout_cart_add>
+            <payment_method_is_active>
+                <observers>
+                    <truwallet_payment_method_is_active>
+                        <type>singleton</type>
+                        <class>truwallet/observer</class>
+                        <method>paymentMethodIsActive</method>
+                    </truwallet_payment_method_is_active>
+                </observers>
+            </payment_method_is_active>
+
         </events>
         <template>
             <email>
@@ -399,6 +418,9 @@
                 <truwallet_value>50</truwallet_value>
                 <order_status>complete</order_status>
                 <notify_message>Important: truWallet cannot be used as a payment option for Gift Cards.</notify_message>
+                <truwallet_payment>authnetcim_ach</truwallet_payment>
+                <truwallet_order_amount>50</truwallet_order_amount>
+                <truwallet_reward_point>3</truwallet_reward_point>
             </product>
             <sharewallet>
                 <expire_date>7</expire_date>

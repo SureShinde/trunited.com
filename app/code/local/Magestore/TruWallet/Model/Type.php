@@ -11,6 +11,7 @@ class Magestore_TruWallet_Model_Type extends Varien_Object
 	const TYPE_TRANSACTION_CHECKOUT_ORDER = 7;
 	const TYPE_TRANSACTION_REFUND_ORDER = 8;
 	const TYPE_TRANSACTION_PURCHASE_GIFT_CARD = 9;
+//	const TYPE_TRANSACTION_RECEIVE_FROM_ECHECK_PAYMENT = 10;
 
 	static public function getOptionArray(){
 		return array(
@@ -23,6 +24,7 @@ class Magestore_TruWallet_Model_Type extends Varien_Object
 			self::TYPE_TRANSACTION_CHECKOUT_ORDER   => Mage::helper('truwallet')->__('Spend truWallet balance to purchase order'),
 			self::TYPE_TRANSACTION_REFUND_ORDER   => Mage::helper('truwallet')->__('Retrieve truWallet balance spent on refunded order'),
 			self::TYPE_TRANSACTION_PURCHASE_GIFT_CARD   => Mage::helper('truwallet')->__('Purchased truWallet Gift Card on order'),
+//			self::TYPE_TRANSACTION_RECEIVE_FROM_ECHECK_PAYMENT   => Mage::helper('truwallet')->__('Received truWallet money from Sharing'),
 		);
 	}
 	

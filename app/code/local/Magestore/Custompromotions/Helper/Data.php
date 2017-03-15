@@ -193,7 +193,7 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function truWalletInCart()
     {
-        $cart = Mage::getModel('checkout/cart')->getQuote();
+        $cart = Mage::getModel('checkout/session')->getQuote();
         $items = $cart->getAllItems();
         if(sizeof($items) > 0){
             $sku_truWallet = $this->getConfigHelper()->getTruWalletSku();

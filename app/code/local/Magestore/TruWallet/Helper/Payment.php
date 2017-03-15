@@ -81,4 +81,38 @@ class Magestore_TruWallet_Helper_Payment extends Mage_Payment_Helper_Data
         return $res;
     }
 
+    public function getActivPaymentMethods()
+    {
+        $payments = Mage::getSingleton('payment/config')->getActiveMethods();
+        $methods = array(array('value' => '', 'label' => Mage::helper('adminhtml')->__('Please Select')));
+
+        foreach ($payments as $paymentCode => $paymentModel) {
+            $is_active = Mage::getStoreConfig('payment/'. $paymentCode .'/active');
+            if($is_active){
+                $paymentTitle = Mage::getStoreConfig('payment/' . $paymentCode . '/title');
+                $methods[$paymentCode] = array(
+                    'label' => $paymentTitle,
+                    'value' => $paymentCode,
+                );
+            }
+        }
+
+        return $methods;
+
+    }
+
+    public function calculatePoints($order)
+    {
+        $grandTotal = $order->getGrandTotal();
+        $amount = Mage::helper('truwallet')->getTruWalletOrderAmount();
+        $points = Mage::helper('truwallet')->getTruWalletPaymentPoint();
+        
+        $reward = 0;
+        if($amount > 0 && $grandTotal > $amount){
+            $reward += ($grandTotal / $amount) * $points;
+        }
+
+        return $reward;
+    }
+
 }

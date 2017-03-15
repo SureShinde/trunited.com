@@ -79,7 +79,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             $transaction->setData($actionModel->getData('transaction_data'));
         }
 
-        $transaction->setData('point_amount', (int)$actionModel->getPointAmount());
+        $transaction->setData('point_amount', $actionModel->getPointAmount());
         $transaction->setData('product_credit', $actionModel->getProductCredit());
         $transaction->setData('product_credit_title', (int)$actionModel->getProductCreditTitle());
 
