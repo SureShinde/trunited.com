@@ -27,9 +27,9 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 
 		$session->setData('onestepcheckout_giftwrap_amount', $wrapTotal);
 
-//		$address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
-//		$address->setGrandTotal($address->getGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());
-//		$address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());
+		$address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
+		$address->setGrandTotal($address->getGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());
+		$address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());
 		return $this;
 	}
 
