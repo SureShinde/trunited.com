@@ -202,4 +202,13 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		}
 	}
 
+	public function plasticAction()
+	{
+		$collection = Mage::helper('truwallet/giftcard')->getPlasticGiftCards();
+		$_collection = Mage::helper('truwallet/giftcard')->plasticInCart();
+		zend_debug::dump($collection);
+		zend_debug::dump($_collection);
+
+	}
+
 }
