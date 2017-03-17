@@ -139,6 +139,8 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
             $_truBox = Mage::getModel('trubox/trubox');
             $_truBox->setData('customer_id', $customer_id);
             $_truBox->setData('status', 'open');
+            $_truBox->setData('created_at', now());
+            $_truBox->setData('updated_at', now());
             $_truBox->save();
             $truBoxId = $_truBox->getId();
         }
@@ -186,6 +188,8 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
                 $_billing->setData('city',$customer_billing->getCity());
                 $_billing->setData('zipcode',$customer_billing->getPostcode());
                 $_billing->setData('country',$customer_billing->getCountryId());
+                $_billing->setData('created_at', now());
+                $_billing->setData('updated_at', now());
                 $_billing->save();
             }
         }
@@ -216,6 +220,8 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
                 $_shipping->setData('city',$customer_shipping->getCity());
                 $_shipping->setData('zipcode',$customer_shipping->getPostcode());
                 $_shipping->setData('country',$customer_shipping->getCountryId());
+                $_shipping->setData('created_at', now());
+                $_shipping->setData('updated_at', now());
                 $_shipping->save();
             }
         }

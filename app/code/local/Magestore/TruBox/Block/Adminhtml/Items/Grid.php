@@ -103,6 +103,20 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             'type' => 'number',
         ));
 
+        $this->addColumn('created_at', array(
+            'header'    => Mage::helper('trubox')->__('Created At'),
+            'align'     =>'right',
+            'index'     => 'created_at',
+            'type'		=> 'date'
+        ));
+
+        $this->addColumn('updated_at', array(
+            'header'    => Mage::helper('trubox')->__('Updated At'),
+            'align'     =>'right',
+            'index'     => 'updated_at',
+            'type'		=> 'date'
+        ));
+
         $this->addColumn('action',
             array(
                 'header' => Mage::helper('trubox')->__('Action'),

@@ -95,7 +95,10 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
             if ($billing_model == null) {
                 $billing_model = Mage::getModel('trubox/address');
+                $billing['created_at'] = now();
             }
+
+            $billing['updated_at'] = now();
             $billing_model->addData($billing);
             $billing_model->save();
             /* end save data to billing address */
@@ -108,7 +111,9 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
             if ($shipping_model == null) {
                 $shipping_model = Mage::getModel('trubox/address');
+                $shipping['created_at'] = now();
             }
+            $shipping['updated_at'] = now();
             $shipping_model->addData($shipping);
             $shipping_model->save();
             /* end save data to shipping address */
@@ -136,8 +141,12 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 ->getFirstItem()
             ;
 
-            if($payment == null)
+            if($payment == null){
                 $payment = Mage::getModel('trubox/payment');
+                $address['created_at'] = now();
+            }
+
+            $address['updated_at'] = now();
 
             $payment->addData($address);
             $payment->save();
@@ -211,6 +220,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                         $item->delete();
                     else{
                         $item->setQty($qty);
+                        $item->setUpdatedAt(now());
                         $transactionSave->addObject($item);
                     }
                 }
@@ -532,6 +542,28 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
              ALTER TABLE {$setup->getTable('trubox/item')} DROP COLUMN  `order_id`;
 
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb6Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('trubox/trubox')} ADD `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+            ALTER TABLE {$setup->getTable('trubox/trubox')} ADD `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+
+            ALTER TABLE {$setup->getTable('trubox/address')} ADD `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+            ALTER TABLE {$setup->getTable('trubox/address')} ADD `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+
+            ALTER TABLE {$setup->getTable('trubox/payment')} ADD `created_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
+            ALTER TABLE {$setup->getTable('trubox/payment')} ADD `updated_at` datetime NULL DEFAULT CURRENT_TIMESTAMP;
 		");
         $installer->endSetup();
         echo "success";
