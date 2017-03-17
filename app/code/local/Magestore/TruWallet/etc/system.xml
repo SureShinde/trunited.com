@@ -187,6 +187,45 @@
 							<show_in_store>0</show_in_store>
 							<comment>Choose Yes if you allow using credit for Shipping Fee.</comment>
 						</shipping>
+
+						<background_color>
+							<label>Background Color</label>
+							<frontend_type>text</frontend_type>
+							<validate>color</validate> <!-- This is important -->
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Specify the background color of text truWallet on checkout page. Default: red: #f2dede, yellow: #fcf8e3, green: #dff0d8</comment>
+						</background_color>
+						<text_color>
+							<label>Text Color</label>
+							<frontend_type>text</frontend_type>
+							<validate>color</validate> <!-- This is important -->
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Specify the color of text truWallet on checkout page. Default: red: #a94442, yellow: #8a6d3b, green: #3c763d</comment>
+						</text_color>
+						<current_label translate="label">
+							<label>The label current balance</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment></comment>
+						</current_label>
+						<applied_label translate="label">
+							<label>The label applied balance</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>24</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment></comment>
+						</applied_label>
 					</fields>
 				</spending>
 

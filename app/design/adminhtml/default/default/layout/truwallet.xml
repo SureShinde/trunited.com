@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+	<adminhtml_system_config_edit>
+		<reference name="head">
+			<action method="addJs"><file>jscolor/jscolor.js</file></action>
+		</reference>
+	</adminhtml_system_config_edit>
+
 	<truwalletadmin_adminhtml_truwallet_index>
 		<reference name="content">
 			<block type="truwallet/adminhtml_truwallet" name="truwallet" />

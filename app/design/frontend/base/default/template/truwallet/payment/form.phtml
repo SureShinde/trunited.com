@@ -1,5 +1,6 @@
 <?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
-<?php $_code = 'truwallet'; ?>
+<?php $_code = 'truwallet';
+?>
 <?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
     <dl id="<?php echo $_code ?>_container">
         <?php if (Mage::helper('customer')->isLoggedIn()): ?>
@@ -9,16 +10,15 @@
                        onclick="changeUseCustomercredit(this, '<?php echo $this->getUrl('truwallet/index/checkCredit') ?>');"
                        checked="checked"/>
 
-                <label for="<?php echo $_code ?>"
-                       style="font-weight: bold; color: #666;display:inline;float:none;padding-left:10px">
-                    <?php echo $this->__('truWallet current balance: ') ?>
+                <span style="padding-left:10px">
+                    <?php echo $this->getLabelCurrent() ?>:
                     <b id="truwallet_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b>
-                </label>
+                </span>
             <form action="" method="post" onsubmit="return false;" id="truwallet-payment-form">
                 <div id="cc_checkout">
                     <div class="checkout-credit-use">
                             <span style="float:left;margin-right: 5px;"><strong
-                                    style="margin-left: 7px;"> <?php echo $this->__('Apply to this order:') ?></strong></span>
+                                    style="margin-left: 7px;"> <?php echo $this->getLabelApplied() ?>: </strong></span>
                             <span style="float: left"
                                   id="checkout-cc-input"><strong><?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false); ?></strong></span>
 
@@ -107,6 +107,14 @@
                 <?php }?>
             });
         </script>
+        <style type="text/css">
+            #onestepcheckout-payment-methods #truwallet_container .truwallet
+            {
+                background-color: #<?php echo $this->getBackgroundColor()?>;
+                color: #<?php echo $this->getTextColor()?>;
+                border: 1px solid #<?php echo $this->getBackgroundColor()?>;
+            }
+        </style>
         </dt>
     </dl>
 <?php endif;?>

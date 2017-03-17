@@ -32,7 +32,7 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getSpendConfig($code, $store = null)
     {
-        return Mage::getStoreConfig('truwallet/spend/' . $code, $store);
+        return Mage::getStoreConfig('truwallet/spending/' . $code, $store);
     }
 
     public function getWarningMessage($store = null)
@@ -79,7 +79,6 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('truwallet/product/truwallet_reward_point', $store);
     }
-
 
 
     public function isShowWarningMessage()

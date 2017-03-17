@@ -164,4 +164,24 @@ class Magestore_TruWallet_Block_Payment_Form extends Mage_Payment_Block_Form
             return true;
     }
 
+    public function getLabelCurrent()
+    {
+        return Mage::helper('truwallet')->getSpendConfig('current_label');
+    }
+
+    public function getLabelApplied()
+    {
+        return Mage::helper('truwallet')->getSpendConfig('applied_label');
+    }
+
+    public function getBackgroundColor()
+    {
+        return Mage::helper('truwallet')->getSpendConfig('background_color');
+    }
+
+    public function getTextColor()
+    {
+        return Mage::helper('truwallet')->getSpendConfig('text_color');
+    }
+
 }

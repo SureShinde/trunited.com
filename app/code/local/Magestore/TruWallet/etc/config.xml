@@ -425,10 +425,14 @@
             <sharewallet>
                 <expire_date>7</expire_date>
             </sharewallet>
-            <spend>
+            <spending>
                 <tax>1</tax>
                 <shipping>1</shipping>
-            </spend>
+                <background_color>FCF8E3</background_color>
+                <text_color>8a6d3b</text_color>
+                <current_label>truWallet current balance</current_label>
+                <applied_label>Applied to this order</applied_label>
+            </spending>
 
             <email>
                 <enable>1</enable>

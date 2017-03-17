@@ -206,6 +206,9 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 	{
 		$collection = Mage::helper('truwallet/giftcard')->getPlasticGiftCards();
 		$_collection = Mage::helper('truwallet/giftcard')->plasticInCart();
+		echo (Mage::getStoreConfig('truwallet/spend/background_color',Mage::app()->getStore()));
+		echo '<br />';
+		echo (Mage::getStoreConfig('truwallet/spend/text_color',Mage::app()->getStore()));
 		zend_debug::dump($collection);
 		zend_debug::dump($_collection);
 
