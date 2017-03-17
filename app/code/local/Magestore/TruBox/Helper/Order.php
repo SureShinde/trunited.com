@@ -167,7 +167,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             foreach ($items as $item)
             {
                 $product = Mage::getModel('catalog/product')->load($item->getProductId());
-                $inStock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getIsInStock();
 
                 if ($product->getIsInStock() && $product->isSaleable() === true) {
 
@@ -373,6 +372,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);
             $service->submitAll();
+            /* Fix bug remove items in carts after creating orders */
+            $quote->setIsActive(false)->save();
+            /* END Fix bug remove items in carts after creating orders */
 
             $increment_id = $service->getOrder()->getIncrementId();
 
