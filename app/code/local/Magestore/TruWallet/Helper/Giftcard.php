@@ -33,17 +33,18 @@ class Magestore_TruWallet_Helper_Giftcard extends Mage_Core_Helper_Abstract
 
         $items = $cart->getAllItems();
         if(sizeof($items) > 0){
-            $flag = false;
+            $is_normal = 0;
+            $is_plastic = false;
             foreach ($cart->getAllItems() as $item) {
                 $product_id = $item->getProduct()->getId();
                 if(in_array($product_id, $plastics))
                 {
-                    $flag = true;
+                    $is_plastic = true;
                 } else if(strcasecmp($item->getProduct()->getTypeId(),Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL) != 0)
-                    $flag = false;
+                    $is_normal++;
             }
 
-            return $flag;
+            return ($is_plastic && $is_normal == 0);
         } else {
             return false;
         }

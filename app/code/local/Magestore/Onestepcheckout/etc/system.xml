@@ -890,6 +890,19 @@
                             <comment><![CDATA[Enter the amount of Get It Now fee.]]>
                             </comment>
                         </giftwrap_amount>
+                        <giftwrap_amount_plastic translate="label">
+                            <label>Get It Now Fee For Plastic Gift Cards</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>18</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable_giftwrap>1</enable_giftwrap>
+                            </depends>
+                            <comment><![CDATA[Enter the amount of Get It Now fee for Plastic Gift Cards.]]>
+                            </comment>
+                        </giftwrap_amount_plastic>
                     </fields>
                 </giftwrap>
                 <giftmessage translate="label comment">

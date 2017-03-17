@@ -1100,6 +1100,7 @@ function minusproduct(id, url) {
     shippingLoad();
     paymentLoad();
     reviewLoad();
+    truboxLoad();
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1129,12 +1130,15 @@ function minusproduct(id, url) {
                                 var shipping_method = $('onestepcheckout-shipping-method-section');
                                 var order_review = $('checkout-review-load');
                                 var payment_method = $('onestepcheckout-payment-methods');
+                                var trubox_method = $('onestepcheckout-trubox-method-section');
                                 if (result.shipping_method && shipping_method)
                                     shipping_method.update(result.shipping_method);
                                 if (result.review)
                                     order_review.update(result.review);
                                 if (result.payment_method)
                                     payment_method.update(result.payment_method);
+                                if (result.trubox_method)
+                                    trubox_method.update(result.trubox_method);
 								
 								//Hide shipping and delivery sections if only virtual product in cart
 								var shipping_container = $('shipping-method-container');
@@ -1148,6 +1152,7 @@ function minusproduct(id, url) {
                                 shippingShow();
                                 paymentShow();
                                 reviewShow();
+                                truboxShow();
                                 $('onestepcheckout-button-place-order').disabled = false;
                                 $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                                 $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1162,6 +1167,7 @@ function minusproduct(id, url) {
                     shippingShow();
                     paymentShow();
                     reviewShow();
+                    truboxShow();
                     $('onestepcheckout-button-place-order').disabled = false;
                     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1178,6 +1184,7 @@ function addproduct(id, url) {
     shippingLoad();
     reviewLoad();
     paymentLoad();
+    truboxLoad();
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1192,6 +1199,7 @@ function addproduct(id, url) {
                             alert(result.error);
                             shippingShow();
                             reviewShow();
+                            truboxShow();
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                             $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1211,6 +1219,7 @@ function addproduct(id, url) {
                             shippingShow();
                             reviewShow();
                             paymentShow();
+                            truboxShow();
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                             $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1224,6 +1233,7 @@ function addproduct(id, url) {
                     shippingShow();
                     paymentShow();
                     reviewShow();
+                    truboxShow();
                     $('onestepcheckout-button-place-order').disabled = false;
                     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1270,6 +1280,30 @@ function shippingLoad() {
         $('control_overlay_shipping').show();
     if ($('onestepcheckout-shipping-method-section'))
         $('onestepcheckout-shipping-method-section').setStyle({
+            'opacity': '0.3',
+            'filter': 'alpha(opacity=30)'
+        });
+}
+
+function truboxShow() {
+    if ($('ajax-trubox'))
+        $('ajax-trubox').hide();
+    if ($('control_overlay_trubox'))
+        $('control_overlay_trubox').hide();
+    if ($('onestepcheckout-trubox-method-section'))
+        $('onestepcheckout-trubox-method-section').setStyle({
+            'opacity': '1',
+            'filter': 'alpha(opacity=100)'
+        });
+}
+
+function truboxLoad() {
+    if ($('ajax-trubox'))
+        $('ajax-trubox').show();
+    if ($('control_overlay_trubox'))
+        $('control_overlay_shipping').show();
+    if ($('onestepcheckout-trubox-method-section'))
+        $('onestepcheckout-trubox-method-section').setStyle({
             'opacity': '0.3',
             'filter': 'alpha(opacity=30)'
         });

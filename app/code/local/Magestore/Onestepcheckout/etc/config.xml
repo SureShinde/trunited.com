@@ -434,6 +434,9 @@
                 <city_characters>3</city_characters>
                 <rows>100</rows> -->
             </geoip>
+            <giftwrap>
+                <giftwrap_amount_plastic>0.99</giftwrap_amount_plastic>
+            </giftwrap>
             <style_management>
                 <style>orange</style>
                 <button>orange</button>

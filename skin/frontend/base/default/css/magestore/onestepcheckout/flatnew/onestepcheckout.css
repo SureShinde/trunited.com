@@ -97,6 +97,15 @@ button.onestepcheckout-btn-checkout{padding:5px 30px;border-radius:3px;width: 10
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li label{font-weight:400;font-size:13px}
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section ul li .price{font-weight:700;font-size:14px}
 #one-step-checkout-form .order-information ol li .onestepcheckout-shipping-method-section .sp-methods dt{font-size:14px;margin:0}
+
+.order-information ol li .onestepcheckout-trubox-method-section{float:left;width:100%;padding:12px 4%;margin:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.onestepcheckout-trubox-method-section .sp-methods dt{display:none}
+#one-step-checkout-form .order-information ol li .onestepcheckout-trubox-method-section ul li{float:left;width:100%;margin:5px 0;font-size:14px}
+#one-step-checkout-form input.radio{float:left;margin:6px 4px 4px 0}
+#one-step-checkout-form .order-information ol li .onestepcheckout-trubox-method-section ul li label{font-weight:400;font-size:13px; margin-top: 6px;}
+#one-step-checkout-form .order-information ol li .onestepcheckout-trubox-method-section ul li .price{font-weight:700;font-size:14px}
+#one-step-checkout-form .order-information ol li .onestepcheckout-trubox-method-section .sp-methods dt{font-size:14px;margin:0}
+
 .one-step-checkout .login{padding-bottom:20px}
 .one-step-checkout .address-order{width:100%;border:none;margin-top:10px}
 #remove_coupon_code_button{margin-top: 5px;display: inline-block;vertical-align: bottom;}

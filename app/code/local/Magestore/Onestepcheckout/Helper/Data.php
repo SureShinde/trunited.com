@@ -1,33 +1,39 @@
 <?php
 
-class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
+class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->settings = $this->getConfigData();
     }
 
-    public function enabledOnestepcheckout() {
+    public function enabledOnestepcheckout()
+    {
         if (Mage::getStoreConfig('onestepcheckout/general/active', Mage::app()->getStore(true)->getStoreId())) {
             return true;
         }
         return false;
     }
 
-    public function enabledDelivery() {
+    public function enabledDelivery()
+    {
         if (Mage::getStoreConfig('onestepcheckout/general/delivery_time_date', Mage::app()->getStore(true)->getStoreId())) {
             return true;
         }
         return false;
     }
 
-    public function enableRegistration() {
+    public function enableRegistration()
+    {
         if ($this->settings['enable_registration']) {
             return true;
         }
         return false;
     }
 
-    public function loadDataforDisabledFields(&$data) {
+    public function loadDataforDisabledFields(&$data)
+    {
         $configData = $this->getConfigData();
         if (!$configData['show_city']) {
             $data['city'] = '-';
@@ -51,7 +57,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $data;
     }
 
-    public function loadEmptyData(&$data) {
+    public function loadEmptyData(&$data)
+    {
         if (!isset($data['city']) || $data['city'] == '') {
             if ($this->settings['city'] != '') {
                 $data['city'] = $this->settings['city'];
@@ -89,7 +96,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $data;
     }
 
-    public function getConfigData() {
+    public function getConfigData()
+    {
         $configData = array();
         $configItems = array('general/active', 'general/checkout_title', 'general/checkout_description',
             'general/show_shipping_address', 'general/country_id',
@@ -119,7 +127,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $configData;
     }
 
-    public function isShowShippingAddress() {
+    public function isShowShippingAddress()
+    {
         if ($this->getOnepage()->getQuote()->isVirtual()) {
             return false;
         }
@@ -129,15 +138,18 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
     }
 
-    public function getOnePage() {
+    public function getOnePage()
+    {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
-    public function getCheckoutUrl() {
+    public function getCheckoutUrl()
+    {
         return Mage::getUrl('onestepcheckout');
     }
 
-    public function savePaymentMethod($data) {
+    public function savePaymentMethod($data)
+    {
         if (empty($data)) {
             return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
         }
@@ -155,7 +167,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return array();
     }
 
-    public function saveShippingMethod($shippingMethod) {
+    public function saveShippingMethod($shippingMethod)
+    {
         if (empty($shippingMethod)) {
             return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid shipping method.'));
         }
@@ -168,14 +181,16 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return array();
     }
 
-    public function allowGuestCheckout() {
+    public function allowGuestCheckout()
+    {
         $_quote = $this->getOnepage()->getQuote();
         $_isAllowed = $this->settings['allow_guest'];
         if ($_isAllowed) {
             $isContain = false;
             foreach ($_quote->getAllItems() as $item) {
                 if (($product = $item->getProduct()) &&
-                        $product->getTypeId() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE) {
+                    $product->getTypeId() == Mage_Downloadable_Model_Product_Type::TYPE_DOWNLOADABLE
+                ) {
                     $isContain = true;
                 }
             }
@@ -187,18 +202,21 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $_isAllowed;
     }
 
-    public function isUseDefaultDataforDisabledFields() {
+    public function isUseDefaultDataforDisabledFields()
+    {
         return $this->settings['use_for_disabled_fields'];
     }
 
-    public function isShowNewsletter() {
+    public function isShowNewsletter()
+    {
         if ($this->settings['show_newsletter'] && !$this->isSignUpNewsletter())
             return true;
         else
             return false;
     }
 
-    public function isSignUpNewsletter() {
+    public function isSignUpNewsletter()
+    {
         if ($this->isCustomerLoggedIn()) {
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             if (isset($customer))
@@ -210,40 +228,49 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
     }
 
-    public function isSubscribeByDefault() {
+    public function isSubscribeByDefault()
+    {
         return $this->settings['newsletter_default_checked'];
     }
 
-    public function enableOrderComment() {
+    public function enableOrderComment()
+    {
         return $this->settings['show_comment'];
     }
 
-    public function showDiscount() {
+    public function showDiscount()
+    {
         return $this->settings['show_discount'];
     }
 
-    public function enableTermsAndConditions() {
+    public function enableTermsAndConditions()
+    {
         return $this->settings['enable_terms'];
     }
 
-    public function getTermPopupWidth() {
+    public function getTermPopupWidth()
+    {
         return $this->settings['term_width'];
     }
 
-    public function getTermPopupHeight() {
+    public function getTermPopupHeight()
+    {
         return $this->settings['term_height'];
     }
 
-    public function getTermsConditionsHtml() {
+    public function getTermsConditionsHtml()
+    {
         return $this->settings['term_html'];
     }
 
-    public function enableNotifyAdmin() {
+    public function enableNotifyAdmin()
+    {
         return $this->settings['enable_notification'];
     }
 
-    public function getEmailArray() {
-        $email_string = (string) $this->settings['notification_email'];
+    public function getEmailArray()
+    {
+        $email_string = (string)$this->settings['notification_email'];
         if ($email_string != '') {
             $email_array = explode(",", $email_string);
             return $email_array;
@@ -251,15 +278,18 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return array();
     }
 
-    public function getEmailTemplate() {
+    public function getEmailTemplate()
+    {
         return Mage::getStoreConfig('onestepcheckout/order_notification/notification_email_template');
     }
 
-    public function getStoreId() {
+    public function getStoreId()
+    {
         return Mage::app()->getStore()->getId();
     }
 
-    public function enableGiftMessage() {
+    public function enableGiftMessage()
+    {
         //return $this->settings['enable_giftmessage'];
 //		return Mage::getStoreConfig('sales/gift_options/allow_order');
         $giftMessage = Mage::getStoreConfig('onestepcheckout/giftmessage/enable_giftmessage', $this->getStoreId());
@@ -274,47 +304,56 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
-    public function enableCustomSize() {
+    public function enableCustomSize()
+    {
         return Mage::getStoreConfig('onestepcheckout/terms_conditions/enable_custom_size', $this->getStoreId());
     }
 
-    public function getTermTitle() {
+    public function getTermTitle()
+    {
         return Mage::getStoreConfig('onestepcheckout/terms_conditions/term_title', $this->getStoreId());
     }
 
-    public function enableGiftWrap() {
+    public function enableGiftWrap()
+    {
         return Mage::getStoreConfig('onestepcheckout/giftwrap/enable_giftwrap', $this->getStoreId());
     }
 
-    public function getGiftwrapType() {
+    public function getGiftwrapType()
+    {
         return Mage::getStoreConfig('onestepcheckout/giftwrap/giftwrap_type', $this->getStoreId());
     }
 
-    public function getGiftwrapAmount() {
-        /*Start: Huy - Fix Bug: Giftwrap amount does not change when switching currency*/
-        // return Mage::getStoreConfig('onestepcheckout/giftwrap/giftwrap_amount', $this->getStoreId());
+    public function getGiftwrapAmount()
+    {
         $baseCurrencyCode = Mage::app()->getStore()->getBaseCurrencyCode();
         $currentCurrencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
-        $amt = Mage::getStoreConfig('onestepcheckout/giftwrap/giftwrap_amount', $this->getStoreId());
-        $amt1= Mage::helper('directory')->currencyConvert($amt, $baseCurrencyCode, $currentCurrencyCode);
+        if (Mage::helper('truwallet/giftcard')->plasticInCart())
+            $amt = Mage::getStoreConfig('onestepcheckout/giftwrap/giftwrap_amount_plastic', $this->getStoreId());
+        else
+            $amt = Mage::getStoreConfig('onestepcheckout/giftwrap/giftwrap_amount', $this->getStoreId());
+        $amt1 = Mage::helper('directory')->currencyConvert($amt, $baseCurrencyCode, $currentCurrencyCode);
         return $amt1;
-        /*End: Huy - Fix Bug: Giftwrap amount does not change when switching currency*/
     }
 
-    public function isCustomerLoggedIn() {
+    public function isCustomerLoggedIn()
+    {
         return Mage::getSingleton('customer/session')->isLoggedIn();
     }
 
-    public function showLoginLink() {
+    public function showLoginLink()
+    {
         return Mage::getStoreConfig('onestepcheckout/checkout_mode/show_login_link', $this->getStoreId());
     }
 
-    public function checkGiftwrapSession() {
+    public function checkGiftwrapSession()
+    {
         $session = Mage::getSingleton('checkout/session');
         return $session->getData('onestepcheckout_giftwrap');
     }
 
-    public function isHideShippingMethod() {
+    public function isHideShippingMethod()
+    {
         $_isHide = $this->settings['hide_shipping_method'];
         if ($_isHide) {
             $_quote = $this->getOnepage()->getQuote();
@@ -337,7 +376,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
      * Save customer comment to the order
      */
 
-    public function saveOrderComment($observer) {
+    public function saveOrderComment($observer)
+    {
         $session = Mage::getSingleton('checkout/session');
         $billing = $this->_getRequest()->getPost('billing');
         $delivery = $this->_getRequest()->getPost('delivery');
@@ -355,7 +395,7 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
                     //$order->setCustomerNote($comment);
                     //$order->save();
                 } catch (Exception $e) {
-                    
+
                 }
             }
         }
@@ -369,7 +409,7 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
                 if ($surveyValue != 'freetext') {
                     $surveyAnswer = $surveyValues[$surveyValue]['value'];
                 } else {
-					$surveyFreeText = $billing['onestepcheckout-survey-freetext'];
+                    $surveyFreeText = $billing['onestepcheckout-survey-freetext'];
                     $surveyAnswer = $surveyFreeText;
                 }
             }
@@ -395,7 +435,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
      * only use if it is enabled
      */
 
-    public function setDefaultDataforDisabledFields(&$data) {
+    public function setDefaultDataforDisabledFields(&$data)
+    {
         if (!$this->settings['show_city']) {
             $data['city'] = $this->settings['city'];
         }
@@ -408,119 +449,124 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $data;
     }
 
-    public function getStyle() {
+    public function getStyle()
+    {
         $path = 'onestepcheckout/style_management/style';
         $value = Mage::getStoreConfig($path, Mage::app()->getStore()->getStoreId());
         return $value;
     }
-    
+
     // ver 3.1 - Michael 20140610
-    public function getStyleColor() {
+    public function getStyleColor()
+    {
         $storeId = Mage::app()->getStore()->getId();
         $websiteId = Mage::app()->getStore()->getWebsiteId();
         $storecode = Mage::app()->getStore()->getCode();
         $path = 'onestepcheckout/style_management/custom';
         $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                ->addFieldToFilter('scope', 'website')
-                ->addFieldToFilter('path', $path)
-                ->addFieldToFilter('scope_id', $websiteId)
-                ->getFirstItem()
-                ->getValue();
+            ->addFieldToFilter('scope', 'website')
+            ->addFieldToFilter('path', $path)
+            ->addFieldToFilter('scope_id', $websiteId)
+            ->getFirstItem()
+            ->getValue();
 
         if (!$value) {
-			$value = Mage::getModel('onestepcheckout/config')->getCollection()
-					->addFieldToFilter('path', $path)
-					->addFieldToFilter('scope', 'stores')
-					->addFieldToFilter('scope_id', $storeId)
-					->getFirstItem()
-					->getValue();
-			if(!$value)
-				$value = Mage::getModel('onestepcheckout/config')->getCollection()
-						->addFieldToFilter('scope', 'default')
-						->addFieldToFilter('path', $path)
-						->addFieldToFilter('scope_id', 0)
-						->getFirstItem()
-						->getValue();
+            $value = Mage::getModel('onestepcheckout/config')->getCollection()
+                ->addFieldToFilter('path', $path)
+                ->addFieldToFilter('scope', 'stores')
+                ->addFieldToFilter('scope_id', $storeId)
+                ->getFirstItem()
+                ->getValue();
+            if (!$value)
+                $value = Mage::getModel('onestepcheckout/config')->getCollection()
+                    ->addFieldToFilter('scope', 'default')
+                    ->addFieldToFilter('path', $path)
+                    ->addFieldToFilter('scope_id', 0)
+                    ->getFirstItem()
+                    ->getValue();
         }
         return $value;
     }
-    
-	public function getCheckoutButtonColor() {
+
+    public function getCheckoutButtonColor()
+    {
         $storeId = Mage::app()->getStore()->getId();
         $websiteId = Mage::app()->getStore()->getWebsiteId();
         $storecode = Mage::app()->getStore()->getCode();
         $path = 'onestepcheckout/style_management/button';
         $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                ->addFieldToFilter('scope', 'stores')
+            ->addFieldToFilter('scope', 'stores')
+            ->addFieldToFilter('path', $path)
+            ->addFieldToFilter('scope_id', $storeId)
+            ->getFirstItem()
+            ->getValue();
+
+        if (!$value) {
+            $value = Mage::getModel('onestepcheckout/config')->getCollection()
                 ->addFieldToFilter('path', $path)
+                ->addFieldToFilter('scope', 'websites')
+                ->addFieldToFilter('scope_id', $websiteId)
+                ->getFirstItem()
+                ->getValue();
+            if (!$value)
+                $value = Mage::getModel('onestepcheckout/config')->getCollection()
+                    ->addFieldToFilter('scope', 'default')
+                    ->addFieldToFilter('path', $path)
+                    ->addFieldToFilter('scope_id', 0)
+                    ->getFirstItem()
+                    ->getValue();
+        }
+        if (!$value) {
+            $value = $this->getBackgroundColor('orange');
+        } elseif ($value == 'custom') {
+            $pathButton = 'onestepcheckout/style_management/custombutton';
+            $valueCustom = Mage::getModel('onestepcheckout/config')->getCollection()
+                ->addFieldToFilter('scope', 'stores')
+                ->addFieldToFilter('path', $pathButton)
                 ->addFieldToFilter('scope_id', $storeId)
                 ->getFirstItem()
                 ->getValue();
 
-        if (!$value) {
-			$value = Mage::getModel('onestepcheckout/config')->getCollection()
-					->addFieldToFilter('path', $path)
-					->addFieldToFilter('scope', 'websites')
-					->addFieldToFilter('scope_id', $websiteId)
-					->getFirstItem()
-					->getValue();
-			if(!$value)
-				$value = Mage::getModel('onestepcheckout/config')->getCollection()
-						->addFieldToFilter('scope', 'default')
-						->addFieldToFilter('path', $path)
-						->addFieldToFilter('scope_id', 0)
-						->getFirstItem()
-						->getValue();
-        }
-        if(!$value){
-            $value = $this->getBackgroundColor('orange');
-        }elseif($value == 'custom'){
-            $pathButton = 'onestepcheckout/style_management/custombutton';
-            $valueCustom = Mage::getModel('onestepcheckout/config')->getCollection()
-                    ->addFieldToFilter('scope', 'stores')
-                    ->addFieldToFilter('path', $pathButton)
-                    ->addFieldToFilter('scope_id', $storeId)
-                    ->getFirstItem()
-                    ->getValue();
-
             if (!$valueCustom) {
                 $valueCustom = Mage::getModel('onestepcheckout/config')->getCollection()
-                        ->addFieldToFilter('scope', 'websites')
-                        ->addFieldToFilter('path', $pathButton)
-                        ->addFieldToFilter('scope_id', $websiteId)
-                        ->getFirstItem()
-                        ->getValue();
-				if(!$valueCustom)	
-					$valueCustom = Mage::getModel('onestepcheckout/config')->getCollection()
+                    ->addFieldToFilter('scope', 'websites')
+                    ->addFieldToFilter('path', $pathButton)
+                    ->addFieldToFilter('scope_id', $websiteId)
+                    ->getFirstItem()
+                    ->getValue();
+                if (!$valueCustom)
+                    $valueCustom = Mage::getModel('onestepcheckout/config')->getCollection()
                         ->addFieldToFilter('scope', 'default')
                         ->addFieldToFilter('path', $pathButton)
                         ->addFieldToFilter('scope_id', 0)
                         ->getFirstItem()
                         ->getValue();
             }
-            if(!$valueCustom)
+            if (!$valueCustom)
                 $value = $this->getBackgroundColor('orange');
             else
-                $value = '#'.$valueCustom;
-        }else{
+                $value = '#' . $valueCustom;
+        } else {
             $value = $this->getBackgroundColor($value);
-        }        
-        return $value;
-    }
-    
-    //Onestepcheckout v2.0.0
-    public function getFieldEnableBackEnd($number, $scope, $scopeId) {
-        $path = 'onestepcheckout/field_position_management/row_' . $number;
-        $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                ->addFieldToFilter('scope', $scope)
-                ->addFieldToFilter('path', $path)
-                ->addFieldToFilter('scope_id', $scopeId)
-                ->getFirstItem()
-                ->getValue();
+        }
         return $value;
     }
 
-    public function getFieldEnables() {
+    //Onestepcheckout v2.0.0
+    public function getFieldEnableBackEnd($number, $scope, $scopeId)
+    {
+        $path = 'onestepcheckout/field_position_management/row_' . $number;
+        $value = Mage::getModel('onestepcheckout/config')->getCollection()
+            ->addFieldToFilter('scope', $scope)
+            ->addFieldToFilter('path', $path)
+            ->addFieldToFilter('scope_id', $scopeId)
+            ->getFirstItem()
+            ->getValue();
+        return $value;
+    }
+
+    public function getFieldEnables()
+    {
         $path = 'onestepcheckout/field_position_management/row_';
         for ($i = 0; $i < 20; $i++) {
             $fields[$i]['value'] = Mage::getStoreConfig($path . $i, Mage::app()->getStore()->getStoreId());
@@ -529,24 +575,25 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $fields;
     }
 
-    public function getFieldEnable($number) {
+    public function getFieldEnable($number)
+    {
         $storeId = Mage::app()->getStore()->getId();
         $websiteId = Mage::app()->getStore()->getWebsiteId();
         $storecode = Mage::app()->getStore()->getCode();
         $path = 'onestepcheckout/field_position_management/row_' . $number;
         $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                ->addFieldToFilter('path', $path)
-                ->addFieldToFilter('scope', 'stores')
-                ->addFieldToFilter('scope_id', $storeId)
-                ->getFirstItem()
-                ->getValue();
+            ->addFieldToFilter('path', $path)
+            ->addFieldToFilter('scope', 'stores')
+            ->addFieldToFilter('scope_id', $storeId)
+            ->getFirstItem()
+            ->getValue();
         if (count($value) == 0 && $storecode == 'default') {
             $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                    ->addFieldToFilter('path', $path)
-                    ->addFieldToFilter('scope', 'websites')
-                    ->addFieldToFilter('scope_id', $websiteId)
-                    ->getFirstItem()
-                    ->getValue();
+                ->addFieldToFilter('path', $path)
+                ->addFieldToFilter('scope', 'websites')
+                ->addFieldToFilter('scope_id', $websiteId)
+                ->getFirstItem()
+                ->getValue();
         }
         if (count($value) == 0) {
             $value = $this->getDefaultField($number);
@@ -555,18 +602,20 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $value;
     }
 
-    public function getDefaultField($number) {
+    public function getDefaultField($number)
+    {
         $path = 'onestepcheckout/field_position_management/row_' . $number;
         $value = Mage::getModel('onestepcheckout/config')->getCollection()
-                ->addFieldToFilter('path', $path)
-                ->addFieldToFilter('scope_id', 0)
-                ->addFieldToFilter('scope', 'default')
-                ->getFirstItem()
-                ->getValue();
+            ->addFieldToFilter('path', $path)
+            ->addFieldToFilter('scope_id', 0)
+            ->addFieldToFilter('scope', 'default')
+            ->getFirstItem()
+            ->getValue();
         return $value;
     }
 
-    public function getFieldValue() {
+    public function getFieldValue()
+    {
         return array(
             '0' => Mage::helper('onestepcheckout')->__('Null'),
             'firstname' => Mage::helper('onestepcheckout')->__('First Name'),
@@ -589,7 +638,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         );
     }
 
-    public function getFieldLabel($field) {
+    public function getFieldLabel($field)
+    {
         if ($field == 'firstname')
             return Mage::helper('onestepcheckout')->__('First Name');
         if ($field == 'lastname')
@@ -626,33 +676,40 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
             return Mage::helper('onestepcheckout')->__('Tax/VAT number');
     }
 
-    public function getFieldRequire($field) {
+    public function getFieldRequire($field)
+    {
         return Mage::getStoreConfig('onestepcheckout/field_require_management/' . $field, Mage::app()->getStore()->getStoreId());
     }
 
     //Survey	
-    public function enableSurvey() {
+    public function enableSurvey()
+    {
         return Mage::getStoreConfig('onestepcheckout/survey/enable_survey', $this->getStoreId());
     }
 
-    public function getSurveyQuestion() {
+    public function getSurveyQuestion()
+    {
         return Mage::getStoreConfig('onestepcheckout/survey/survey_question', $this->getStoreId());
     }
 
-    public function enableFreeText() {
+    public function enableFreeText()
+    {
         return Mage::getStoreConfig('onestepcheckout/survey/enable_survey_freetext', $this->getStoreId());
     }
 
-    public function getSurveyValues() {
+    public function getSurveyValues()
+    {
         return Mage::getStoreConfig('onestepcheckout/survey/survey_values', $this->getStoreId());
     }
 
-    public function enableGiftwrapModule() {
+    public function enableGiftwrapModule()
+    {
         $moduleGiftwrap = Mage::getConfig()->getModuleConfig('Magestore_Giftwrap')->is('active', 'true');
         return $moduleGiftwrap;
     }
 
-    public function getOrderGiftwrapAmount() {
+    public function getOrderGiftwrapAmount()
+    {
         $amount = $this->getGiftwrapAmount();
         $giftwrapAmount = 0;
         // $freeBoxes = 0;
@@ -674,41 +731,48 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
       Geoip
      */
 
-    public function enableGeoip() {
+    public function enableGeoip()
+    {
         return false;
         return Mage::getStoreConfig('onestepcheckout/geoip/enable', $this->getStoreId());
     }
 
-    public function allowDetectCountry() {
+    public function allowDetectCountry()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/detect_by_ip', $this->getStoreId());
     }
 
-    public function allowDetectByPostcode() {
+    public function allowDetectByPostcode()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/detect_by_postcode', $this->getStoreId());
     }
 
-    public function allowDetectByCity() {
+    public function allowDetectByCity()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/detect_by_city', $this->getStoreId());
     }
 
-    public function getMaxItemsEachImport() {
+    public function getMaxItemsEachImport()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/rows', $this->getStoreId());
     }
 
-    public function getMinCharsPostcode() {
+    public function getMinCharsPostcode()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/postcode_characters', $this->getStoreId());
     }
 
-    public function getMinCharsCity() {
+    public function getMinCharsCity()
+    {
         return Mage::getStoreConfig('onestepcheckout/geoip/city_characters', $this->getStoreId());
     }
 
-    public function getRealIpAddr() {
+    public function getRealIpAddr()
+    {
         //check ip from share internet
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-        //to check ip is pass from proxy
+        } //to check ip is pass from proxy
         elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
@@ -717,18 +781,17 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $ip;
     }
 
-    public function detectCountryIp() {
+    public function detectCountryIp()
+    {
         $realIp = $this->getRealIpAddr();
         $geoip = Mage::getModel('onestepcheckout/country');
         $ipInteger = $geoip->convertIpToInteger($realIp);
         $countryips = Mage::getModel('onestepcheckout/country')->getCollection()
-                ->addFieldToFilter('first_ip_number', array('lteq' => $ipInteger['ip']))
-                ->addFieldToFilter('last_ip_number', array('gteq' => $ipInteger['ip']))
-        ;
+            ->addFieldToFilter('first_ip_number', array('lteq' => $ipInteger['ip']))
+            ->addFieldToFilter('last_ip_number', array('gteq' => $ipInteger['ip']));
         if (isset($ipInteger['ip_lower'])) {
             if ($ipInteger['ip_lower'] > 0) {
-                $countryips = $countryips->addFieldToFilter('last_ip_number_lower', array('gteq' => $ipInteger['ip_lower']))
-                // ->addFieldToFilter('first_ip_number_lower', array('lteq'=>$ipInteger['ip_lower']))									 
+                $countryips = $countryips->addFieldToFilter('last_ip_number_lower', array('gteq' => $ipInteger['ip_lower']))// ->addFieldToFilter('first_ip_number_lower', array('lteq'=>$ipInteger['ip_lower']))
                 ;
             }
         }
@@ -738,7 +801,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return false;
     }
 
-    public function getStoreByCode($storeCode) {
+    public function getStoreByCode($storeCode)
+    {
         $stores = array_keys(Mage::app()->getStores());
         foreach ($stores as $id) {
             $store = Mage::app()->getStore($id);
@@ -749,7 +813,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return null; // if not found
     }
 
-    public function getDefaultPositionArray() {
+    public function getDefaultPositionArray()
+    {
         $arrayDefault = array();
         $arrayDefault[0] = 'firstname';
         $arrayDefault[1] = 'lastname';
@@ -765,7 +830,8 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return $arrayDefault;
     }
 
-    public function getBackgroundColor($style) {
+    public function getBackgroundColor($style)
+    {
         if ($style == 'orange')
             return '#F39801';
         if ($style == 'green')
@@ -786,8 +852,9 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return '#F39801';
     }
 
-    public function checkLayout3columns() {
-        if(Mage::getStoreConfig('onestepcheckout/general/page_layout') == '30columns')
+    public function checkLayout3columns()
+    {
+        if (Mage::getStoreConfig('onestepcheckout/general/page_layout') == '30columns')
             return true;
         return false;
     }

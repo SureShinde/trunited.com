@@ -291,14 +291,16 @@
 				<!-- When do you want it -->
 				<?php if ($_helper->enableGiftWrap() && !$this->isVirtual()):?>
 					<?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap');?>
+                    <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount();?>
 					<div id="delivery-type-container" class="order-information order-info-3-columns">
 						<ol>
 							<li class="shipping-method">
 								<h3 style="float:left"  id="shipping_method_step_header" class="step_2">
 									<?php echo $this->__('When do you want it?'); ?>
 								</h3>
+                                <div class="ajax-loader3" id="ajax-trubox" style="float: left; margin-top: 14px; margin-left: 10px; display: none;"></div>
 								<div class="clear"></div>
-								<div class="onestepcheckout-shipping-method-section" id="delivery-type">
+								<div class="onestepcheckout-trubox-method-section" id="onestepcheckout-trubox-method-section">
 									<ul>
 										<li>
 											<input  checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);" name="delivery_type" type="radio" id="trubox" class="radio validate-one-required-by-name">
@@ -306,10 +308,11 @@
 										</li>
 										<li>
 											<input  <?php if(Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"';?> onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);" name="delivery_type" type="radio" id="get_it_now" class="radio validate-one-required-by-name">
-											<label for="get_it_now"><?php echo $this->__('Get It Now ($4.99 Expedited Cost)'); ?></label>
+											<label for="get_it_now"><?php echo $this->__('Get It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
 										</li>
 									</ul>
 								</div>
+                                <div id="control_overlay_trubox" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
 							</li>
 						</ol>
 					</div>
@@ -388,6 +391,15 @@
     var show_term_condition_url = '<?php echo $this->getUrl('onestepcheckout/index/show_term_condition', array('_secure' => true)); ?>';
     var form = $('one-step-checkout-form');
     var reload_payment = <?php echo $this->configData['reload_payment']; ?>;
+
+    <?php if ($_helper->enableGiftWrap() && !$this->isVirtual()){?>
+    $j = jQuery.noConflict();
+    $j(document).ready(function(){
+        <?php if(Mage::helper('truwallet/giftcard')->plasticInCart()){?>
+        $j('#get_it_now').click();
+        <?php }?>
+    });
+    <?php }?>
 
     function showloginbox() {
         var url = '<?php echo $this->getUrl('onestepcheckout/index/show_login', array('_secure' => true)); ?>';

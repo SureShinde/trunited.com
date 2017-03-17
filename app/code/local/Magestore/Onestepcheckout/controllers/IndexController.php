@@ -1166,7 +1166,6 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
 
         try {
 
-
             $filter = new Zend_Filter_LocalizedToNormalized(
                     array('locale' => Mage::app()->getLocale()->getLocaleCode())
             );
@@ -1323,8 +1322,10 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             $result = array();
         $payment_method_html = $this->getLayout()->getBlock('onestepcheckout_payment_method')->toHtml();
         $review_total_html = $this->getLayout()->getBlock('review_info')->toHtml();
+        $trubox_method = $this->getLayout()->createBlock('onestepcheckout/trubox_option')->setTemplate('onestepcheckout/trubox.phtml')->toHtml();
         $result['payment_method'] = $payment_method_html;
         $result['review'] = $review_total_html;
+        $result['trubox_method'] = $trubox_method;
         if ($isShipping) {
             $shipping_method_html = $this->getLayout()->getBlock('onestepcheckout_shipping_method')->toHtml();
             $result['shipping_method'] = $shipping_method_html;
