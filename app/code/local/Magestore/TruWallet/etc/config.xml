@@ -418,10 +418,13 @@
                 <truwallet_value>50</truwallet_value>
                 <order_status>complete</order_status>
                 <notify_message>Important: truWallet cannot be used as a payment option for Gift Cards.</notify_message>
-                <truwallet_payment>authnetcim_ach</truwallet_payment>
-                <truwallet_order_amount>50</truwallet_order_amount>
-                <truwallet_reward_point>3</truwallet_reward_point>
             </product>
+            <truwallet_payment>
+                <enable>0</enable>
+                <payment>authnetcim_ach</payment>
+                <order_amount>50</order_amount>
+                <reward_point>3</reward_point>
+            </truwallet_payment>
             <sharewallet>
                 <expire_date>7</expire_date>
             </sharewallet>
@@ -433,7 +436,6 @@
                 <current_label>truWallet current balance</current_label>
                 <applied_label>Applied to this order</applied_label>
             </spending>
-
             <email>
                 <enable>1</enable>
                 <share_email_customer>truwallet_email_share_email_customer</share_email_customer>

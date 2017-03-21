@@ -65,19 +65,24 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/general/enable_change_balance', $store);
     }
 
+    public function getTruWalletPaymentEnable($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/truwallet_payment/enable', $store);
+    }
+
     public function getTruWalletPayment($store = null)
     {
-        return Mage::getStoreConfig('truwallet/product/truwallet_payment', $store);
+        return Mage::getStoreConfig('truwallet/truwallet_payment/payment', $store);
     }
 
     public function getTruWalletOrderAmount($store = null)
     {
-        return Mage::getStoreConfig('truwallet/product/truwallet_order_amount', $store);
+        return Mage::getStoreConfig('truwallet/truwallet_payment/order_amount', $store);
     }
 
     public function getTruWalletPaymentPoint($store = null)
     {
-        return Mage::getStoreConfig('truwallet/product/truwallet_reward_point', $store);
+        return Mage::getStoreConfig('truwallet/truwallet_payment/reward_point', $store);
     }
 
 

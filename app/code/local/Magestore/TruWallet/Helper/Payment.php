@@ -108,7 +108,7 @@ class Magestore_TruWallet_Helper_Payment extends Mage_Payment_Helper_Data
         $points = Mage::helper('truwallet')->getTruWalletPaymentPoint();
         
         $reward = 0;
-        if($amount > 0 && $grandTotal > $amount){
+        if($amount > 0 && $grandTotal >= $amount){
             $reward += ($grandTotal / $amount) * $points;
         }
 

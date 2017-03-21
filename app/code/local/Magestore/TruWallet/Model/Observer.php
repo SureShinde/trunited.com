@@ -105,27 +105,30 @@ class Magestore_TruWallet_Model_Observer
         }
 
         /* Calculate points from eCheck payment */
-        $payment_reward = Mage::helper('truwallet')->getTruWalletPayment();
-        if ($payment_reward != '' && strcasecmp($order->getPayment()->getMethod(), $payment_reward) == 0) {
-            $reward_points = Mage::helper('truwallet/payment')->calculatePoints($order);
+        $enable = Mage::helper('truwallet')->getTruWalletPaymentEnable();
+        if($enable)
+        {
+            $payment_reward = Mage::helper('truwallet')->getTruWalletPayment();
+            if ($payment_reward != '' && strcasecmp($order->getPayment()->getMethod(), $payment_reward) == 0) {
+                $reward_points = Mage::helper('truwallet/payment')->calculatePoints($order);
 
-            if ($reward_points > 0) {
-                $customer = Mage::getModel('customer/customer')->load($customer_id);
+                if ($reward_points > 0) {
+                    $customer = Mage::getModel('customer/customer')->load($customer_id);
 
-                $receiveObject = new Varien_Object();
-                $receiveObject->setData('product_credit', 0);
-                $receiveObject->setData('point_amount', $reward_points);
-                $receiveObject->setData('customer_exist', true);
-                $receiveObject->setData('order_id', $order->getIncrementId());
+                    $receiveObject = new Varien_Object();
+                    $receiveObject->setData('product_credit', 0);
+                    $receiveObject->setData('point_amount', $reward_points);
+                    $receiveObject->setData('customer_exist', true);
+                    $receiveObject->setData('order_id', $order->getIncrementId());
 
-                Mage::helper('rewardpoints/action')
-                    ->addTransaction(
-                        'earning_payment', $customer, $receiveObject
-                    );
+                    Mage::helper('rewardpoints/action')
+                        ->addTransaction(
+                            'earning_payment', $customer, $receiveObject
+                        );
+                }
+
             }
-
         }
-
         /* END Calculate points from eCheck payment */
 
         Mage::getSingleton('checkout/session')->clear();
