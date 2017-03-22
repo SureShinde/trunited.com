@@ -70,6 +70,12 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             Mage::getSingleton('persistent/observer')->setQuoteGuest();
         }
 
+        if(Mage::helper('truwallet/giftcard')->plasticInCart())
+        {
+            $shipping_method = 'freeshipping_freeshipping';
+            $this->getOnepage()->saveShippingMethod($shipping_method);
+        }
+
         //$this->loadLayout();
         $update = $this->getLayout()->getUpdate();
         $update->addHandle('default');
@@ -380,6 +386,16 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         /* edit by Leo 02042015 */
         /* Mage::helper('onestepcheckout')->saveShippingMethod($shipping_method); */
         /* End of edit by Leo 02042015 */
+
+
+        $is_plastic = false;
+        if(Mage::helper('truwallet/giftcard')->plasticInCart()){
+            $shipping_method = 'freeshipping_freeshipping';
+            $is_plastic = true;
+        }
+
+//        zend_debug::dump(Mage::helper('truwallet/giftcard')->plasticInCart());
+//        zend_debug::dump($shipping_method);
         $this->getOnepage()->saveShippingMethod($shipping_method);
         try {
             $payment = $this->getRequest()->getPost('payment', array());
@@ -395,6 +411,7 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
 
         $this->_addOnestepcheckoutHandle(false);
         $result = $this->_getBlockResults();
+        $result['is_plastic'] = $is_plastic;
         $this->getResponse()->setBody(Zend_Json::encode($result));
     }
 

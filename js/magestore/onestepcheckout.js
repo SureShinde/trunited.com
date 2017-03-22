@@ -314,6 +314,18 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                         }
                     }
                 }
+
+                if(response.is_plastic)
+                {
+                    $('shipping-method-container').setStyle({
+                        'display': 'none'
+                    });
+                } else {
+                    $('shipping-method-container').setStyle({
+                        'display': 'block'
+                    });
+                }
+
                 if (update_shipping_review == 1) {
                     review.update(response.review);
                     reviewShow();

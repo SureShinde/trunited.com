@@ -145,7 +145,8 @@
 
                 <?php if ($this->isVirtual() || !Mage::helper('onestepcheckout')->isHideShippingMethod() || $_helper->enabledDelivery()): ?>
                     <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
-                        <div id="shipping-method-container" class="order-information order-info-3-columns">
+                        <div id="shipping-method-container" class="order-information order-info-3-columns"
+                            <?php if(Mage::helper('truwallet/giftcard')->plasticInCart()){?>style="display: none"<?php }?>>
                         <ol>
                                 <li class="shipping-method">
                                     <h3 style="float:left"  id="shipping_method_step_header" class="step_2">
