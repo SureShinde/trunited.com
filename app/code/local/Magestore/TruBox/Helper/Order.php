@@ -301,7 +301,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $quote = Mage::getModel('sales/quote')->setStoreId(1);
 
-            //Load Product and add to cart
+            /*Load Product and add to cart*/
             $before_grandTotal = 0;
             foreach ($products as $itemid => $pro){
                 $item_price = Mage::helper('trubox/item')->getItemPrice(Mage::getModel('trubox/item')->load($itemid));
@@ -314,20 +314,43 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $admin_session->setGrandTotalOrder($before_grandTotal);
 
-            $is_no_need_payment = $this->checkApplyBalanceToPayment($customer, $before_grandTotal);
+            /*Add Billing Address*/
+            $quote->getBillingAddress()
+                ->addData($billingAddress);
+
+            $_shipping = Mage::helper('trubox')->getShippingMethod();
+            if($_shipping != null)
+                $this->_shippingMethod = $_shipping;
+
+            /*Add Shipping Address and set shipping method*/
+            $quote->getShippingAddress()
+                ->addData($shippingAddress)
+                ->setCollectShippingRates(true)
+                ->setShippingMethod($this->_shippingMethod)
+                ->setPaymentMethod($this->_paymentMethod)
+                ->collectTotals();
+
+            /*Set Customer group As Guest*/
+            $quote->setCustomer($customer);
+
+            if ($quote->isVirtual()) {
+                $quote->getBillingAddress()->setPaymentMethod($this->_paymentMethod);
+            }
+
+            $tax_amount = $quote->getShippingAddress()->getData('tax_amount');
+            $is_no_need_payment = $this->checkApplyBalanceToPayment($customer, $before_grandTotal + $tax_amount);
             $payment_information = $this->getPaymentInformation($customer_id, $is_no_need_payment);
 
             $paymentData = array(
                 'truwallet' => 'on',
                 'method' => $this->_paymentMethod,
                 'cc_type' => $payment_information->getCardType(),
-//                'cc_owner' => $payment_information->getNameOnCard(),
-//                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),
+                /*'cc_owner' => $payment_information->getNameOnCard(),
+                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),*/
                 'cc_number' => $payment_information->getCardNumber(),
                 'cc_exp_month' => $payment_information->getMonthExpire(),
                 'cc_exp_year' => $payment_information->getYearExpire(),
                 'cc_cid' => $payment_information->getCvv(),
-//                'checks' => 179
             );
 
 
@@ -340,36 +363,9 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $this->_paymentMethod = $this->_freePaymentMethod;
             }
 
-
-
-            // Add Billing Address
-            $quote->getBillingAddress()
-                ->addData($billingAddress);
-
-            $_shipping = Mage::helper('trubox')->getShippingMethod();
-            if($_shipping != null)
-                $this->_shippingMethod = $_shipping;
-
-            //Add Shipping Address and set shipping method
-            $quote->getShippingAddress()
-                ->addData($shippingAddress)
-                ->setCollectShippingRates(true)
-                ->setShippingMethod($this->_shippingMethod)
-                ->setPaymentMethod($this->_paymentMethod)
-                ->collectTotals();
-
-            //Set Customer group As Guest
-            $quote->setCustomer($customer);
-
-            if ($quote->isVirtual()) {
-                $quote->getBillingAddress()->setPaymentMethod($this->_paymentMethod);
-            }
-
             $quote->getPayment()->importData($paymentData);
             $quote->collectTotals();
-//            $quote->save();
 
-            //Save Order With All details
             $service = Mage::getModel('sales/service_quote', $quote);
             $service->submitAll();
             /* Fix bug remove items in carts after creating orders */
@@ -380,7 +376,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "1");
 
-            //Send Order Mail
 
             $order_mail = new Mage_Sales_Model_Order();
             $order_mail->loadByIncrementId($increment_id);
