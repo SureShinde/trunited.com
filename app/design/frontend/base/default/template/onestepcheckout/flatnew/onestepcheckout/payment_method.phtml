@@ -1,9 +1,25 @@
 
 	<dl class="sp-methods" id="checkout-payment-method-load">
+	<?php 
+		$methods = $this->getMethods();
+		$display_methods = array();
+		$size_methods = sizeof($methods);
+		$is_zero = false;
+		if(sizeof($methods) > 1)
+		{
+			foreach ($methods as $_method) {
+				if(strcasecmp($_method->getCode(),'free') == 0)
+				{
+					$is_zero = true;
+					break;
+				}
+			}
+		}
+	?>
 	<?php $i=0;?>
-	<?php foreach ($this->getMethods() as $_method): $_code = $_method->getCode() ?>
+	<?php foreach ($methods as $_method): $_code = $_method->getCode();?>
 	<?php $i++;?>
-	<?php if($i != count($this->getMethods())):?>
+	<?php if($i != count($size_methods)):?>
 		<style type="text/css">
 			#advice-validate-one-required-by-name-p_method_<?php echo $_code ?>{
 				display: none !important;
@@ -11,12 +27,21 @@
 		</style>
 	<?php endif;?>
 		<dt>
-		<?php if( sizeof($this->getMethods()) > 1 ): ?>	
-				<input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio validate-one-required-by-name" />
-		<?php else: ?>
+		<?php if($is_zero){?>
+			<?php if(strcasecmp($_code, 'free') == 0){?>
 				<span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" /></span>
-		<?php endif; ?>
 				<label for="p_method_<?php echo $_code ?>"><?php echo $this->getMethodTitle($_method) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
+			<?php }?>
+		<?php } else {?>
+			<?php if( sizeof($size_methods) > 1): ?>	
+				<input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio validate-one-required-by-name" />
+			<?php else: ?>
+				<span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" /></span>
+			<?php endif; ?>
+			<label for="p_method_<?php echo $_code ?>"><?php echo $this->getMethodTitle($_method) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
+		<?php }?>
+		
+				
 		</dt>
 		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
 		<dd id="container_payment_method_<?php echo $_code; ?>" class="payment-method">

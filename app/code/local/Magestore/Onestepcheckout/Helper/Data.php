@@ -159,6 +159,7 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract
         } else {
             $onepage->getShippingAddress()->setPaymentMethod(isset($data['method']) ? $data['method'] : null);
         }
+
         $payment = $onepage->getPayment();
         $payment->importData($data);
 
