@@ -82,17 +82,13 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
             $rules = $this->getCache($collectionKey);
         }
         $earnPointByTax = Mage::getStoreConfig('rewardpoints/earning/by_tax');
-
         foreach ($rules as $rule) {
             /**
              * end update
              */
             if ($rule->validate($product)) {
                 $points += $this->calcCatalogPoint(
-                        $rule->getSimpleAction(),
-                        $rule->getPointsEarned(),
-                        Mage::helper('rewardpoints/calculator')->getPrice($product, $product->getFinalPrice(), $earnPointByTax),
-                        Mage::helper('rewardpoints/calculator')->getPrice($product, $product->getFinalPrice(), $earnPointByTax) - $product->getCost(),
+                        $rule->getSimpleAction(), $rule->getPointsEarned(), Mage::helper('rewardpoints/calculator')->getPrice($product, $product->getFinalPrice(), $earnPointByTax), Mage::helper('rewardpoints/calculator')->getPrice($product, $product->getFinalPrice(), $earnPointByTax) - $product->getCost(),
 //                                $product->getPrice(),
 //                                $product->getPrice() - $product->getCost(),
                         $rule->getMoneyStep(), $rule->getMaxPointsEarned()
@@ -214,11 +210,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
      */
     public function calcCatalogPoint($actionOperator, $xAmount, $price, $profit, $yStep, $maxAmount) {
         $points = 0;
-
         switch ($actionOperator) {
-            case 'by_percent':
-                $points = $xAmount + 100;
-                break;
             case 'fixed':
                 $points = $xAmount;
                 break;
@@ -257,20 +249,10 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
         $websiteId = is_null($websiteId) ? Mage::app()->getStore($quote->getStoreId())->getWebsiteId() : $websiteId;
         $points = 0;
 
-		$rules = Mage::getResourceModel('rewardpointsrule/earning_sales_collection')
-			   ->setAvailableFilter($customerGroupId, $websiteId, $date)
-			   ->addFieldToFilter('coupon_code',array('null' => true));
-		
-		if(Mage::getSingleton('checkout/session')->getData('reward_shoppingcart_earning_rule_id')){
-			$couponRuleId = Mage::getSingleton('checkout/session')->getData('reward_shoppingcart_earning_rule_id');
-			$couponRule = Mage::getModel('rewardpointsrule/earning_sales')->load($couponRuleId);
-			if($couponRule)
-				$rules->addItem($couponRule);
-		}
-		
+        $rules = Mage::getResourceModel('rewardpointsrule/earning_sales_collection')
+                ->setAvailableFilter($customerGroupId, $websiteId, $date);
         $items = $quote->getAllItems();
         $this->setStoreId($quote->getStoreId());
-        $percent_points = 0;
         foreach ($rules as $rule) {
             $rule->afterLoad();
             if (!$rule->validate($address)) {
@@ -279,8 +261,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
             $rowTotal = 0;
             $qtyTotal = 0;
             foreach ($items as $item) {
-                $product = Mage::getModel('catalog/product')->load($item->getProductId());
-                if ($item->getParentItemId() || !$product->getId())
+                if ($item->getParentItemId())
                     continue;
                 if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                     foreach ($item->getChildren() as $child) {
@@ -299,7 +280,6 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
                         if (Mage::getStoreConfigFlag(self::XML_PATH_EARNING_BY_TAX, $quote->getStoreId())) {
                             $rowTotal += $item->getBaseTaxAmount();
                         }
-                        $percent_points += round(($rule->getPointsEarned() * $product->getRewardpointsEarn() *  $item->getQty()) / 100);
                     }  
                 }
             }
@@ -310,12 +290,8 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
                     $rowTotal += $address->getBaseShippingTaxAmount();
                 }
             }
-
             $pointsRule = $this->calcSalesPoints(
-                $rule->getSimpleAction(),
-                $rule->getSimpleAction() == 'by_percent' ? $percent_points : $rule->getPointsEarned(),
-                $rule->getMoneyStep(),
-                $rowTotal, $rule->getQtyStep(), $qtyTotal, $rule->getMaxPointsEarned()
+                    $rule->getSimpleAction(), $rule->getPointsEarned(), $rule->getMoneyStep(), $rowTotal, $rule->getQtyStep(), $qtyTotal, $rule->getMaxPointsEarned()
             );
             $points += $pointsRule;
 			if($points >= 1){
@@ -397,11 +373,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
      */
     public function calcSalesPoints($pointOperation, $xAmount, $yStep, $price, $qtyStep, $qty, $maxPoint) {
         $points = 0;
-
         switch ($pointOperation) {
-            case 'by_percent':
-                $points = $xAmount;
-                break;
             case 'fixed':
                 $points = $xAmount;
                 break;
@@ -422,7 +394,6 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
                 }
                 break;
         }
-
         return (int) $points;
     }
 

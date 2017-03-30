@@ -121,15 +121,7 @@ class Magestore_RewardPointsRule_Block_Adminhtml_Earning_Sales_Edit_Tab_Form ext
                     ->load()
                     ->toOptionArray()
         ));
-		$fieldset->addField('coupon_code', 'text', array(
-			'name' => 'coupon_code',
-			'label' => Mage::helper('rewardpointsrule')->__('Coupon Code'),
-			'title' => Mage::helper('rewardpointsrule')->__('Coupon Code'),
-			'required' => false,
-			'style'   => 'width:20%!important',
-			'note' => Mage::helper('rewardpointsrule')->__('Used to apply this rule')
-		));
-		
+        
         $dateFormatIso = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
         $fieldset->addField('from_date', 'date', array(
             'name' => 'from_date',

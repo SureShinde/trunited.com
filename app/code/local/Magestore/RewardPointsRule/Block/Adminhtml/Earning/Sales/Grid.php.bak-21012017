@@ -72,13 +72,6 @@ class Magestore_RewardPointsRule_Block_Adminhtml_Earning_Sales_Grid extends Mage
             'align' => 'left',
             'index' => 'name',
         ));
-		
-        $this->addColumn('coupon_code', array(
-            'header' => Mage::helper('rewardpointsrule')->__('Coupon Code'),
-            'align' => 'left',
-            'index' => 'coupon_code',
-			'width' => '150px',
-        ));
 
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('website_ids', array(

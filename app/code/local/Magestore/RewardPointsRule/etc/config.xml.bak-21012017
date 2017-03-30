@@ -53,22 +53,6 @@
             </modules>
         </translate>
         <events>
-            <controller_action_predispatch_checkout_cart_couponPost>
-                <observers>
-                    <rewardpointsrule_observers>
-                        <class>rewardpointsrule/frontend_observer</class>
-                        <method>couponPost</method>
-                    </rewardpointsrule_observers>
-                </observers>
-            </controller_action_predispatch_checkout_cart_couponPost>
-            <controller_action_predispatch_onestepcheckout_index_add_coupon>
-                <observers>
-                    <rewardpointsrule_observers>
-                        <class>rewardpointsrule/frontend_observer</class>
-                        <method>couponPostOSC</method>
-                    </rewardpointsrule_observers>
-                </observers>
-            </controller_action_predispatch_onestepcheckout_index_add_coupon>
             <rewardpoints_block_dashboard_earn_can_show>
                 <observers>
                     <rewardpointsrule_observers>

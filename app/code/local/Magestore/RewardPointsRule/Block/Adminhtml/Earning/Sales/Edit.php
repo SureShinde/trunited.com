@@ -51,6 +51,10 @@ class Magestore_RewardPointsRule_Block_Adminhtml_Earning_Sales_Edit extends Mage
                     $('rule_money_step').up(1).hide();
                     $('rule_max_points_earned').up(1).hide();
                     $('rule_qty_step').up(1).hide();
+                } else if ($('rule_simple_action').value == 'by_percent') {
+                    $('rule_money_step').up(1).hide();
+                    $('rule_max_points_earned').up(1).hide();
+                    $('rule_qty_step').up(1).hide();
                 } else if ($('rule_simple_action').value == 'by_total') {
                     $('rule_money_step').up(1).show();
                     $('rule_qty_step').up(1).hide();

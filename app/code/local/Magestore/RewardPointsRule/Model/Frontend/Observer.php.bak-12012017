@@ -141,7 +141,8 @@ class Magestore_RewardPointsRule_Model_Frontend_Observer {
             $pointHtml = '';
             if(Mage::helper('rewardpointsrule')->getCanShow(Mage::app()->getStore()))     
             $pointHtml = '<div class="earning-product-list">' .
-                Mage::helper('rewardpoints')->__(' Earn %s Profit Points',$points) .
+                Mage::helper('rewardpoints/point')->getImageHtml(true) .
+                Mage::helper('rewardpoints')->__(' Purchase and earn %s', Mage::helper('rewardpoints/point')->format($points)) .
                 '</div>';
             if($points && $points>0){
                 $html = $pointHtml.$html;
@@ -250,113 +251,4 @@ class Magestore_RewardPointsRule_Model_Frontend_Observer {
             }   
         }
     }
-	
-    public function couponPost($observer) {
-        $action = $observer->getEvent()->getControllerAction();
-        $code = trim($action->getRequest()->getParam('coupon_code'));
-        if(!strlen($code)){
-            return $this;
-        }
-		$session = Mage::getSingleton('checkout/session');
-		$quote = $session->getQuote();
-		$address = $quote->isVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
-        $customerGroupId = $quote->getCustomerGroupId();
-        $websiteId = Mage::app()->getStore($quote->getStoreId())->getWebsiteId();
-        $date = now(true);
-		$earningRuleId = '';
-		
-		$couponEarningRules = Mage::getResourceModel('rewardpointsrule/earning_sales_collection')
-							->setAvailableFilter($customerGroupId, $websiteId, $date)
-							->addFieldToFilter('coupon_code',$code);
-							
-		if($couponEarningRules->getSize() > 0){
-			$rule = $couponEarningRules->getFirstItem();
-            $rule->afterLoad();
-            if ($rule->validate($address)) {
-				$earningRuleId = $rule->getId();
-			}
-		}
-		if ($action->getRequest()->getParam('remove') == 1) {
-			if($session->getData('coupon_code') == $code){
-                $session->addSuccess(Mage::helper('rewardpointsrule')->__('Coupon code "%s" was canceled.', $session->getData('coupon_code')));
-				$session->setData('coupon_code', '');
-				$session->setData('reward_shoppingcart_earning_rule_id', '');
-			}else{
-				return $this;
-			}
-		}else{
-            if ($earningRuleId) {
-                $session->addSuccess(Mage::helper('rewardpointsrule')->__('Coupon code "%s" was applied.', $code));
-				$session->setData('coupon_code', $code);
-				$session->setData('reward_shoppingcart_earning_rule_id', $earningRuleId);
-				$quote->setCouponCode($code);
-				$quote->collectTotals()->save();
-            }else{
-				$session->setData('coupon_code', '');
-				$session->setData('reward_shoppingcart_earning_rule_id', '');
-				return $this;
-			}
-		}
-		
-        $action->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-		$action->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
-	}
-	
-    public function couponPostOSC($observer) {
-        $action = $observer->getEvent()->getControllerAction();
-        $code = trim($action->getRequest()->getParam('coupon_code'));
-        if(!strlen($code)){
-            return $this;
-        }
-		$session = Mage::getSingleton('checkout/session');
-		$quote = $session->getQuote();
-		$address = $quote->isVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
-        $customerGroupId = $quote->getCustomerGroupId();
-        $websiteId = Mage::app()->getStore($quote->getStoreId())->getWebsiteId();
-        $date = now(true);
-		$earningRuleId = '';
-		
-		$couponEarningRules = Mage::getResourceModel('rewardpointsrule/earning_sales_collection')
-							->setAvailableFilter($customerGroupId, $websiteId, $date)
-							->addFieldToFilter('coupon_code',$code);
-							
-		if($couponEarningRules->getSize() > 0){
-			$rule = $couponEarningRules->getFirstItem();
-            $rule->afterLoad();
-            if ($rule->validate($address)) {
-				$earningRuleId = $rule->getId();
-			}
-		}
-		if ($action->getRequest()->getParam('remove') == 1) {
-			if($session->getData('coupon_code') == $code){
-				$error = false;
-				$message = Mage::helper('rewardpointsrule')->__('Coupon code "%s" was canceled.', $session->getData('coupon_code'));
-				$quote->setCouponCode('');
-				$session->setData('coupon_code', '');
-				$session->setData('reward_shoppingcart_earning_rule_id', '');
-			}else{
-				return $this;
-			}
-		}else{
-            if ($earningRuleId) {
-				$error = false;
-				$message = Mage::helper('rewardpointsrule')->__('Coupon code "%s" was applied.', $code);
-				$session->setData('coupon_code', $code);
-				$session->setData('reward_shoppingcart_earning_rule_id', $earningRuleId);
-				$quote->setCouponCode($code);
-				$quote->collectTotals()->save();
-            }else{
-				$session->setData('coupon_code', '');
-				$session->setData('reward_shoppingcart_earning_rule_id', '');
-				return $this;
-			}
-		}
-		
-		$result = array(
-            'error' => $error,
-            'message' => $message
-        );
-        $action->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-        $action->getResponse()->setBody(Zend_Json::encode($result));
-	}
 }

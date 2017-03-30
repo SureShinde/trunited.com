@@ -56,6 +56,7 @@ class Magestore_RewardPointsRule_Block_Adminhtml_Earning_Sales_Edit_Tab_Actions 
             'title' => Mage::helper('rewardpointsrule')->__('Action'),
             'name' => 'simple_action',
             'options' => array(
+                'by_percent' => Mage::helper('rewardpointsrule')->__('Percent of product point'),
                 'fixed' => Mage::helper('rewardpointsrule')->__('Give fixed X points to Customers'),
                 'by_total' => Mage::helper('rewardpointsrule')->__('Give X points for every Y money spent'),
                 'by_qty' => Mage::helper('rewardpointsrule')->__('Give X points for every Y qty purchased'),
