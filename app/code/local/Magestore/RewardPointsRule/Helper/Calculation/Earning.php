@@ -26,7 +26,7 @@
 
 /**
  * RewardPointsRule Calculation Earning Helper
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPoints
  * @author      Magestore Developer
@@ -38,7 +38,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 
     /**
      * get calculate earning point for each product
-     * 
+     *
      * @param mixed $product
      * @param int $customerGroupId
      * @param int $websiteId
@@ -108,7 +108,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 
     /**
      * calculate earning for quote/order item
-     * 
+     *
      * @param Varien_Object $item
      * @param int $customerGroupId
      * @param int $websiteId
@@ -196,14 +196,14 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 		if(!Mage::registry("rp_catalog_rules")){
         	Mage::register("rp_catalog_rules", $rules);
         }
-		
+
         $this->saveCache($cacheKey, $points * $item->getQty());
         return $this->getCache($cacheKey);
     }
 
     /**
      * Calculate points for product by Catalog Rule
-     * 
+     *
      * @param type $actionOperator is action type when chose at action in created rule
      * @param type $xAmount
      * @param type $price
@@ -244,7 +244,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 
     /**
      * calculate earning point for order quote
-     * 
+     *
      * @param Mage_Sales_Model_Quote $quote
      * @param int $customerGroupId
      * @param int $websiteId
@@ -260,14 +260,14 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 		$rules = Mage::getResourceModel('rewardpointsrule/earning_sales_collection')
 			   ->setAvailableFilter($customerGroupId, $websiteId, $date)
 			   ->addFieldToFilter('coupon_code',array('null' => true));
-		
+
 		if(Mage::getSingleton('checkout/session')->getData('reward_shoppingcart_earning_rule_id')){
 			$couponRuleId = Mage::getSingleton('checkout/session')->getData('reward_shoppingcart_earning_rule_id');
 			$couponRule = Mage::getModel('rewardpointsrule/earning_sales')->load($couponRuleId);
 			if($couponRule)
 				$rules->addItem($couponRule);
 		}
-		
+
         $items = $quote->getAllItems();
         $this->setStoreId($quote->getStoreId());
         $percent_points = 0;
@@ -290,7 +290,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
                             if (Mage::getStoreConfigFlag(self::XML_PATH_EARNING_BY_TAX, $quote->getStoreId())) {
                                 $rowTotal += $child->getBaseTaxAmount();
                             }
-                        }                        
+                        }
                     }
                 }else if($item->getProduct()){
                     if ($rule->getActions()->validate($item)) {
@@ -300,7 +300,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
                             $rowTotal += $item->getBaseTaxAmount();
                         }
                         $percent_points += round(($rule->getPointsEarned() * $product->getRewardpointsEarn() *  $item->getQty()) / 100);
-                    }  
+                    }
                 }
             }
             if (!$qtyTotal) continue;
@@ -329,7 +329,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 		 if(!Mage::registry("rp_shoppingcart_rules")){
         	Mage::register("rp_shoppingcart_rules", $rules);
         }
-		
+
         return $points;
     }
 
@@ -385,7 +385,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 
     /**
      * Calculate the point received for shopping cart rule
-     * 
+     *
      * @param string $pointOperation
      * @param float $xAmount
      * @param float $yStep
@@ -428,7 +428,7 @@ class Magestore_RewardPointsRule_Helper_Calculation_Earning extends Magestore_Re
 
     /**
      * set store id for current working helper
-     * 
+     *
      * @param int $value
      * @return Magestore_RewardPointsRule_Helper_Calculation_Earning
      */

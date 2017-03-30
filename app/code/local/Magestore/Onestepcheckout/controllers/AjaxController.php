@@ -7,7 +7,7 @@ class Magestore_Onestepcheckout_AjaxController extends Mage_Core_Controller_Fron
         $session = Mage::getSingleton('checkout/session');
         $session->setData('delivery_type', $deliveryType);
         $this->_addOnestepcheckoutHandle(true);
-        $result = $this->_getBlockResults($result, true);
+        $result = $this->_getBlockResults(array(), true);
         $this->getResponse()->setBody(Zend_Json::encode($result));
     }
 

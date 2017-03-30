@@ -248,7 +248,7 @@ function sliderAjax(url) {
                                 page_loaded = true;
                             } else {
                                 $("#fullajax_loader").show();
-                                console.log("pathname: "+location.pathname);
+
 
                                 $.ajax({url: location.pathname,data:{fullpageajax:true},success: showResponse,error: function() {
                                     window.location.href = a
@@ -469,7 +469,7 @@ function infiniteAjax(url) {
                                 page_loaded = true;
                             } else {
                                 $("#fullajax_loader").show();
-                                console.log("pathname: "+location.pathname);
+
 
                                 $.ajax({url: location.pathname,data:{fullpageajax:true},success: showResponse,error: function() {
                                     window.location.href = a

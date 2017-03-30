@@ -276,9 +276,8 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
         shipping_method: shipping_method,
         payment_method: payment_method
     };
-
     //Find payment parameters and include 
-    var items = $$('input[name^=payment]', 'select[name^=payment]');
+    /*var items = $$('input[name^=payment]', 'select[name^=payment]');
     var names = items.pluck('name');
     var values = items.pluck('value');
 
@@ -286,7 +285,7 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
         if (names[x] != 'payment[method]') {
             parameters[names[x]] = values[x];
         }
-    }
+    }*/
     if ((update_shipping_payment == 1) || (update_shipping_review == 1)) {
         $('onestepcheckout-button-place-order').disabled = true;
         $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
@@ -297,6 +296,7 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
         parameters: parameters,
         onFailure: '',
         onSuccess: function (transport) {
+
             if (transport.status == 200) {
                 var response = getResponseText(transport);
                 if (enable_update_payment) {
@@ -315,6 +315,12 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     }
                 }
 
+                if (update_shipping_review == 1) {
+                    review.update(response.review);
+                    reviewShow();
+                }
+                checkvalidEmail();
+
                 if(response.is_plastic)
                 {
                     $('shipping-method-container').setStyle({
@@ -326,11 +332,6 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     });
                 }
 
-                if (update_shipping_review == 1) {
-                    review.update(response.review);
-                    reviewShow();
-                }
-                checkvalidEmail();
             }
         }
     });
@@ -807,8 +808,6 @@ var OneStepCheckoutLoginPopup = Class.create({
                 this.mode = 'register';
                 var height1 = document.viewport.getHeight();
                 var heightpopup1 = document.getElementById('onestepcheckout-login-popup').getHeight();
-                //console.log('height viewport:' +height1);
-                //console.log('height popup:' +heightpopup1);
                 if (height1 < heightpopup1){
                     document.getElementById('onestepcheckout-login-popup').addClassName('absolute-box');
                     document.getElementById('onestepcheckout-login-popup').removeClassName('fixed-box');

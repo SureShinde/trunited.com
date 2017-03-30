@@ -84,7 +84,6 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_before', array(
             'address' => $address,
         ));
-
         if(!$address->getRewardpointsEarn()){
             $baseGrandTotal = $quote->getBaseGrandTotal();
             if (!Mage::getStoreConfigFlag(Magestore_RewardPoints_Helper_Calculation_Earning::XML_PATH_EARNING_BY_SHIPPING, $quote->getStoreId())) {
@@ -111,16 +110,21 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));
+
+        //Shopping Cart Earning Rule Points
+        $shoppingCartRulePoints = Mage::helper('rewardpointsrule/calculation_earning')
+            ->getShoppingCartPoints($quote);
 		
 		//TruBox Bonus Points
 		$bonusPoints = 0;
 
 		$earningPoints = $address->getRewardpointsEarn();
         $customer_id = $admin_session->getOrderCustomerId();
+
 		if(Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId())){
 			if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())
             || ($this->checkIsAdmin() && isset($customer_id) && $customer_id > 0)){
-				$bonusPoints = ceil(0.1*$earningPoints);
+				$bonusPoints = ceil(0.1*($earningPoints-$shoppingCartRulePoints));
 			}
 		}
 		
@@ -129,11 +133,11 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
 		if($quote->getCouponCode() == $checkCouponCode){
 			$bonusPoints += 5;
 		}
-		
-		//Shopping Cart Earning Rule Points
-		$shoppingCartRulePoints = Mage::helper('rewardpointsrule/calculation_earning')
-								->getShoppingCartPoints($quote);
-								
+
+      /*  zend_debug::dump($earningPoints - $shoppingCartRulePoints);
+        zend_debug::dump($bonusPoints);
+        zend_debug::dump($shoppingCartRulePoints);
+        exit;*/
 		$address->setRewardpointsBonus($bonusPoints + $shoppingCartRulePoints);
 		$address->setRewardpointsEarn($earningPoints + $bonusPoints);
         
