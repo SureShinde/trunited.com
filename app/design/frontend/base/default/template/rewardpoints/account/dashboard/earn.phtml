@@ -32,15 +32,5 @@
         echo $this->__('Points will be added to your reward balance after you take certain activities. For example, every time you make a purchase you will earn points based on the price of products purchased.');
     ?></span><br />
     <?php $rate = $this->getEarningRate() ?>
-    <?php // if ($rate && $rate->getId()): ?>
-        <!--strong class="rewardpoints-money rewardpoints-title-rate"><?php //echo $this->__('Earning Rate:') ?></strong><br /-->
-         <!--<ul class="rewardpoints-dashboard-ul">
-            <li>
-        <span><?php echo $this->__('Each %s spent for your order will earn %s.',
-            '<strong class="rewardpoints-money">' . $this->getCurrentMoney($rate) . '</strong>',
-            '<strong class="rewardpoints-money">' . Mage::helper('rewardpoints/point')->format($rate->getPoints()) . '</strong>'
-        ) ?></span>
-            </li>
-        </ul> -->
-    <?php // endif ?>
+   
 <?php endif ?>

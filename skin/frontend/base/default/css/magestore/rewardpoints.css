@@ -117,7 +117,7 @@ a.rewardpoints-name-img img {
 .rewardpoints-title{font-size: 15px; color: #3182be;}
 .rewardpoints-title-link{text-decoration: none; color: #3182be; font-weight: bold;}
 .rewardpoints-title-rate{margin-top: 5px;}
-.rewardpoints-dashboard-list{margin-bottom: 10px;}
+.rewardpoints-dashboard-list{margin-bottom: 10px;    line-height: 20px;}
 .rewardpoints-dashboard-ul {list-style: circle !important; margin: 0 0 0 2em !important; }
 .rewardpointsrule-rule-name-policy {color: #3182be;font-style: italic;}
 
