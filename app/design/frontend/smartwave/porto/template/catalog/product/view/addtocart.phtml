@@ -37,14 +37,26 @@ else
             </div>
         </div>
         <?php endif; ?>
+        <?php if(!Mage::helper('trubox')->isInPhysicalList($_product)){?>
         <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
+        <?php } else {?>
+            <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
+                <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
+                    <button type="button" title="<?php echo $this->__('Add to TruBox') ?>" class="addtrubox button btn-cart"
+                        data-url="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>">
+                        <span><span><i class="icon-cart"></i><?php echo $this->__('Add to TruBox') ?></span></span>
+                    </button>
+                <?php }?>
+            <?php }?>
+        <?php }?>
         <?php echo $this->getChildHtml('', true, true) ?>
     </div>
 
 <?php endif; ?>
 <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-    <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
-        <a href="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>" class="addtrubox trubox_btn" title="<?php echo $this->__('Add to TruBox') ?>">
+    <?php if(!Mage::helper('trubox')->isInExclusionList($_product) && !Mage::helper('trubox')->isInPhysicalList($_product)){?>
+        <a href="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>"
+           class="addtrubox trubox_btn button btn-cart trubox_detail" title="<?php echo $this->__('Add to TruBox') ?>">
             <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" /></a>
     <?php }?>
 <?php }?>
@@ -57,12 +69,11 @@ else
             {
                 return false;
             } else {
-                var new_url = $j(this).attr('href')+'?'+$j('#product_addtocart_form').serialize();
+                var new_url = $j(this).attr('data-url')+'?'+$j('#product_addtocart_form').serialize();
                 window.location.href = new_url;
             }
 
             return false;
         });
     });
-
 </script>

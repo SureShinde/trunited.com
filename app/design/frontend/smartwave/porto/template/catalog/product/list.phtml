@@ -243,7 +243,7 @@ $_coreHelper = $this->helper('core');
                                             <?php endif; ?>
 
                                             <?php if (Mage::helper('trubox')->isCurrentCheckingCustomer() && $_product->getTypeId() != 'grouped') { ?>
-                                                <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing()) { ?>
+                                                <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) { ?>
                                                     <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>"
                                                        class="addtrubox addtowishlist"
                                                        title="<?php echo $this->__('Add to TruBox') ?>">
@@ -502,6 +502,7 @@ $_coreHelper = $this->helper('core');
                                         <?php endif; ?>
                                         <?php if ($product->isSaleable() && $_product->getTypeId() != 'grouped'): ?>
                                             <?php if (!($product->getTypeInstance(true)->hasOptions($product)/*$_product->getData('has_options')*/ || $product->isGrouped())) : ?>
+                                                <?php if(!Mage::helper('trubox')->isInPhysicalList($_product)){?>
                                                 <a href="<?php if (!Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code) && !Mage::getStoreConfig("porto_settings/category/qty_field", $code)): ?><?php echo $this->getAddToCartUrl($_product) ?><?php else: ?>javascript:void(0)<?php endif; ?>"
                                                    class="addtocart" title="<?php echo $this->__('Add to Cart') ?>"
                                                    <?php if (Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>onclick="setLocationAjax(this,'<?php echo $this->getAddToCartUrl($_product) ?>','<?php echo $_product->getId(); ?>')"
@@ -509,6 +510,20 @@ $_coreHelper = $this->helper('core');
                                                             class="icon-cart"></i><span>&nbsp;
                                                         <?php if(strcasecmp($_product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0) echo $this->__('BUY NOW'); else echo $this->__('Add to Cart'); ?>
                                                     </span></a>
+                                                <?php } else {?>
+                                                    <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
+                                                        <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
+                                                            <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>"
+                                                               class="addtocart"
+                                                               title="<?php echo $this->__('Add to TruBox') ?>">
+                                                                <i class="icon-cart"></i>
+                                                                <span>&nbsp;
+                                                                    <?php echo $this->__('Add to TruBox'); ?>
+                                                                </span>
+                                                            </a>
+                                                        <?php }?>
+                                                    <?php }?>
+                                                <?php }?>
                                             <?php else : ?>
                                                 <a href="<?php if (Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>javascript:showOptions('<?php echo $_product->getId() ?>')<?php else: ?><?php echo $this->getAddToCartUrl($_product) ?><?php endif; ?>"
                                                    class="addtocart" title="<?php echo $this->__('Add to Cart') ?>"><i
@@ -531,7 +546,7 @@ $_coreHelper = $this->helper('core');
                                                         class="icon-compare"></i></a>
                                         <?php endif; ?>
                                         <?php if (Mage::helper('trubox')->isCurrentCheckingCustomer() && $_product->getTypeId() != 'grouped') { ?>
-                                            <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing()) { ?>
+                                            <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) { ?>
                                                 <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>"
                                                    class="addtrubox addtowishlist"
                                                    title="<?php echo $this->__('Add to TruBox') ?>">

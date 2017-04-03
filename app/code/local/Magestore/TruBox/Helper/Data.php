@@ -70,6 +70,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/shipping/shipping_amount', $store);
     }
 
+    public function getPhysicalOnlyProduct()
+    {
+        return Mage::getStoreConfig('trubox/general/physical_only_product');
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
@@ -89,6 +94,36 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
     {
 
         $product_exclusion = $this->getExclusionList();
+
+        if (sizeof($product_exclusion) == 0)
+            return false;
+        else {
+            if (in_array(strtolower(trim($product->getSku())), $product_exclusion))
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public function getPhysicalList()
+    {
+        $list = $this->getPhysicalOnlyProduct();
+        $result = array();
+        if ($list != null) {
+            $data = explode(',', $list);
+            foreach ($data as $sku) {
+                $result[] = trim(strtolower($sku));
+            }
+        }
+
+        return $result;
+
+    }
+
+    public function isInPhysicalList($product)
+    {
+
+        $product_exclusion = $this->getPhysicalList();
 
         if (sizeof($product_exclusion) == 0)
             return false;

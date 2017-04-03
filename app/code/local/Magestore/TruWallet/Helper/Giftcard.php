@@ -4,13 +4,14 @@ class Magestore_TruWallet_Helper_Giftcard extends Mage_Core_Helper_Abstract
 {
     public function getPlasticGiftCards()
     {
+        $list_skus = Mage::helper('trubox')->getPhysicalList();
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('status')
             ->addAttributeToSelect('visibility')
             ->addAttributeToFilter('type_id', array('eq' => 'simple'))
-            ->addAttributeToFilter('SKU', array('like' => '%GP%'))
+            ->addAttributeToFilter('sku', array('in' => $list_skus))
             ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED))
             ->setOrder('entity_id', 'desc')
         ;

@@ -147,7 +147,7 @@
     height: 32px;
 }
 
-.addtrubox {
+.actions .addtrubox, .trubox_detail {
     right: 53px;
     position: absolute;
     margin-top: 2px;

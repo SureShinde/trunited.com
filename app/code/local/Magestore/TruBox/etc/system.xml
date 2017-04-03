@@ -142,6 +142,27 @@
 							<show_in_store>1</show_in_store>
 							<comment></comment>
 						</enable_product_listing>
+
+						<physical_products_separator translate="label comment">
+							<label>Physical Gift Card Products</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</physical_products_separator>
+						<physical_only_product  translate="label">
+							<label>TruBox Only Products</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Sku's that are "TruBox Only Products". Any sku added to this config textbox will only have the ADD TO TRUBOX button on product listing and product details pages.</comment>
+						</physical_only_product>
 					</fields>				
 				</general>
 				<shipping>

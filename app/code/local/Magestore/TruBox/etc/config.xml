@@ -148,6 +148,7 @@
                 <email_testing_mode>dev@trunited.vn</email_testing_mode>
                 <enable_orders_section>1</enable_orders_section>
                 <enable_product_listing>1</enable_product_listing>
+                <physical_only_product>GP588568-100,GP588568-50,GP588568-25,GP588568,GP348965-50,GP348965,GP183219-50,GP183219</physical_only_product>
             </general>
             <shipping>
                 <shipping_method>freeshipping_freeshipping</shipping_method>
