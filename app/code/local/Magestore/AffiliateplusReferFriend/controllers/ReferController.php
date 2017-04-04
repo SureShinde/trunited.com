@@ -1,13 +1,15 @@
 <?php
 
-class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Controller_Front_Action {
+class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Controller_Front_Action
+{
 
     /**
      * get Account helper
      *
      * @return Magestore_Affiliateplus_Helper_Account
      */
-    protected function _getAccountHelper() {
+    protected function _getAccountHelper()
+    {
         return Mage::helper('affiliateplus/account');
     }
 
@@ -16,7 +18,8 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
      *
      * @return Magestore_Affiliateplus_Helper_Data
      */
-    protected function _getHelper() {
+    protected function _getHelper()
+    {
         return Mage::helper('affiliateplus');
     }
 
@@ -25,7 +28,8 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
      *
      * @return Magestore_Affiliateplus_Helper_Config
      */
-    protected function _getConfigHelper() {
+    protected function _getConfigHelper()
+    {
         return Mage::helper('affiliateplus/config');
     }
 
@@ -34,13 +38,15 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
      *
      * @return Mage_Core_Model_Session
      */
-    protected function _getCoreSession() {
+    protected function _getCoreSession()
+    {
         return Mage::getSingleton('core/session');
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         //Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -58,9 +64,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
 
     /* Personal URL */
 
-    public function personalAction() {
+    public function personalAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -73,7 +80,7 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
                 $session->addError($this->__('Please enter a valid custom url'));
                 return $this->_redirect('*/*/index');
             }
-            $requestPath = $this->_getConfigHelper()->getReferConfig('url_prefix') . trim($data['personal_url']);
+            $requestPath = $this->_getConfigHelper()->getReferConfig('url_prefix') . trim(strtolower($data['personal_url']));
             $account = Mage::getSingleton('affiliateplus/session')->getAccount();
             $store = Mage::app()->getStore();
 
@@ -85,10 +92,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
             /* END */
 
             $existedRewirte = Mage::getResourceModel('core/url_rewrite_collection')
-                    ->addFieldToFilter('store_id', $store->getId())
-                    ->addFieldToFilter('request_path', $requestPath)
-                    ->addFieldToFilter('id_path', array('neq' => $idPath))
-                    ->getFirstItem();
+                ->addFieldToFilter('store_id', $store->getId())
+                ->addFieldToFilter('request_path', $requestPath)
+                ->addFieldToFilter('id_path', array('neq' => $idPath))
+                ->getFirstItem();
             if ($existedRewirte->getId()) {
                 $session->addError($this->__('This url already exists. Please choose another custom url.'));
                 $session->setAffilateCustomUrl($data['personal_url']);
@@ -96,13 +103,13 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
             }
             $targetPath = $this->_getDefaultPath($store);
             $url_param = Mage::getStoreConfig('affiliateplus/general/url_param');
-            if($url_param == '')
+            if ($url_param == '')
                 $url_param = 'acc';
 
             if (strpos($targetPath, '?') === false)
-                $targetPath .= '/?'.$url_param.'=';
+                $targetPath .= '/?' . $url_param . '=';
             else
-                $targetPath .= '&'.$url_param.'=';
+                $targetPath .= '&' . $url_param . '=';
             $targetPath .= $account->getIdentifyCode();
 
             $rewrite = Mage::getModel('core/url_rewrite')->load($idPath, 'id_path');
@@ -124,22 +131,26 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         $this->_redirect('*/*/index');
     }
 
-    protected function _getDefaultPath($store = null) {
+    protected function _getDefaultPath($store = null)
+    {
         $defaultPath = Mage::getStoreConfig('web/default/front', $store);
         $p = explode('/', $defaultPath);
         switch (count($p)) {
-            case 1: $p[] = 'index';
-            case 2: $p[] = 'index';
+            case 1:
+                $p[] = 'index';
+            case 2:
+                $p[] = 'index';
         }
         return implode('/', $p);
     }
 
     /* Email */
 
-    public function emailAction() {
+    public function emailAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
-            
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -167,11 +178,11 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
 
             $store = Mage::app()->getStore();
             $mailTemplate = Mage::getModel('core/email_template')
-                    ->setDesignConfig(array('area' => 'frontend', 'store' => $store->getId()));
+                ->setDesignConfig(array('area' => 'frontend', 'store' => $store->getId()));
             /* edit by hainh for adding http to <a> tag */
-            $data['email_content'] = preg_replace(array("#http://([\S]+?)#Uis", "#https://([\S]+?)#Uis"), 
-                    array('<a href="http://\\1">\\1</a>', '<a href="https://\\1">\\1</a>'), 
-                    $data['email_content']);
+            $data['email_content'] = preg_replace(array("#http://([\S]+?)#Uis", "#https://([\S]+?)#Uis"),
+                array('<a href="http://\\1">\\1</a>', '<a href="https://\\1">\\1</a>'),
+                $data['email_content']);
             /* end edit by hainh */
             foreach ($contacts as $contact) {
                 if (strpos($contact, '@') === false)
@@ -190,17 +201,17 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
                 $content = str_replace(array('{{friend_name}}', '{{friend_email}}'), array($name, $email), $data['email_content']);
                 try {
                     $mailTemplate->sendTransactional(
-                            $template, $sender, $email, $name, array(
-                        'store' => $store,
-                        'contact_name' => $name,
-                        'sender_name' => $account->getName(),
-                        'subject' => $subject,
-                        'content' => $content,
-                            )
+                        $template, $sender, $email, $name, array(
+                            'store' => $store,
+                            'contact_name' => $name,
+                            'sender_name' => $account->getName(),
+                            'subject' => $subject,
+                            'content' => $content,
+                        )
                     );
                     $totalSent++;
                 } catch (Exception $e) {
-                    
+
                 }
             }
             $translate->setTranslateInline(true);
@@ -216,9 +227,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         return $this->_redirect('*/*/index');
     }
 
-    public function yahooAction() {
+    public function yahooAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -240,9 +252,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         $this->renderLayout();
     }
 
-    public function gmailAction() {
+    public function gmailAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -264,9 +277,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         $this->renderLayout();
     }
 
-    public function hotmailAction() {
+    public function hotmailAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -291,7 +305,8 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
     /**
      * facebook share action
      */
-    public function facebookAction() {
+    public function facebookAction()
+    {
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -310,17 +325,17 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
             if (!class_exists('Facebook'))
                 require_once(Mage::getBaseDir('lib') . DS . 'Facebookv3' . DS . 'facebook.php');
             $facebook = new Facebook(array(
-                        'appId' => $this->_getConfigHelper()->getReferConfig('fbapp_id'),
-                        'secret' => $this->_getConfigHelper()->getReferConfig('fbapp_secret'),
-                        'cookie' => true
-                    ));
+                'appId' => $this->_getConfigHelper()->getReferConfig('fbapp_id'),
+                'secret' => $this->_getConfigHelper()->getReferConfig('fbapp_secret'),
+                'cookie' => true
+            ));
             $userId = $facebook->getUser();
             if ($isAuth || !$userId) {
                 $loginUrl = $facebook->getLoginUrl(array(
                     'display' => 'popup',
                     'redirect_uri' => Mage::getUrl('*/*/facebook'),
                     'scope' => 'publish_stream,email,publish_actions',
-                        ));
+                ));
                 unset($_SESSION['fb_' . $this->_getConfigHelper()->getReferConfig('fbapp_id') . '_code']);
                 unset($_SESSION['fb_' . $this->_getConfigHelper()->getReferConfig('fbapp_id') . '_access_token']);
                 unset($_SESSION['fb_' . $this->_getConfigHelper()->getReferConfig('fbapp_id') . '_user_id']);
@@ -361,7 +376,7 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
 			</script>";
             exit();
         } catch (Exception $e) {
-			Zend_debug::dump($e->getMessage());
+            Zend_debug::dump($e->getMessage());
             die('11');
         }
         echo "<script type='text/javascript'>
@@ -373,26 +388,29 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         exit();
     }
 
-    public function refineCustomUrlAction() {
+    public function refineCustomUrlAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
         $custom_url = $this->getRequest()->getParam('custom_url');
         $requestPath = Mage::helper('catalog/product_url')->format($custom_url);
         $response = str_replace(" ", "", $requestPath);
         $this->getResponse()->setBody(json_encode($response));
     }
 
-    public function emailboxAction() {
+    public function emailboxAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
         $formBlock = $this->getLayout()->createBlock('affiliateplusreferfriend/email_form');
         $formBlock->setTemplate('affiliateplusreferfriend/email/form.phtml');
         $this->getResponse()->setBody($formBlock->toHtml());
     }
 
-    public function sendemailAction() {
+    public function sendemailAction()
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
 //        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
 //            return;
 //        }
@@ -422,7 +440,7 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
 
             $store = Mage::app()->getStore();
             $mailTemplate = Mage::getModel('core/email_template')
-                    ->setDesignConfig(array('area' => 'frontend', 'store' => $store->getId()));
+                ->setDesignConfig(array('area' => 'frontend', 'store' => $store->getId()));
             foreach ($contacts as $contact) {
                 if (strpos($contact, '@') === false)
                     continue;
@@ -440,17 +458,17 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
                 $content = str_replace(array('{{friend_name}}', '{{friend_email}}'), array($name, $email), $data['email_content']);
                 try {
                     $mailTemplate->sendTransactional(
-                            $template, $sender, $email, $name, array(
-                        'store' => $store,
-                        'contact_name' => $name,
-                        'sender_name' => $account->getName(),
-                        'subject' => $subject,
-                        'content' => $content,
-                            )
+                        $template, $sender, $email, $name, array(
+                            'store' => $store,
+                            'contact_name' => $name,
+                            'sender_name' => $account->getName(),
+                            'subject' => $subject,
+                            'content' => $content,
+                        )
                     );
                     $totalSent++;
                 } catch (Exception $e) {
-                    
+
                 }
             }
             $translate->setTranslateInline(true);
@@ -467,9 +485,10 @@ class Magestore_AffiliateplusReferFriend_ReferController extends Mage_Core_Contr
         }
     }
 
-    public function responseJson($result) {
+    public function responseJson($result)
+    {
         //Changed By Adam 28/07/2014
-            if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirect('affiliateplus/index/index');
         return $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 

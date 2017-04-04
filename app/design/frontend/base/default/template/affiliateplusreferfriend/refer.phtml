@@ -106,6 +106,7 @@ $parameter = $this->getUrlParameter();
                         if (process) {
                             process = 0;
                             var customUrlInput = $('personal_url').value;
+                            customUrlInput = customUrlInput.toLowerCase();
                             var url = '<?php echo $this->getUrl('affiliateplus/refer/refineCustomUrl') ?>' + '?custom_url=' + customUrlInput;
                             var request = new Ajax.Request(url, {
                                 onComplete: function(response) {

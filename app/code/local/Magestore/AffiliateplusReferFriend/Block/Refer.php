@@ -60,7 +60,7 @@ class Magestore_AffiliateplusReferFriend_Block_Refer extends Mage_Core_Block_Tem
     }
 
     public function getIdentifyCode(){
-        return $this->getAccount()->getIdentifyCode();
+        return strtolower($this->getAccount()->getIdentifyCode());
     }
 
     public function getUrlParameter(){
