@@ -55,9 +55,14 @@ else
 <?php endif; ?>
 <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
     <?php if(!Mage::helper('trubox')->isInExclusionList($_product) && !Mage::helper('trubox')->isInPhysicalList($_product)){?>
-        <a href="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>"
-           class="addtrubox trubox_btn button btn-cart trubox_detail" title="<?php echo $this->__('Add to TruBox') ?>">
-            <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>" alt="<?php echo $this->__('Add to TruBox') ?>" /></a>
+        <!--<a href="<?php /*echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));*/?>"
+           class="addtrubox trubox_btn button btn-cart trubox_detail" title="<?php /*echo $this->__('Add to TruBox') */?>">
+            <img src="<?php /*echo $this->getSkinUrl('images/trubox-icon.png'); */?>" alt="<?php /*echo $this->__('Add to TruBox') */?>" /></a>-->
+
+        <button type="button" title="<?php echo $this->__('Add to TruBox') ?>" class="addtrubox button btn-cart trubox-right"
+                data-url="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>">
+            <span><span><i class="icon-cart"></i><?php echo $this->__('Add to TruBox') ?></span></span>
+        </button>
     <?php }?>
 <?php }?>
 <script type="text/javascript">

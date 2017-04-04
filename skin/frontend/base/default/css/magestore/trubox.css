@@ -184,3 +184,8 @@ a.addtrubox{
     float: none !important;
     display: inline-block !important;
 }
+
+.trubox-right
+{
+    float: right;
+}

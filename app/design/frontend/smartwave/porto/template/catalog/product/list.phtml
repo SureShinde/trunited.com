@@ -547,11 +547,19 @@ $_coreHelper = $this->helper('core');
                                         <?php endif; ?>
                                         <?php if (Mage::helper('trubox')->isCurrentCheckingCustomer() && $_product->getTypeId() != 'grouped') { ?>
                                             <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) { ?>
-                                                <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>"
+                                                <!--<a href="<?php /*echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() */?>"
                                                    class="addtrubox addtowishlist"
+                                                   title="<?php /*echo $this->__('Add to TruBox') */?>">
+                                                    <img src="<?php /*echo $this->getSkinUrl('images/trubox-icon.png'); */?>"
+                                                         alt="<?php /*echo $this->__('Add to TruBox') */?>"/>
+                                                </a>-->
+                                                <a href="<?php echo Mage::getBaseUrl() . 'trubox/index/addTruBox?id=' . $_product->getId() ?>"
+                                                   class="addtocart"
                                                    title="<?php echo $this->__('Add to TruBox') ?>">
-                                                    <img src="<?php echo $this->getSkinUrl('images/trubox-icon.png'); ?>"
-                                                         alt="<?php echo $this->__('Add to TruBox') ?>"/>
+                                                    <i class="icon-cart"></i>
+                                                                <span>&nbsp;
+                                                                    <?php echo $this->__('Add to TruBox'); ?>
+                                                                </span>
                                                 </a>
                                             <?php } ?>
                                         <?php } ?>
