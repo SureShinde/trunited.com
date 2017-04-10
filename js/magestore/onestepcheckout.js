@@ -1112,6 +1112,7 @@ function minusproduct(id, url) {
     paymentLoad();
     reviewLoad();
     truboxLoad();
+
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1120,8 +1121,10 @@ function minusproduct(id, url) {
             {
                 method: 'get',
                 onSuccess: function (transport) {
+                    
                     if (transport.status == 200) {
                         var result = transport.responseText.evalJSON();
+                        
                         if (result.error) {
                             alert(result.error);
                             reviewShow();
@@ -1136,8 +1139,10 @@ function minusproduct(id, url) {
                             $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
                             window.location.href = result.url;
                         } else {
+                            
                             /* Start: Modified by Daniel - 02042015 - reload data after minus product - decrease ajax request */
                             if (result.success) {
+
                                 var shipping_method = $('onestepcheckout-shipping-method-section');
                                 var order_review = $('checkout-review-load');
                                 var payment_method = $('onestepcheckout-payment-methods');
@@ -1148,18 +1153,19 @@ function minusproduct(id, url) {
                                     order_review.update(result.review);
                                 if (result.payment_method)
                                     payment_method.update(result.payment_method);
-                                if (result.trubox_method)
+                                if (result.trubox_method && trubox_method)
                                     trubox_method.update(result.trubox_method);
-								
 								//Hide shipping and delivery sections if only virtual product in cart
 								var shipping_container = $('shipping-method-container');
 								var delivery_container = $('delivery-type-container');
 								if(result.is_virtual && shipping_container)
 									shipping_container.hide();
-								if(result.is_virtual && delivery_container)
+								if((result.is_virtual || result.hide_trubox) && delivery_container)
 									delivery_container.hide();
-								//Hide shipping and delivery sections if only virtual product in cart
-								
+                                if(result.hide_trubox)
+                                {
+                                    document.getElementById('s_method_freeshipping_freeshipping').click();
+                                }
                                 shippingShow();
                                 paymentShow();
                                 reviewShow();
@@ -1209,6 +1215,7 @@ function addproduct(id, url) {
                         if (result.error) {
                             alert(result.error);
                             shippingShow();
+                            paymentShow();
                             reviewShow();
                             truboxShow();
                             $('onestepcheckout-button-place-order').disabled = false;

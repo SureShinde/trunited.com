@@ -102,3 +102,15 @@ skin/frontend/default/modern/
 skin/frontend/enterprise
 skin/install/
 var/
+app/code/community/Cm/
+app/code/community/Phoenix/
+app/code/local/Monyet/Easygiftcard/Block/
+app/design/adminhtml/default/default/template/system/config/system/
+app/design/frontend/default/
+app/design/frontend/smartwave/porto_trunited/template/contacts/
+app/etc/modules/disable/
+dev/
+lib/MaxMind/GeoIP/data/
+shell/
+skin/adminhtml/
+skin/frontend/default/

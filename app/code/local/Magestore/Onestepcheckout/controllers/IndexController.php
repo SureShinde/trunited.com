@@ -70,10 +70,15 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             Mage::getSingleton('persistent/observer')->setQuoteGuest();
         }
 
-        if(Mage::helper('truwallet/giftcard')->plasticInCart())
+        if(Mage::helper('truwallet/giftcard')->plasticInCart() || Mage::helper('other')->dropShipInCart())
         {
             $shipping_method = 'freeshipping_freeshipping';
             $this->getOnepage()->saveShippingMethod($shipping_method);
+        }
+
+        if(Mage::helper('other')->dropShipInCart())
+        {
+            Mage::getSingleton('checkout/session')->setData('delivery_type', null);
         }
 
         //$this->loadLayout();
@@ -1343,6 +1348,7 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $result['payment_method'] = $payment_method_html;
         $result['review'] = $review_total_html;
         $result['trubox_method'] = $trubox_method;
+        $result['hide_trubox'] = Mage::helper('other')->dropShipInCart();
         if ($isShipping) {
             $shipping_method_html = $this->getLayout()->getBlock('onestepcheckout_shipping_method')->toHtml();
             $result['shipping_method'] = $shipping_method_html;

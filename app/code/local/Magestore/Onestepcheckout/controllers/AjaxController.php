@@ -5,7 +5,10 @@ class Magestore_Onestepcheckout_AjaxController extends Mage_Core_Controller_Fron
     public function add_giftwrapAction() {
         $deliveryType = $this->getRequest()->getPost('delivery_type');
         $session = Mage::getSingleton('checkout/session');
-        $session->setData('delivery_type', $deliveryType);
+        if(Mage::helper('other')->dropShipInCart())
+            $session->setData('delivery_type', null);
+        else
+            $session->setData('delivery_type', $deliveryType);
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults(array(), true);
         $this->getResponse()->setBody(Zend_Json::encode($result));

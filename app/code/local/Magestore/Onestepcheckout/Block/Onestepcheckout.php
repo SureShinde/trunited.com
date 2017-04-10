@@ -55,8 +55,11 @@ class Magestore_Onestepcheckout_Block_Onestepcheckout extends Mage_Checkout_Bloc
 		//Set default delivery type
 		$session = Mage::getSingleton('checkout/session');
 		$deliveryType = $session->getData('delivery_type');
-		if($deliveryType == null)
-			$session->setData('delivery_type',1);
+		if($deliveryType == null && !Mage::helper('other')->dropShipInCart())
+        {
+            $session->setData('delivery_type',1);
+        }
+
     }
 
     /* End: Modified by Daniel - improve OSC load speed */

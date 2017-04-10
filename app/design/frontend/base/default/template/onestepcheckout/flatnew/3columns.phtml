@@ -290,7 +290,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
 				<!-- When do you want it -->
-				<?php if ($_helper->enableGiftWrap() && !$this->isVirtual()):?>
+				<?php if (($_helper->enableGiftWrap() && !$this->isVirtual()) && !Mage::helper('other')->dropShipInCart()):?>
 					<?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap');?>
                     <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount();?>
 					<div id="delivery-type-container" class="order-information order-info-3-columns">
@@ -392,7 +392,7 @@
     var form = $('one-step-checkout-form');
     var reload_payment = <?php echo $this->configData['reload_payment']; ?>;
 
-    <?php if ($_helper->enableGiftWrap() && !$this->isVirtual()){?>
+    <?php if ($_helper->enableGiftWrap() && !$this->isVirtual() && !Mage::helper('other')->dropShipInCart()){?>
     $j = jQuery.noConflict();
     $j(document).ready(function(){
         <?php if(Mage::helper('truwallet/giftcard')->plasticInCart()){?>

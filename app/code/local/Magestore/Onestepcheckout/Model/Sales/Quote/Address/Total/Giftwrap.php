@@ -16,6 +16,7 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 		}
 		$session = Mage::getSingleton('checkout/session');
 		$deliveryType = $session->getData('delivery_type');
+
 		if($deliveryType == null)
 			return $this;
 
@@ -44,6 +45,7 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 			return;
 		$session = Mage::getSingleton('checkout/session');
 		$deliveryType = $session->getData('delivery_type');
+
 		if($deliveryType == null)
 			return $this;
 		

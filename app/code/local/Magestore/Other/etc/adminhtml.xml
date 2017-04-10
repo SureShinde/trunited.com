@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+	<!--menu>
+		<other module="other" translate="title">
+			<title>Other</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<other module="other" translate="title">
+					<title>Manage Items</title>
+					<sort_order>0</sort_order>
+					<action>otheradmin/adminhtml_other</action>
+				</other>
+				<settings module="other" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/other</action>
+				</settings>
+			</children>
+		</other>
+	</menu-->
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<other module="other" translate="title">
+										<title>Other</title>
+										<sort_order>71</sort_order>									
+									</other>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<other module="other" translate="title">
+						<title>Other</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<other module="other" translate="title">
+								<title>Manage Items</title>
+								<sort_order>0</sort_order>
+								<action>otheradmin/adminhtml_other</action>
+							</other>
+							<settings module="other" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/other</action>
+							</settings>
+						</children>
+					</other>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
