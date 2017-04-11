@@ -332,6 +332,10 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     });
                 }
 
+                if(response.text_button_payment)
+                {
+                    $('onestepcheckout-button-place-order-text').update(response.text_button_payment);
+                }
             }
         }
     });
@@ -1234,6 +1238,11 @@ function addproduct(id, url) {
                                 order_review.update(result.review);
                             if (result.payment_method)
                                 payment_method.update(result.payment_method);
+
+                            if(result.text_button_payment)
+                            {
+                                $('onestepcheckout-button-place-order-text').update(result.text_button_payment);
+                            }
                             shippingShow();
                             reviewShow();
                             paymentShow();

@@ -350,6 +350,34 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </enable_items_image>
+
+                        <text_button translate="label comment">
+                            <label>The text of submit button that is depending on payment</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>onestepcheckout/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>230</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </text_button>
+                        <text_on_zero translate="label">
+                            <label>The order is No Payment Information Required</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>240</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </text_on_zero>
+                        <text_greater_zero translate="label">
+                            <label>The grand total is greater than zero</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>250</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </text_greater_zero>
                     </fields> 
                     <!-- End: added by Daniel - 31/03/2015 - Add product thumbnail in the order review section -->
                 </general>

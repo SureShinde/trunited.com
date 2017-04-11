@@ -51,6 +51,12 @@
                 <script>magestore/onestepcheckout.js</script>
             </action>
             <action method="addJs">
+                <script>magestore/onestepcheckout/bootstrap.min.js</script>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/magestore/onestepcheckout/flatnew/bootstrap.min.css</stylesheet>
+            </action>
+            <action method="addJs">
                 <script>calendar/calendar.js</script>
             </action>
             <action method="addJs">

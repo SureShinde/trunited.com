@@ -8,6 +8,16 @@ class Magestore_Onestepcheckout_Helper_Data extends Mage_Core_Helper_Abstract
         $this->settings = $this->getConfigData();
     }
 
+    public function getTextButtonOnZero()
+    {
+        return Mage::getStoreConfig('onestepcheckout/general/text_on_zero', Mage::app()->getStore(true)->getStoreId());
+    }
+
+    public function getTextButtGreaterZero()
+    {
+        return Mage::getStoreConfig('onestepcheckout/general/text_greater_zero', Mage::app()->getStore(true)->getStoreId());
+    }
+
     public function enabledOnestepcheckout()
     {
         if (Mage::getStoreConfig('onestepcheckout/general/active', Mage::app()->getStore(true)->getStoreId())) {

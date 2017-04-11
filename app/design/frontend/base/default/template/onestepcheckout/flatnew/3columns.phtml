@@ -1,4 +1,8 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->getGoogleMapApiKey(); ?>&v=3.exp&sensor=false&libraries=places&language=en"></script><script type="text/javascript">if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {	$$('.onestepcheckout-index-index')[0].addClassName('iphone');}</script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->getGoogleMapApiKey(); ?>&v=3.exp&sensor=false&libraries=places&language=en"></script>
+<script type="text/javascript">if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
+        $$('.onestepcheckout-index-index')[0].addClassName('iphone');
+    }</script>
 <?php $styleChange = Mage::helper('onestepcheckout')->getStyle(); ?>
 <?php $background_color = Mage::helper('onestepcheckout')->getBackgroundColor($styleChange); ?>
 <?php $background_button = Mage::helper('onestepcheckout')->getCheckoutButtonColor(); ?>
@@ -9,17 +13,19 @@
 <?php else: ?>
     <?php $styleUse = Mage::helper('onestepcheckout')->getBackgroundColor($styleChange); ?>
 <?php endif; ?>
-<?php $_helper = Mage::helper('onestepcheckout'); ?>
+<?php $_helper = Mage::helper('onestepcheckout');
+?>
 <style type="text/css">
 
-    .one-step-checkout h3
-    {
-        background-color:<?php echo $styleUse ?> !important;
+    .one-step-checkout h3 {
+        background-color: <?php echo $styleUse ?> !important;
     }
-    button.onestepcheckout-btn-checkout{
-        background:<?php echo $background_button ?> !important;              
+
+    button.onestepcheckout-btn-checkout {
+        background: <?php echo $background_button ?> !important;
     }
-    button.onestepcheckout-btn-checkout:hover{
+
+    button.onestepcheckout-btn-checkout:hover {
         cursor: pointer;
     }
 
@@ -33,61 +39,67 @@
     #onestepcheckout-forgot-table li.last p a span,
     #onestepcheckout-register-table li.last p a span,
     p.forgot-link a span,
-	p.register-link a span
-    {
-        background-color:<?php echo $styleUse ?> !important;      
+    p.register-link a span {
+        background-color: <?php echo $styleUse ?> !important;
 
     }
+
     .onestepcheckout-login-link a,
     p.forgot-link a,
-	p.register-link a,
+    p.register-link a,
     #onestepcheckout-forgot-table li.last p a,
-    #onestepcheckout-register-table li.last p a
-    { color:<?php echo $styleUse ?> !important; }
-    button#add_coupon_code_button:hover{
+    #onestepcheckout-register-table li.last p a {
+        color: <?php echo $styleUse ?> !important;
+    }
+
+    button#add_coupon_code_button:hover {
         cursor: pointer;
     }
 
-    button#remove_coupon_code_button:hover{
+    button#remove_coupon_code_button:hover {
         cursor: pointer;
-    }    
-    button.place-order-loader span {
-        background:none  !important;
     }
-	#notify-email-invalid{
-		width:250px !important;
-		height:70px !important;
-		position:fixed !important;
-		margin-left:-125px !important;
-		margin-top:-50px !important;
-		top:50% !important;
-		left:50% !important;
-		z-index:9999999 !important;
-		background:#fff;
-		box-shadow: 3px 3px 3px #aaa;
-		border-radius:5px;
-	}
-	#notify-email-invalid-overlay{
-		position: fixed !important;
+
+    button.place-order-loader span {
+        background: none !important;
+    }
+
+    #notify-email-invalid {
+        width: 250px !important;
+        height: 70px !important;
+        position: fixed !important;
+        margin-left: -125px !important;
+        margin-top: -50px !important;
+        top: 50% !important;
+        left: 50% !important;
+        z-index: 9999999 !important;
+        background: #fff;
+        box-shadow: 3px 3px 3px #aaa;
+        border-radius: 5px;
+    }
+
+    #notify-email-invalid-overlay {
+        position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        z-index:9999998 !important;
+        z-index: 9999998 !important;
         opacity: 0.65;
-	}
+    }
 </style>
 <!-- Start: Added by Daniel - 02/04/2015 - set background color for top links buttons after login from OSC -->
 <style type='text/css'>
-	.onestepcheckout-index-index  #osc_top_links a{
-		background:<?php echo $styleUse?>;
-	}
+    .onestepcheckout-index-index #osc_top_links a {
+        background: <?php echo $styleUse?>;
+    }
 </style>
 <!-- End: Added by Daniel - 02/04/2015 - set background color for top links buttons after login from OSC -->
 <div id="ajaxcart-load-ajax" style="display:none;">
     <div id="load" class="ajaxcart-overlay">&nbsp;</div>
     <div id="ajaxcart-loading" class="ajaxcart-loading">
-        <img alt="<?php echo $this->__('Loading') ?>..." src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" /><br />
+        <img alt="<?php echo $this->__('Loading') ?>..."
+             src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>"/><br/>
         <?php echo $this->__('Loading') ?>...
     </div>
     <div id="form-paypal" style="display:none;" class="form-paypal"></div>
@@ -96,49 +108,53 @@
 <ol class="one-step-checkout clearfix three-columns-flat">
     <li>
         <h1 class="checkout_header"><?php echo $this->getCheckoutTitle(); ?></h1>
+
         <p class="subtitle">
             <?php echo $this->configData['checkout_description'] ? $this->configData['checkout_description'] : 'Please fill in the fields below and click Place order to complete your purchase!'; ?>
         </p>
     </li>
     <?php if (($this->isShowLoginLink() || $this->isShowRegisterLink()) && !$this->isCustomerLoggedIn()): ?>
-        <li id='onestepcheckout_login_link' class="onestepcheckout-login-link">            
-            <a href="javascript:void(0);"  id="onestepcheckout-login-link"><span>&nbsp;</span>
-                <?php if($this->configData['login_link_title']): ?>
-					<?php echo $this->configData['login_link_title'] ?> 
-				<?php else:?>
-					<?php if(Mage::helper('onestepcheckout')->enableRegistration()):?>
-						<?php echo $this->__('Click here to login or create a new account') ?>
-					<?php else:?>
-						<?php echo $this->__('Already have an account?Click here to login') ?>
-					<?php endif;?>
-				<?php endif;?>
+        <li id='onestepcheckout_login_link' class="onestepcheckout-login-link">
+            <a href="javascript:void(0);" id="onestepcheckout-login-link"><span>&nbsp;</span>
+                <?php if ($this->configData['login_link_title']): ?>
+                    <?php echo $this->configData['login_link_title'] ?>
+                <?php else: ?>
+                    <?php if (Mage::helper('onestepcheckout')->enableRegistration()): ?>
+                        <?php echo $this->__('Click here to login or create a new account') ?>
+                    <?php else: ?>
+                        <?php echo $this->__('Already have an account?Click here to login') ?>
+                    <?php endif; ?>
+                <?php endif; ?>
             </a>
         </li>
     <?php endif ?>
-	<!-- Start: Added by Daniel - 02/04/2015 - Top links buttons after login from OSC -->
-	<li id='osc_top_links'>
-		<a href='<?php echo $this->getUrl('customer/account/',array('_secure'=>true));?>' title='<?php echo $this->__('My Account');?>'><?php echo $this->__('My Account');?></a>
-		<a href='<?php echo $this->getUrl('checkout/cart/',array('_secure'=>true));?>' title='<?php echo $this->__('My Cart');?>'><?php echo $this->__('My Cart');?></a>
-		<a href='<?php echo $this->getUrl('customer/account/logout',array('_secure'=>true));?>' title='<?php echo $this->__('Log Out');?>'><?php echo $this->__('Log Out');?></a>
-	</li>
-	<!-- End: Added by Daniel - 02/04/2015 - Top links buttons after login from OSC -->
+    <!-- Start: Added by Daniel - 02/04/2015 - Top links buttons after login from OSC -->
+    <li id='osc_top_links'>
+        <a href='<?php echo $this->getUrl('customer/account/', array('_secure' => true)); ?>'
+           title='<?php echo $this->__('My Account'); ?>'><?php echo $this->__('My Account'); ?></a>
+        <a href='<?php echo $this->getUrl('checkout/cart/', array('_secure' => true)); ?>'
+           title='<?php echo $this->__('My Cart'); ?>'><?php echo $this->__('My Cart'); ?></a>
+        <a href='<?php echo $this->getUrl('customer/account/logout', array('_secure' => true)); ?>'
+           title='<?php echo $this->__('Log Out'); ?>'><?php echo $this->__('Log Out'); ?></a>
+    </li>
+    <!-- End: Added by Daniel - 02/04/2015 - Top links buttons after login from OSC -->
     <li class='payment_buttons'>
-	<?php if(Mage::helper('core')->isModuleEnabled('Amazon_Payments')) echo $this->getChildHtml('amazon_button');?>
+        <?php if (Mage::helper('core')->isModuleEnabled('Amazon_Payments')) echo $this->getChildHtml('amazon_button'); ?>
     </li>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <li class="address-order">
         <form id="one-step-checkout-form" method="post" action="<?php echo $this->getCheckoutUrl(); ?>">
             <div class="address-information address-info-3-columns">
-			
-			<!-- Start: Modified by Daniel -01042015- Reload data after login -->
-				<div id='onestepcheckout-billing-section'>
-					<?php echo $this->getChildHtml('onestepcheckout.billing'); ?>	
-				</div>	
-				<div id='onestepcheckout-shipping-section'>				
-					<?php echo $this->getChildHtml('onestepcheckout.shipping'); ?>
-				</div>
-			<!-- End: Modified by Daniel -01042015- Reload data after login -->
-			
+
+                <!-- Start: Modified by Daniel -01042015- Reload data after login -->
+                <div id='onestepcheckout-billing-section'>
+                    <?php echo $this->getChildHtml('onestepcheckout.billing'); ?>
+                </div>
+                <div id='onestepcheckout-shipping-section'>
+                    <?php echo $this->getChildHtml('onestepcheckout.shipping'); ?>
+                </div>
+                <!-- End: Modified by Daniel -01042015- Reload data after login -->
+
             </div>
 
             <div class="onestepcheckout-shipping-payment-review">
@@ -146,50 +162,73 @@
                 <?php if ($this->isVirtual() || !Mage::helper('onestepcheckout')->isHideShippingMethod() || $_helper->enabledDelivery()): ?>
                     <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
                         <div id="shipping-method-container" class="order-information order-info-3-columns"
-                            <?php if(Mage::helper('truwallet/giftcard')->plasticInCart()){?>style="display: none"<?php }?>>
-                        <ol>
+                             <?php if (Mage::helper('truwallet/giftcard')->plasticInCart()){ ?>style="display: none"<?php } ?>>
+                            <ol>
                                 <li class="shipping-method">
-                                    <h3 style="float:left"  id="shipping_method_step_header" class="step_2">
+                                    <h3 style="float:left" id="shipping_method_step_header" class="step_2">
                                         <?php echo $this->__('Shipping Method'); ?>
                                     </h3>
-                                    <div class="ajax-loader3" id="ajax-shipping" style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+
+                                    <div class="ajax-loader3" id="ajax-shipping"
+                                         style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
                                     <div class="clear"></div>
 
-                                    <div class="onestepcheckout-shipping-method-section" id="onestepcheckout-shipping-method-section">
-                                        <?php echo $this->getChildHtml('onestepcheckout.shipping_method'); ?>						
+                                    <div class="onestepcheckout-shipping-method-section"
+                                         id="onestepcheckout-shipping-method-section">
+                                        <?php echo $this->getChildHtml('onestepcheckout.shipping_method'); ?>
                                     </div>
                                     <div class="ajax-loader1" id="ajax-loader1" style="display:none;"></div>
-                                    <div id="control_overlay_shipping" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                                    <div id="control_overlay_shipping"
+                                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
                                 </li>
                                 <?php if ($_helper->enabledDelivery()): ?>
                                     <li class="delivery">
                                         <div class="delivery_time_date">
-                                            <label for="delivery_date" ><?php echo $this->__('Select a date') ?>: </label>
+                                            <label for="delivery_date"><?php echo $this->__('Select a date') ?>
+                                                : </label>
+
                                             <p class="datetime-delivery">
-                                                <input readonly="readonly" id="delivery_date" type="text" size="7" style="background: none repeat scroll 0 center rgba(0, 0, 0, 0); border: medium none; box-shadow: none; cursor: default; font-weight: bold;" value="<?php echo date('m.d.Y') ?>" name="delivery[onestepcheckout-date]" />
-                                                <img src="<?php echo Mage::getBaseUrl('skin') ?>frontend/base/default/images/onestepcheckout/flatnew/calendar.png" alt="dateinput" class="v-middle" id="delivery_date_trig" title="dateinput" width="21" height="21"/>
+                                                <input readonly="readonly" id="delivery_date" type="text" size="7"
+                                                       style="background: none repeat scroll 0 center rgba(0, 0, 0, 0); border: medium none; box-shadow: none; cursor: default; font-weight: bold;"
+                                                       value="<?php echo date('m.d.Y') ?>"
+                                                       name="delivery[onestepcheckout-date]"/>
+                                                <img
+                                                    src="<?php echo Mage::getBaseUrl('skin') ?>frontend/base/default/images/onestepcheckout/flatnew/calendar.png"
+                                                    alt="dateinput" class="v-middle" id="delivery_date_trig"
+                                                    title="dateinput" width="21" height="21"/>
                                             </p>
                                             <select name="delivery[onestepcheckout-time]" style="margin-left:6px;">
-                                                <?php for ($i = 0; $i <= 23; $i++):  if(!$this->isEnableHour($i)) continue;?>
-                                                    <option value="<?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00</option>
+                                                <?php for ($i = 0; $i <= 23; $i++): if (!$this->isEnableHour($i)) continue; ?>
+                                                    <option
+                                                        value="<?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>
+                                                        :00
+                                                    </option>
                                                 <?php endfor; ?>
                                             </select>
                                         </div>
-                                        <?php if($this->enableDeliverySecurityCode()):?>
-                                        <div class="clear"></div>
-                                        <div class="delivery-sercurity-box" style="padding: 0px 4%;margin-bottom:10px">
-                                            <div class="input-box ">
-                                                <label class="label" for="delivery_security_code"><?php echo $this->__('Security access code (Buildings/gated communities)');?></label>
-                                                <input id="delivery_security_code" class="input-text"
-                                                       type="text" size="25" name="delivery_security_code"/>
+                                        <?php if ($this->enableDeliverySecurityCode()): ?>
+                                            <div class="clear"></div>
+                                            <div class="delivery-sercurity-box"
+                                                 style="padding: 0px 4%;margin-bottom:10px">
+                                                <div class="input-box ">
+                                                    <label class="label"
+                                                           for="delivery_security_code"><?php echo $this->__('Security access code (Buildings/gated communities)'); ?></label>
+                                                    <input id="delivery_security_code" class="input-text"
+                                                           type="text" size="25" name="delivery_security_code"/>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <?php endif;?>
-                                        <link rel="stylesheet" type="text/css" href="<?php echo Mage::getBaseUrl('js') ?>calendar/calendar-win2k-1.css"  />
+                                        <?php endif; ?>
+                                        <link rel="stylesheet" type="text/css"
+                                              href="<?php echo Mage::getBaseUrl('js') ?>calendar/calendar-win2k-1.css"/>
 
                                         <script type="text/javascript">
                                             //<![CDATA[
-                                            enUS = {"m": {"wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}}; // en_US locale reference
+                                            enUS = {
+                                                "m": {
+                                                    "wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                                                    "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                }
+                                            }; // en_US locale reference
                                             Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
                                             Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
                                             Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
@@ -257,24 +296,24 @@
                                                 button: "delivery_date_trig",
                                                 electric: false,
                                                 singleClick: true,
-                                                disableFunc : function(date) {
+                                                disableFunc: function (date) {
                                                     var today = new Date();
 
-                                                    if(disableDays && disableDays.length > 0){
+                                                    if (disableDays && disableDays.length > 0) {
                                                         var day = date.getDay();
-                                                        if(disableDays.indexOf(day.toString()) >= 0){
+                                                        if (disableDays.indexOf(day.toString()) >= 0) {
                                                             return true;
                                                         }
                                                     }
 
-                                                    if(date.getFullYear() < today.getFullYear()){
+                                                    if (date.getFullYear() < today.getFullYear()) {
                                                         return true;
-                                                    }else if(date.getMonth() < today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                                                    } else if (date.getMonth() < today.getMonth() && date.getFullYear() <= today.getFullYear()) {
                                                         return true;
-                                                    }else if(date.getDate() < today.getDate() && date.getMonth() <= today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                                                    } else if (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth() && date.getFullYear() <= today.getFullYear()) {
                                                         return true;
                                                     }
-                                                    if(today.getDate() == date.getDate()){
+                                                    if (today.getDate() == date.getDate()) {
                                                         return false;
                                                     }
 
@@ -285,101 +324,148 @@
 
                                     </li>
                                 <?php endif; ?>
-                        </ol>
-						</div>
+                            </ol>
+                        </div>
                     <?php endif; ?>
                 <?php endif; ?>
-				<!-- When do you want it -->
-				<?php if (($_helper->enableGiftWrap() && !$this->isVirtual()) && !Mage::helper('other')->dropShipInCart()):?>
-					<?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap');?>
-                    <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount();?>
-					<div id="delivery-type-container" class="order-information order-info-3-columns">
-						<ol>
-							<li class="shipping-method">
-								<h3 style="float:left"  id="shipping_method_step_header" class="step_2">
-									<?php echo $this->__('When do you want it?'); ?>
-								</h3>
-                                <div class="ajax-loader3" id="ajax-trubox" style="float: left; margin-top: 14px; margin-left: 10px; display: none;"></div>
-								<div class="clear"></div>
-								<div class="onestepcheckout-trubox-method-section" id="onestepcheckout-trubox-method-section">
-									<ul>
-										<li>
-											<input  checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);" name="delivery_type" type="radio" id="trubox" class="radio validate-one-required-by-name">
-											<label for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
-										</li>
-										<li>
-											<input  <?php if(Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"';?> onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);" name="delivery_type" type="radio" id="get_it_now" class="radio validate-one-required-by-name">
-											<label for="get_it_now"><?php echo $this->__('Get It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
-										</li>
-									</ul>
-								</div>
-                                <div id="control_overlay_trubox" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
-							</li>
-						</ol>
-					</div>
-				<?php endif;?>
-				<!-- When do you want it -->
-				
+                <!-- When do you want it -->
+                <?php if (($_helper->enableGiftWrap() && !$this->isVirtual()) && !Mage::helper('other')->dropShipInCart()): ?>
+                    <?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap'); ?>
+                    <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount(); ?>
+                    <div id="delivery-type-container" class="order-information order-info-3-columns">
+                        <ol>
+                            <li class="shipping-method">
+                                <h3 style="float:left" id="shipping_method_step_header" class="step_2">
+                                    <?php echo $this->__('When do you want it?'); ?>
+                                </h3>
+
+                                <div class="ajax-loader3" id="ajax-trubox"
+                                     style="float: left; margin-top: 14px; margin-left: 10px; display: none;"></div>
+                                <div class="clear"></div>
+                                <div class="onestepcheckout-trubox-method-section"
+                                     id="onestepcheckout-trubox-method-section">
+                                    <ul>
+                                        <li>
+                                            <input checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);"
+                                                   name="delivery_type" type="radio" id="trubox"
+                                                   class="radio validate-one-required-by-name">
+                                            <label
+                                                for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
+                                        </li>
+                                        <li>
+                                            <input <?php if (Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"'; ?>
+                                                onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);"
+                                                name="delivery_type" type="radio" id="get_it_now"
+                                                class="radio validate-one-required-by-name">
+                                            <label
+                                                for="get_it_now"><?php echo $this->__('Get It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="control_overlay_trubox"
+                                     style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                            </li>
+                        </ol>
+                    </div>
+                <?php endif; ?>
+                <!-- When do you want it -->
+
                 <?php if (Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
                     <?php $_shippingMethod = $this->hasOnlyOneShippingMethod(); ?>
                     <span class="no-display">
-                        <input name="shipping_method" type="radio" value="<?php echo $_shippingMethod; ?>" id="s_method_<?php echo $_shippingMethod; ?>" checked="checked" />
+                        <input name="shipping_method" type="radio" value="<?php echo $_shippingMethod; ?>"
+                               id="s_method_<?php echo $_shippingMethod; ?>" checked="checked"/>
                     </span>
-               <?php endif; ?>
-			   
-                <div class="order-review-section" style="<?php if (Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()) if($this->hasOnlyOneShippingMethod()) echo 'width: 100% !important' ;?>">
+                <?php endif; ?>
+
+                <div class="order-review-section"
+                     style="<?php if (Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()) if ($this->hasOnlyOneShippingMethod()) echo 'width: 100% !important'; ?>">
                     <ol>
                         <li class="payment-method">
-                            <h3 style="float:left" id="payment_method_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod() && $_helper->enabledDelivery()): ?> class="step_4"<?php elseif (!$this->isVirtual() && Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()): ?>class="step_2"<?php else: ?> class="step_3"<?php endif; ?>>
+                            <h3 style="float:left"
+                                id="payment_method_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod() && $_helper->enabledDelivery()): ?> class="step_4"<?php elseif (!$this->isVirtual() && Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()): ?>class="step_2"<?php else: ?> class="step_3"<?php endif; ?>>
                                 <?php echo $this->__('Payment Method'); ?>
                             </h3>
-                            <div class="ajax-loader3" id="ajax-payment" style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+
+                            <div class="ajax-loader3" id="ajax-payment"
+                                 style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
                             <div class="clear"></div>
                             <div id="onestepcheckout-payment-methods" class="onestepcheckout-payment-methods">
                                 <?php echo $this->getChildHtml('onestepcheckout.payment_method'); ?>
-							</div>				
-							<div id="control_overlay_payment" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                            </div>
+                            <div id="control_overlay_payment"
+                                 style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
                         </li>
 
                     </ol>
                 </div>
-			</div>
-			
+            </div>
+
             <div class="column-last">
                 <div class="onestepcheckout-review-info">
                     <ol>
                         <li class="order-review-info">
-                            <h3 style="float:left" id="review_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?> class="step_4" <?php else: ?> class="step_3"<?php endif ?>>
+                            <h3 style="float:left"
+                                id="review_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?> class="step_4" <?php else: ?> class="step_3"<?php endif ?>>
                                 <?php echo $this->__('Order Review'); ?>
                             </h3>
-                            <div class="ajax-loader3" id="ajax-review" style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+
+                            <div class="ajax-loader3" id="ajax-review"
+                                 style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
                             <div class="clear"></div>
                             <?php echo $this->getChildHtml('onestepcheckout.review') ?>
-                            <div id="control_overlay_review" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                            <div id="control_overlay_review"
+                                 style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
 
                         </li>
                     </ol>
                 </div>
                 <div class="button-set clearfix button-onestepcheckout">
                     <div class="clear"></div>
-                    <button style="float:left" onclick="oscPlaceOrder(this);" id="onestepcheckout-button-place-order" type="button" title="<?php echo $this->__('Place Order') ?>" class="btn-proceed-checkout onestepcheckout-btn-checkout onestepcheckout-place">
+                    <button style="float:left" onclick="oscPlaceOrder(this);" id="onestepcheckout-button-place-order"
+                            type="button" title="<?php echo $this->__('Place Order') ?>"
+                            class="btn-proceed-checkout onestepcheckout-btn-checkout onestepcheckout-place">
                             <span>
-                                <span>
-                                    <?php echo $this->__('Place order now') ?>
+                                <span id="onestepcheckout-button-place-order-text">
+                                    <?php
+                                    $default_text = $this->__('Place order now');
+
+                                    if (Mage::getModel('checkout/session')->getQuote()->getGrandTotal() > 0) {
+                                        if ($_helper->getTextButtGreaterZero() != '')
+                                            echo $_helper->getTextButtGreaterZero();
+                                        else
+                                            echo $default_text;
+                                    } else {
+                                        if ($_helper->getTextButtonOnZero() != '')
+                                            echo $_helper->getTextButtonOnZero();
+                                        else
+                                            echo $default_text;
+                                    }
+
+                                    ?>
                                 </span>
                             </span>
                     </button>
                 </div>
                 <div id="onestepcheckout-place-order-loading" style="display:none;margin-top:10px; ">
-                    <p style="float:left;padding-top:5px;">&nbsp;&nbsp;<?php echo $this->__('Please wait, processing your order...') ?></p>
+                    <p style="float:left;padding-top:5px;">
+                        &nbsp;&nbsp;<?php echo $this->__('Please wait, processing your order...') ?></p>
                 </div>
             </div>
             <?php if (!$_helper->isCustomerLoggedIn() && $_helper->showLoginLink()): ?>
                 <?php echo $this->getChildHtml('login-popup'); ?>
-            <?php endif; ?>			
+            <?php endif; ?>
         </form>
     </li>
 </ol>
+<div class="modal fade osc-modal" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <iframe style = "border:none; width:100%; height:1000px;" id="load-skrill-form"
+                    src=""></iframe>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 
     //<![CDATA[	
@@ -394,7 +480,7 @@
 
     <?php if ($_helper->enableGiftWrap() && !$this->isVirtual() && !Mage::helper('other')->dropShipInCart()){?>
     $j = jQuery.noConflict();
-    $j(document).ready(function(){
+    $j(document).ready(function () {
         <?php if(Mage::helper('truwallet/giftcard')->plasticInCart()){?>
         $j('#get_it_now').click();
         <?php }?>
@@ -453,7 +539,7 @@
     }
 
 
-<?php $storeId = Mage::app()->getStore(true)->getStoreId() ?>
+    <?php $storeId = Mage::app()->getStore(true)->getStoreId() ?>
     var save_address_url = '<?php echo $this->getUrl('onestepcheckout/index/saveAddressOnestepcheckout', array('_secure' => true)) ?>';
     var update_address_shipping = '<?php echo Mage::getStoreConfig('onestepcheckout/ajax_update/address_shipping', $storeId) ?>';
     var update_address_payment = '<?php echo Mage::getStoreConfig('onestepcheckout/ajax_update/address_payment', $storeId) ?>';
@@ -462,132 +548,131 @@
     var update_shipping_review = '<?php echo Mage::getStoreConfig('onestepcheckout/ajax_update/shipping_review', $storeId) ?>';
     var update_payment_review = '<?php echo Mage::getStoreConfig('onestepcheckout/ajax_update/payment_review', $storeId) ?>';
 
-<?php if (Mage::getStoreConfig('onestepcheckout/ajax_update/enable_ajax', $storeId)): ?>
+    <?php if (Mage::getStoreConfig('onestepcheckout/ajax_update/enable_ajax', $storeId)): ?>
 
-        //save address when change country field
+    //save address when change country field
     <?php if ($this->isAjaxBillingField('country')): ?>
-                //2014.18.11 fix VAT apply start
-        	if ($('billing:taxvat'))
-                    Event.observe('billing:taxvat', 'change', function() {
-                    //check empty fields
-                    var empty = checkEmptyFields($('billing-new-address-form'));
-                    if (empty == false || reload_payment == 2)
-                        save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                    });
-                //2014.18.11 fix VAT apply end
-                
-                //save billing when country is changed
-                if ($('billing:country_id'))
-                    Event.observe('billing:country_id', 'change', function() {
-                        //check empty fields
-                        var empty = checkEmptyFields($('billing-new-address-form'));
-                        if (empty == false || reload_payment == 2)
-                            save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                        //Thinhnd
-        <?php if (Mage::getStoreConfig('onestepcheckout/field_require_management/region')): ?>
-                                if ($('billing:region').style.display != 'none')
-                                {
-                                    $('billing:region').addClassName('required-entry');
-                                    $$('span.required')[8].style.display = '';
-                                }
-        <?php endif; ?>
-                        //end
-                    });
-        <?php if ($this->isShowShippingAddress()): ?>
-                        if ($('shipping:country_id'))
-                            Event.observe('shipping:country_id', 'change', function() {
-                                //check empty fields
-                                var empty = checkEmptyFields($('shipping-new-address-form'));
-                                if (empty == false || reload_payment == 2)
-                                    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                            });
-        <?php endif; ?>
+    //2014.18.11 fix VAT apply start
+    if ($('billing:taxvat'))
+        Event.observe('billing:taxvat', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    //2014.18.11 fix VAT apply end
+
+    //save billing when country is changed
+    if ($('billing:country_id'))
+        Event.observe('billing:country_id', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+            //Thinhnd
+            <?php if (Mage::getStoreConfig('onestepcheckout/field_require_management/region')): ?>
+            if ($('billing:region').style.display != 'none') {
+                $('billing:region').addClassName('required-entry');
+                $$('span.required')[8].style.display = '';
+            }
+            <?php endif; ?>
+            //end
+        });
+    <?php if ($this->isShowShippingAddress()): ?>
+    if ($('shipping:country_id'))
+        Event.observe('shipping:country_id', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('shipping-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php endif; ?>
     <?php endif; ?>
 
-            //save address when change state/region field
+    //save address when change state/region field
     <?php if ($this->isAjaxBillingField('state/region')): ?>
-                //save billing when state / region is changed
-                if ($('billing:region_id'))
-                    Event.observe('billing:region_id', 'change', function() {
-                        //check empty fields
-                        var empty = checkEmptyFields($('billing-new-address-form'));
-                        if (empty == false || reload_payment == 2)
-                            save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                    });
-                if ($('billing:region'))
-                    Event.observe('billing:region', 'change', function() {
-                        //check empty fields
-                        var empty = checkEmptyFields($('billing-new-address-form'));
-                        if (empty == false || reload_payment == 2)
-                            save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                    });
-        <?php if ($this->isShowShippingAddress()): ?>
-                        if ($('shipping:region_id'))
-                            Event.observe('shipping:region_id', 'change', function() {
-                                //check empty fields
-                                var empty = checkEmptyFields($('shipping-new-address-form'));
-                                if (empty == false || reload_payment == 2)
-                                    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                            });
-                        if ($('shipping:region'))
-                            Event.observe('shipping:region', 'change', function() {
-                                //check empty fields
-                                var empty = checkEmptyFields($('shipping-new-address-form'));
-                                if (empty == false || reload_payment == 2)
-                                    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                            });
-        <?php endif; ?>
+    //save billing when state / region is changed
+    if ($('billing:region_id'))
+        Event.observe('billing:region_id', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    if ($('billing:region'))
+        Event.observe('billing:region', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php if ($this->isShowShippingAddress()): ?>
+    if ($('shipping:region_id'))
+        Event.observe('shipping:region_id', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('shipping-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    if ($('shipping:region'))
+        Event.observe('shipping:region', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('shipping-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php endif; ?>
     <?php endif; ?>
 
-            //save address when change postcode field
+    //save address when change postcode field
     <?php if ($this->isAjaxBillingField('postcode')): ?>
-                //save billing when postcode is changed
-                if ($('billing:postcode'))
-                    Event.observe('billing:postcode', 'change', function() {
-                        //check empty fields
-                        var empty = checkEmptyFields($('billing-new-address-form'));
-                        if (empty == false || reload_payment == 2)
-                            save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                    });
-        <?php if ($this->isShowShippingAddress()): ?>
-                        if ($('shipping:postcode'))
-                            Event.observe('shipping:postcode', 'change', function() {
-                                //check empty fields
-                                var empty = checkEmptyFields($('shipping-new-address-form'));
-                                if (empty == false || reload_payment == 2)
-                                    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                            });
-        <?php endif; ?>
+    //save billing when postcode is changed
+    if ($('billing:postcode'))
+        Event.observe('billing:postcode', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php if ($this->isShowShippingAddress()): ?>
+    if ($('shipping:postcode'))
+        Event.observe('shipping:postcode', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('shipping-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php endif; ?>
     <?php endif; ?>
 
-            //save address when change city field
+    //save address when change city field
     <?php if ($this->isAjaxBillingField('city')): ?>
-                //save billing when city is changed
-                if ($('billing:city'))
-                    Event.observe('billing:city', 'change', function() {
-                        //check empty fields
-                        var empty = checkEmptyFields($('billing-new-address-form'));
-                        if (empty == false || reload_payment == 2)
-                            save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                    });
-        <?php if ($this->isShowShippingAddress()): ?>
-                        if ($('shipping:city'))
-                            Event.observe('shipping:city', 'change', function() {
-                                //check empty fields
-                                var empty = checkEmptyFields($('shipping-new-address-form'));
-                                if (empty == false || reload_payment == 2)
-                                    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-                            });
-        <?php endif; ?>
+    //save billing when city is changed
+    if ($('billing:city'))
+        Event.observe('billing:city', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('billing-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
+    <?php if ($this->isShowShippingAddress()): ?>
+    if ($('shipping:city'))
+        Event.observe('shipping:city', 'change', function () {
+            //check empty fields
+            var empty = checkEmptyFields($('shipping-new-address-form'));
+            if (empty == false || reload_payment == 2)
+                save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+        });
     <?php endif; ?>
-        
-        //2014.18.11 delete reload when change telephone
-<?php endif ?>
+    <?php endif; ?>
+
+    //2014.18.11 delete reload when change telephone
+    <?php endif ?>
 
     //document.observe('dom:loaded', function() {
     //fix for IE9
-    Event.observe(window, 'load', function() {
-        if($('create_account_checkbox_id')){
+    Event.observe(window, 'load', function () {
+        if ($('create_account_checkbox_id')) {
             if ($('create_account_checkbox_id').checked)
                 $('password_section_id').show();
             else
@@ -615,25 +700,25 @@
             }
         }
     }
-    
+
     /* isUseAmazon() return true if use Amazon payment method */
-	function isUseAmazon(){
-		var options = document.getElementsByName('payment[method]');
-		var pay = true;
-		for(var i=0;i<options.length;i++){
-			if($(options[i].id).checked){
-				if(options[i].value == 'amazon_payments')
-				pay = false;
-				break;
-			}
-		}
-		if(pay==true){
-			return false;
-		}
-		return true;
-	}
-	/* end */
-        
+    function isUseAmazon() {
+        var options = document.getElementsByName('payment[method]');
+        var pay = true;
+        for (var i = 0; i < options.length; i++) {
+            if ($(options[i].id).checked) {
+                if (options[i].value == 'amazon_payments')
+                    pay = false;
+                break;
+            }
+        }
+        if (pay == true) {
+            return false;
+        }
+        return true;
+    }
+    /* end */
+
     function checkpayment() {
         var options = document.getElementsByName('payment[method]');
         var pay = true;
@@ -649,9 +734,11 @@
         return true;
     }
     function oscPlaceOrder(element) {
+
         var validator = new Validation('one-step-checkout-form');
         var form = $('one-step-checkout-form');
         if (validator.validate()) {
+
             if (($('p_method_hosted_pro') && $('p_method_hosted_pro').checked) || ($('p_method_payflow_advanced') && $('p_method_payflow_advanced').checked)) {
                 $('onestepcheckout-place-order-loading').show();
                 $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
@@ -659,6 +746,7 @@
                 $('ajaxcart-load-ajax').show();
                 checkAjax('<?php echo $this->getUrl('onestepcheckout/index/saveOrderPro', array('_secure' => true)); ?>');
             } else {
+
                 if (checkpayment()) {
                     element.disabled = true;
                     var already_placing_order = true;
@@ -668,94 +756,118 @@
                     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
                     //$('one-step-checkout-form').submit();
                     var options = document.getElementsByName('payment[method]');
+                    var is_skrill_lightbox = <?php if(Mage::helper('core')->isModuleEnabled('Skrill') && Mage::getStoreConfig('payment/skrill_settings/display', Mage::app()->getStore()) == 'LIGHTBOX'){?>1<?php }else{?>0<?php }?>;
                     for (var i = 0; i < options.length; i++) {
                         if ($(options[i].id).checked) {
                             if (options[i].id.indexOf("tco") != -1) {
                                 var params = Form.serialize('one-step-checkout-form');
                                 var request = new Ajax.Request(
-                                '<?php echo $this->getCheckoutUrl() . 'isAjax/tco'; ?>',
-                                {
-                                    method: 'post',
-                                    onComplete: this.onComplete,
-                                    onSuccess: function(transport) {
-                                        if (transport.status == 200) {
-                                            if (transport.responseText.isJSON) {
-                                                var response = JSON.parse(transport.responseText);
-                                                $('onestepcheckout-place-order-loading').style.display = 'none';
-                                                $('checkout-' + response.update_section.name + '-load').update(response.update_section.html);
-                                                $('onestepcheckout-button-place-order').removeAttribute('onclick');
-                                                $('onestepcheckout-button-place-order').observe('click', formsubmit());
-                                                $('onestepcheckout-button-place-order').disabled = false;
+                                    '<?php echo $this->getCheckoutUrl() . 'isAjax/tco'; ?>',
+                                    {
+                                        method: 'post',
+                                        onComplete: this.onComplete,
+                                        onSuccess: function (transport) {
+                                            if (transport.status == 200) {
+                                                if (transport.responseText.isJSON) {
+                                                    var response = JSON.parse(transport.responseText);
+                                                    $('onestepcheckout-place-order-loading').style.display = 'none';
+                                                    $('checkout-' + response.update_section.name + '-load').update(response.update_section.html);
+                                                    $('onestepcheckout-button-place-order').removeAttribute('onclick');
+                                                    $('onestepcheckout-button-place-order').observe('click', formsubmit());
+                                                    $('onestepcheckout-button-place-order').disabled = false;
+                                                }
                                             }
-                                        }
-                                    },
-                                    onFailure: '', //checkout.ajaxFailure.bind(checkout),
-                                    parameters: params
-                                });
-                            } 
-							else if (options[i].id.indexOf("wirecard") != -1) {
+                                        },
+                                        onFailure: '', //checkout.ajaxFailure.bind(checkout),
+                                        parameters: params
+                                    });
+                            }
+                            else if (options[i].id.indexOf("wirecard") != -1) {
                                 var params = Form.serialize('one-step-checkout-form');
                                 var request = new Ajax.Request(
-                                '<?php echo $this->getCheckoutUrl() . 'isAjax/wirecard'; ?>',
-                                {
-                                    method: 'post',
-                                    onComplete: this.onComplete,
-                                    onSuccess: function(transport) {
-                                        var response = JSON.parse(transport.responseText);
-                                        if (response.url) {
-                                            window.location.href = response.url;
-                                        } else {
-                                            var payment_method = $RF(form, 'payment[method]');
-                                            var wireparams = {'paymentMethod': payment_method};
-                                            url = '<?php echo Mage::getBaseUrl() . 'wirecard_checkout_page/processing/wirecard_checkout_pagecheckout/'; ?>';
-                                            var wirerequest = new Ajax.Request(
-                                            qmoreIsIframe,
-                                            {
-                                                method: 'get',
-                                                parameters: wireparams,
-                                                onSuccess: function(innerTransport) {
-                                                    if (innerTransport && innerTransport.responseText) {
-                                                        try {
-                                                            var innerResponse = eval('(' + innerTransport.responseText + ')');
-                                                        }
-                                                        catch (e) {
-                                                            innerResponse = {};
-                                                        }
-                                                        if (innerResponse.isIframe)
-                                                        {
-                                                            toggleQMoreIFrame();
-                                                            $('qmore-iframe').src = url;
-                                                        } else {
-                                                            window.location.href = url;
-                                                        }
-                                                    }
-                                                },
-                                                onFailure: ''
-                                            });
-                                        }
-                                    },
-                                    onFailure: '', //checkout.ajaxFailure.bind(checkout),
-                                    parameters: params
-                                });
-                            } 
-							else {
-                                if(isUseAmazon() == false){
+                                    '<?php echo $this->getCheckoutUrl() . 'isAjax/wirecard'; ?>',
+                                    {
+                                        method: 'post',
+                                        onComplete: this.onComplete,
+                                        onSuccess: function (transport) {
+                                            var response = JSON.parse(transport.responseText);
+                                            if (response.url) {
+                                                window.location.href = response.url;
+                                            } else {
+                                                var payment_method = $RF(form, 'payment[method]');
+                                                var wireparams = {'paymentMethod': payment_method};
+                                                url = '<?php echo Mage::getBaseUrl() . 'wirecard_checkout_page/processing/wirecard_checkout_pagecheckout/'; ?>';
+                                                var wirerequest = new Ajax.Request(
+                                                    qmoreIsIframe,
+                                                    {
+                                                        method: 'get',
+                                                        parameters: wireparams,
+                                                        onSuccess: function (innerTransport) {
+                                                            if (innerTransport && innerTransport.responseText) {
+                                                                try {
+                                                                    var innerResponse = eval('(' + innerTransport.responseText + ')');
+                                                                }
+                                                                catch (e) {
+                                                                    innerResponse = {};
+                                                                }
+                                                                if (innerResponse.isIframe) {
+                                                                    toggleQMoreIFrame();
+                                                                    $('qmore-iframe').src = url;
+                                                                } else {
+                                                                    window.location.href = url;
+                                                                }
+                                                            }
+                                                        },
+                                                        onFailure: ''
+                                                    });
+                                            }
+                                        },
+                                        onFailure: '', //checkout.ajaxFailure.bind(checkout),
+                                        parameters: params
+                                    });
+                            }
+                            else if(options[i].id.indexOf("skrill") != -1 && is_skrill_lightbox > 0) {
+                                var params = Form.serialize('one-step-checkout-form');
+
+                                var request = new Ajax.Request(
+                                    '<?php echo $this->getCheckoutUrl() . 'isAjax/skrill'; ?>',
+                                    {
+                                        method: 'post',
+                                        onComplete: this.onComplete,
+                                        onSuccess: function (transport) {
+                                            var response = JSON.parse(transport.responseText);
+                                            if (response.url) {
+                                                var $jD = jQuery.noConflict();
+                                                $jD('#load-skrill-form').attr('src',response.url);
+                                                $jD('#myModal').modal('show');
+                                                return false;
+                                            }
+                                        },
+                                        onFailure: '',
+                                        parameters: params
+                                    });
+                            } else {
+                                if (isUseAmazon() == false) {
                                     $('one-step-checkout-form').submit();
-								}
-								else{ 
-								<?php 
-									if(Mage::helper('core')->isModuleEnabled('Amazon_Payments')){
-										$helperAmz = new Amazon_Payments_Helper_Data();
-										if(isset($helperAmz))
-											$checkoutUrl = $helperAmz->getCheckoutUrl(false);
-									}
-								?>
-									window.location.href = "<?php if(isset($checkoutUrl)) echo $checkoutUrl;?>";
-								}
+                                }
+                                else {
+
+                                    <?php
+
+                                        if(Mage::helper('core')->isModuleEnabled('Amazon_Payments')){
+                                            $helperAmz = new Amazon_Payments_Helper_Data();
+                                            if(isset($helperAmz))
+                                                $checkoutUrl = $helperAmz->getCheckoutUrl(false);
+                                        }
+                                    ?>
+                                    window.location.href = "<?php if(isset($checkoutUrl)) echo $checkoutUrl;?>";
+                                }
+
                             }
                             break;
                         }
                     }
+
                 }
             }
         }
@@ -796,7 +908,7 @@
         new Ajax.Request(url, {
             method: 'post',
             evalJS: 'force',
-            onSuccess: function(transport) {
+            onSuccess: function (transport) {
                 // alert(JSON.parse(transport.responseText).url);
                 // Huy - Edit+add JS, CSS to display iFrame for PayPal Hosted Pro
                 if (JSON.parse(transport.responseText).url == 'null' || JSON.parse(transport.responseText).url == null) {
@@ -811,18 +923,17 @@
                     $('iframe-warning').style.textAlign = 'left';
                     $('hss-iframe').style.display = 'block';
                 }
-                else
-                {
+                else {
                     window.location.href = JSON.parse(transport.responseText).url;
                 }
             },
-            onFailure: function(transport) {
+            onFailure: function (transport) {
             },
             parameters: parameters
         });
     }
 
-   save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+    save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
 
 </script>
 
@@ -830,7 +941,11 @@
 <div id="loading-process" style="display: none;"></div>
 <?php echo $this->getChildHtml('tco_iframe'); ?>
 <div id="notify-email-invalid" style="display:none;">
-<p style="float:left;padding-top:27px;color:#000;font-family:tahoma;margin-left:10px;"><span style="display:block;float:left;margin-right:2px;"><?php echo $this->__('Email is ') ?></span><img style="float:left;margin-right:2px;"src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/invalidIcon.jpg'); ?>"/><?php echo $this->__(' please check it again!') ?></p>
+    <p style="float:left;padding-top:27px;color:#000;font-family:tahoma;margin-left:10px;"><span
+            style="display:block;float:left;margin-right:2px;"><?php echo $this->__('Email is ') ?></span><img
+            style="float:left;margin-right:2px;"
+            src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/invalidIcon.jpg'); ?>"/><?php echo $this->__(' please check it again!') ?>
+    </p>
 </div>
 <div id="notify-email-invalid-overlay" style="display:none;"></div>
 <!-- Terms and conditions -->
@@ -839,11 +954,11 @@
 <?php $height = $_helper->getTermPopupHeight() ? $_helper->getTermPopupHeight() : 530; ?>
 
 <?php if ($_helper->enableTermsAndConditions()): ?>
-    
-    	
+
+
     <script>
         //<![CDATA[
-        Event.observe(window, 'load', function() {
+        Event.observe(window, 'load', function () {
 
             var termsPopup = new Control.Modal($('onestepcheckout-toc-popup'), {
                 overlayOpacity: 0.65,
@@ -851,39 +966,39 @@
                 fadeDuration: 0.3
             });
 
-            $('onestepcheckout-toc-link').observe('click', function(e) {
+            $('onestepcheckout-toc-link').observe('click', function (e) {
                 e.preventDefault();
                 termsPopup.open();
                 var controlOverlay = $('control_overlay');
                 controlOverlay.style.opacity = 0.65;
-				/*window.scrollTo(0, 20);*/
+                /*window.scrollTo(0, 20);*/
             });
 
-            $$('div#onestepcheckout-toc-popup p.close a').invoke('observe', 'click', function(e) {
+            $$('div#onestepcheckout-toc-popup p.close a').invoke('observe', 'click', function (e) {
                 e.preventDefault();
                 termsPopup.close();
             });
 
         });
-		
-		Event.observe(window, 'scroll', function() {
-			var toc_popup = $('onestepcheckout-toc-popup');
-			if(toc_popup){
-				var toc_popup_height = toc_popup.clientHeight;
-				var window_height = window.innerHeight;
-				var document_height =  document.documentElement.clientHeight;
-				if(typeof(window_height) == 'undefined'){
-					window_height = document_height;
-				}
-				if(toc_popup_height <= window_height){
-					toc_popup.addClassName('fix-possition-toc-popup');
-				}else{
-					toc_popup.removeClassName('fix-possition-toc-popup');
-				}
-			}
- 
+
+        Event.observe(window, 'scroll', function () {
+            var toc_popup = $('onestepcheckout-toc-popup');
+            if (toc_popup) {
+                var toc_popup_height = toc_popup.clientHeight;
+                var window_height = window.innerHeight;
+                var document_height = document.documentElement.clientHeight;
+                if (typeof(window_height) == 'undefined') {
+                    window_height = document_height;
+                }
+                if (toc_popup_height <= window_height) {
+                    toc_popup.addClassName('fix-possition-toc-popup');
+                } else {
+                    toc_popup.removeClassName('fix-possition-toc-popup');
+                }
+            }
+
         });
-		
+
         //]]>
     </script>
 <?php endif; ?>
@@ -895,66 +1010,66 @@
             } else {
                 document.getElementById(type + ':street1').value = '';
             }
-            if (sublocality){
+            if (sublocality) {
                 document.getElementById(type + ':street2').value = sublocality;
-			}else{
-				document.getElementById(type + ':street2').value = '';
-			}
-            if (city){
+            } else {
+                document.getElementById(type + ':street2').value = '';
+            }
+            if (city) {
                 document.getElementById(type + ':city').value = city;
-			}else{
-				document.getElementById(type + ':city').value = '';
-			}
+            } else {
+                document.getElementById(type + ':city').value = '';
+            }
             if (country)
                 document.getElementById(type + ':country_id').value = country;
             if (type == 'billing')
                 billingRegionUpdater.update();
             if (type == 'shipping')
                 shippingRegionUpdater.update();
-			if (region){
+            if (region) {
                 document.getElementById(type + ':region').value = region;
-			}else{
-				document.getElementById(type + ':region').value = '';
-			}
-            if (postal_code){
+            } else {
+                document.getElementById(type + ':region').value = '';
+            }
+            if (postal_code) {
                 document.getElementById(type + ':postcode').value = postal_code;
-			}else{
-				document.getElementById(type + ':postcode').value = '';
-			}
+            } else {
+                document.getElementById(type + ':postcode').value = '';
+            }
             var params = {country: country, region_id: region_id};
             var request = new Ajax.Request(
-            '<?php echo $this->getUrl('onestepcheckout/index/getreionid'); ?>',
-            {
-                method: 'post',
-                onSuccess: function(transport) {
-                    if (transport.status == 200) {
-                        var id = JSON.parse(transport.responseText).id;
-                        if (region_id){
-                            document.getElementById(type + ':region_id').value = id;
-						}else{
-							document.getElementById(type + ':region_id').value = '';
-						}
-                        if (street) {
-                            document.getElementById(type + ':street1').value = street;
-                        } else {
-                            //document.getElementById(type + ':street1').value = '';
+                '<?php echo $this->getUrl('onestepcheckout/index/getreionid'); ?>',
+                {
+                    method: 'post',
+                    onSuccess: function (transport) {
+                        if (transport.status == 200) {
+                            var id = JSON.parse(transport.responseText).id;
+                            if (region_id) {
+                                document.getElementById(type + ':region_id').value = id;
+                            } else {
+                                document.getElementById(type + ':region_id').value = '';
+                            }
+                            if (street) {
+                                document.getElementById(type + ':street1').value = street;
+                            } else {
+                                //document.getElementById(type + ':street1').value = '';
+                            }
                         }
-                    }
-                },
-				onComplete: function(transport){
-					save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
-				},
-                onFailure: '',
-                parameters: params
-            });
+                    },
+                    onComplete: function (transport) {
+                        save_address_information(save_address_url, update_address_shipping, update_address_payment, update_address_review);
+                    },
+                    onFailure: '',
+                    parameters: params
+                });
         }
     </script>
 <?php endif; ?>
 <script type="text/javascript">
-var invalidEmailPopup = new Control.Modal($('notify-email-invalid'), {
-                overlayOpacity: 0.65,
-                fade: true,
-                fadeDuration: 0.3
+    var invalidEmailPopup = new Control.Modal($('notify-email-invalid'), {
+        overlayOpacity: 0.65,
+        fade: true,
+        fadeDuration: 0.3
     });
 
     function check_valid_email(transport) {
@@ -963,28 +1078,28 @@ var invalidEmailPopup = new Control.Modal($('notify-email-invalid'), {
         if (message == 'valid') {
             $('email-error-message').update('');
             $('valid_email_address_image').show();
-			$('onestepcheckout-button-place-order').disabled = false;
-			$('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
-			$('onestepcheckout-button-place-order').removeClassName('place-order-loader');
-			if($('emailvalid'))
-			$('emailvalid').value = 'valid';
-			invalidEmailPopup.close();
+            $('onestepcheckout-button-place-order').disabled = false;
+            $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
+            $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
+            if ($('emailvalid'))
+                $('emailvalid').value = 'valid';
+            invalidEmailPopup.close();
 
         }
         else if (message == 'invalid') {
             $('valid_email_address_image').hide();
             $('email-error-message').update('<?php echo $this->__('<p>Invalid Email Address</p>') ?>');
-			$('onestepcheckout-button-place-order').disabled = true;
-			$('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
-			$('onestepcheckout-button-place-order').addClassName('place-order-loader');
-			if($('emailvalid'))
-			$('emailvalid').value = 'invalid';
-			invalidEmailPopup.open();
+            $('onestepcheckout-button-place-order').disabled = true;
+            $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
+            $('onestepcheckout-button-place-order').addClassName('place-order-loader');
+            if ($('emailvalid'))
+                $('emailvalid').value = 'invalid';
+            invalidEmailPopup.open();
 
-		}
+        }
         else if (message == 'exists') {
-			if($('emailvalid'))
-				$('emailvalid').value = 'valid';
+            if ($('emailvalid'))
+                $('emailvalid').value = 'valid';
             $('valid_email_address_image').hide();
             if (show_login_link)
                 $('email-error-message').update('<?php echo $this->__('<p>Email address already registered. You may <a href="" onclick="login_popup.show(); return false;">login</a> if you wish to do so </p>') ?>');
