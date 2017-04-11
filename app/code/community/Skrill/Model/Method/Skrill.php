@@ -131,7 +131,7 @@ abstract class Skrill_Model_Method_Skrill extends Mage_Payment_Model_Method_Abst
             return $paymentInfo->getOrder();
         }
 
-        return $paymentInfo->getQuote();
+        return Mage::getModel('sales/quote')->load($paymentInfo->getQuote()->getId());
     }
 
     public function getOrderIncrementId()
