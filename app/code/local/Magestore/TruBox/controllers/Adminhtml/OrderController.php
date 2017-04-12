@@ -48,35 +48,12 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 
 	public function saveAction() {
 		if ($params = $this->getRequest()->getPost()) {
-			if(isset($_FILES['filename']['name']) && $_FILES['filename']['name'] != '') {
-				try {
-					/* Starting upload */
-					$uploader = new Varien_File_Uploader('filename');
-
-					// Any extention would work
-			   		$uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
-					$uploader->setAllowRenameFiles(false);
-
-					// Set the file upload mode
-					// false -> get the file directly in the specified folder
-					// true -> get the file in the product like folders
-					//	(file.jpg will go in something like /media/f/i/file.jpg)
-					$uploader->setFilesDispersion(false);
-
-					// We set media as the upload dir
-					$path = Mage::getBaseDir('media') . DS ;
-					$uploader->save($path, $_FILES['filename']['name'] );
-
-				} catch (Exception $e) {}
-
-				//this way the name is saved in DB
-	  			$data['filename'] = $_FILES['filename']['name'];
-			}
 			try {
 				$customer_params = explode(',',$params['customers']);
 				if(sizeof($customer_params) > 0)
 				{
 					$truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/item');
+					$rs = array();
 					foreach ($customer_params as $identify_customer) {
 						if (!filter_var($identify_customer, FILTER_VALIDATE_INT) === false) {
 							$customer = Mage::getModel('customer/customer')->load($identify_customer);
@@ -105,13 +82,15 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 									}
 								}
 
-								zend_debug::dump($data);
-								exit;
-								$rs = 0;
+
 								if(sizeof($data) > 0)
 								{
-									$rs = Mage::helper('trubox/order')->prepareOrder($data);
+									$re = Mage::helper('trubox/order')->prepareOrder($data);
+									if(sizeof($re) > 0)
+										$rs[] = $re;
 								}
+
+
 							}
 						} else if(!filter_var($identify_customer, FILTER_VALIDATE_EMAIL) === false) {
 
@@ -121,7 +100,13 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 							);
 						}
 					}
-					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('trubox')->__('Order(s) was successfully saved'));
+
+					$message = str_replace(array('[',']','{','}'),array('','','',''),json_encode($rs));
+					Mage::getSingleton('adminhtml/session')->addSuccess(
+						Mage::helper('trubox')->__(
+							'Total Order(s) was successfully created: <b style="color: red;">%s</b> <br />- %s',sizeof($rs),$message
+						)
+					);
 					Mage::getSingleton('adminhtml/session')->setFormData(false);
 				} else {
 					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('trubox')->__('Empty customers'));

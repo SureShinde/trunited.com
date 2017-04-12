@@ -65,6 +65,14 @@ class Magestore_TruBox_Block_Adminhtml_Items_Grid extends Mage_Adminhtml_Block_W
             'index' => 'item_id',
         ));
 
+        $this->addColumn('customer_id', array(
+            'header' => Mage::helper('trubox')->__('Customer ID'),
+            'index' => 'customer_id',
+//            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_Customer_Name',
+            'filter_name' => 'customer_id',
+//            'filter_condition_callback' => array($this, '_filterCustomerNameCallback')
+        ));
+
         $this->addColumn('customer_name', array(
             'header' => Mage::helper('trubox')->__('Customer Name'),
             'index' => 'customer_name',
