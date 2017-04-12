@@ -80,6 +80,10 @@ class Skrill_PaymentController extends Mage_Core_Controller_Front_Action
             if ($additionalInformation['skrill_status'] == Skrill_Model_Method_Skrill::PENDING_STATUS
                 || $additionalInformation['skrill_status'] == Skrill_Model_Method_Skrill::PROCESSED_STATUS
             ) {
+                $order->addStatusHistoryComment('', Mage_Sales_Model_Order::STATE_PROCESSING);
+                $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
+                $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+                $order->save();
                 $this->_redirect('checkout/onepage/success');
             } elseif ($additionalInformation['skrill_status'] == Skrill_Model_Method_Skrill::FAILED_STATUS) {
                 $failedReasonCode = $additionalInformation['failed_reason_code'];
@@ -282,7 +286,7 @@ class Skrill_PaymentController extends Mage_Core_Controller_Front_Action
                 $order->addStatusHistoryComment($comment, Mage_Sales_Model_Order::STATE_PROCESSING)->save();
             } else{
                 $comment = Mage::helper('skrill')->getComment($responseStatus);
-                $order->addStatusHistoryComment($comment, 'payment_accepted')->save();
+                $order->addStatusHistoryComment($comment, Mage_Sales_Model_Order::STATE_PROCESSING)->save();
             }
             $this->inActiveQuote($order);
         } else {
@@ -306,7 +310,8 @@ class Skrill_PaymentController extends Mage_Core_Controller_Front_Action
         if ($responseStatus['status'] == Skrill_Model_Method_Skrill::PROCESSED_STATUS) {
             Mage::helper('skrill')->invoice($order);
             $comment = Mage::helper('skrill')->getComment($responseStatus);
-            $order->addStatusHistoryComment($comment, 'payment_accepted')->save();
+//            $order->addStatusHistoryComment($comment, 'payment_accepted')->save();
+            $order->addStatusHistoryComment($comment, Mage_Sales_Model_Order::STATE_PROCESSING)->save();
         } elseif ($responseStatus['status'] == Skrill_Model_Method_Skrill::FAILED_STATUS) {
             if ($responseStatus['failed_reason_code']) {
                 $order->getPayment()->setAdditionalInformation(

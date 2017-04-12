@@ -1,0 +1,94 @@
+2017-04-12T00:01:55-07:00 DEBUG (7): get sid request
+2017-04-12T00:01:55-07:00 DEBUG (7): Array
+(
+    [pay_to_email] => admin@trunited.com
+    [recipient_description] => Trunited
+    [transaction_id] => 10002538317041212010370910806
+    [return_url] => http://dev.trunited.com/skrill/payment/handleResponse/?orderId=100025383&paymentMethod=skrill_vsa
+    [status_url] => http://dev.trunited.com/skrill/payment/handleStatusResponse/orderId/100025383/paymentMethod/skrill_vsa/
+    [status_url2] => admin@trunited.com
+    [cancel_url] => http://dev.trunited.com/skrill/payment/cancelResponse/
+    [language] => EN
+    [logo_url] => https%3A%2F%2Ftrunited.com%2Flogo.png
+    [prepare_only] => 1
+    [pay_from_email] => damon.porter@gmail.com
+    [firstname] => Damon
+    [lastname] => Porter
+    [address] => 4117 E Lexington Ave
+    [postal_code] => 85234
+    [city] => Gilbert
+    [country] => USA
+    [amount] => 3.2300
+    [currency] => USD
+    [detail1_description] => Order pay from damon.porter@gmail.com
+    [merchant_fields] => Platform,Paymentkey
+    [Platform] => 71422537
+    [Paymentkey] => 3084FF35DC623CAD6FECB04F80907237
+    [payment_methods] => VSA
+)
+
+2017-04-12T00:01:55-07:00 DEBUG (7): get sid response : cbc37c9bed554785e6af833af292b89d
+2017-04-12T00:02:55-07:00 DEBUG (7): process status url with status : 2
+2017-04-12T00:02:55-07:00 DEBUG (7): status url response
+2017-04-12T00:02:55-07:00 DEBUG (7): Array
+(
+    [orderid] => 100025383
+    [paymentmethod] => skrill_vsa
+    [platform] => 71422537
+    [status] => 2
+    [md5sig] => 31AE94766C68549E9B98CCDFB6230FEB
+    [merchant_id] => 89516037
+    [pay_to_email] => admin@trunited.com
+    [paymentkey] => 3084FF35DC623CAD6FECB04F80907237
+    [mb_amount] => 3.23
+    [mb_transaction_id] => 2071573792
+    [currency] => USD
+    [amount] => 3.2300
+    [payment_type] => AMX
+    [transaction_id] => 10002538317041212010370910806
+    [pay_from_email] => damon.porter@gmail.com
+    [mb_currency] => USD
+)
+
+2017-04-12T00:02:55-07:00 DEBUG (7): validate payment
+2017-04-12T00:02:55-07:00 DEBUG (7): send version tracker
+2017-04-12T00:02:55-07:00 DEBUG (7): send version tracker request
+2017-04-12T00:02:55-07:00 DEBUG (7): Array
+(
+    [transaction_mode] => LIVE
+    [ip_address] => 192.240.189.176
+    [shop_version] => 1.9.2.4
+    [plugin_version] => 1.0.28
+    [client] => Skrill
+    [merchant_id] => 89516037
+    [shop_system] => Magento
+    [shop_url] => https://trunited.com
+    [email] => admin@trunited.com
+)
+
+2017-04-12T00:02:56-07:00 DEBUG (7): send version tracker response
+2017-04-12T00:02:56-07:00 DEBUG (7): Array
+(
+    [error] => Array
+        (
+            [code] => 202
+            [message] => Accepted: Request accepted but the maximum request per day is exceeded
+        )
+
+)
+
+2017-04-12T00:02:56-07:00 DEBUG (7): is Fraud : 0
+2017-04-12T00:02:56-07:00 DEBUG (7): is credential valid : 1
+2017-04-12T00:02:56-07:00 DEBUG (7): process payment
+2017-04-12T00:03:03-07:00 DEBUG (7): process return url
+2017-04-12T00:03:03-07:00 DEBUG (7): payment additional information
+2017-04-12T00:03:03-07:00 DEBUG (7): Array
+(
+    [skrill_status_url_response] => a:16:{s:7:"orderid";s:9:"100025383";s:13:"paymentmethod";s:10:"skrill_vsa";s:8:"platform";s:8:"71422537";s:6:"status";s:1:"2";s:6:"md5sig";s:32:"31AE94766C68549E9B98CCDFB6230FEB";s:11:"merchant_id";s:8:"89516037";s:12:"pay_to_email";s:18:"admin@trunited.com";s:10:"paymentkey";s:32:"3084FF35DC623CAD6FECB04F80907237";s:9:"mb_amount";s:4:"3.23";s:17:"mb_transaction_id";s:10:"2071573792";s:8:"currency";s:3:"USD";s:6:"amount";s:6:"3.2300";s:12:"payment_type";s:3:"AMX";s:14:"transaction_id";s:29:"10002538317041212010370910806";s:14:"pay_from_email";s:22:"damon.porter@gmail.com";s:11:"mb_currency";s:3:"USD";}
+    [skrill_transaction_id] => 10002538317041212010370910806
+    [skrill_mb_transaction_id] => 2071573792
+    [skrill_status] => 2
+    [skrill_payment_type] => AMX
+    [skrill_currency] => USD
+)
+
