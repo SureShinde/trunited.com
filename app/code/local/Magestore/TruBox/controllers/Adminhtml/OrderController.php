@@ -8,7 +8,7 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 			->_addBreadcrumb(Mage::helper('adminhtml')->__('Order Manager'), Mage::helper('adminhtml')->__('Order Manager'));
 		return $this;
 	}
- 
+
 	public function indexAction(){
 		$this->_initAction()
 			->renderLayout();
@@ -57,6 +57,7 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 					foreach ($customer_params as $identify_customer) {
 						if (!filter_var($identify_customer, FILTER_VALIDATE_INT) === false) {
 							$customer = Mage::getModel('customer/customer')->load($identify_customer);
+
 							if($customer->getId())
 							{
 								$truBox = Mage::getModel('trubox/trubox')->getCollection()
@@ -64,13 +65,18 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 									->getFirstItem()
 								;
 
-								if(!$truBox->getId())
+								if(!$truBox->getId()){
+									Mage::getSingleton('adminhtml/session')->addError(
+										Mage::helper('trubox')->__('Customer does not have items: %s', $customer->getId().' - '.$customer->getEmail())
+									);
 									continue;
+								}
+
 
 								$collection = Mage::getModel('trubox/item')->getCollection()
 									->addFieldToFilter('trubox_id', $truBox->getId())
 								;
-								
+
 								$data = array();
 								foreach ($collection as $item) {
 									if(!array_key_exists($item->getTruboxId(), $data)){
@@ -82,10 +88,10 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 									}
 								}
 
-
 								if(sizeof($data) > 0)
 								{
 									$re = Mage::helper('trubox/order')->prepareOrder($data);
+
 									if(sizeof($re) > 0)
 										$rs[] = $re;
 								}
@@ -93,7 +99,52 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 
 							}
 						} else if(!filter_var($identify_customer, FILTER_VALIDATE_EMAIL) === false) {
+							$customer = Mage::getModel('customer/customer')->getCollection()
+								->addFieldToFilter('email', $identify_customer)
+								->setOrder('entity_id', 'desc')
+								->getFirstItem()
+							;
 
+							if($customer->getId())
+							{
+								$truBox = Mage::getModel('trubox/trubox')->getCollection()
+									->addFieldToFilter('customer_id', $customer->getId())
+									->getFirstItem()
+								;
+
+								if(!$truBox->getId()){
+									Mage::getSingleton('adminhtml/session')->addError(
+										Mage::helper('trubox')->__('Customer does not have items: %s', $customer->getId().' - '.$customer->getEmail())
+									);
+									continue;
+								}
+
+
+								$collection = Mage::getModel('trubox/item')->getCollection()
+									->addFieldToFilter('trubox_id', $truBox->getId())
+								;
+
+								$data = array();
+								foreach ($collection as $item) {
+									if(!array_key_exists($item->getTruboxId(), $data)){
+										$data[$item->getTruboxId()] = array(
+											$item->getId()
+										);
+									} else {
+										$data[$item->getTruboxId()][] = $item->getId();
+									}
+								}
+
+								if(sizeof($data) > 0)
+								{
+									$re = Mage::helper('trubox/order')->prepareOrder($data);
+
+									if(sizeof($re) > 0)
+										$rs[] = $re;
+								}
+
+
+							}
 						} else {
 							Mage::getSingleton('adminhtml/session')->addError(
 								Mage::helper('trubox')->__('Error data: %s', $identify_customer)
