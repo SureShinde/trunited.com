@@ -10,6 +10,11 @@
 					<sort_order>0</sort_order>
 					<action>truboxadmin/adminhtml_items</action>
 				</items>
+				<order module="trubox" translate="title">
+					<title>Generating Orders</title>
+					<sort_order>1</sort_order>
+					<action>truboxadmin/adminhtml_order/new</action>
+				</order>
 				<settings module="trubox" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
@@ -46,6 +51,11 @@
 								<sort_order>0</sort_order>
 								<action>truboxadmin/adminhtml_trubox</action>
 							</items>
+							<order module="trubox" translate="title">
+								<title>Generating Orders</title>
+								<sort_order>1</sort_order>
+								<action>truboxadmin/adminhtml_order/new</action>
+							</order>
 							<settings module="trubox" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>
