@@ -20,7 +20,7 @@ class Magestore_TruBox_Block_Adminhtml_Order_Edit_Tab_Form extends Mage_Adminhtm
             'class'     => 'required-entry',
             'required'  => true,
             'name'      => 'customers',
-            'after_element_html' => '<br /><small>The customers are separated by commas. You are able to enter id or email of customers. <br /><b>Example: 3493, 3495, test@gmail.com, 3499..</b></small>',
+            'after_element_html' => '<br /><small>The customers are separated by commas. You are able to enter id of customers. <br /><b>Example: 3493, 3495, 3499..</b></small>',
             'tabindex' => 1
         ));
 

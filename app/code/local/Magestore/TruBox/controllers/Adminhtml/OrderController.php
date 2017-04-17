@@ -153,11 +153,12 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 					}
 
 					$message = str_replace(array('[',']','{','}'),array('','','',''),json_encode($rs));
-					Mage::getSingleton('adminhtml/session')->addSuccess(
-						Mage::helper('trubox')->__(
-							'Total Order(s) was successfully created: <b style="color: red;">%s</b> <br />- %s',sizeof($rs),$message
-						)
-					);
+					if(sizeof($rs) > 0)
+						Mage::getSingleton('adminhtml/session')->addSuccess(
+							Mage::helper('trubox')->__(
+								'Total Order(s) was successfully created: <b style="color: red;">%s</b> <br />- %s',sizeof($rs),$message
+							)
+						);
 					Mage::getSingleton('adminhtml/session')->setFormData(false);
 				} else {
 					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('trubox')->__('Empty customers'));
