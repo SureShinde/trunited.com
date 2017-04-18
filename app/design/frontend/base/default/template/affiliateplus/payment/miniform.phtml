@@ -51,6 +51,11 @@
                     <span><span><?php echo $this->__('Transfer to truWallet') ?></span></span>
                 </button>
             </div>
+            <?php if(Mage::helper('truwallet')->getEnableTransferBonus()){?>
+            <div class="bonus-message message">
+                <?php echo Mage::helper('truwallet')->getMessageTransferBonus();?>
+            </div>
+            <?php }?>
         </div>
     </div>
 </form>

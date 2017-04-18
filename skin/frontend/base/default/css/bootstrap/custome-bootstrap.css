@@ -667,3 +667,8 @@ ul.tab li a:focus, .active {
 .pages .next img, .pages .previous img{
     width: 20px;
 }
+
+.bonus-message{
+    margin: 10px 0 0 0;
+    color: green;
+}

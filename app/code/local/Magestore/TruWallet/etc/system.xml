@@ -249,6 +249,44 @@
 						</applied_label>
 					</fields>
 				</spending>
+				<transfer>
+					<label>Affiliate Transfers Money To truWallet Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>5</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enable>
+							<label>Enable % bonus</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable>
+						<bonus>
+							<label>Bonus (%)</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>When the affiliate transfers money to truWallet, he will be received additional % bonus in truWallet.</comment>
+						</bonus>
+						<message>
+							<label>Notification Message</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>The message will be displayed when the affiliate transfers money to truWallet</comment>
+						</message>
+					</fields>
+				</transfer>
 
 				<email>
 					<label>Email Configuration</label>
