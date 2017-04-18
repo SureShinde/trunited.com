@@ -106,7 +106,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             // Update earning point for each items
             $this->_updateEarningPoints($address);
         }
-        
+
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));

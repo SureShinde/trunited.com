@@ -65,13 +65,20 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
     public function prepareOrder($data)
     {
-        $flag = 0;
+        $flag = array();
         if (sizeof($data) > 0) {
             foreach ($data as $trubox_id => $itms) {
                 $trubox = Mage::getModel('trubox/trubox')->load($trubox_id);
                 if ($trubox->getId()) {
-                    if ($this->createOrder($trubox->getCustomerId(), $itms))
-                        $flag++;
+                    if ($rs = $this->createOrder($trubox->getCustomerId(), $itms))
+                    {
+                        var_dump(sizeof($rs));
+                        if(sizeof($rs) > 0)
+                            $flag[] = $rs;
+                    } else {
+
+                    }
+
                 }
 
             }
@@ -229,9 +236,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
     public function createOrder($customer_id, $data_items)
     {
+
         Mage::helper('catalog/product')->setSkipSaleableCheck(true);
         $customer = Mage::getModel('customer/customer')->load($customer_id);
         $admin_session = Mage::getSingleton('adminhtml/session');
+        $result = array();
         try{
 
             $admin_session->setIsOrderBackend(true);
@@ -395,14 +404,26 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $admin_session->unsOrderCustomerId();
             $admin_session->unsGrandTotalOrder();
 
-            return true;
-        } catch (Exception $ex) {
-            Mage::getSingleton('adminhtml/session')->addError(
-                'Email: '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
+            $result[] = array(
+                'ID' => $customer_id,
+                'Email' => $customer->getEmail(),
+                'Order_id' => $increment_id
             );
 
-            return false;
+
+        } catch (Exception $ex) {
+            Mage::getSingleton('adminhtml/session')->addError(
+                'Customer: '.$customer->getId().' - '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
+            );
+
+            /*$result[] = array(
+                'customer' => $customer_id,
+                'order_increment_id' => $increment_id,
+                'error' => 'Email: '.$customer->getEmail().' - '.Mage::helper('trubox')->__($ex->getMessage())
+            );*/
         }
+
+        return $result;
     }
 
     public function checkApplyBalanceToPayment($customer, $grandTotal)
