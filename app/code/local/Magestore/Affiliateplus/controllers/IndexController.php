@@ -241,10 +241,19 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 ->addTransaction(
                     'transfer_credit', $customer, $transferObject
                 );*/
-
-            $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer->getId(), $transfer_amount);
+            $enable_bonus = Mage::helper('truwallet')->getEnableTransferBonus();
+            if($enable_bonus){
+                $percent = Mage::helper('truwallet')->getTransferBonus();
+                $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100 ;
+            } else {
+                $new_amount = $transfer_amount;
+            }
+            $truWalletAccount = Mage::helper('truwallet/account')->updateCredit(
+                $customer->getId(),
+                $new_amount
+            );
             $params = array(
-                'credit' => $transfer_amount,
+                'credit' => $new_amount,
                 'title' => Mage::helper('truwallet')->__('Transfer dollars from balance to truWallet'),
                 'receiver_email' => '',
                 'receiver_customer_id' => '',
@@ -274,7 +283,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
 
             $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
-                , $baseCurrency->format($transfer_amount, array(), false)));
+                , $baseCurrency->format($new_amount, array(), false)));
         } catch(Exception $ex){
             $this->_getCoreSession()->addError($ex->getMessage());
         }
