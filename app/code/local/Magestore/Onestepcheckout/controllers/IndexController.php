@@ -70,10 +70,15 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
             Mage::getSingleton('persistent/observer')->setQuoteGuest();
         }
 
-        if(Mage::helper('truwallet/giftcard')->plasticInCart())
+        if(Mage::helper('truwallet/giftcard')->plasticInCart() || Mage::helper('other')->dropShipInCart())
         {
             $shipping_method = 'freeshipping_freeshipping';
             $this->getOnepage()->saveShippingMethod($shipping_method);
+        }
+
+        if(Mage::helper('other')->dropShipInCart())
+        {
+            Mage::getSingleton('checkout/session')->setData('delivery_type', null);
         }
 
         //$this->loadLayout();
@@ -380,6 +385,8 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $shipping_method = $this->getRequest()->getPost('shipping_method', '');
         $payment_method = $this->getRequest()->getPost('payment_method', false);
         $billing_data = $this->getRequest()->getPost('billing', false);
+        $_helper = Mage::helper('onestepcheckout');
+
         if ($billing_data['country_id']) {
             Mage::getModel('checkout/session')->getQuote()->getBillingAddress()->setData('country_id', $billing_data['country_id'])->save();
         }
@@ -412,6 +419,14 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $this->_addOnestepcheckoutHandle(false);
         $result = $this->_getBlockResults();
         $result['is_plastic'] = $is_plastic;
+        if(Mage::getModel('checkout/session')->getQuote()->getGrandTotal() > 0)
+        {
+            $result['is_no_payment'] = true;
+            $result['text_button_payment'] = $_helper->getTextButtGreaterZero() != '' ? $_helper->getTextButtGreaterZero() : $this->__('Place order now');
+        } else {
+            $result['is_no_payment'] = true;
+            $result['text_button_payment'] = $_helper->getTextButtonOnZero() != '' ? $_helper->getTextButtonOnZero() : $this->__('Place order now');
+        }
         $this->getResponse()->setBody(Zend_Json::encode($result));
     }
 
@@ -666,12 +681,18 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
                 $redirect = Mage::getUrl('checkout/onepage/success');
             }
 
-            if ($isAjax == 'wirecard') {
+
+            if(Mage::helper('core')->isModuleEnabled('Skrill') && $isAjax == 'skrill'
+                && Mage::getStoreConfig('payment/skrill_settings/display', Mage::app()->getStore()) == 'LIGHTBOX'){
+                $rs['url'] = $redirectUrl;
+                $this->getResponse()->setBody(json_encode($rs));
+            } elseif ($isAjax == 'wirecard') {
                 $this->getResponse()->setBody(json_encode($JSONresponse));
             } elseif ($isAjax == 'tco') {
                 //Nothing to do here
                 //tco payment response the JSON code automatically
             } else {
+//                echo $redirect;
                 Header('Location: ' . $redirect);
                 exit();
             }
@@ -1229,6 +1250,7 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
 
     public function add_productAction()
     {
+        $_helper = Mage::helper('onestepcheckout');
         $session = $this->getSession();
         $id = (int) $this->getRequest()->getParam('id');
         /* Start: Huy - fix bug not accept decimal number */
@@ -1298,6 +1320,14 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
 		
         $this->_addOnestepcheckoutHandle(true);
         $result = $this->_getBlockResults($result, true);
+        if(Mage::getModel('checkout/session')->getQuote()->getGrandTotal() > 0)
+        {
+            $result['is_no_payment'] = true;
+            $result['text_button_payment'] = $_helper->getTextButtGreaterZero() != '' ? $_helper->getTextButtGreaterZero() : $this->__('Place order now');
+        } else {
+            $result['is_no_payment'] = true;
+            $result['text_button_payment'] = $_helper->getTextButtonOnZero() != '' ? $_helper->getTextButtonOnZero() : $this->__('Place order now');
+        }
         $this->getResponse()->setBody(Zend_Json::encode($result));
     }
 
@@ -1343,6 +1373,7 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $result['payment_method'] = $payment_method_html;
         $result['review'] = $review_total_html;
         $result['trubox_method'] = $trubox_method;
+        $result['hide_trubox'] = Mage::helper('other')->dropShipInCart();
         if ($isShipping) {
             $shipping_method_html = $this->getLayout()->getBlock('onestepcheckout_shipping_method')->toHtml();
             $result['shipping_method'] = $shipping_method_html;

@@ -397,3 +397,10 @@ p.forgot-link{float:left;width:100%;padding-top:15px;padding-bottom:5px;border-t
 #delivery-type label {
     font-size: 12.5px!important;
 }
+
+.osc-modal .modal-content
+{
+    box-shadow: none !important;
+    background-color: transparent !important;
+    border: none !important;
+}

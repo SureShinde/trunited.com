@@ -131,7 +131,7 @@ abstract class Skrill_Model_Method_Skrill extends Mage_Payment_Model_Method_Abst
             return $paymentInfo->getOrder();
         }
 
-        return $paymentInfo->getQuote();
+        return Mage::getModel('sales/quote')->load($paymentInfo->getQuote()->getId());
     }
 
     public function getOrderIncrementId()
@@ -336,7 +336,10 @@ abstract class Skrill_Model_Method_Skrill extends Mage_Payment_Model_Method_Abst
 
         Mage::getSingleton('customer/session')->setRedirectUrl('https://pay.skrill.com/?sid='.$sid);
 
-        if ($this->getDisplay() == "IFRAME" )
+        if($this->getDisplay() == 'LIGHTBOX')
+        {
+            return Mage::getSingleton('customer/session')->getRedirectUrl();
+        } else if ($this->getDisplay() == "IFRAME" )
             return Mage::app()->getStore(Mage::getDesign()->getStore())->getUrl('skrill/payment/qcheckout/', array('_secure'=>true));
         else
             return Mage::getSingleton('customer/session')->getRedirectUrl();

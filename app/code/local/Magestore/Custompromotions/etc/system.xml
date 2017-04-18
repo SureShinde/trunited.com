@@ -135,7 +135,7 @@
                 <shipment translate="label">
                     <label>ShipStation Configuration</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>3</sort_order>
+                    <sort_order>2</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -165,7 +165,7 @@
 				<verify translate="label">
 					<label>Verification Code Configuration</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>4</sort_order>
+					<sort_order>3</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
@@ -240,7 +240,7 @@
 				<cms_page translate="label">
 					<label>CMS Page Configuration</label>
 					<frontend_type>text</frontend_type>
-					<sort_order>5</sort_order>
+					<sort_order>4</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>

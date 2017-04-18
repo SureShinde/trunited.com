@@ -436,6 +436,11 @@
                 <current_label>truWallet current balance</current_label>
                 <applied_label>Applied to this order</applied_label>
             </spending>
+            <transfer>
+                <enable>1</enable>
+                <bonus>6</bonus>
+                <message>You will be received 6% bonus when transfers money to truWallet</message>
+            </transfer>
             <email>
                 <enable>1</enable>
                 <share_email_customer>truwallet_email_share_email_customer</share_email_customer>

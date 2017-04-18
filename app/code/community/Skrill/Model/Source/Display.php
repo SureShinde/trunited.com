@@ -33,6 +33,10 @@ class Skrill_Model_Source_Display
     {
         $display = array(
             array(
+                'label' => Mage::helper('skrill')->__('Light Box'),
+                'value' => 'LIGHTBOX'
+            ),
+            array(
                 'label' => Mage::helper('skrill')->__('SKRILL_BACKEND_IFRAME'),
                 'value' => 'IFRAME'
             ), 

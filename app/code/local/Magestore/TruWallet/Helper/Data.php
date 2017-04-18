@@ -85,6 +85,21 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/truwallet_payment/reward_point', $store);
     }
 
+    public function getEnableTransferBonus($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/transfer/enable', $store);
+    }
+
+    public function getTransferBonus($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/transfer/bonus', $store);
+    }
+
+    public function getMessageTransferBonus($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/transfer/message', $store);
+    }
+
 
     public function isShowWarningMessage()
     {

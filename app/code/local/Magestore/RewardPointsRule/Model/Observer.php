@@ -73,12 +73,14 @@ class Magestore_RewardPointsRule_Model_Observer
         
         $points = 0;
         foreach ($items as $item) {
-            if ($item->getParentItemId()) {
+
+            if ($item->getParentItemId() || $item->getProduct()->getParentProductId()) {
                 continue;
             }
             $itemPoint = Mage::helper('rewardpointsrule/calculation_earning')
                 ->getCatalogItemEarningPoints($item);
             //Brian fix earn point for parent_child item
+
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 $parentItemsPrice = $item->getPrice();
                 $childs = $item->getChildren();
@@ -101,6 +103,7 @@ class Magestore_RewardPointsRule_Model_Observer
             //end
             $points += $itemPoint;
         }
+
         $address->setRewardpointsEarn($address->getRewardpointsEarn() + $points);
         if (!$this->getFlag('collect_catalog_earning')) {
             $this->_totalEarning += $points;
