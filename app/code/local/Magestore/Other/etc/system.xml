@@ -66,6 +66,45 @@
 						</sku>
 					</fields>
 				</drop_ship>
+				<rewardpoint_header translate="label">
+					<label>RewardPoints in the Header Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>3</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enable translate="label">
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable>
+						<font_size translate="label">
+							<label>Font size of text</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</font_size>
+						<text_color>
+							<label>Text Color</label>
+							<frontend_type>text</frontend_type>
+							<validate>color</validate>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Specify the color of text on the header. Default: white: #ffffff</comment>
+						</text_color>
+					</fields>
+				</rewardpoint_header>
 			</groups>
 		</other>
 	</sections>
