@@ -156,6 +156,18 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         echo "success";
     }
 
+    public function updateDb2Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `is_on_hold` TINYINT(4) NULL default 0;
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `hold_point` DECIMAL(10,2) NULL default 0;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
+
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');

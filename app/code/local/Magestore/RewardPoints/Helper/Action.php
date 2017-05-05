@@ -83,6 +83,11 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
         $transaction->setData('product_credit', $actionModel->getProductCredit());
         $transaction->setData('product_credit_title', (int)$actionModel->getProductCreditTitle());
 
+        if($actionCode == 'admin')
+        {
+            $transaction->setData('is_on_hold', $object->getIsOnHold());
+        }
+
         if (!$transaction->hasData('store_id')) {
             $transaction->setData('store_id', Mage::app()->getStore()->getId());
         }
@@ -100,16 +105,32 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             ));
         } else {
             if ($actionModel->getPointAmount()) {
-                $transaction->createTransaction(array(
-                    'customer_id'   => $customer->getId(),
-                    'customer'      => $customer,
-                    'customer_email'=> $customer->getEmail(),
-                    'title'         => $actionModel->getTitle(),
-                    'action'        => $actionCode,
-                    'action_type'   => $actionModel->getActionType(),
-                    'created_time'  => now(),
-                    'updated_time'  => now(),
-                ));
+                if($actionCode == 'admin')
+                {
+                    $transaction->createTransaction(array(
+                        'customer_id'   => $customer->getId(),
+                        'customer'      => $customer,
+                        'customer_email'=> $customer->getEmail(),
+                        'title'         => $actionModel->getTitle(),
+                        'action'        => $actionCode,
+                        'action_type'   => $actionModel->getActionType(),
+                        'created_time'  => now(),
+                        'updated_time'  => now(),
+                        'is_on_hold'    => $object->getIsOnHold(),
+                        'status'        => Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD
+                    ));
+                } else {
+                    $transaction->createTransaction(array(
+                        'customer_id'   => $customer->getId(),
+                        'customer'      => $customer,
+                        'customer_email'=> $customer->getEmail(),
+                        'title'         => $actionModel->getTitle(),
+                        'action'        => $actionCode,
+                        'action_type'   => $actionModel->getActionType(),
+                        'created_time'  => now(),
+                        'updated_time'  => now(),
+                    ));
+                }
             }
         }
 

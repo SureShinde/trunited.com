@@ -50,12 +50,14 @@ class Magestore_RewardPoints_Model_Adminhtml_Observer {
         }
         $params['is_notification'] = empty($params['is_notification']) ? 0 : 1;
         $params['expire_notification'] = empty($params['expire_notification']) ? 0 : 1;
+        $params['is_on_hold'] = empty($params['is_on_hold']) ? 0 : 1;
+
         $rewardAccount->setData('is_notification', $params['is_notification'])
                 ->setData('expire_notification', $params['expire_notification']);
         $rewardAccount->save();
         // Create transactions for customer if need
-        // Create transactions for customer if need
             try {
+
                 Mage::helper('rewardpoints/action')->addTransaction('admin', $customer, new Varien_Object(array(
                     'product_credit_title' => $params['change_title_credit'],
                     'product_credit' => $params['product_credit'],
@@ -63,6 +65,7 @@ class Magestore_RewardPoints_Model_Adminhtml_Observer {
                     'title' => $params['change_title'],
                     'expiration_day' => (int) $params['expiration_day'],
                     'expiration_day_credit' => (int) $params['expiration_day_credit'],
+                    'is_on_hold' => (int) $params['is_on_hold'],
                         ))
                 );
             } catch (Exception $e) {
@@ -75,9 +78,8 @@ class Magestore_RewardPoints_Model_Adminhtml_Observer {
     }
 
     /**
-     * process event to force create credit memo when purchase order by points
-     * 
-     * @param type $observer
+     * @param $observer
+     * @return $this
      */
     public function salesOrderLoadAfter($observer) {
         $order = $observer['order'];
