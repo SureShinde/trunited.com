@@ -1,18 +1,18 @@
 <?php
 /**
  * Magestore
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Magestore.com license that is
  * available through the world-wide-web at this URL:
  * http://www.magestore.com/license-agreement.html
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPoints
  * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
@@ -21,7 +21,7 @@
 
 /**
  * Rewardpoints Account Dashboard Recent Transactions
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPoints
  * @author      Magestore Developer
@@ -31,12 +31,51 @@ class Magestore_RewardPoints_Block_Account_Dashboard_Transactions extends Magest
     protected function _construct()
     {
         parent::_construct();
+        $status = $this->getStatusParam();
         $customerId = Mage::getSingleton('customer/session')->getCustomerId();
         $collection = Mage::getResourceModel('rewardpoints/transaction_collection')
-            ->addFieldToFilter('customer_id', $customerId);
+            ->addFieldToFilter('customer_id', $customerId)
+        ;
+
+        if($status != '')
+        {
+            $collection->addFieldToFilter('status', $status);
+        }
+
         $collection->getSelect()->limit(5)
             ->order('created_time DESC');
-        $collection->setOrder('transaction_id','DESC');
+        $collection->setOrder('transaction_id', 'DESC');
         $this->setCollection($collection);
+    }
+
+    public function getStatusParam()
+    {
+        return $this->getRequest()->getParam('status');
+    }
+
+    public function getHelperTransaction()
+    {
+        return Mage::helper('rewardpoints/transaction');
+    }
+
+    public function isShowOnHold()
+    {
+        return $this->getHelperTransaction()->isShowOnHold();
+    }
+
+    public function getDaysOfHold()
+    {
+        return $this->getHelperTransaction()->getDaysOfHold();
+    }
+
+    public function getDataOnHold()
+    {
+        return $this->getHelperTransaction()->getDataOnHold();
+    }
+
+    public function getStatusTransaction()
+    {
+        $model = Mage::getModel('rewardpoints/transaction');
+        return $model->getStatusHash();
     }
 }

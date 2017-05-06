@@ -31,12 +31,23 @@ class Magestore_RewardPoints_Block_Account_Transactions extends Magestore_Reward
 
     protected function _construct() {
         parent::_construct();
+        $status = $this->getStatusParam();
         $customerId = Mage::getSingleton('customer/session')->getCustomerId();
         $collection = Mage::getResourceModel('rewardpoints/transaction_collection')
                 ->addFieldToFilter('customer_id', $customerId)
                 ->setOrder('created_time', 'DESC')
                 ->setOrder('transaction_id','DESC');
+        if($status != '')
+        {
+            $collection->addFieldToFilter('status', $status);
+        }
+
         $this->setCollection($collection);
+    }
+
+    public function getStatusParam()
+    {
+        return $this->getRequest()->getParam('status');
     }
 
     public function _prepareLayout() {
@@ -49,6 +60,12 @@ class Magestore_RewardPoints_Block_Account_Transactions extends Magestore_Reward
 
     public function getPagerHtml() {
         return $this->getChildHtml('transactions_pager');
+    }
+
+    public function getStatusTransaction()
+    {
+        $model = Mage::getModel('rewardpoints/transaction');
+        return $model->getStatusHash();
     }
 
 }

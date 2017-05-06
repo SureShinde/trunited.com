@@ -31,6 +31,20 @@
 </div>
 
 <?php $_collection = $this->getCollection() ?>
+<form action="<?php echo Mage::getUrl('rewardpoints/index/transactions')?>" method="get"
+      id="all_transaction_form">
+    <label for="status_transaction">Status: </label>
+    <select name="status" id="status_transaction">
+        <option value=""><?php echo $this->__('Select Status')?></option>
+        <?php
+        $statues = $this->getStatusTransaction();
+        $current_status = $this->getRequest()->getParam('status');
+        foreach ($statues as $k => $v) {?>
+            <option value="<?php echo $k?>"
+                    <?php if($current_status == $k){?>selected<?php }?>><?php echo $v?></option>
+        <?php }?>
+    </select>
+</form>
 <?php echo $this->getPagerHtml() ?>
 <table class="data-table" id="recent-transactions-history">
     <colgroup>
@@ -86,3 +100,10 @@
     </tbody>
 </table>
 <?php echo $this->getPagerHtml() ?>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('#status_transaction').change(function() {
+        $j('#all_transaction_form').submit();
+    });
+</script>

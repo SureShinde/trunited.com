@@ -269,4 +269,33 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
 			echo 'None order';
 		}
     }
+
+    public function testAction()
+    {
+        $helper = Mage::helper('rewardpoints/transaction');
+        $collection = $helper->getOnHoldTransaction();
+        if(sizeof($collection) > 0)
+        {
+            $t = strtotime('2017-07-04');
+            foreach ($collection as $transaction) {
+                $date = $helper->addDaysToDate(
+                    $transaction->getCreatedTime(),
+                    $helper->getDaysOfHold()
+                );
+
+                if(date('Y',strtotime($date)) == date('Y', $t) &&
+                    date('m',strtotime($date)) == date('m', $t) &&
+                    date('d',strtotime($date)) == date('d', $t))
+                {
+                    try {
+                        $transaction->completeTransaction();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+
+            }
+
+        }
+    }
 }

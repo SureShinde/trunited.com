@@ -305,3 +305,43 @@ input#send_friend {
     border-right: 1px solid #ccc;
     font-weight: bold;
 }
+
+.point-on-hold h2{
+    float: left;
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #313131;
+    line-height: 1.4;
+    padding-bottom: 20px;
+}
+
+.point-on-hold table
+{
+    width: 50%;
+    clear: both;
+}
+
+.point-on-hold table th {
+    font-weight: bold;
+}
+
+.point-on-hold table, .point-on-hold th, .point-on-hold td {
+    border: 1px solid #dcdcdc;
+    border-collapse: collapse;
+}
+.point-on-hold th, .point-on-hold td {
+    padding: 10px;
+    text-align: center;
+}
+
+.box-rewardpoints-history .box-head select
+{
+    margin-right: 10px;
+}
+
+#all_transaction_form{
+    margin: 15px 0;
+    display: block;
+    float: left;
+}

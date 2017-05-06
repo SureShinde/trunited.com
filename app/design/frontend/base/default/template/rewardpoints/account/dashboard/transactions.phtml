@@ -24,11 +24,51 @@
  * @see Magestore_RewardPoints_Block_Account_Dashboard_Transactions
  */
 ?>
+<?php
+    if($this->isShowOnHold()){
+        $data = $this->getDataOnHold();
+?>
+<div class="point-on-hold">
+    <h2><?php echo $this->__('Current and Future Points Earned')?></h2>
+    <table>
+        <tr>
+            <th></th>
+            <th colspan="<?php echo sizeof($data);?>"><?php echo $this->__('Points On Hold Until')?></th>
+        </tr>
+        <tr>
+            <th><?php echo $this->__('Current Points')?></th>
+            <?php foreach($data as $k=>$v){?>
+            <th><?php echo date('M',$k);?></th>
+            <?php }?>
+        </tr>
+        <tr>
+            <td><?php echo Mage::helper('rewardpoints/customer')->getBalance(); ?></td>
+            <?php foreach($data as $k=>$v){?>
+                <td><?php echo number_format($v);?></td>
+            <?php }?>
+        </tr>
+    </table>
+</div>
+<?php }?>
 
 <?php $_collection = $this->getCollection() ?>
     <div class="box-account box-info box-rewardpoints-history">
         <div class="box-head">
             <h2><?php echo $this->__('Recent Transactions') ?></h2>
+            <form action="<?php echo Mage::getUrl('rewardpoints/index/index')?>" method="post"
+                  id="status_transaction_form">
+                <label for="status_transaction">Status: </label>
+                <select name="status" id="status_transaction">
+                    <option value=""><?php echo $this->__('Select Status')?></option>
+                    <?php
+                    $statues = $this->getStatusTransaction();
+                    $current_status = $this->getRequest()->getParam('status');
+                    foreach ($statues as $k => $v) {?>
+                        <option value="<?php echo $k?>"
+                                <?php if($current_status == $k){?>selected<?php }?>><?php echo $v?></option>
+                    <?php }?>
+                </select>
+            </form>
             <?php if (count($_collection)): ?>
                 <a href="<?php echo $this->getUrl('*/*/transactions') ?>"><?php echo $this->__('View All') ?></a>
             <?php endif; ?>
@@ -83,3 +123,10 @@
             </tbody>
         </table>
     </div>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('#status_transaction').change(function() {
+        $j('#status_transaction_form').submit();
+    });
+</script>

@@ -31,7 +31,7 @@
                 <?php echo $this->getChildHtml('topLinks'); ?>
             </div>
             <p class="welcome-msg"><?php echo $this->getChildHtml('welcome'); ?> <?php echo $this->getAdditionalHtml(); ?></p>
-            <?php if($is_enable && Mage::getSingleton('customer/session')->isLoggedIn()){?>
+            <?php if($is_enable){?>
             <div class="reward-top-header">
                 <ul class="award-header">
                     <li><?php echo Mage::helper('other')->__('YTD PAYOUT: %s',Mage::helper('other')->ytd());?></li>
@@ -62,7 +62,7 @@
     </div>
 </div>
 <?php echo $this->getChildHtml('mobile.nav') ?>
-<?php if($is_enable && Mage::getSingleton('customer/session')->isLoggedIn()){?>
+<?php if($is_enable){?>
 <style type="text/css">
     .reward-top-header ul.award-header li
     {

@@ -107,7 +107,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
                     ->addFieldToSelect('transaction_id')
                     ->addFieldToSelect('status')
                     ->addFieldToSelect('created_time')
-                    ->addFieldToFilter('customer_id', $customer_id)
+//                    ->addFieldToFilter('customer_id', $customer_id)
                     ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
                     ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
                 ;
@@ -138,7 +138,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
                 ->addFieldToSelect('transaction_id')
                 ->addFieldToSelect('status')
                 ->addFieldToSelect('created_time')
-                ->addFieldToFilter('customer_id', $customer_id)
+//                ->addFieldToFilter('customer_id', $customer_id)
                 ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
                 ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
             ;

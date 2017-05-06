@@ -553,6 +553,14 @@
                     <model>rewardpoints/cron::processTransactions</model>
                 </run>
             </rewardpoints>
+            <rewardpoints_check_expiry_date_on_hold_transaction>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>rewardpoints/cron::checkExpiryDateOnHoldTransaction</model>
+                </run>
+            </rewardpoints_check_expiry_date_on_hold_transaction>
             <!--<rewardpoints_check_expiry_date_sharing_truWallet>
                 <schedule>
                     <cron_expr>* * */1 * *</cron_expr>

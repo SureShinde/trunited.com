@@ -226,4 +226,33 @@ class Magestore_RewardPoints_Model_Cron
         }
         Varien_Profiler::stop('REWARDPOINTS_CRON::completeHoldingTransaction');
     }
+
+    public function checkExpiryDateOnHoldTransaction()
+    {
+        $helper = Mage::helper('rewardpoints/transaction');
+        $collection = $helper->getOnHoldTransaction();
+        if(sizeof($collection) > 0)
+        {
+            $t = time();
+            foreach ($collection as $transaction) {
+                $date = $helper->addDaysToDate(
+                    $transaction->getCreatedTime(),
+                    $helper->getDaysOfHold()
+                );
+
+                if(date('Y',strtotime($date)) == date('Y', $t) &&
+                    date('m',strtotime($date)) == date('m', $t) &&
+                    date('d',strtotime($date)) == date('d', $t))
+                {
+                    try {
+                        $transaction->completeTransaction();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+
+            }
+
+        }
+    }
 }
