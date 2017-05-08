@@ -126,6 +126,11 @@
             <trubox>
                 <class>Magestore_TruBox_Block</class>
             </trubox>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_grid>Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid</sales_order_grid>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <helpers>
             <trubox>

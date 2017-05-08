@@ -18,6 +18,7 @@ class Magestore_TruBox_Block_Adminhtml_Renderer_Sales_Order_Grid extends Mage_Ad
     public function render(Varien_Object $row){
         $value = $row->getData('created_by');
         $options = $this->_getOptions();
+
         return isset($options[$value]) ? $options[$value] : $value;
     }
 }
