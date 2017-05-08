@@ -144,10 +144,9 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
     }
 
     /**
-     * Validate transaction data and create transaction
-     * 
      * @param array $data
-     * @return Magestore_RewardPoints_Model_Transaction
+     * @return $this
+     * @throws Exception
      */
     public function createTransaction($data = array()) {
         $this->addData($data);
@@ -241,6 +240,11 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
                 $this->setData('status', self::STATUS_COMPLETED);
                 // Update real points and point used for holding transaction (earning) depend on account/ order
                 $this->_getResource()->updateRealPointHolding($this);
+            }
+
+            if($this->getAction() == 'admin' && $this->getIsOnHold())
+            {
+                $this->setData('hold_point', $this->getPointAmount());
             }
             $rewardAccount->save();
             $this->save();

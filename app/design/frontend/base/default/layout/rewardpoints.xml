@@ -186,13 +186,13 @@
                     <enable helper="rewardpoints/policy/showPolicyMenu" />
                     <order>40</order>
                 </action>
-                <action method="addLink" translate="label" module="rewardpoints">
+                <!--<action method="addLink" translate="label" module="rewardpoints">
                     <name>rewardpoints_settings</name>
                     <path>rewardpoints/index/settings</path>
                     <label>Settings</label>
                     <enable>true</enable>
                     <order>100</order>
-                </action>
+                </action>-->
             </block>
         </reference>
     </rewardpoints_default>

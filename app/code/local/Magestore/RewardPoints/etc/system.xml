@@ -152,6 +152,15 @@
                                 <show_welcome_page>1</show_welcome_page>
                             </depends>
                         </welcome_page>
+                        <day_hold_point>
+                            <label>The # of days to hold points</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>81</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Default is 60 days</comment>
+                        </day_hold_point>
                     </fields>
                 </general>
                 <earning>

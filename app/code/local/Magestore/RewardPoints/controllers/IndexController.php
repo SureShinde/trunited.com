@@ -156,6 +156,18 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         echo "success";
     }
 
+    public function updateDb2Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `is_on_hold` TINYINT(4) NULL default 0;
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `hold_point` DECIMAL(10,2) NULL default 0;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
+
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
@@ -256,5 +268,34 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         } else {
 			echo 'None order';
 		}
+    }
+
+    public function testAction()
+    {
+        $helper = Mage::helper('rewardpoints/transaction');
+        $collection = $helper->getOnHoldTransaction();
+        if(sizeof($collection) > 0)
+        {
+            $t = strtotime('2017-07-04');
+            foreach ($collection as $transaction) {
+                $date = $helper->addDaysToDate(
+                    $transaction->getCreatedTime(),
+                    $helper->getDaysOfHold()
+                );
+
+                if(date('Y',strtotime($date)) == date('Y', $t) &&
+                    date('m',strtotime($date)) == date('m', $t) &&
+                    date('d',strtotime($date)) == date('d', $t))
+                {
+                    try {
+                        $transaction->completeTransaction();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+
+            }
+
+        }
     }
 }

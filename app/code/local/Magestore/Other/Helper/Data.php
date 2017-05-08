@@ -17,6 +17,21 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('other/drop_ship/sku', Mage::app()->getStore());
     }
 
+    public function enableRewardPointHeader()
+    {
+        return Mage::getStoreConfig('other/rewardpoint_header/enable', Mage::app()->getStore());
+    }
+
+    public function getRewardFontSizeHeader()
+    {
+        return Mage::getStoreConfig('other/rewardpoint_header/font_size', Mage::app()->getStore());
+    }
+
+    public function getRewardColorHeader()
+    {
+        return Mage::getStoreConfig('other/rewardpoint_header/text_color', Mage::app()->getStore());
+    }
+
     public function getListDropShipSku()
     {
         $list = $this->skuDropShip();
@@ -71,5 +86,60 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
         } else {
             return false;
         }
+    }
+
+    public function isLogged()
+    {
+        return Mage::getSingleton('customer/session')->isLoggedIn();
+    }
+
+    public function ytd()
+    {
+        $dateStart = date('Y').'-01-01 00:00:00';
+        $dateEnd = date('Y-m-d 23:59:59', strtotime("last day of -1 month"));
+
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToSelect('customer_id')
+            ->addFieldToSelect('transaction_id')
+            ->addFieldToSelect('status')
+            ->addFieldToSelect('created_time')
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
+        ;
+
+        $transactions ->getSelect()
+            ->columns('SUM(point_amount) as total')
+        ;
+
+        $firstItem = $transactions->getFirstItem();
+        if($firstItem->getId())
+            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
+        else
+            return Mage::helper('core')->currency(0, true, false);
+    }
+
+    public function mtd()
+    {
+        $dateStart = date('Y-m-01 00:00:00');
+        $dateEnd = date('Y-m-d 23:59:59', time());
+
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToSelect('customer_id')
+            ->addFieldToSelect('transaction_id')
+            ->addFieldToSelect('status')
+            ->addFieldToSelect('created_time')
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
+        ;
+
+        $transactions ->getSelect()
+            ->columns('SUM(point_amount) as total')
+        ;
+
+        $firstItem = $transactions->getFirstItem();
+        if($firstItem->getId())
+            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
+        else
+            return Mage::helper('core')->currency(0, true, false);
     }
 }

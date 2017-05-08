@@ -144,6 +144,13 @@ class Magestore_RewardPoints_Block_Adminhtml_Customer_Edit_Tab_Rewardpoints
             'name'  => 'rewardpoints[admin_editing]',
             'value' => 1,
         ));
+
+        $fieldset->addField('is_on_hold', 'checkbox', array(
+            'label' => Mage::helper('rewardpoints')->__('Points On Hold'),
+            'title' => Mage::helper('rewardpoints')->__('Points On Hold'),
+            'name'  => 'rewardpoints[is_on_hold]',
+            'value' => 1,
+        ));
         
         $fieldset->addField('is_notification', 'checkbox', array(
             'label' => Mage::helper('rewardpoints')->__('Update Points Subscription'),

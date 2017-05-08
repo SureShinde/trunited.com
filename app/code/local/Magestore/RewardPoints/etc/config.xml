@@ -508,6 +508,7 @@
                 <policy_page>rewardpoints-policy</policy_page>
                 <show_welcome_page>0</show_welcome_page>
                 <welcome_page>rewardpoints-welcome</welcome_page>
+                <day_hold_point>60</day_hold_point>
             </general>
             <earning>
                 <by_tax>0</by_tax>
@@ -552,6 +553,14 @@
                     <model>rewardpoints/cron::processTransactions</model>
                 </run>
             </rewardpoints>
+            <rewardpoints_check_expiry_date_on_hold_transaction>
+                <schedule>
+                    <cron_expr>* * */1 * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>rewardpoints/cron::checkExpiryDateOnHoldTransaction</model>
+                </run>
+            </rewardpoints_check_expiry_date_on_hold_transaction>
             <!--<rewardpoints_check_expiry_date_sharing_truWallet>
                 <schedule>
                     <cron_expr>* * */1 * *</cron_expr>
