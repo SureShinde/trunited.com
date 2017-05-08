@@ -189,3 +189,8 @@ a.addtrubox{
 {
     float: right;
 }
+
+#my-orders-table tr.trubox_order
+{
+    background-color: #dddddd !important;
+}

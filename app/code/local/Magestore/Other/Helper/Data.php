@@ -95,62 +95,51 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function ytd()
     {
-        if($this->isLogged())
-        {
-            $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+        $dateStart = date('Y').'-01-01 00:00:00';
+        $dateEnd = date('Y-m-d 23:59:59', strtotime("last day of -1 month"));
 
-            $dateStart = date('Y').'-01-01 00:00:00';
-            $dateEnd = date('Y-m-d 23:59:59', strtotime("last day of -1 month"));
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToSelect('customer_id')
+            ->addFieldToSelect('transaction_id')
+            ->addFieldToSelect('status')
+            ->addFieldToSelect('created_time')
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
+        ;
 
-            $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-                    ->addFieldToSelect('customer_id')
-                    ->addFieldToSelect('transaction_id')
-                    ->addFieldToSelect('status')
-                    ->addFieldToSelect('created_time')
-//                    ->addFieldToFilter('customer_id', $customer_id)
-                    ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
-                    ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
-                ;
+        $transactions ->getSelect()
+            ->columns('SUM(point_amount) as total')
+        ;
 
-            $transactions ->getSelect()
-                ->columns('SUM(point_amount) as total')
-                ;
-            if($transactions->getFirstItem()->getId())
-                return Mage::helper('core')->currency($transactions->getFirstItem()->getTotal(), true, false);
-            else
-                return Mage::helper('core')->currency(0, true, false);
-        } else
-            return false;
+        $firstItem = $transactions->getFirstItem();
+        if($firstItem->getId())
+            return Mage::helper('core')->currency($firstItem->getTotal(), true, false);
+        else
+            return Mage::helper('core')->currency(0, true, false);
     }
 
     public function mtd()
     {
+        $dateStart = date('Y-m-01 00:00:00');
+        $dateEnd = date('Y-m-d 23:59:59', time());
 
-        if($this->isLogged())
-        {
-            $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToSelect('customer_id')
+            ->addFieldToSelect('transaction_id')
+            ->addFieldToSelect('status')
+            ->addFieldToSelect('created_time')
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
+        ;
 
-            $dateStart = date('Y-m-01 00:00:00');
-            $dateEnd = date('Y-m-d 23:59:59', time());
+        $transactions ->getSelect()
+            ->columns('SUM(point_amount) as total')
+        ;
 
-            $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-                ->addFieldToSelect('customer_id')
-                ->addFieldToSelect('transaction_id')
-                ->addFieldToSelect('status')
-                ->addFieldToSelect('created_time')
-//                ->addFieldToFilter('customer_id', $customer_id)
-                ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
-                ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
-            ;
-
-            $transactions ->getSelect()
-                ->columns('SUM(point_amount) as total')
-            ;
-            if($transactions->getFirstItem()->getId())
-                return Mage::helper('core')->currency($transactions->getFirstItem()->getTotal(), true, false);
-            else
-                return Mage::helper('core')->currency(0, true, false);
-        } else
-            return false;
+        $firstItem = $transactions->getFirstItem();
+        if($firstItem->getId())
+            return Mage::helper('core')->currency($firstItem->getTotal(), true, false);
+        else
+            return Mage::helper('core')->currency(0, true, false);
     }
 }

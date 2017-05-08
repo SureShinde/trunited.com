@@ -50,8 +50,8 @@
     </thead>
     <tbody>
         <?php $_odd = ''; ?>
-        <?php foreach ($_orders as $_order): ?>
-        <tr>
+        <?php foreach ($_orders as $_order):?>
+        <tr <?php if($_order->getCreatedBy() == Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES){?> class="trubox_order" <?php }?>>
             <td><?php echo $_order->getRealOrderId() ?></td>
             <td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
             <td><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
