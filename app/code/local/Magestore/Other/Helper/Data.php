@@ -113,7 +113,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $firstItem = $transactions->getFirstItem();
         if($firstItem->getId())
-            return Mage::helper('core')->currency($firstItem->getTotal(), true, false);
+            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
         else
             return Mage::helper('core')->currency(0, true, false);
     }
@@ -138,7 +138,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $firstItem = $transactions->getFirstItem();
         if($firstItem->getId())
-            return Mage::helper('core')->currency($firstItem->getTotal(), true, false);
+            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
         else
             return Mage::helper('core')->currency(0, true, false);
     }

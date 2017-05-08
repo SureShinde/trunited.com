@@ -128,7 +128,7 @@
                 <sku>SITA12</sku>
             </drop_ship>
             <rewardpoint_header>
-                <enable>1</enable>
+                <enable>0</enable>
                 <font_size>13</font_size>
                 <text_color>FFFFFF</text_color>
             </rewardpoint_header>
