@@ -62,6 +62,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
      */
     public function addTransaction($actionCode, $customer, $object = null, $extraContent = array())
     {
+
         Varien_Profiler::start('REWARDPOINTS_HELPER_ACTION::addTransaction');
         if (!$customer->getId()) {
             throw new Exception($this->__('Customer must be existed.'));
@@ -105,7 +106,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             ));
         } else {
             if ($actionModel->getPointAmount()) {
-                if($actionCode == 'admin')
+                if($actionCode == 'admin' && $object->getIsOnHold() == 1)
                 {
                     $transaction->createTransaction(array(
                         'customer_id'   => $customer->getId(),
