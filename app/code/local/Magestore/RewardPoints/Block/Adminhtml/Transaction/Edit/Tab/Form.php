@@ -49,9 +49,12 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
         ));
         
         if ($model->getId()) {
-            $fieldset->addField('title', 'note', array(
+            $fieldset->addField('title', 'textarea', array(
                 'label'     => Mage::helper('rewardpoints')->__('Transaction Title'),
-                'text'      => $model->getTitleHtml(),
+                'value'      => $model->getTitleHtml(),
+                'class'     => 'required-entry',
+                'required'  => true,
+                'name'      => 'title',
             ));
             $fieldset->addField('customer_email', 'note', array(
                         'label'     => Mage::helper('rewardpoints')->__('Customer Email'),
@@ -82,14 +85,23 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
                 'text'      => isset($statusHash[$model->getStatus()])
                     ? '<strong>' . $statusHash[$model->getStatus()] . '</strong>' : '',
             ));
-            
-            $fieldset->addField('point_amount', 'note', array(
-                'label'     => Mage::helper('rewardpoints')->__('Points'),
-                'text'      => '<strong>' . Mage::helper('rewardpoints/point')->format(
-                        $model->getPointAmount(),
-                        $model->getStoreId()
-                    ) . '</strong>',
-            ));
+
+            if($model->getStatus() != Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+                $fieldset->addField('point_amount', 'note', array(
+                    'label'     => Mage::helper('rewardpoints')->__('Points'),
+                    'text'      => '<strong>' . Mage::helper('rewardpoints/point')->format(
+                            $model->getPointAmount(),
+                            $model->getStoreId()
+                        ) . '</strong>',
+                ));
+            else
+                $fieldset->addField('point_amount', 'text', array(
+                    'label'     => Mage::helper('rewardpoints')->__('Points'),
+                    'value'      => $model->getPointAmount(),
+                    'class'     => 'required-entry',
+                    'required'  => true,
+                    'name'      => 'point_amount',
+                ));
             
             $fieldset->addField('point_used', 'note', array(
                 'label'     => Mage::helper('rewardpoints')->__('Point Used'),
@@ -132,7 +144,7 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
             
             return parent::_prepareForm();
         }
-        
+
         $fieldset->addField('customer_email', 'text', array(
             'label'     => Mage::helper('rewardpoints')->__('Customer'),
             'title'     => Mage::helper('rewardpoints')->__('Customer'),
@@ -160,7 +172,8 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
         ));
         
         $fieldset->addField('customer_id', 'hidden', array('name'  => 'customer_id'));
-        
+
+
         $fieldset->addField('point_amount', 'text', array(
             'label'     => Mage::helper('rewardpoints')->__('Points'),
             'title'     => Mage::helper('rewardpoints')->__('Points'),
@@ -174,7 +187,8 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
             'name'      => 'title',
             'style'     => 'height: 5em;'
         ));
-        
+
+
         $fieldset->addField('expiration_day', 'text', array(
             'label'     => Mage::helper('rewardpoints')->__('Points expire after'),
             'title'     => Mage::helper('rewardpoints')->__('Points expire after'),

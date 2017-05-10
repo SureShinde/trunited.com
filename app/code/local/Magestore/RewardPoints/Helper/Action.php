@@ -86,7 +86,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
 
         if($actionCode == 'admin')
         {
-            $transaction->setData('is_on_hold', $object->getIsOnHold());
+            $transaction->setData('is_on_hold', $object->getIsOnHold() != null ? $object->getIsOnHold() : 0);
         }
 
         if (!$transaction->hasData('store_id')) {

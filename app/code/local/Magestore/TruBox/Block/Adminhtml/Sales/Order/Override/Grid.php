@@ -6,7 +6,7 @@
  * Time: 4:32 PM
  */
 
-class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Adminhtml_Block_Sales_Order_Grid
 {
 
 
@@ -99,12 +99,14 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
         ));
 
         $this->addColumn('created_by', array(
-            'header' => Mage::helper('sales')->__('Created From TruBox'),
+            'header' => Mage::helper('sales')->__('TruBox'),
             'index' => 'created_by',
             'type'  => 'options',
             'width' => '70px',
             'align' => 'right',
             'options' => Magestore_TruBox_Model_Status::getOptionArray(),
+            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Renderer_CreatedBy',
+            'filter_condition_callback' => array($this, '_createdByFilter'),
         ));
 
         $this->addColumn('status', array(
@@ -210,5 +212,24 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=>true));
+    }
+
+    protected function _createdByFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $order_table = Mage::getSingleton('core/resource')->getTableName('sales/order');
+
+        $this->getCollection()->getSelect()->join(
+            array(
+                'order'=> $order_table),
+            'order.entity_id = main_table.entity_id and order.created_by = '.$value,
+            array('order.created_by')
+        );
+
+
+        return $this;
     }
 }

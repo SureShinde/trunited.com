@@ -131,23 +131,49 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
         if ($this->getRequest()->isPost()) {
             try {
                 $request = $this->getRequest();
-                $customer = Mage::getModel('customer/customer')->load($request->getPost('customer_id'));
-                if (!$customer->getId()) {
-                    throw new Exception($this->__('Not found customer to create transaction.'));
-                }
-                $transaction = Mage::helper('rewardpoints/action')->addTransaction('admin',
-                    $customer,
-                    new Varien_Object(array(
-                        'point_amount'  => $request->getPost('point_amount'),
-                        'title'         => $request->getPost('title'),
-                        'expiration_day'=> (int)$request->getPost('expiration_day'),
-                    ))
-                );
-                if (!$transaction->getId()) {
-                    throw new Exception(
-                        $this->__('Cannot create transaction, please recheck form information.')
+
+                $id = $request->getParam('id');
+                if($id == null)
+                {
+                    $customer = Mage::getModel('customer/customer')->load($request->getPost('customer_id'));
+                    if (!$customer->getId()) {
+                        throw new Exception($this->__('Not found customer to create transaction.'));
+                    }
+
+                    $transaction = Mage::helper('rewardpoints/action')->addTransaction(
+                        'admin',
+                        $customer,
+                        new Varien_Object(array(
+                            'point_amount'  => $request->getPost('point_amount'),
+                            'title'         => $request->getPost('title'),
+                            'expiration_day'=> (int)$request->getPost('expiration_day'),
+                        ))
                     );
+                    if (!$transaction->getId()) {
+                        throw new Exception(
+                            $this->__('Cannot create transaction, please recheck form information.')
+                        );
+                    }
+                } else {
+                    $transaction = Mage::getModel('rewardpoints/transaction')->load($id);
+
+                    if (!$transaction->getId()) {
+                        throw new Exception(
+                            $this->__('Cannot create transaction, please recheck form information.')
+                        );
+                    }
+
+                    $transaction->setData('title', $request->getParam('title'));
+                    if($transaction->getStatus() == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+                    {
+                        $transaction->setData('point_amount', $request->getParam('point_amount'));
+                        $transaction->setData('hold_point', $request->getParam('point_amount'));
+                    }
+
+
+                    $transaction->save();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     $this->__('Transaction has been created successfully.')
                 );
