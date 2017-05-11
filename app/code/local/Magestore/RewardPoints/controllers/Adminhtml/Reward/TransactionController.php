@@ -156,22 +156,47 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
                     }
                 } else {
                     $transaction = Mage::getModel('rewardpoints/transaction')->load($id);
-
+                    $point_amount = $request->getParam('point_amount');
                     if (!$transaction->getId()) {
                         throw new Exception(
                             $this->__('Cannot create transaction, please recheck form information.')
                         );
                     }
 
-                    $transaction->setData('title', $request->getParam('title'));
-                    if($transaction->getStatus() == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+                    if(!filter_var($point_amount, FILTER_VALIDATE_INT))
                     {
-                        $transaction->setData('point_amount', $request->getParam('point_amount'));
-                        $transaction->setData('hold_point', $request->getParam('point_amount'));
+                        throw new Exception(
+                            $this->__('The Points is not a number')
+                        );
                     }
 
+                    if($point_amount < 0)
+                    {
+                        throw new Exception(
+                            $this->__('The Points is greater than zero')
+                        );
+                    }
+
+                    $old_point = $transaction->getData('point_amount');
+                    $transaction->setData('title', $request->getParam('title'));
+                    $status_arr = array(
+                        Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD,
+                        Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED,
+                    );
+                    if(in_array($transaction->getStatus(), $status_arr))
+                    {
+                        $transaction->setData('point_amount', $point_amount);
+                        $transaction->setData('hold_point', $point_amount);
+                    }
 
                     $transaction->save();
+
+                    /* Update balance */
+                    if($transaction->getStatus() == Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+                    {
+                        $this->updateBalance($transaction, $old_point);
+                    }
+                    /* END Update balance */
                 }
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(
@@ -194,6 +219,38 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
             Mage::helper('rewardpoints')->__('Unable to find item to save')
         );
         $this->_redirect('*/*/');
+    }
+
+    public function updateBalance($transaction, $old_point)
+    {
+        $rewardAccount = Mage::getModel('rewardpoints/customer')->load($transaction->getRewardId());
+
+        $maxBalance = (int) Mage::getStoreConfig(
+            Magestore_RewardPoints_Model_Transaction::XML_PATH_MAX_BALANCE,
+            $transaction->getStoreId()
+        );
+
+        if ($maxBalance > 0 && $transaction->getRealPoint() > 0 &&
+            $rewardAccount->getPointBalance() + $transaction->getRealPoint() > $maxBalance)
+        {
+            if ($maxBalance > $rewardAccount->getPointBalance()) {
+                $transaction->setPointAmount(abs($maxBalance - ($rewardAccount->getPointBalance() + $transaction->getPointAmount())));
+                $transaction->setRealPoint($maxBalance - $rewardAccount->getPointBalance());
+                $rewardAccount->setPointBalance($maxBalance);
+                $transaction->sendUpdateBalanceEmail($rewardAccount);
+            } else {
+                throw new Exception(
+                    Mage::helper('rewardpoints')->__('Maximum points allowed in account balance is %s.', $maxBalance)
+                );
+            }
+        } else {
+            $new_balance = $rewardAccount->getPointBalance() + ($transaction->getPointAmount() - $old_point);
+            $rewardAccount->setPointBalance($new_balance > 0 ? $new_balance : 0);
+            $transaction->sendUpdateBalanceEmail($rewardAccount);
+        }
+
+        // Save reward account and transaction to database
+        $rewardAccount->save();
     }
     
     /**

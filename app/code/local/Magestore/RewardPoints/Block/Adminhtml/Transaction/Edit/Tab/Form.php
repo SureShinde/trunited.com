@@ -47,8 +47,10 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
         $fieldset = $form->addFieldset('rewardpoints_form', array(
             'legend'=>Mage::helper('rewardpoints')->__('Transaction Information')
         ));
-        
-        if ($model->getId()) {
+
+
+        if ($model->getId() || $this->getRequest()->getParam('id')) {
+            $model = $model->getId() != null ? $model : Mage::getModel('rewardpoints/transaction')->load($this->getRequest()->getParam('id'));
             $fieldset->addField('title', 'textarea', array(
                 'label'     => Mage::helper('rewardpoints')->__('Transaction Title'),
                 'value'      => $model->getTitleHtml(),
@@ -86,7 +88,11 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit_Tab_Form extends M
                     ? '<strong>' . $statusHash[$model->getStatus()] . '</strong>' : '',
             ));
 
-            if($model->getStatus() != Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+            $status_arr = array(
+                Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD,
+                Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED,
+            );
+            if(!in_array($model->getStatus(), $status_arr))
                 $fieldset->addField('point_amount', 'note', array(
                     'label'     => Mage::helper('rewardpoints')->__('Points'),
                     'text'      => '<strong>' . Mage::helper('rewardpoints/point')->format(
