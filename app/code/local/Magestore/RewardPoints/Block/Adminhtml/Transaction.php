@@ -35,5 +35,10 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction extends Mage_Adminhtml_
         $this->_headerText = Mage::helper('rewardpoints')->__('Transaction Manager');
         $this->_addButtonLabel = Mage::helper('rewardpoints')->__('Add Transaction');
         parent::__construct();
+        $this->_addButton('import', array(
+            'label' => Mage::helper('rewardpoints')->__('Import Transactions'),
+            'onclick' => "setLocation('" . $this->getUrl('*/*/import', array('page_key' => 'collection')) . "')",
+            'class' => 'add'
+        ));
     }
 }
