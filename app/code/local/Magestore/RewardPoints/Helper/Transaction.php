@@ -313,23 +313,9 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
                         if ($customer->getId() && strcasecmp($customer->getEmail(), $csv[1]) == 0) {
                             $account = Mage::helper('rewardpoints/customer')->loadByCustomerId($customer->getId());
                             if ($account != null && $account->getId()) {
-//                                $_point_before = $account->getPointBalance();
-//                                $_point_new = $_point_before + $amount;
+
                                 $status = isset($csv[4]) ? $csv[4] : '';
                                 $is_on_hold = false;
-
-                                /*if($status == Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
-                                {
-                                    $account->setPointBalance($_point_new)
-                                        ->setUpdatedTime(now())
-                                        ->save();
-                                } else if($status == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD) {
-                                    $is_on_hold = true;
-                                } else {
-                                    throw new Exception(
-                                        Mage::helper('rewardpoints')->__('Status is not valid !')
-                                    );
-                                }*/
 
                                 if($status == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD) {
                                     $is_on_hold = true;
@@ -343,25 +329,6 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
                                     ))
                                 );
 
-                               /* $obj = Mage::getModel('rewardpoints/transaction');
-                                $_data = array(
-                                    'reward_id' => $account->getId(),
-                                    'customer_id' => $customer->getId(),
-                                    'customer_email' => $customer->getEmail(),
-                                    'title' => isset($csv[3]) ? $csv[3] : '',
-                                    'action' => 'admin',
-                                    'action_type' => 0,
-                                    'store_id' => Mage::app()->getStore()->getId(),
-                                    'created_time' => now(),
-                                    'updated_time' => now(),
-                                    'point_amount' => $amount,
-                                    'real_point' => $amount,
-                                    'status' => $status,
-                                    'is_on_hold' => $is_on_hold,
-                                    'hold_point' => $is_on_hold == true ? $amount : 0,
-                                );*/
-//                                $obj->setData($_data);
-//                                $transactionSave->addObject($obj);
                                 $import_count++;
                             }
                         }
