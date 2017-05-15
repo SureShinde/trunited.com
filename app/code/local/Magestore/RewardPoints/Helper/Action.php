@@ -84,6 +84,9 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
         $transaction->setData('product_credit', $actionModel->getProductCredit());
         $transaction->setData('product_credit_title', (int)$actionModel->getProductCreditTitle());
 
+        if($object->getStatus() !== null && $object->getStatus() > 0)
+            $transaction->setData('status', (int)$object->getStatus());
+
         if($actionCode == 'admin')
         {
             $transaction->setData('is_on_hold', $object->getIsOnHold() != null ? $object->getIsOnHold() : 0);
