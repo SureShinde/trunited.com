@@ -66,7 +66,7 @@
 						</sku>
 					</fields>
 				</drop_ship>
-				<rewardpoint_header translate="label">
+				<!--<rewardpoint_header translate="label">
 					<label>RewardPoints in the Header Configuration</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>3</sort_order>
@@ -104,7 +104,7 @@
 							<comment>Specify the color of text on the header. Default: white: #ffffff</comment>
 						</text_color>
 					</fields>
-				</rewardpoint_header>
+				</rewardpoint_header>-->
 			</groups>
 		</other>
 	</sections>
