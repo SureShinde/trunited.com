@@ -131,9 +131,9 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $firstItem = $order_collection->getFirstItem();
         if($firstItem->getId())
-            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
+            return $this->displayNumberFormat($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0);
         else
-            return Mage::helper('core')->currency(0, true, false);
+            return $this->displayNumberFormat(0);
     }
 
     public function mtd()
@@ -174,8 +174,19 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $firstItem = $order_collection->getFirstItem();
         if($firstItem->getId())
-            return Mage::helper('core')->currency($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0, true, false);
+            return $this->displayNumberFormat($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0);
         else
-            return Mage::helper('core')->currency(0, true, false);
+            return $this->displayNumberFormat(0);
+    }
+
+    public function displayNumberFormat($val)
+    {
+        if($val > 0)
+        {
+            $currency = Mage::helper('core')->currency($val, true, false);
+            $dt = explode('.', $currency);
+            return $dt[0];
+        } else
+            return 0;
     }
 }
