@@ -294,17 +294,21 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             }
 
             $flag = false;
+
             if ($str_encode == "null" && $product->getTypeId() == 'configurable')
             {
                 $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
-                foreach ($options as $_option) {
-                    $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
 
-                    if ($attr->getId() && $attr->getIsRequired()) {
+                foreach ($options as $_option) {
+                    zend_debug::dump($_option);
+
+                    $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
+                    if ($attr->getId() || $attr->getIsRequired()) {
                         $flag = true;
                         break;
                     }
                 }
+
 
                 if ($flag) {
                     Mage::getSingleton('core/session')->addError(

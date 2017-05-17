@@ -44,6 +44,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
     const ACTION_TYPE_RECEIVE_FROM_REGISTER_NEW_CUSTOMER = 7;
     const ACTION_TYPE_RECEIVE_FROM_PURCHASE_TRUWALLET_PRODUCT = 8;
     const ACTION_TYPE_RECEIVE_FROM_ECHECK_PAYMENT = 9;
+    const ACTION_TYPE_RESET_POINTS_BY_ADMIN = 10;
     const XML_PATH_MAX_BALANCE = 'rewardpoints/earning/max_balance';
     const XML_PATH_EMAIL_ENABLE = 'rewardpoints/email/enable';
     const XML_PATH_EMAIL_SENDER = 'rewardpoints/email/sender';

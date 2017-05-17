@@ -131,23 +131,74 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
         if ($this->getRequest()->isPost()) {
             try {
                 $request = $this->getRequest();
-                $customer = Mage::getModel('customer/customer')->load($request->getPost('customer_id'));
-                if (!$customer->getId()) {
-                    throw new Exception($this->__('Not found customer to create transaction.'));
-                }
-                $transaction = Mage::helper('rewardpoints/action')->addTransaction('admin',
-                    $customer,
-                    new Varien_Object(array(
-                        'point_amount'  => $request->getPost('point_amount'),
-                        'title'         => $request->getPost('title'),
-                        'expiration_day'=> (int)$request->getPost('expiration_day'),
-                    ))
-                );
-                if (!$transaction->getId()) {
-                    throw new Exception(
-                        $this->__('Cannot create transaction, please recheck form information.')
+
+                $id = $request->getParam('id');
+                if($id == null)
+                {
+                    $customer = Mage::getModel('customer/customer')->load($request->getPost('customer_id'));
+                    if (!$customer->getId()) {
+                        throw new Exception($this->__('Not found customer to create transaction.'));
+                    }
+
+                    $transaction = Mage::helper('rewardpoints/action')->addTransaction(
+                        'admin',
+                        $customer,
+                        new Varien_Object(array(
+                            'point_amount'  => $request->getPost('point_amount'),
+                            'title'         => $request->getPost('title'),
+                            'expiration_day'=> (int)$request->getPost('expiration_day'),
+                        ))
                     );
+                    if (!$transaction->getId()) {
+                        throw new Exception(
+                            $this->__('Cannot create transaction, please recheck form information.')
+                        );
+                    }
+                } else {
+                    $transaction = Mage::getModel('rewardpoints/transaction')->load($id);
+                    $point_amount = $request->getParam('point_amount');
+                    if (!$transaction->getId()) {
+                        throw new Exception(
+                            $this->__('Cannot create transaction, please recheck form information.')
+                        );
+                    }
+
+                    if(!filter_var($point_amount, FILTER_VALIDATE_INT))
+                    {
+                        throw new Exception(
+                            $this->__('The Points is not a number')
+                        );
+                    }
+
+                    if($point_amount < 0)
+                    {
+                        throw new Exception(
+                            $this->__('The Points is greater than zero')
+                        );
+                    }
+
+                    $old_point = $transaction->getData('point_amount');
+                    $transaction->setData('title', $request->getParam('title'));
+                    $status_arr = array(
+                        Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD,
+                        Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED,
+                    );
+                    if(in_array($transaction->getStatus(), $status_arr))
+                    {
+                        $transaction->setData('point_amount', $point_amount);
+                        $transaction->setData('hold_point', $point_amount);
+                    }
+
+                    $transaction->save();
+
+                    /* Update balance */
+                    if($transaction->getStatus() == Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+                    {
+                        $this->updateBalance($transaction, $old_point);
+                    }
+                    /* END Update balance */
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     $this->__('Transaction has been created successfully.')
                 );
@@ -168,6 +219,38 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
             Mage::helper('rewardpoints')->__('Unable to find item to save')
         );
         $this->_redirect('*/*/');
+    }
+
+    public function updateBalance($transaction, $old_point)
+    {
+        $rewardAccount = Mage::getModel('rewardpoints/customer')->load($transaction->getRewardId());
+
+        $maxBalance = (int) Mage::getStoreConfig(
+            Magestore_RewardPoints_Model_Transaction::XML_PATH_MAX_BALANCE,
+            $transaction->getStoreId()
+        );
+
+        if ($maxBalance > 0 && $transaction->getRealPoint() > 0 &&
+            $rewardAccount->getPointBalance() + $transaction->getRealPoint() > $maxBalance)
+        {
+            if ($maxBalance > $rewardAccount->getPointBalance()) {
+                $transaction->setPointAmount(abs($maxBalance - ($rewardAccount->getPointBalance() + $transaction->getPointAmount())));
+                $transaction->setRealPoint($maxBalance - $rewardAccount->getPointBalance());
+                $rewardAccount->setPointBalance($maxBalance);
+                $transaction->sendUpdateBalanceEmail($rewardAccount);
+            } else {
+                throw new Exception(
+                    Mage::helper('rewardpoints')->__('Maximum points allowed in account balance is %s.', $maxBalance)
+                );
+            }
+        } else {
+            $new_balance = $rewardAccount->getPointBalance() + ($transaction->getPointAmount() - $old_point);
+            $rewardAccount->setPointBalance($new_balance > 0 ? $new_balance : 0);
+            $transaction->sendUpdateBalanceEmail($rewardAccount);
+        }
+
+        // Save reward account and transaction to database
+        $rewardAccount->save();
     }
     
     /**
@@ -396,5 +479,45 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
     protected function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('rewardpoints');
+    }
+
+    public function importAction() {
+        $this->loadLayout();
+        $this->_setActiveMenu('rewardpoints/transaction');
+
+        $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+        $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+
+        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $editBlock = $this->getLayout()->createBlock('rewardpoints/adminhtml_transaction_import');
+        $editBlock->removeButton('delete');
+        $editBlock->removeButton('saveandcontinue');
+        $editBlock->removeButton('reset');
+        $editBlock->updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/*/') . '\')');
+        $editBlock->setData('form_action_url', $this->getUrl('*/*/importSave', array()));
+
+        $this->_addContent($editBlock)
+            ->_addLeft($this->getLayout()->createBlock('rewardpoints/adminhtml_transaction_import_tabs'));
+
+        $this->renderLayout();
+    }
+
+    public function importSaveAction() {
+
+        if (!empty($_FILES['csv_store']['tmp_name'])) {
+            try {
+                $number = Mage::helper('rewardpoints/transaction')->import();
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('rewardpoints')->__('You\'ve successfully imported ') . $number . Mage::helper('rewardpoints')->__(' new transaction(s)'));
+            } catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
+            }
+            $this->_redirect('*/*/');
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
+            $this->_redirect('*/*/importstore');
+        }
+
     }
 }

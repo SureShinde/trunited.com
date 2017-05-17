@@ -62,6 +62,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
      */
     public function addTransaction($actionCode, $customer, $object = null, $extraContent = array())
     {
+
         Varien_Profiler::start('REWARDPOINTS_HELPER_ACTION::addTransaction');
         if (!$customer->getId()) {
             throw new Exception($this->__('Customer must be existed.'));
@@ -83,9 +84,12 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
         $transaction->setData('product_credit', $actionModel->getProductCredit());
         $transaction->setData('product_credit_title', (int)$actionModel->getProductCreditTitle());
 
+        if($object->getStatus() !== null && $object->getStatus() > 0)
+            $transaction->setData('status', (int)$object->getStatus());
+
         if($actionCode == 'admin')
         {
-            $transaction->setData('is_on_hold', $object->getIsOnHold());
+            $transaction->setData('is_on_hold', $object->getIsOnHold() != null ? $object->getIsOnHold() : 0);
         }
 
         if (!$transaction->hasData('store_id')) {
@@ -105,7 +109,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             ));
         } else {
             if ($actionModel->getPointAmount()) {
-                if($actionCode == 'admin')
+                if($actionCode == 'admin' && $object->getIsOnHold() == 1)
                 {
                     $transaction->createTransaction(array(
                         'customer_id'   => $customer->getId(),

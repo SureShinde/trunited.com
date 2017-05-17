@@ -39,7 +39,17 @@ class Magestore_RewardPoints_Block_Adminhtml_Transaction_Edit extends Mage_Admin
         
         $transaction = Mage::registry('transaction_data');
         if ($transaction && $transaction->getId()) {
-            $this->_removeButton('save');
+//            $this->_removeButton('save');
+            $this->_addButton('saveandcontinue', array(
+                'label'     => Mage::helper('rewardpoints')->__('Save And Continue View'),
+                'onclick'   => 'saveAndContinueEdit()',
+                'class'     => 'save',
+            ), -100);
+            $this->_formScripts[] = "
+                function saveAndContinueEdit(){
+                    editForm.submit($('edit_form').action+'back/edit/');
+                }
+            ";
             $this->_removeButton('reset');
             if ($transaction->getPointAmount() <= 0) {
                 return ;

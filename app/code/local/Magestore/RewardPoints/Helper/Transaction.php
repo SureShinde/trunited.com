@@ -278,4 +278,72 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
 
         return $data;
     }
+
+    public function import()
+    {
+        $fileName = $_FILES['csv_store']['tmp_name'];
+        $csvObject = new Varien_File_Csv();
+        $csvData = $csvObject->getData($fileName);
+        $import_count = 0;
+
+        $transactionSave = Mage::getModel('core/resource_transaction');
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+
+        try {
+            $connection->beginTransaction();
+
+            if (sizeof($csvData) > 0) {
+                $current_symbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+                $type_data = array(
+                    Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED,
+                    Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD
+                );
+                $line = 0;
+                foreach ($csvData as $csv) {
+                    $amount = str_replace($current_symbol, '', $csv[2]);
+
+                    if (isset($csv[0]) && !filter_var($csv[0], FILTER_VALIDATE_INT) === false
+                        && isset($csv[1]) && !filter_var($csv[1], FILTER_VALIDATE_EMAIL) === false
+                        && isset($csv[4]) && !filter_var($csv[4], FILTER_VALIDATE_INT) === false
+                        && isset($amount) && !filter_var($amount, FILTER_VALIDATE_FLOAT) === false
+                        && in_array($csv[4], $type_data) && $line > 0
+                    ) {
+                        $customer = Mage::getModel('customer/customer')->load($csv[0]);
+
+                        if ($customer->getId() && strcasecmp($customer->getEmail(), $csv[1]) == 0) {
+                            $account = Mage::helper('rewardpoints/customer')->loadByCustomerId($customer->getId());
+                            if ($account != null && $account->getId()) {
+
+                                $status = isset($csv[4]) ? $csv[4] : '';
+                                $is_on_hold = false;
+
+                                if($status == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD) {
+                                    $is_on_hold = true;
+                                }
+
+                                Mage::helper('rewardpoints/action')->addTransaction('admin', $customer, new Varien_Object(array(
+                                        'point_amount' => $amount,
+                                        'title' => isset($csv[3]) ? $csv[3] : '',
+                                        'is_on_hold' => $is_on_hold,
+                                        'status' => $status
+                                    ))
+                                );
+
+                                $import_count++;
+                            }
+                        }
+                    }
+                    $line++;
+                }
+            }
+
+            $transactionSave->save();
+            $connection->commit();
+        } catch (Exception $e) {
+            $connection->rollback();
+            zend_debug::dump($e->getMessage());
+            exit;
+        }
+        return $import_count;
+    }
 }

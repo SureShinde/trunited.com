@@ -61,7 +61,7 @@ class Magestore_RewardPoints_Helper_Data extends Mage_Core_Helper_Abstract
         $pointAmount = Mage::helper('rewardpoints/customer')->getBalance();
 
         $imageHtml = Mage::helper('rewardpoints/point')->getImageHtml(false);
-        return $this->__('My Rewards') . ' ' . $imageHtml;
+        return $this->__('My Points') . ' ' . $imageHtml;
     }
 
     /**

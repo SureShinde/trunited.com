@@ -3,11 +3,6 @@
     $store = Mage::app()->getStore();
     $code  = $store->getCode();
     $custom_block = Mage::getStoreConfig('porto_settings/header/static_block', $code);
-
-    /* Reward Points in Header */
-    $is_enable = Mage::helper('other')->enableRewardPointHeader();
-    $font_size = Mage::helper('other')->getRewardFontSizeHeader();
-    $text_color = Mage::helper('other')->getRewardColorHeader();
 ?>
 <div class="header-container type6">
     <div class="top-links-container">
@@ -31,14 +26,6 @@
                 <?php echo $this->getChildHtml('topLinks'); ?>
             </div>
             <p class="welcome-msg"><?php echo $this->getChildHtml('welcome'); ?> <?php echo $this->getAdditionalHtml(); ?></p>
-            <?php if($is_enable){?>
-            <div class="reward-top-header">
-                <ul class="award-header">
-                    <li><?php echo Mage::helper('other')->__('YTD PAYOUT: %s',Mage::helper('other')->ytd());?></li>
-                    <li><?php echo Mage::helper('other')->__('MTD POOL: %s',Mage::helper('other')->mtd());?></li>
-                </ul>
-            </div>
-            <?php }?>
             <div class="clearer"></div>
         </div>
     </div>
@@ -62,12 +49,3 @@
     </div>
 </div>
 <?php echo $this->getChildHtml('mobile.nav') ?>
-<?php if($is_enable){?>
-<style type="text/css">
-    .reward-top-header ul.award-header li
-    {
-        font-size: <?php echo $font_size;?>px;
-        color: #<?php echo $text_color;?>;
-    }
-</style>
-<?php }?>
