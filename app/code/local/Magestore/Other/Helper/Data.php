@@ -98,7 +98,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
         $dateStart = date('Y').'-01-01 00:00:00';
         $dateEnd = date('Y-m-d 23:59:59', strtotime("last day of -1 month"));
 
-        $order_collection = Mage::getModel('sales/order')->getCollection()
+        /*$order_collection = Mage::getModel('sales/order')->getCollection()
             ->addFieldToSelect('entity_id')
             ->addFieldToSelect('status')
             ->addFieldToSelect('created_at')
@@ -114,22 +114,24 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $order_collection ->getSelect()
             ->columns('SUM(rewardpoints_earn) as total')
-        ;
+        ;*/
 
-        /*$transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
             ->addFieldToSelect('customer_id')
             ->addFieldToSelect('transaction_id')
             ->addFieldToSelect('status')
             ->addFieldToSelect('created_time')
             ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('action_type', array('neq'=> Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_RESET_POINTS_BY_ADMIN))
+            ->addFieldToFilter('action', array('neq'=> 'reset_point'))
             ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
         ;
 
         $transactions ->getSelect()
             ->columns('SUM(point_amount) as total')
-        ;*/
+        ;
 
-        $firstItem = $order_collection->getFirstItem();
+        $firstItem = $transactions->getFirstItem();
         if($firstItem->getId())
             return $this->displayNumberFormat($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0);
         else
@@ -141,7 +143,7 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
         $dateStart = date('Y-m-01 00:00:00');
         $dateEnd = date('Y-m-d 23:59:59', time());
 
-        $order_collection = Mage::getModel('sales/order')->getCollection()
+        /*$order_collection = Mage::getModel('sales/order')->getCollection()
             ->addFieldToSelect('entity_id')
             ->addFieldToSelect('status')
             ->addFieldToSelect('created_at')
@@ -157,22 +159,24 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
 
         $order_collection ->getSelect()
             ->columns('SUM(rewardpoints_earn) as total')
-        ;
+        ;*/
 
-        /*$transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+        $transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
             ->addFieldToSelect('customer_id')
             ->addFieldToSelect('transaction_id')
             ->addFieldToSelect('status')
             ->addFieldToSelect('created_time')
             ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_COMPLETED)
+            ->addFieldToFilter('action_type', array('neq'=> Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_RESET_POINTS_BY_ADMIN))
+            ->addFieldToFilter('action', array('neq'=> 'reset_point'))
             ->addFieldToFilter('created_time', array('from' => $dateStart, 'to' => $dateEnd));
         ;
 
         $transactions ->getSelect()
             ->columns('SUM(point_amount) as total')
-        ;*/
+        ;
 
-        $firstItem = $order_collection->getFirstItem();
+        $firstItem = $transactions->getFirstItem();
         if($firstItem->getId())
             return $this->displayNumberFormat($firstItem->getTotal() > 0 ? $firstItem->getTotal() : 0);
         else
