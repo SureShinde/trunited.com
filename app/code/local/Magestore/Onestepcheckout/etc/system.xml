@@ -906,7 +906,7 @@
                             <show_in_store>1</show_in_store>
                         </enable_bonuspoints>
                         <giftwrap_amount translate="label">
-                            <label>Get It Now Fee</label>
+                            <label>Standard Shipping Fee</label>
                             <frontend_type>text</frontend_type>							
                             <sort_order>17</sort_order>
                             <show_in_default>1</show_in_default>
@@ -915,11 +915,11 @@
                             <depends>
                                 <enable_giftwrap>1</enable_giftwrap>
                             </depends>
-                            <comment><![CDATA[Enter the amount of Get It Now fee.]]>
+                            <comment><![CDATA[Enter the amount of Standard Shipping fee.]]>
                             </comment>
                         </giftwrap_amount>
                         <giftwrap_amount_plastic translate="label">
-                            <label>Get It Now Fee For Plastic Gift Cards</label>
+                            <label>Standard Shipping Fee For Plastic Gift Cards</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>18</sort_order>
                             <show_in_default>1</show_in_default>
@@ -928,7 +928,7 @@
                             <depends>
                                 <enable_giftwrap>1</enable_giftwrap>
                             </depends>
-                            <comment><![CDATA[Enter the amount of Get It Now fee for Plastic Gift Cards.]]>
+                            <comment><![CDATA[Enter the amount of Standard Shipping fee for Plastic Gift Cards.]]>
                             </comment>
                         </giftwrap_amount_plastic>
                     </fields>

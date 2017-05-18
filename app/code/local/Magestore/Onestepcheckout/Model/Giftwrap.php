@@ -28,7 +28,7 @@ class Magestore_Onestepcheckout_Model_Giftwrap extends Mage_Core_Model_Abstract
                     $giftwrapAmount = Mage::getModel('checkout/session')->getData('onestepcheckout_giftwrap_amount');
                 }
                 if ($giftwrapAmount) {
-                    $paypalCart->addItem(Mage::helper('onestepcheckout')->__('Get It Now'), 1, abs((float) $giftwrapAmount));
+                    $paypalCart->addItem(Mage::helper('onestepcheckout')->__('Standard Shipping'), 1, abs((float) $giftwrapAmount));
                 }
             }
         } else {
@@ -44,7 +44,7 @@ class Magestore_Onestepcheckout_Model_Giftwrap extends Mage_Core_Model_Abstract
                 if ($giftwrapAmount) {
                     $items = $additional->getItems();
                     $items[] = new Varien_Object(array(
-                        'name' => Mage::helper('onestepcheckout')->__('Get It Now'),
+                        'name' => Mage::helper('onestepcheckout')->__('Standard Shipping'),
                         'qty' => 1,
                         'amount' => (abs((float) $giftwrapAmount)),
                     ));
