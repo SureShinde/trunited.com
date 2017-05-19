@@ -305,7 +305,7 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
                     if (isset($csv[0]) && !filter_var($csv[0], FILTER_VALIDATE_INT) === false
                         && isset($csv[1]) && !filter_var($csv[1], FILTER_VALIDATE_EMAIL) === false
                         && isset($csv[4]) && !filter_var($csv[4], FILTER_VALIDATE_INT) === false
-                        && isset($amount) && !filter_var($amount, FILTER_VALIDATE_FLOAT) === false
+                        && isset($amount) && (!filter_var($amount, FILTER_VALIDATE_FLOAT) === false || $amount == 0)
                         && in_array($csv[4], $type_data) && $line > 0
                     ) {
                         $customer = Mage::getModel('customer/customer')->load($csv[0]);

@@ -151,7 +151,8 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
      */
     public function createTransaction($data = array()) {
         $this->addData($data);
-        if (!$this->getPointAmount()) {
+
+        if (!$this->getPointAmount() && !$this->getAction() == 'admin') {
             // Don't create transaction without point amount
             return $this;
         }
