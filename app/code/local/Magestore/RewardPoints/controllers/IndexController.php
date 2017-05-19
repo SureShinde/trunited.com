@@ -168,6 +168,17 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         echo "success";
     }
 
+    public function updateDb3Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} MODIFY `title` VARCHAR(500) NULL default 0;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
+
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');

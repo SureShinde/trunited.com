@@ -300,21 +300,28 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
                 );
                 $line = 0;
                 foreach ($csvData as $csv) {
-                    $amount = str_replace($current_symbol, '', $csv[2]);
+                    $amount = str_replace($current_symbol, '', $csv[1]);
 
                     if (isset($csv[0]) && !filter_var($csv[0], FILTER_VALIDATE_INT) === false
-                        && isset($csv[1]) && !filter_var($csv[1], FILTER_VALIDATE_EMAIL) === false
-                        && isset($csv[4]) && !filter_var($csv[4], FILTER_VALIDATE_INT) === false
-                        && isset($amount) && !filter_var($amount, FILTER_VALIDATE_FLOAT) === false
-                        && in_array($csv[4], $type_data) && $line > 0
+//                        && isset($csv[1]) && !filter_var($csv[1], FILTER_VALIDATE_EMAIL) === false
+                        && isset($csv[3]) && !filter_var($csv[3], FILTER_VALIDATE_INT) === false
+                        && isset($amount) && (!filter_var($amount, FILTER_VALIDATE_FLOAT) === false || $amount == 0)
+                        && in_array($csv[3], $type_data) && $line > 0
                     ) {
                         $customer = Mage::getModel('customer/customer')->load($csv[0]);
 
-                        if ($customer->getId() && strcasecmp($customer->getEmail(), $csv[1]) == 0) {
+//                        if ($customer->getId() && strcasecmp($customer->getEmail(), $csv[1]) == 0) {
+                        if ($customer->getId()) {
                             $account = Mage::helper('rewardpoints/customer')->loadByCustomerId($customer->getId());
+
+                            if($account === null)
+                            {
+                                $account = $this->createRewardPointCustomer($customer->getId());
+                            }
+
                             if ($account != null && $account->getId()) {
 
-                                $status = isset($csv[4]) ? $csv[4] : '';
+                                $status = isset($csv[3]) ? $csv[3] : '';
                                 $is_on_hold = false;
 
                                 if($status == Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD) {
@@ -323,7 +330,7 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
 
                                 Mage::helper('rewardpoints/action')->addTransaction('admin', $customer, new Varien_Object(array(
                                         'point_amount' => $amount,
-                                        'title' => isset($csv[3]) ? $csv[3] : '',
+                                        'title' => isset($csv[2]) ? $csv[2] : '',
                                         'is_on_hold' => $is_on_hold,
                                         'status' => $status
                                     ))
@@ -345,5 +352,31 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
             exit;
         }
         return $import_count;
+    }
+
+    public function createRewardPointCustomer($customer_id)
+    {
+        $customer = Mage::getModel('rewardpoints/customer');
+        $data = array(
+            'customer_id' => $customer_id,
+            'point_balance' => 0,
+            'holding_balance' => 0,
+            'spent_balance' => 0,
+            'is_notification' => 1,
+            'expire_notification' => 1,
+        );
+
+        $customer->setData($data);
+        try{
+            $customer->save();
+
+            if($customer->getId())
+                return $customer;
+            else
+                return null;
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+            return null;
+        }
     }
 }

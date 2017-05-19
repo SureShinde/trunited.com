@@ -108,7 +108,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
                 'updated_time' => now(),
             ));
         } else {
-            if ($actionModel->getPointAmount()) {
+            if ($actionModel->getPointAmount() >= 0) {
                 if($actionCode == 'admin' && $object->getIsOnHold() == 1)
                 {
                     $transaction->createTransaction(array(
