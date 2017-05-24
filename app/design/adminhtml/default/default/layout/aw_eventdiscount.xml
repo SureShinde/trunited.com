@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <adminhtml_aweventdiscount_timer_edit>
+        <reference name="head">
+            <action method="addJs">
+                <script>extjs/ext-tree.js</script>
+            </action>
+            <action method="addJs">
+                <script>extjs/ext-tree-checkbox.js</script>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>extjs/resources/css/ext-all.css</name>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>extjs/resources/css/ytheme-magento.css</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>mage/adminhtml/rules.js</name>
+                <params/>
+            </action>
+            <action method="addCss">
+                <name>aw_eventdiscount/css/styles.css</name>
+            </action>
+            <action method="addCss">
+                <name>aw_eventdiscount/css/colorpicker.css</name>
+            </action>
+            <action method="addJs">
+                <script>aw_eventdiscount/adminhtml/position.js</script>
+            </action>
+            <action method="addJs">
+                <script>aw_eventdiscount/adminhtml/colorpicker.js</script>
+            </action>
+
+        </reference>
+        <default>
+        <reference name="head">
+                </reference>>
+        </default>
+    </adminhtml_aweventdiscount_timer_edit>
+
+    <adminhtml_aweventdiscount_timer_list>
+        <reference name="content">
+            <block type="eventdiscount/adminhtml_timer" name="timer"/>
+        </reference>
+    </adminhtml_aweventdiscount_timer_list>
+    <adminhtml_aweventdiscount_stat_index>
+        <reference name="content">
+            <block type="eventdiscount/adminhtml_stat" name="timer"/>
+        </reference>
+    </adminhtml_aweventdiscount_stat_index>
+</layout>

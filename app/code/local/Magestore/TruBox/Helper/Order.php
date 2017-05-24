@@ -72,7 +72,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 if ($trubox->getId()) {
                     if ($rs = $this->createOrder($trubox->getCustomerId(), $itms))
                     {
-                        var_dump(sizeof($rs));
                         if(sizeof($rs) > 0)
                             $flag[] = $rs;
                     } else {

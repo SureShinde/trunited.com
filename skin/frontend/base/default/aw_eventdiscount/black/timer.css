@@ -1,0 +1,126 @@
+.aw_eventdiscount_timer_container_black {
+    margin-bottom: 5px;
+    font: 12px/1.5em Arial, Helvetica, sans-serif;
+    background-color: #6D6D6D;
+}
+*+html .aw_eventdiscount_timer_container_black {
+    width:193px;
+}
+.aw_eventdiscount_timer_container_black a {
+    text-decoration: none;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_timer {
+    color: #ffffff;
+}
+div.aw_eventdiscount_timer_container_black {
+    text-align: left;
+}
+a.aw_eventdiscount_timer_container_black {
+    text-decoration: none;
+    color: #000;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_days_container,
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_minutes_container,
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_seconds_container,
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_hours_container {
+    float: left;
+    background: #D6D6D6;
+}
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_days,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_hours,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_minutes,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_seconds {
+    padding-left: 5px;
+    font-size: 20px;
+    letter-spacing: 3px;
+}
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_days_label,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_minutes_label,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_hours_label,
+.aw_eventdiscount_timer_container_black span.aw_eventdiscount_seconds_label {
+    font-size: 12px;
+    color: #4D4D4D;
+    padding: 0 3px;
+    font-variant: small-caps;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_separator {
+    float: left;
+
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_separator_afterhours, .aw_eventdiscount_timer_container_black div.aw_eventdiscount_separator_afterminutes {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 9px 0;
+    background: #4D4D4D;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_days {
+    background: #4D4D4D;
+    /*position: relative;*/
+    width: 44px;
+    padding: 10px 0;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_seconds, .aw_eventdiscount_timer_container_black div.aw_eventdiscount_hours, .aw_eventdiscount_timer_container_black div.aw_eventdiscount_minutes {
+    background: #4D4D4D;
+    /*position: relative;*/
+    width: 44px;
+    padding: 10px 0;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_spacer {
+    width: 0;
+    position: absolute;
+    left: 50%;
+    background: none repeat scroll 0 0 #FFFFFF;
+    height: 100%;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_title {
+    font-size: 17px;
+    color: #FFFFFF;
+    background-color: #6D6D6D;
+    width: 170px;
+    margin-right: 20px;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_notice {
+    color: #FFFFFF;
+    background-color: #6D6D6D;
+    width: 170px;
+    margin-right: 20px;
+}
+.aw_eventdiscount_timer_container_black div.aw_eventdiscount_timer_close {
+    cursor: pointer;
+    float: right;
+    width: 20px;
+}
+.aw_transparent {
+    opacity:0;
+    -moz-opacity:0;
+    filter:alpha(opacity=0);
+}
+.aw_timer_wraper_black{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #4D4D4D;
+}
+.aw_clear{
+    clear: both;
+    width: 100%;
+    height: 1px;
+    line-height: 1px;
+}
+.aw_days, .aw_hours, .aw_mins, .aw_secs{
+    float: left;
+    text-align: center;
+}
+.aw_days{
+    width: 24%;
+}
+.aw_hours{
+    width: 24%;
+}
+.aw_mins{
+    width: 29%;
+}
+.aw_secs{
+    width: 23%;
+}

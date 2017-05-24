@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <promo>
+            <children>
+                <eventdiscount module="eventdiscount">
+                    <title>Event Based Discounts</title>
+                    <sort_order>10</sort_order>
+                    <children>
+                        <new module="eventdiscount">
+                            <title>Add New</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/aweventdiscount_timer/new</action>
+                        </new>
+                        <list module="eventdiscount">
+                            <title>Timer List</title>
+                            <sort_order>20</sort_order>
+                            <action>adminhtml/aweventdiscount_timer/list</action>
+                        </list>
+			            <stats module="eventdiscount">
+                            <title>Statistics</title>
+                            <sort_order>30</sort_order>
+                            <action>adminhtml/aweventdiscount_stat/index</action>
+                        </stats>
+                    </children>
+                </eventdiscount>
+            </children>
+        </promo>
+    </menu>
+    <enterprise>
+        <admingws>
+            <collection_load_before>
+                <eventdiscount__timer_collection>addStoreFilter</eventdiscount__timer_collection>
+            </collection_load_before>
+        </admingws>
+    </enterprise>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow everything</title>
+            </all>
+            <admin>
+                <children>
+                    <promo>
+                        <children>
+                            <eventdiscount module="eventdiscount">
+                                <title>Event Based Discounts</title>
+                                <sort_order>10</sort_order>
+                                <children>
+                                    <new module="eventdiscount">
+                                        <title>Add New</title>
+                                        <sort_order>10</sort_order>
+                                    </new>
+                                    <list module="eventdiscount">
+                                        <title>Timer List</title>
+                                        <sort_order>20</sort_order>
+                                    </list>
+				                    <stats module="eventdiscount">
+                                        <title>Statistics</title>
+                                        <sort_order>30</sort_order>
+                                    </stats>
+                                </children>
+                            </eventdiscount>
+                        </children>
+                    </promo>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <eventdiscount>
+                                        <title>Event Based Discounts section</title>
+                                    </eventdiscount>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <layout>
+        <updates>
+            <eventdiscount module="eventdiscount">
+                <file>aw_eventdiscount.xml</file>
+            </eventdiscount>
+        </updates>
+    </layout>
+</config>
