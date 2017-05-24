@@ -307,6 +307,14 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'vat_id' => '',
             );
 
+            if($customer_id == 8138)
+            {
+            	zend_debug::dump($billing_trubox->debug());
+            	zend_debug::dump($billing_trubox->getData('region_id'));
+            	zend_debug::dump($billingAddress);
+            	exit;
+            }
+
             $quote = Mage::getModel('sales/quote')->setStoreId(1);
 
             /*Load Product and add to cart*/
@@ -468,6 +476,26 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
         }
 
         return 0;
+    }
+
+    public function checkRegionId($country, $region_name, $region_id = 0)
+    {
+        if($region_id > 0  && !filter_var($region_id, FILTER_VALIDATE_INT) === false)
+        {
+            return $region_id;
+        } else {
+            $region = Mage::getModel('directory/region')->getCollection()
+                ->addFieldToSelect('region_id')
+                ->addFieldToFilter('country_id', $country)
+                ->addFieldToFilter('default_name', $region_name)
+                ->getFirstItem()
+            ;
+
+            if($region->getId())
+                return $region->getId();
+            else
+                return null;
+        }
     }
 
 }
