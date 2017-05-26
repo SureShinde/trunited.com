@@ -41,6 +41,28 @@
         </default>
     </adminhtml_aweventdiscount_timer_edit>
 
+    <adminhtml_aweventdiscount_timer_products>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="eventdiscount/adminhtml_timer_edit_tab_products" name="eventdiscount.timer.edit.tab.products"/>
+            <block type="adminhtml/widget_grid_serializer" name="grid_serializer">
+                <reference name="grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>eventdiscount.timer.edit.tab.products</grid_block_name>
+                        <data_callback>getSelectedProducts</data_callback>
+                        <hidden_input_name>links[products]</hidden_input_name>
+                        <reload_param_name>products</reload_param_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_aweventdiscount_timer_products>
+
+    <adminhtml_aweventdiscount_timer_productsgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="eventdiscount/adminhtml_timer_edit_tab_products" name="eventdiscount.timer.edit.tab.products"/>
+        </block>
+    </adminhtml_aweventdiscount_timer_productsgrid>
+
     <adminhtml_aweventdiscount_timer_list>
         <reference name="content">
             <block type="eventdiscount/adminhtml_timer" name="timer"/>

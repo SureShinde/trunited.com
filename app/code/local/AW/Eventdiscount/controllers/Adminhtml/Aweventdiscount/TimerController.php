@@ -184,6 +184,10 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
 
     public function saveAction()
     {
+        $data = $this->getRequest()->getParams();
+        $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
+        zend_debug::dump($product_ids);
+        exit;
         if ($data = $this->getRequest()->getPost()) {
             $data['duration'] = $data['duration'][0] * 3600 + $data['duration'][1] * 60 + $data['duration'][2];
             try {
@@ -313,5 +317,28 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
             $this->_title($this->__(' Event based discount timer'))->_title($this->__($action));
         }
         return $this;
+    }
+
+    public function productsAction()
+    {
+        $product_ids = array();
+
+        $this->loadLayout()
+            ->getLayout()
+            ->getBlock('eventdiscount.timer.edit.tab.products')
+            ->setProducts($product_ids)
+        ;
+
+        $this->renderLayout();
+    }
+
+    public function productsGridAction()
+    {
+        $this->loadLayout()
+            ->getLayout()
+            ->getBlock('eventdiscount.timer.edit.tab.products')
+            ->setProducts($this->getRequest()->getPost('products', null));
+
+        $this->renderLayout();
     }
 }
