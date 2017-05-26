@@ -28,6 +28,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 {
     public function setDiscount($observer)
     {
+
         if (!Mage::getModel('customer/session')->isLoggedIn()) {
             return $this;
         }
@@ -38,6 +39,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                 array_push($actions, $action);
             }
         }
+
 
         if (empty($actions)) {
             return $this;
@@ -64,14 +66,15 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             if ($baseDiscount == 0) {
                 continue;
             }
+
             $action['action'] = $baseDiscount;
             $discount = Mage::app()->getStore()->convertPrice($baseDiscount);
             $formattedPrice = Mage::helper('core')->currency($baseDiscount, true, false);
-            $discountDescription = Mage::helper('eventdiscount')->__('Promo')
+            $discountDescription = Mage::helper('eventdiscount')->__('Discount Login')
                 . (count($actions) > 1 ? '&nbsp;#' . $numberPromo++ : '')
                 . '&nbsp;-&nbsp;' . $formattedPrice
             ;
-
+            
             $result = $quote->getBaseSubtotalWithDiscount() - $baseDiscount;
             if ($result < 0) {
                 $baseDiscount = $quote->getBaseSubtotalWithDiscount();

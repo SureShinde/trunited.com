@@ -89,6 +89,8 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                         ->load($id)
                         ->delete()
                     ;
+
+                    Mage::helper('eventdiscount')->removeProductByTimerId($id);
                 }
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('adminhtml')->__(
@@ -168,7 +170,9 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
         $model = $this->_initTimer();
         if ($model->getId()) {
             try {
+                $id = $model->getId();
                 $model->delete();
+                Mage::helper('eventdiscount')->removeProductByTimerId($id);
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('eventdiscount')->__('Timer was successfully deleted')
                 );
@@ -252,6 +256,10 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                 unset($data['actions']);
                 $model->loadPost($data)->save();
 
+                /* Update timer product table */
+                $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
+                Mage::helper('eventdiscount')->saveTimerProduct($model->getId(), $product_ids);
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('eventdiscount')->__('Timer was successfully saved')
                 );
@@ -313,5 +321,28 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
             $this->_title($this->__(' Event based discount timer'))->_title($this->__($action));
         }
         return $this;
+    }
+
+    public function productsAction()
+    {
+        $product_ids = array();
+
+        $this->loadLayout()
+            ->getLayout()
+            ->getBlock('eventdiscount.timer.edit.tab.products')
+            ->setProducts($product_ids)
+        ;
+
+        $this->renderLayout();
+    }
+
+    public function productsGridAction()
+    {
+        $this->loadLayout()
+            ->getLayout()
+            ->getBlock('eventdiscount.timer.edit.tab.products')
+            ->setProducts($this->getRequest()->getPost('products', null));
+
+        $this->renderLayout();
     }
 }

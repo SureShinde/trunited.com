@@ -66,6 +66,9 @@
                     <action>
                         <table>aw_eventdiscount_action</table>
                     </action>
+                    <product>
+                        <table>aw_eventdiscount_timer_product</table>
+                    </product>
                 </entities>
             </eventdiscount_resource>
         </models>
@@ -124,6 +127,7 @@
                     </aweventdiscount_checkout_cart_add_product_complete>
                 </observers>
             </sales_quote_address_discount_item>
+
             <sales_order_place_after>
                 <observers>
                     <aweventdiscount_event_placeorder>

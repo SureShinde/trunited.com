@@ -69,4 +69,67 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return false;
     }
+
+    public function saveTimerProduct($timer_id, $product_ids)
+    {
+        $collection = $this->getTimerProductCollection($timer_id);
+
+        $transactionSave = Mage::getModel('core/resource_transaction');
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        try {
+            $connection->beginTransaction();
+
+            if(sizeof($collection) > 0)
+            {
+                foreach ($collection as $timer_product) {
+                    $timer_product->delete();
+                }
+            }
+
+            if(sizeof($product_ids) > 0)
+            {
+                foreach ($product_ids as $pid) {
+                    $model = Mage::getModel('aweventdiscount/product');
+                    $_data = array(
+                        'timer_id' => $timer_id,
+                        'product_id'    => $pid
+                    );
+                    $model->setData($_data);
+                    $transactionSave->addObject($model);
+                }
+                $transactionSave->save();
+            }
+
+            $connection->commit();
+        } catch (Exception $e) {
+            $connection->rollback();
+        }
+    }
+
+    public function getTimerProductCollection($timer_id)
+    {
+        $collection = Mage::getModel('aweventdiscount/product')->getCollection()
+            ->addFieldToFilter('timer_id', $timer_id)
+            ->setOrder('timer_product_id', 'desc')
+        ;
+
+        return $collection;
+    }
+
+    public function getProductByTimerId($timer_id)
+    {
+        return $this->getTimerProductCollection($timer_id)->getColumnValues('product_id');
+    }
+
+    public function removeProductByTimerId($timer_id)
+    {
+        $collection = $this->getTimerProductCollection($timer_id);
+
+        if(sizeof($collection) > 0)
+        {
+            foreach ($collection as $product) {
+                $product->delete();
+            }
+        }
+    }
 }

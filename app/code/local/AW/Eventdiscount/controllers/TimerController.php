@@ -93,4 +93,22 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $this->getResponse()->setBody(1);
         return;
     }
+
+    public function updateDbAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+           CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/product')}` (
+              `timer_product_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `timer_id` int(10) unsigned NOT NULL,
+              `product_id` int(10) unsigned NOT NULL,
+              PRIMARY KEY (`timer_product_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
 }
