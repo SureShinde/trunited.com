@@ -296,7 +296,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
     public function getSelectedProducts() {
         $products = array();
 
-        $timer_id = $this->getRequest()->getParam('id');
+$timer_id = $this->getRequest()->getParam('id');
 
         if (isset($timer_id)) {
             $product_ids = Mage::helper('eventdiscount')->getProductByTimerId($timer_id);
@@ -316,4 +316,5 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
     {
         return $this->getData('grid_url') ? $this->getData('grid_url') : $this->getUrl('*/*/productsGrid', array('_current' => true));
     }
+
 }

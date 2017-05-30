@@ -188,6 +188,10 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
 
     public function saveAction()
     {
+        $data = $this->getRequest()->getParams();
+        $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
+        zend_debug::dump($product_ids);
+        exit;
         if ($data = $this->getRequest()->getPost()) {
             $data['duration'] = $data['duration'][0] * 3600 + $data['duration'][1] * 60 + $data['duration'][2];
             try {

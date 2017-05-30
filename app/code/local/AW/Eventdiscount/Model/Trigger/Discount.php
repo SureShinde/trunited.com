@@ -74,7 +74,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                 . (count($actions) > 1 ? '&nbsp;#' . $numberPromo++ : '')
                 . '&nbsp;-&nbsp;' . $formattedPrice
             ;
-            
+
             $result = $quote->getBaseSubtotalWithDiscount() - $baseDiscount;
             if ($result < 0) {
                 $baseDiscount = $quote->getBaseSubtotalWithDiscount();

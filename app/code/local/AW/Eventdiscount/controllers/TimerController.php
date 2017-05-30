@@ -100,7 +100,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $installer = $setup;
         $installer->startSetup();
         $installer->run("
-           CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/product')}` (
+ CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/product')}` (
               `timer_product_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `timer_id` int(10) unsigned NOT NULL,
               `product_id` int(10) unsigned NOT NULL,
