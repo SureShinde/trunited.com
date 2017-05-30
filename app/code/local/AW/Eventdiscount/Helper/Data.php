@@ -79,7 +79,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
         try {
             $connection->beginTransaction();
 
-            if(sizeof($collection) > 0)
+            if(sizeof($collection) > 0 && sizeof($product_ids) > 0)
             {
                 foreach ($collection as $timer_product) {
                     $timer_product->delete();

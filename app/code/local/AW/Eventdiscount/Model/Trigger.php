@@ -91,4 +91,6 @@ class AW_Eventdiscount_Model_Trigger extends Mage_Core_Model_Abstract
         );
         return $this->getId();
     }
+
+
 }

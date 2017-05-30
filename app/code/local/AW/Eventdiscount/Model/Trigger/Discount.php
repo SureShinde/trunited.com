@@ -57,12 +57,16 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             ) {
                 continue;
             }
-            if ($action['type'] === AW_Eventdiscount_Model_Source_Action::FIXED) {
+
+            /*if ($action['type'] === AW_Eventdiscount_Model_Source_Action::FIXED) {
                 $baseDiscount = $action['action'];
             }
             if ($action['type'] === AW_Eventdiscount_Model_Source_Action::PERCENT) {
                 $baseDiscount = $action['action'] / 100 * $quote->getBaseSubtotalWithDiscount();
-            }
+            }*/
+
+            $baseDiscount = $this->calculateDiscount($action['timer_id'], $action['type'], $action['action'], $quote);
+
             if ($baseDiscount == 0) {
                 continue;
             }
@@ -137,5 +141,28 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
         }
         $session->setData('eventdiscounts', $actions);
         return $this;
+    }
+
+    public function calculateDiscount($timer_id, $type, $amount, $quote)
+    {
+        $discount = 0;
+        $product_collection = Mage::helper('eventdiscount')->getTimerProductCollection($timer_id);
+
+        if(sizeof($product_collection) > 0)
+        {
+            $product_ids = $product_collection->getColumnValues('product_id');
+
+            foreach ($quote->getAllItems() as $item) {
+                if(in_array($item->getProduct()->getId(), $product_ids))
+                {
+                    if($type === AW_Eventdiscount_Model_Source_Action::FIXED)
+                        $discount += $amount * $item->getQty();
+                    else
+                        $discount += ($amount / 100) * $item->getQty() * $item->getPrice();
+                }
+            }
+        }
+
+        return $discount;
     }
 }
