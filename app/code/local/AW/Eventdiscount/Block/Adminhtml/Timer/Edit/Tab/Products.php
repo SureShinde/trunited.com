@@ -151,6 +151,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
             'header_css_class' => 'a-center',
             'type' => 'checkbox',
             'name' => 'in_products',
+            'field_name' => 'products[]',
             'values' => $this->_getSelectedProducts(),
             'align' => 'center',
             'index' => 'entity_id'
@@ -163,7 +164,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
                 'type'  => 'number',
                 'index' => 'entity_id',
             ));
-        $this->addColumn('name',
+        $this->addColumn('product_name',
             array(
                 'header'=> Mage::helper('catalog')->__('Name'),
                 'index' => 'name',
@@ -209,7 +210,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
             ));
 
         $store = $this->_getStore();
-        $this->addColumn('price',
+        $this->addColumn('product_price',
             array(
                 'header'=> Mage::helper('catalog')->__('Price'),
                 'type'  => 'price',
@@ -236,7 +237,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
                 'options' => Mage::getModel('catalog/product_visibility')->getOptionArray(),
             ));
 
-        $this->addColumn('status',
+        $this->addColumn('product_status',
             array(
                 'header'=> Mage::helper('catalog')->__('Status'),
                 'width' => '70px',
@@ -257,7 +258,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Products extends Mage_Admi
                 ));
         }
 
-        $this->addColumn('action',
+        $this->addColumn('product_action',
             array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '50px',

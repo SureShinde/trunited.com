@@ -138,4 +138,18 @@ class AW_Eventdiscount_Model_Resource_Trigger_Collection extends Mage_Core_Model
         $countSelect = clone $this->getSelect();
         return $countSelect->reset()->from($this->getSelect(), array())->columns('COUNT(*)');
     }
+
+    public function deleteByTimerId($timerId)
+    {
+        if ($timerId > 0) {
+            $collection = clone $this;
+            $collection->addFieldToFilter('timer_id', array('eq' => $timerId));
+
+            foreach ($collection as $item) {
+                $item->delete();
+            }
+            return $this;
+        }
+        return $this;
+    }
 }

@@ -113,6 +113,9 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
         parent::_beforeDelete();
         $collection = Mage::getModel('aweventdiscount/action')->getCollection();
         $collection->deleteByTimerId($this->getId());
+
+        $collection_trigger = Mage::getModel('aweventdiscount/trigger')->getCollection();
+        $collection_trigger->deleteByTimerId($this->getId());
         return $this;
     }
 }

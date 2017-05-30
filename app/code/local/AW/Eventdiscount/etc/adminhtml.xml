@@ -7,11 +7,11 @@
                     <title>Event Based Discounts</title>
                     <sort_order>10</sort_order>
                     <children>
-                        <new module="eventdiscount">
+                        <!--<new module="eventdiscount">
                             <title>Add New</title>
                             <sort_order>10</sort_order>
                             <action>adminhtml/aweventdiscount_timer/new</action>
-                        </new>
+                        </new>-->
                         <list module="eventdiscount">
                             <title>Timer List</title>
                             <sort_order>20</sort_order>
@@ -47,10 +47,10 @@
                                 <title>Event Based Discounts</title>
                                 <sort_order>10</sort_order>
                                 <children>
-                                    <new module="eventdiscount">
+                                    <!--<new module="eventdiscount">
                                         <title>Add New</title>
                                         <sort_order>10</sort_order>
-                                    </new>
+                                    </new>-->
                                     <list module="eventdiscount">
                                         <title>Timer List</title>
                                         <sort_order>20</sort_order>

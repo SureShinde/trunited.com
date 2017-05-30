@@ -188,10 +188,6 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
 
     public function saveAction()
     {
-        $data = $this->getRequest()->getParams();
-        $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
-        zend_debug::dump($product_ids);
-        exit;
         if ($data = $this->getRequest()->getPost()) {
             $data['duration'] = $data['duration'][0] * 3600 + $data['duration'][1] * 60 + $data['duration'][2];
             try {
@@ -261,8 +257,13 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                 $model->loadPost($data)->save();
 
                 /* Update timer product table */
-                $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
-                Mage::helper('eventdiscount')->saveTimerProduct($model->getId(), $product_ids);
+
+                if(isset($data['links']['products']))
+                {
+                    unset($data['products'][0]);
+                    $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
+                    Mage::helper('eventdiscount')->saveTimerProduct($model->getId(), $data['products']);
+                }
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('eventdiscount')->__('Timer was successfully saved')
