@@ -245,4 +245,13 @@ class Magestore_RewardPoints_Helper_Customer extends Mage_Core_Helper_Abstract {
         return true;
     }
 
+    public function loadByCustomerId($customer_id)
+    {
+        $customer = Mage::getModel('rewardpoints/customer')->load($customer_id, 'customer_id');
+        if($customer->getId())
+            return $customer;
+        else
+            return null;
+    }
+
 }

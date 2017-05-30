@@ -87,6 +87,22 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $shipping['address_type'] = Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING;
 
         try {
+            /* Check Region ID of billing and shipping address first */
+            $billing['region_id'] = Mage::helper('trubox/order')->checkRegionId($billing['country'], $billing['region'], $billing['region_id']);
+            if($billing['region_id'] == null)
+                throw new Exception(
+                    Mage::helper('trubox')->__('Please enter the State/Province in Billing Address.')
+                );
+
+            $shipping['region_id'] = Mage::helper('trubox/order')->checkRegionId($shipping['country'], $shipping['region'], $shipping['region_id']);
+            if($shipping['region_id'] == null)
+                throw new Exception(
+                    Mage::helper('trubox')->__('Please enter the State/Province in Shipping Address.')
+                );
+
+
+            /* END Check Region ID of billing and shipping address first */
+
             /* save data to billing address */
             $billing_model = Mage::getModel('trubox/address')->getCollection()
                 ->addFieldToFilter('address_type', Magestore_TruBox_Model_Address::ADDRESS_TYPE_BILLING)
@@ -294,17 +310,19 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             }
 
             $flag = false;
+
             if ($str_encode == "null" && $product->getTypeId() == 'configurable')
             {
                 $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+
                 foreach ($options as $_option) {
                     $attr = Mage::getModel('catalog/resource_eav_attribute')->load($_option['attribute_id']);
-
-                    if ($attr->getId() && $attr->getIsRequired()) {
+                    if ($attr->getId() || $attr->getIsRequired()) {
                         $flag = true;
                         break;
                     }
                 }
+
 
                 if ($flag) {
                     Mage::getSingleton('core/session')->addError(
@@ -618,6 +636,28 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         );
 
 //        zend_debug::dump($order->debug());
+    }
+
+    public function updateAddressAction()
+    {
+        var_dump($_SERVER);
+        $collection = Mage::getModel('trubox/address')->getCollection()
+            ->addFieldToFilter('region_id',0)
+        ;
+
+        if(sizeof($collection) > 0)
+        {
+            foreach($collection as $col)
+            {
+                $region_id = Mage::helper('trubox/order')->checkRegionId($col->getCountry(), $col->getRegion());
+                if($region_id != null)
+                {
+                    $col->setRegionId($region_id)->save();
+                }
+            }
+        }
+
+        echo 'success';
     }
 
 }

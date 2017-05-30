@@ -452,6 +452,9 @@
                 <promotion_register>rewardpoints/action_promotion_register</promotion_register>
                 <promotion_order>rewardpoints/action_promotion_order</promotion_order>
                 <purchase_truWallet_giftcard>rewardpoints/action_promotion_giftcard</purchase_truWallet_giftcard>
+
+                <!-- Reset Points By Admin -->
+                <reset_point>rewardpoints/action_reset</reset_point>
             </actions>
         </rewardpoints>
         <template>

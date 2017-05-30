@@ -480,4 +480,44 @@ class Magestore_RewardPoints_Adminhtml_Reward_TransactionController extends Mage
     {
         return Mage::getSingleton('admin/session')->isAllowed('rewardpoints');
     }
+
+    public function importAction() {
+        $this->loadLayout();
+        $this->_setActiveMenu('rewardpoints/transaction');
+
+        $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+        $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Import Transactions'), Mage::helper('adminhtml')->__('Import Transactions'));
+
+        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+        $editBlock = $this->getLayout()->createBlock('rewardpoints/adminhtml_transaction_import');
+        $editBlock->removeButton('delete');
+        $editBlock->removeButton('saveandcontinue');
+        $editBlock->removeButton('reset');
+        $editBlock->updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('*/*/') . '\')');
+        $editBlock->setData('form_action_url', $this->getUrl('*/*/importSave', array()));
+
+        $this->_addContent($editBlock)
+            ->_addLeft($this->getLayout()->createBlock('rewardpoints/adminhtml_transaction_import_tabs'));
+
+        $this->renderLayout();
+    }
+
+    public function importSaveAction() {
+
+        if (!empty($_FILES['csv_store']['tmp_name'])) {
+            try {
+                $number = Mage::helper('rewardpoints/transaction')->import();
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('rewardpoints')->__('You\'ve successfully imported ') . $number . Mage::helper('rewardpoints')->__(' new transaction(s)'));
+            } catch (Mage_Core_Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
+            }
+            $this->_redirect('*/*/');
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
+            $this->_redirect('*/*/importstore');
+        }
+
+    }
 }
