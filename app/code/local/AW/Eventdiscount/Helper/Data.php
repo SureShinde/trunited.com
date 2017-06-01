@@ -137,4 +137,9 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('awall/eventdiscount/type_notify', $store);
     }
+
+    public function getCMSPage($store = null)
+    {
+        return Mage::getStoreConfig('awall/eventdiscount/cms', $store);
+    }
 }

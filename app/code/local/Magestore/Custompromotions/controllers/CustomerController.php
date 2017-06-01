@@ -54,13 +54,13 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				$client = new Client($sid, $token);
 				if($_SERVER['REMOTE_ADDR'] != '101.99.23.40')
 				{
-					$client->messages->create(
+					/*$client->messages->create(
 						$phone,
 						array(
 							'from' => $from,
 							'body' => $message
 						)
-					);
+					);*/
 				}
 				/* end sending sms */
 				Mage::log('Mobile Code: - '.$phone.' - Quantity: '.$new_code, null, 'mobileCode.log');

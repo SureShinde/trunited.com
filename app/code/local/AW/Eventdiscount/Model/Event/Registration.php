@@ -57,7 +57,8 @@ class AW_Eventdiscount_Model_Event_Registration extends AW_Eventdiscount_Model_E
 
     public function redirectToCMS($observer)
     {
-        $url = Mage::getUrl('promotion-registration');
+        $cms = Mage::helper('eventdiscount')->getCMSPage();
+        $url = Mage::getUrl($cms);
         Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
         return;
     }
