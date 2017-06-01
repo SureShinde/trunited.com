@@ -1,0 +1,70 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Eventdiscount
+ * @version    1.0.5
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Statistics') ?></h4>
+    <div class="form-buttons"></div>
+</div>
+<div class="fieldset">
+    <div class="hor-scroll">
+
+        <table style="border: 1px solid;" class="grid" id="aw_eb_stat_table" width="400px">
+            <tr>
+                <td><?php echo $this->__('Run timer limit');?></td>
+                <td><?php echo ($this->getLimit() == 0 ? $this->__('Unlimited') : $this->getLimit()); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->__('Run timer limit (per customer)');?></td>
+                <td style="margin-left: 10px;"><?php echo ($this->getLimitPerCustomer() == 0 ? $this->__('Unlimited') : $this->getLimitPerCustomer()); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->__('Run timer count');?></td>
+                <td><?php echo $this->getRunCount(); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $this->__('Discounts earned');?></td>
+                <td><?php echo $this->getAmount();?></td>
+            </tr>
+
+            <tr>
+                <td><?php echo $this->__('Timer in progress');?></td>
+                <td><?php echo $this->getInProgress();?> (<?php echo $this->getInProgressPercent(); ?> %)</td>
+            </tr>
+            <tr>
+                <td><?php echo $this->__('Timer used');?></td>
+                <td><?php echo $this->getUsed(); ?> (<?php echo $this->getUsedPercent(); ?> %)</td>
+            </tr>
+            <tr>
+                <td><?php echo $this->__('Timer missed');?></td>
+                <td><?php echo $this->getMissed();?> (<?php echo $this->getMissedPercent();?> %)</td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            Event.observe(window, 'load', function () {
+                decorateTable($('aw_eb_stat_table'))
+            });
+        </script>
+    </div>
+</div>

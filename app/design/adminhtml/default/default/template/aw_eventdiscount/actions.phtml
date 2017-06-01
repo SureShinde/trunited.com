@@ -1,0 +1,137 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Eventdiscount
+ * @version    1.0.5
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><script type="text/javascript">
+    //<![CDATA[
+    var actions = function() {
+        return {
+            del : function(obj) {
+                if( confirm('<?php echo $this->__('Are you sure you want to delete it?') ?>') ) {
+                    fieldSet = obj.up('div.fieldset');
+                    fieldSet.remove();
+                }
+            },
+            switchAction: function(obj){
+                if(obj.options[obj.selectedIndex].value == '<?php echo AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP;?>'){
+                    obj.up().down('select.groups').hidden = false;
+                    obj.up().down('input').hidden = true;
+                    obj.up().down('input').removeClassName('required-entry');
+                }else {
+                    obj.up().down('select.groups').hidden = true;
+                    obj.up().down('input').hidden = false;
+                    obj.up().down('input').addClassName('required-entry');
+                    obj.up().down('input').value='';
+                }
+            },
+            add : function(obj) {
+                var id = this.createId();
+                var newElement = document.createElement('div');
+                newElement.addClassName('fieldset'); // <div id="action-'+id+'" class="fieldset">
+                newElement.setAttribute("id", 'action-'+id);
+
+                newElement.innerHTML = this.getTemplate();
+                $('action_fildsets').appendChild(newElement);
+            },
+            getTemplate : function() {
+                var id = this.getId();
+         return '<label for="action_type_'+id+'"><?php echo $this->__('Action type:');?></label> '+
+                    '<select style="margin-left: 10px; min-width: 180px;" id="action_type_'+id+'" name="actions['+id+'][type]" title="Action type" class=" select" onchange="actions.switchAction(this); return false;">'+
+            <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
+                '<option value="<?php echo $key;?>"><?php echo $val;?></option>'+
+                <?php endforeach;?>
+                '</select> '+
+                '<label style="margin-left: 30px;" for="action_'+id+'"><?php echo $this->__('Action:');?></label> '+
+                    '<select style="margin-left: 10px; min-width: 166px;" id="action_'+id+'" name="actions['+id+'][group]" title="Action" class="select groups " hidden>'+
+            <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
+            '<option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>'+
+                <?php endforeach;?>
+                '</select>'+
+                '<input style="margin-left: 10px; min-width: 160px;" id="action_'+id+'" name="actions['+id+'][amount]" value="" title="Action" type="text" class=" input-text required-entry"> '+
+             '<button style="margin-left: 10px;" class="delete" id="remove_'+id+'" onclick="actions.del(this); return false;"><span><?php echo $this->__('Remove')?></span></button>'
+            },
+            createId : function () {
+                return lastId++;
+            },
+            getId : function () {
+                return lastId;
+            }
+        }
+    }();
+
+    //]]>
+</script>
+<?php $actions = $this->getTimer()->getActionValues();?>
+<button class="add" type="button" id="actions_fieldset_button" onclick="actions.add(); return false;"><span><?php echo $this->__('Add action');?></span></button><br><br>
+<?php $i = 0;?>
+<div id="action_fildsets">
+<?php if($actions):?>
+   <?php foreach($actions as $action):?>
+        <div class="fieldset" id="action-<?php echo $i;?>">
+    <label for="action_type-<?php echo $i;?>"><?php echo $this->__('Action type:');?></label>
+        <select style="margin-left: 10px; min-width: 180px;" id="action_type-<?php echo $i;?>" name="actions[<?php echo $i;?>][type]" title="Action type" class="select" onchange="actions.switchAction(this); return false;">
+            <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
+            <option value="<?php echo $key;?>" <?php if($key==$action['type']){ echo 'selected="selected"';}?>><?php echo $val;?></option>
+            <?php endforeach;?>
+        </select>
+   <label style="margin-left: 30px;" for="action-<?php echo $i;?>"><?php echo $this->__('Action:');?></label>
+        <?php if($action['type'] === AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP):?>
+            <?php $group = ''; $amount = 'hidden';?>
+            <?php else:?>
+            <?php $group = 'hidden'; $amount = '';?>
+            <?php endif;?>
+            <select style="margin-left: 10px; min-width: 166px;" id="action-<?php echo $i;?>" name="actions[<?php echo $i;?>][group]" title="Action" class="select groups" <?php echo $group;?>>
+                <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
+                <option value="<?php echo $key['value'];?>" <?php if($key['value']===$action['action']){echo 'selected="selected"';}?>><?php echo $key['label'];?></option>
+                <?php endforeach;?>
+            </select>
+            <input <?php echo $amount;?> style="margin-left: 10px; min-width: 160px;" id="action-<?php echo $i;?>" name="actions[<?php echo $i;?>][amount]" value="<?php echo $action['action'];?>" title="Action" type="text" class=" input-text ">
+            <?php if($i>0):?>
+            <button style="margin-left: 10px;" class="delete" id="remove_<?php echo $i;?>" onclick="actions.del(this); return false;"><span><?php echo $this->__("Remove");?></span></button>
+            <?php endif;?>
+        </div>
+            <?php $i++;?>
+     <?php endforeach;?>
+                <?php else:?>
+        <div class="fieldset" id="action-0">
+    <label for="action_type-0"><?php echo $this->__('Action type:');?></label>
+        <select style="margin-left: 10px; min-width: 180px;" id="action_type-0" name="actions[0][type]" title="Action type" class=" select" id="action_type-0" onchange="actions.switchAction(this); return false;">
+            <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
+                        <option value="<?php echo $key;?>"><?php echo $val;?></option>
+            <?php endforeach;?>
+        </select>
+
+<label style="margin-left: 30px;" for="action-0"><?php echo $this->__('Action:');?></label>
+           <select style="margin-left: 10px; min-width: 166px;" id="action-0" name="actions[0][group]" title="Action" class="select groups" id="action_g-1" hidden>
+                <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
+                        <option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>
+                <?php endforeach;?>
+            </select>
+            <input style="margin-left: 10px; min-width: 160px;" id="action-0" name="actions[0][amount]" value="" title="Action" type="text"  id="action_a-1" class=" input-text required-entry">
+            </div>
+<?php endif;?>
+</div>
+<script type="text/javascript">
+    var lastId = <?php echo $i;?>;
+</script>

@@ -1,0 +1,118 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Eventdiscount
+ * @version    1.0.5
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?><?php $element = $this->getElement()->getData();
+$values = $element['values'];
+$designPreview = $this->getTimer()->getDesign();
+?>
+
+<div id="aw_preview" style="position: absolute;border: 0 solid;margin-left: 500px;margin-top: 5px;">
+    <?php
+    $package = Mage_Core_Model_Design_Package::DEFAULT_PACKAGE;
+    if (AW_All_Helper_Versions::getPlatform() == 100) {
+        $package = 'enterprise';
+    }
+    if (AW_All_Helper_Versions::getPlatform() == 10) {
+        $package = 'pro';
+    }
+    ?>
+    <?php $base = Mage::getDesign()->getSkinBaseUrl(array('_area' => Mage_Core_Model_Design_Package::DEFAULT_AREA, '_default' => true, '_theme' => Mage_Core_Model_Design_Package::DEFAULT_THEME, '_package' => $package)) . 'aw_eventdiscount';?>
+    <?php foreach (Mage::getModel('aweventdiscount/source_design')->toOptionArray() as $design): ?>
+    <?php if (!$designPreview) {
+        $designPreview = $design;
+    }
+    ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $base . "/" . $design;?>/timer.css" media="all">
+    <?php endforeach;?>
+
+    <?php $base = Mage::getDesign()->getSkinBaseUrl(array('_area' => Mage_Core_Model_Design_Package::DEFAULT_AREA, '_default' => true, '_theme' => Mage_Core_Model_Design_Package::DEFAULT_THEME, '_package' => Mage_Core_Model_Design_Package::BASE_PACKAGE)) . 'aw_eventdiscount';?>
+    <?php foreach (Mage::getModel('aweventdiscount/source_design')->toOptionArray() as $design): ?>
+        <?php if (!$designPreview) {
+            $designPreview = $design;
+        }
+        ?>
+        <link rel="stylesheet" type="text/css" href="<?php echo $base . "/" . $design;?>/timer.css" media="all">
+    <?php endforeach;?>
+
+    <div class="preview_title" align="center"><?php echo $this->__("Timer preview")?></div>
+    <div class="aw_eventdiscount_timer_container_<?php echo $designPreview;?>" id="preview_timer">
+        <div class="aw_eventdiscount_timer" align="center" style="color:<?php echo $values['color'];?>">
+            <div class="aw_eventdiscount_title"><?php echo $values['title']; ?></div>
+            <div id="aw_timer_wraper" class="aw_timer_wraper_<?php echo $designPreview;?>">
+
+                <div class="aw_eventdiscount_days_container" id="test1">
+                    <div class="aw_eventdiscount_days">
+                        <div class="aw_eventdiscount_spacer"></div>
+                        <span class="aw_eventdiscount_days">01</span>
+                    </div>
+                </div>
+                <div class="aw_eventdiscount_hours_container">
+                    <div class="aw_eventdiscount_hours">
+                        <div class="aw_eventdiscount_spacer"></div>
+                        <span class="aw_eventdiscount_hours">01</span>
+                    </div>
+                </div>
+
+                <div class="aw_eventdiscount_separator">
+                    <div class="aw_eventdiscount_separator_afterhours">:</div>
+                    <div class="aw_eventdiscount_separator_afterhours_bottom"><span></span></div>
+                </div>
+
+                <div class="aw_eventdiscount_minutes_container">
+                    <div class="aw_eventdiscount_minutes">
+                        <div class="aw_eventdiscount_spacer"></div>
+                        <span class="aw_eventdiscount_minutes">59</span>
+                    </div>
+                </div>
+
+                <div class="aw_eventdiscount_separator">
+                    <div class="aw_eventdiscount_separator_afterminutes">:</div>
+                    <div class="aw_eventdiscount_separator_afterminutes_bottom"><span></span></div>
+                </div>
+
+                <div class="aw_eventdiscount_seconds_container">
+                    <div class="aw_eventdiscount_seconds">
+                        <div class="aw_eventdiscount_spacer"></div>
+                        <span class="aw_eventdiscount_seconds">30</span>
+                    </div>
+                </div>
+
+                <div class="aw_clear"></div>
+
+            </div>
+            <div class="aw_days"><span class="aw_eventdiscount_days_label"><?php echo $this->__('days'); ?></span></div>
+            <div class="aw_hours"><span class="aw_eventdiscount_hours_label"><?php echo $this->__('hrs'); ?></span>
+            </div>
+            <div class="aw_mins"><span class="aw_eventdiscount_minutes_label"><?php echo $this->__('min'); ?></span>
+            </div>
+            <div class="aw_secs"><span class="aw_eventdiscount_seconds_label"><?php echo $this->__('sec'); ?></span>
+            </div>
+            <div class="aw_clear"></div>
+            <div class="aw_eventdiscount_notice"><?php echo $values['notice']; ?></div>
+        </div>
+    </div>
+    <input type="checkbox" id="preview_font" checked="checked" onclick="switchFonts(this);"> <label for="preview_font" style="vertical-align: middle;">
+    <?php echo $this->__('Font color shown on ending');?> </label>
+</div>
