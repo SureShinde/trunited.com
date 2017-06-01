@@ -306,7 +306,7 @@
 									</li>
 									<li>
 										<input  <?php if(Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"';?> onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);" name="delivery_type" type="radio" id="get_it_now" class="radio validate-one-required-by-name">
-                                        <label for="get_it_now"><?php echo $this->__('Get It Now ($4.99 Handling Cost)'); ?></label>
+                                        <label for="get_it_now"><?php echo $this->__('Standard Shipping ($4.99 Handling Cost)'); ?></label>
 									</li>
 								</ul>
 							</div>

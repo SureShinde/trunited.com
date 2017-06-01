@@ -1,0 +1,83 @@
+<?php
+$type = Mage::helper('eventdiscount')->getTypeNotifyConfiguration();
+?>
+<script type="text/javascript">
+    $js = jQuery.noConflict();
+
+    var s = null;
+    Event.observe(window, 'load', function() {
+        var url = '<?php echo $this->getAjaxUrl();?>';
+        if(window.location.href.match('https://') && !url.match('https://')){ url = url.replace('http://', 'https://') }
+        new Ajax.Request(url, {
+            method:'get',
+            onSuccess:function (transport) {
+                var json = transport.responseText.evalJSON(true);
+                if (!json.error) {
+                    json.timers.each(function (timer) {
+                        showNotify(timer.html_block);
+                        new AwEbd('HMS', timer.count_down, 'aw_eventdiscount_timer_' + timer.id, timer.color);
+                    });
+                }
+            }
+        })
+    });
+
+    function showNotify(html)
+    {
+        $js.notify({
+            title: '',
+            message: ''
+        },{
+            element: 'body',
+            position: null,
+            type: "<?php echo $type;?>", /* info, warning, danger, success */
+            allow_dismiss: true,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: {
+                from: "top",
+                align: "center"
+            },
+            offset: 5,
+            spacing: 10,
+            z_index: 1031,
+            delay: 0    ,
+            timer: 1000,
+            url_target: '_blank',
+            mouse_over: 'pause',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            onShow: null,
+            onShown: null,
+            onClose: null,
+            onClosed: null,
+            icon_type: 'class',
+            template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert">' +
+            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                /*'<span data-notify="icon"></span> ' +
+                 '<span data-notify="title">{1}</span> ' +
+                 '<span data-notify="message">{2}</span>' +
+                 '<div class="progress" data-notify="progressbar">' +
+                 '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                 '</div>' +
+                 '<a href="{3}" target="{4}" data-notify="url"></a>' +*/
+            html+
+            '</div>'
+        });
+    }
+
+    function closeTimer(id) {
+        var url = '<?php echo $this->getAjaxUrl();?>';
+        if(window.location.href.match('https://') && !url.match('https://')){ url = url.replace('http://', 'https://') }
+        new Ajax.Request(url+'tid/' + id, {
+            method:'get',
+            onCreate:function () {
+                $('aw_eventdiscount_timer_' + id).setStyle('display:none');
+            },
+            onSuccess:function (transport) {
+            }
+        });
+    }
+</script>
