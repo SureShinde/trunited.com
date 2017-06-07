@@ -112,4 +112,18 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $installer->endSetup();
         echo "success";
     }
+
+    public function updateDb2Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `point_type` TINYINT;
+            ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `point_amount` FLOAT;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
 }

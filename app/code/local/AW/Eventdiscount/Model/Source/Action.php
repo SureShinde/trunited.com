@@ -34,6 +34,9 @@ class AW_Eventdiscount_Model_Source_Action extends AW_Eventdiscount_Model_Source
     const PERCENT_LABEL='Percent discount';
     const CHANGE_GROUP_LABEL='Change customer group to';
 
+    const AWARD_POINT_FIXED = 1;
+    const AWARD_POINT_PERCENT = 2;
+
     public static function toOptionArray()
     {
         $helper = Mage::helper('eventdiscount');
