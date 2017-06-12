@@ -578,6 +578,7 @@
                 <payment_method>api</payment_method>
                 <who_pay_fees>payer</who_pay_fees>
                 <reduce_balance>1</reduce_balance>
+                <transfer_to>2</transfer_to>
             </payment>
             <email>
                 <is_sent_email_new_account>1</is_sent_email_new_account>

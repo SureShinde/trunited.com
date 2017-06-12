@@ -34,22 +34,22 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
 
     public function isEnableTruWalletProduct()
     {
-        return $this->getDataConfig('product','enable');
+        return Mage::helper('truwallet')->isEnableTruWalletProduct();
     }
 
     public function getTruWalletSku()
     {
-        return $this->getDataConfig('product','truwallet_sku');
+        return Mage::helper('truwallet')->getTruWalletSku();
     }
 
     public function getTruWalletValue()
     {
-        return $this->getDataConfig('product','truwallet_value');
+        return Mage::helper('truwallet')->getTruWalletValue();
     }
 
     public function getTruWalletOrderStatus()
     {
-        return $this->getDataConfig('product','order_status');
+        return Mage::helper('truwallet')->getTruWalletOrderStatus();
     }
 
     public function getNotifyMessage()
@@ -75,5 +75,25 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
     public function getCmsMessageLogin()
     {
         return $this->getDataConfig('cms_page','message_login');
+    }
+
+    public function isEnableTruGiftCardProduct()
+    {
+        return Mage::helper('trugiftcard')->isEnableTruGiftCardProduct();
+    }
+
+    public function getTruGiftCardSku()
+    {
+        return Mage::helper('trugiftcard')->getTruGiftCardSku();
+    }
+
+    public function getTruGiftCardValue()
+    {
+        return Mage::helper('trugiftcard')->getTruGiftCardValue();
+    }
+
+    public function getTruGiftCardOrderStatus()
+    {
+        return Mage::helper('trugiftcard')->getTruGiftCardOrderStatus();
     }
 }

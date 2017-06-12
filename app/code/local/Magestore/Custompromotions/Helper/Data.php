@@ -31,6 +31,11 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->getConfigHelper()->isEnableTruWalletProduct();
     }
 
+    public function isEnableTruGfitCardProduct()
+    {
+        return $this->getConfigHelper()->isEnableTruGiftCardProduct();
+    }
+
     public function compareTime($start_time, $end_time)
     {
         $diff = abs($end_time - $start_time);
@@ -201,6 +206,27 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
             foreach ($cart->getAllItems() as $item) {
                 $sku = $item->getProduct()->getSku();
                 if(strcasecmp($sku_truWallet, $sku) == 0){
+                    $flag = true;
+                    break;
+                }
+            }
+
+            return $flag;
+        } else {
+            return false;
+        }
+    }
+
+    public function truGiftCardInCart()
+    {
+        $cart = Mage::getModel('checkout/session')->getQuote();
+        $items = $cart->getAllItems();
+        if(sizeof($items) > 0){
+            $sku_truGiftCard = $this->getConfigHelper()->getTruGiftCardSku();
+            $flag = false;
+            foreach ($cart->getAllItems() as $item) {
+                $sku = $item->getProduct()->getSku();
+                if(strcasecmp($sku_truGiftCard, $sku) == 0){
                     $flag = true;
                     break;
                 }

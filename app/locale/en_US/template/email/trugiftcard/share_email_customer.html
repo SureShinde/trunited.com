@@ -1,0 +1,54 @@
+<!--@subject Wow, a friend just boosted your truWallet balance @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$customer.name":"Customer Name",
+"var title":"Transaction Title",
+"var amount":"Transaction Amount",
+"var status":"Transaction Status",
+"var point_amount":"Point Amount Formated",
+"var total":"Customer Balance",
+"var point_balance":"Customer Balance Formated",
+"store url=\"customer/account/\"":"Customer Account Url"}
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<div style="font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                </table>
+
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Hi {{htmlescape var=$customer_name}}</strong>,</p>
+                            <p>{{htmlescape var=$message}}</p>
+                            <p>You have just received <b>{{htmlescape var=$amount}}</b> from {{htmlescape var=$sender_email}}. To view more details, please click <a href="{{store url="rewardpoints"}}">here</a>.</p>
+                            <p style="border:1px solid #BEBCB7; padding:13px 18px; background:#F8F7F5; ">
+                                <strong>Transaction Details</strong><br/>
+                                <strong>Transaction Title:</strong> {{var title}}<br/>
+                                <strong>Transaction Amount:</strong> {{var amount}}<br/>
+                                <strong>Transaction Status:</strong> {{var status}}
+                            </p>
+                            <p>If you have any questions, please feel free to <a href="https://trunited.com/contacts">contact us</a> anytime.</p>
+                             <p>Enjoy!</p>
+                                <p><strong>{{var store.getFrontendName()}}</strong>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

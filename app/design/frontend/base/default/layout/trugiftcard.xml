@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/magestore/trugiftcard.css</stylesheet>
+            </action>
+        </reference>
+    </default>
+    <trugiftcard_index_index>
+        <reference name="content">
+            <block type="trugiftcard/trugiftcard" name="trugiftcard" template="trugiftcard/trugiftcard.phtml"/>
+        </reference>
+    </trugiftcard_index_index>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="trugiftcard" ifconfig="trugiftcard/general/enable">
+                <name>trugiftcard</name>
+                <path>trugiftcard</path>
+                <label helper="trugiftcard/getMyTruGiftCardLabel"/>
+            </action>
+        </reference>
+    </customer_account>
+
+    <trugiftcard_default>
+        <update handle="page_two_columns_left"/>
+        <reference name="left">
+            <block type="trugiftcard/account_navigation" before="-" name="trugiftcard.navigation"
+                   template="trugiftcard/account/navigation.phtml">
+                <action method="addLink" translate="label" module="trugiftcard">
+                    <name>account_dashboard</name>
+                    <path>customer/account</path>
+                    <label>Account Dashboard</label>
+                    <enable>true</enable>
+                </action>
+                <action method="addLink" translate="label" module="trugiftcard">
+                    <name>trugiftcard_dashboard</name>
+                    <path>trugiftcard</path>
+                    <label helper="trugiftcard/getMyTruGiftCardLabel"/>
+                    <enable>true</enable>
+                    <order>10</order>
+                </action>
+                <action method="addLink" translate="label" module="trugiftcard">
+                    <name>trugiftcard_dashboard</name>
+                    <path>trugiftcard/index/shareTruGiftCard</path>
+                    <label helper="trugiftcard/getShareTruGiftCardLabel"/>
+                    <enable>true</enable>
+                    <order>20</order>
+                </action>
+                <action method="addLink" translate="label" module="trugiftcard">
+                    <name>trugiftcard_transactions</name>
+                    <path>trugiftcard/index/transactions</path>
+                    <label>Transactions</label>
+                    <enable>true</enable>
+                    <order>30</order>
+                </action>
+            </block>
+        </reference>
+    </trugiftcard_default>
+
+    <trugiftcard_index_index>
+        <update handle="trugiftcard_default"/>
+        <reference name="content">
+            <block type="trugiftcard/account_dashboard" name="trugiftcard.dashboard"
+                   template="trugiftcard/account/dashboard.phtml">
+
+                <block type="core/text_list" name="trugiftcard.dashboard.other" as="other">
+                    <block type="trugiftcard/account_dashboard_transactions" name="dashboard.transactions"
+                           template="trugiftcard/account/dashboard/transactions.phtml"/>
+                </block>
+            </block>
+        </reference>
+    </trugiftcard_index_index>
+
+    <trugiftcard_index_transactions>
+        <update handle="trugiftcard_default" />
+        <reference name="content">
+            <block type="trugiftcard/account_transactions" name="trugiftcard.transactions" template="trugiftcard/account/transactions.phtml" />
+        </reference>
+    </trugiftcard_index_transactions>
+
+    <trugiftcard_index_sharetrugiftcard>
+        <update handle="trugiftcard_default" />
+        <reference name="content">
+            <block type="trugiftcard/account_shareTruGiftCard" name="trugiftcard.shareTruGiftCard" template="trugiftcard/account/shareTruGiftCard.phtml" />
+        </reference>
+    </trugiftcard_index_sharetrugiftcard>
+</layout>
