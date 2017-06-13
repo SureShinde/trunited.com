@@ -33,6 +33,9 @@
  */
 class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_EMAIL_OUT_OF_STOCK = 'trubox/email/out_of_stock';
+    const XML_PATH_EMAIL_SENDER = 'trubox/email/sender';
+
     protected $_shippingMethod = 'freeshipping_freeshipping';
     protected $_paymentMethod = 'authorizenet';
     protected $_freePaymentMethod = 'free';
@@ -204,6 +207,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                             )
                         );
                     }
+                } else {
+                    $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id));
                 }
             }
         }
@@ -496,6 +501,46 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             else
                 return null;
         }
+    }
+
+    /**
+     * @param $customer
+     * @return $this
+     */
+    public function sendEmailOutOfStock($customer)
+    {
+        $store = Mage::app()->getStore();
+        $translate = Mage::getSingleton('core/translate');
+        $translate->setTranslateInline(false);
+
+        if (!$customer->getId())
+            return $this;
+
+        $email_path =  Mage::getStoreConfig(self::XML_PATH_EMAIL_OUT_OF_STOCK, $store);
+
+        $data = array(
+            'store' => $store,
+            'customer_name' => $customer->getName(),
+        );
+
+        $rs = Mage::getModel('core/email_template')
+            ->setDesignConfig(array(
+                'area' => 'frontend',
+                'store' => Mage::app()->getStore()->getId()
+            ))->sendTransactional(
+                $email_path,
+                Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()),
+                $customer->getEmail(),
+                $customer->getName(),
+                $data
+            );
+
+        $translate->setTranslateInline(true);
+        zend_debug::dump(Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()));
+        zend_debug::dump($customer->getEmail());
+        zend_debug::dump($rs);
+        exit;
+        return $this;
     }
 
 }
