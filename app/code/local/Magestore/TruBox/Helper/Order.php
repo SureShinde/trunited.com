@@ -33,6 +33,9 @@
  */
 class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_EMAIL_OUT_OF_STOCK = 'trubox/email/out_of_stock';
+    const XML_PATH_EMAIL_SENDER = 'trubox/email/sender';
+
     protected $_shippingMethod = 'freeshipping_freeshipping';
     protected $_paymentMethod = 'authorizenet';
     protected $_freePaymentMethod = 'free';
@@ -175,12 +178,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $product = Mage::getModel('catalog/product')->load($item->getProductId());
 
                 if ($product->getIsInStock() && $product->isSaleable() === true) {
-
                     if($item->getOptionParams() != null){
                         $option_params = json_decode($item->getOptionParams(), true);
                         if($product->getTypeId() == 'configurable')
                         {
-                            $data[$item->getId()] = array(
+                            $data['product'][$item->getId()] = array(
                                 $item->getProductId() => array(
                                     'qty' => $item->getQty(),
                                     'super_attribute' => $option_params,
@@ -188,7 +190,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                                 )
                             );
                         } else {
-                            $data[$item->getId()] = array(
+                            $data['product'][$item->getId()] = array(
                                 $item->getProductId() => array(
                                     'qty' => $item->getQty(),
                                     'options' => $option_params,
@@ -197,13 +199,20 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                             );
                         }
                     } else {
-                        $data[$item->getId()] = array(
+                        $data['product'][$item->getId()] = array(
                             $item->getProductId() => array(
                                 'qty' => $item->getQty(),
                                 '_processing_params' => array(),
                             )
                         );
                     }
+                } else {
+                    $data['email'][] = array(
+                        'product_name' => $product->getName(),
+                        'qty' => $item->getQty(),
+                        'price' => $item->getPrice(),
+                    );
+                    $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id), $data['email']);
                 }
             }
         }
@@ -306,14 +315,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'fax' => '',
                 'vat_id' => '',
             );
-
-            if($customer_id == 8138)
-            {
-            	zend_debug::dump($billing_trubox->debug());
-            	zend_debug::dump($billing_trubox->getData('region_id'));
-            	zend_debug::dump($billingAddress);
-            	exit;
-            }
 
             $quote = Mage::getModel('sales/quote')->setStoreId(1);
 
@@ -496,6 +497,48 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             else
                 return null;
         }
+    }
+
+    /**
+     * @param $customer
+     * @param $products
+     * @return $this
+     */
+    public function sendEmailOutOfStock($customer, $products)
+    {
+        $store = Mage::app()->getStore();
+        $translate = Mage::getSingleton('core/translate');
+        $translate->setTranslateInline(false);
+
+        if (!$customer->getId())
+            return $this;
+
+        $email_path =  Mage::getStoreConfig(self::XML_PATH_EMAIL_OUT_OF_STOCK, $store);
+
+        $data = array(
+            'store' => $store,
+            'customer_name' => $customer->getName(),
+            'items' => $products
+        );
+
+        $rs = Mage::getModel('core/email_template')
+            ->setDesignConfig(array(
+                'area' => 'frontend',
+                'store' => Mage::app()->getStore()->getId()
+            ))->sendTransactional(
+                $email_path,
+                Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()),
+                $customer->getEmail(),
+                $customer->getName(),
+                $data
+            );
+
+        $translate->setTranslateInline(true);
+        zend_debug::dump(Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()));
+        zend_debug::dump($customer->getEmail());
+        zend_debug::dump($rs);
+        exit;
+        return $this;
     }
 
 }

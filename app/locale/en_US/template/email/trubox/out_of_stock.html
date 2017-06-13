@@ -1,0 +1,54 @@
+<!--@subject TruBox Order - Product(s) Not Available @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$customer.name":"Customer Name",
+"var title":"Transaction Title",
+"var amount":"Transaction Amount",
+"var status":"Transaction Status",
+"var point_amount":"Point Amount Formated",
+"var spent":"Transaction Amount Used",
+"var point_used":"Transaction Amount Used Formated",
+"var total":"Customer Balance",
+"var point_balance":"Customer Balance Formated",
+"var expirationdays":"Expiration After Days",
+"var expirationdate":"Expiration Date",
+"store url=\"customer/account/\"":"Customer Account Url"}
+@-->
+
+<!--@styles
+body,td { color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<div style="font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{var logo_url}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                </table>
+
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Dear {{htmlescape var=$customer_name}}</strong>,<br/><br/>
+                                Thank you for your TruBox order. Unfortunately, the following products are unavailable and were not added to your TruBox order this month. All other items have been processed and will ship very soon.</p>
+                            <p>
+                                {{block type='core/template' area='frontend' template='trubox/email/items.phtml' items=$items}}
+                            </p>
+                            <p>Regards,<br/>
+                                The TruBox Team<br/>
+                                <p>Email from address is admin@trunited.com</p>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,19 @@
+<?php
+    $items = $this->getItems();
+?>
+<table style="width:100%; border-collapse: collapse; " border="1">
+    <tr>
+        <th style="text-align: left; padding: 5px"><?php echo $this->__('Product')?></th>
+        <th style="text-align: left; padding: 5px"><?php echo $this->__('Qty')?></th>
+        <th style="text-align: left; padding: 5px"><?php echo $this->__('Price')?></th>
+    </tr>
+    <?php if(sizeof($items) > 0){?>
+        <?php foreach ($items as $item){?>
+            <tr>
+                <td style="padding: 5px"><?php echo $item['product_name'];?></td>
+                <td style="padding: 5px"><?php echo $item['qty'];?></td>
+                <td style="padding: 5px"><?php echo $item['price'];?></td>
+            </tr>
+        <?php }?>
+    <?php }?>
+</table>
