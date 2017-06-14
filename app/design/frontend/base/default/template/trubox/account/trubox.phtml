@@ -106,10 +106,28 @@ $orders = $this->getCollection();
                         foreach ($collection as $item) {
                             $product = Mage::getModel('catalog/product')->load($item->getProductId());
                             $pointEarn = $this->getPointEarning($product);
-                            if ($product->getStockItem()->getIsInStock()) {
-                                $totalPointEarn += $pointEarn * $item->getQty();
-                            }
                             $option_params = json_decode($item->getOptionParams(), true);
+                            if ($product->getStockItem()->getIsInStock()) {
+                                $flag = false;
+                                if ($product->getTypeId() == 'configurable') {
+                                    $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                        ->getProductByAttributes($option_params, $product)->getId();
+                                    $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                    foreach ($childProducts as $childProduct) {
+                                        $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                        if ($childProduct->getId() == $main_child_product) {
+                                            if ($qty <= 0) {
+                                                $flag = true;
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if(!$flag)
+                                    $totalPointEarn += $pointEarn * $item->getQty();
+                            }
+
                             $price_options = 0;
 
 
@@ -195,7 +213,24 @@ $orders = $this->getCollection();
                                     <?php
                                     $itemPrice = ($product->getFinalPrice() + $price_options) * $item->getQty();
                                     if ($product->getStockItem()->getIsInStock()) {
-                                        $totalPrice += $itemPrice;
+                                        $flag = false;
+                                        if ($product->getTypeId() == 'configurable') {
+                                            $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                                ->getProductByAttributes($option_params, $product)->getId();
+                                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                            foreach ($childProducts as $childProduct) {
+                                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                                if ($childProduct->getId() == $main_child_product) {
+                                                    if ($qty <= 0) {
+                                                        $flag = true;
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if(!$flag)
+                                            $totalPrice += $itemPrice;
                                     }
                                     ?>
                                 </td>
@@ -212,14 +247,50 @@ $orders = $this->getCollection();
                                     <?php
                                         $item_tax_amount = $this->getTaxAmount($product, $item->getQty());
                                         if ($product->getStockItem()->getIsInStock()) {
-                                            $tax += $item_tax_amount;
+                                            $flag = false;
+                                            if ($product->getTypeId() == 'configurable') {
+                                                $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                                    ->getProductByAttributes($option_params, $product)->getId();
+                                                $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                                foreach ($childProducts as $childProduct) {
+                                                    $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                                    if ($childProduct->getId() == $main_child_product) {
+                                                        if ($qty <= 0) {
+                                                            $flag = true;
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            if(!$flag)
+                                                $tax += $item_tax_amount;
                                         }
                                         echo Mage::helper('core')->currency($item_tax_amount, true, false);?>
                                 </td>
                                 <td class="a-center">
                                     <?php
                                     if ($product->getStockItem()->getIsInStock()) {
-                                        echo $this->__("In Stock");
+                                        $flag = false;
+                                        if ($product->getTypeId() == 'configurable') {
+                                            $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                                ->getProductByAttributes($option_params, $product)->getId();
+                                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                            foreach ($childProducts as $childProduct) {
+                                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                                if ($childProduct->getId() == $main_child_product) {
+                                                    if ($qty <= 0) {
+                                                        $flag = true;
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if(!$flag)
+                                            echo $this->__("In Stock");
+                                        else
+                                            echo $this->__("Out of Stock");
                                     } else {
                                         echo $this->__("Out of Stock");
                                     }
