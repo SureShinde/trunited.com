@@ -182,13 +182,59 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                         $option_params = json_decode($item->getOptionParams(), true);
                         if($product->getTypeId() == 'configurable')
                         {
-                            $data['product'][$item->getId()] = array(
-                                $item->getProductId() => array(
-                                    'qty' => $item->getQty(),
-                                    'super_attribute' => $option_params,
-                                    '_processing_params' => array(),
-                                )
-                            );
+                            $main_child_product = Mage::getModel('catalog/product_type_configurable')->getProductByAttributes($option_params, $product)->getId();
+                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null,$product);
+                            $flag = false;
+                            foreach ($childProducts as $childProduct) {
+                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                if ($childProduct->getId() == $main_child_product) {
+
+                                    if($qty <= 0)
+                                    {
+                                        $name = $product->getName().'<br />';
+                                        $flag = true;
+                                        $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                                        if ($_options && sizeof($option_params) > 0){
+                                            foreach ($_options as $_option){
+                                                $_attribute_value = 0;
+                                                foreach ($option_params as $k => $v) {
+                                                    if ($k == $_option['attribute_id']) {
+                                                        $_attribute_value = $v;
+                                                        break;
+                                                    }
+                                                }
+                                                if ($_attribute_value > 0) {
+                                                    $name .= '<small><b>'.$_option['label'].'</b></small><br />';
+                                                    foreach ($_option['values'] as $val) {
+                                                        if ($val['value_index'] == $_attribute_value) {
+                                                            $name .= '<small><i>'.$val['default_label'].'</i></small>';
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        $data['email'][] = array(
+                                            'product_name' => $name,
+                                            'qty' => $item->getQty(),
+                                            'price' => $item->getPrice(),
+                                        );
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if(!$flag)
+                            {
+                                $data['product'][$item->getId()] = array(
+                                    $item->getProductId() => array(
+                                        'qty' => $item->getQty(),
+                                        'super_attribute' => $option_params,
+                                        '_processing_params' => array(),
+                                    )
+                                );
+                            }
                         } else {
                             $data['product'][$item->getId()] = array(
                                 $item->getProductId() => array(
@@ -222,10 +268,10 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                                         }
                                     }
                                     if ($_attribute_value > 0) {
-                                        $name .= '<b>'.$_option['label'].'</b><br />';
+                                        $name .= '<small><b>'.$_option['label'].'</b></small><br />';
                                         foreach ($_option['values'] as $val) {
                                             if ($val['value_index'] == $_attribute_value) {
-                                                $name .= '<i>'.$val['default_label'].'</i>';
+                                                $name .= '<small><i>'.$val['default_label'].'</i></small>';
                                                 break;
                                             }
                                         }
@@ -244,14 +290,14 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                                     }
                                 }
                                 if ($_attribute_value > 0) {
-                                    $name .= '<b>'.$o->getTitle().'</b><br />';
+                                    $name .= '<small><b>'.$o->getTitle().'</b></small><br />';
                                     foreach ($values as $val) {
                                         if (is_array($_attribute_value)) {
                                             if (in_array($val->getOptionTypeId(), $_attribute_value)) {
-                                                $name .= '<i>'.$val->getTitle().'</i>';
+                                                $name .= '<small><i>'.$val->getTitle().'</i></small>';
                                             }
                                         } else if ($val->getOptionTypeId() == $_attribute_value) {
-                                            $name .= '<i>'.$val->getTitle().'</i>';
+                                            $name .= '<small><i>'.$val->getTitle().'</i></small>';
                                         }
                                     }
                                 }
