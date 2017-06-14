@@ -77,6 +77,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                     {
                         if(sizeof($rs) > 0)
                             $flag[] = $rs;
+
+                        sleep(1);
                     } else {
 
                     }
@@ -521,7 +523,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'Order_id' => $increment_id
             );
 
-            if(sizeof($prepare_data['email']) > 0)
+            if(sizeof($prepare_data['email']) > 0 && $order_mail->getId())
             {
                 $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id), $prepare_data['email']);
             }

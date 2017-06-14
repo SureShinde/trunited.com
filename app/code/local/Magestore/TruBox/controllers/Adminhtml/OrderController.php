@@ -50,6 +50,7 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 		if ($params = $this->getRequest()->getPost()) {
 			try {
 				$customer_params = explode(',',$params['customers']);
+				$customer_params = array_filter($customer_params);
 				if(sizeof($customer_params) > 0)
 				{
 					$truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/item');

@@ -52,7 +52,7 @@ $orders = $this->getCollection();
     <div class="info-summary">
         <?php if ($logo != null) { ?>
             <img
-                src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
+                    src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
         <?php } else { ?>
             <img src="<?php echo Mage::getBaseUrl('media') . 'trubox/no_image.png'; ?>">
         <?php } ?>
@@ -71,180 +71,183 @@ $orders = $this->getCollection();
             <h2 class="trubox-header"><?php echo $this->__('Trubox Items') ?></h2>
             <?php if (sizeof($collection) > 0) { ?>
                 <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST" id="trubox-items">
-                    <table id="shopping-cart-table" class="cart-table data-table">
-                        <thead>
-                        <tr class="first last">
-                            <th rowspan="1"><span class="nobr"><?php echo $this->__('Product') ?></span></th>
-                            <th rowspan="1" class="a-center">
-                                <?php echo $this->__('Qty') ?>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><?php echo $this->__('Points') ?></span></span>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><?php echo $this->__('Price') ?></span></span>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><?php echo $this->__('Total Price') ?></span></span>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><?php echo $this->__('Tax Amount') ?></span></span>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><?php echo $this->__('Status') ?></span></span>
-                            </th>
-                            <th class="a-center cart-price-head" colspan="1">
-                                <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $totalPointEarn = 0;
-                        $totalPrice = 0;
-                        $tax = 0;
-                        foreach ($collection as $item) {
-                            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-                            $pointEarn = $this->getPointEarning($product);
-                            $option_params = json_decode($item->getOptionParams(), true);
-                            if ($product->getStockItem()->getIsInStock()) {
-                                $flag = false;
-                                if ($product->getTypeId() == 'configurable') {
-                                    $main_child_product = Mage::getModel('catalog/product_type_configurable')
-                                        ->getProductByAttributes($option_params, $product)->getId();
-                                    $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
-                                    foreach ($childProducts as $childProduct) {
-                                        $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
-                                        if ($childProduct->getId() == $main_child_product) {
-                                            if ($qty <= 0) {
-                                                $flag = true;
+                    <div class="table-responsive">
+                        <table id="shopping-cart-table" class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th><span class="nobr"><?php echo $this->__('') ?></span></th>
+                                    <th><span class="nobr"><?php echo $this->__('Name') ?></span></th>
+                                    <th>
+                                        <?php echo $this->__('Qty') ?>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><?php echo $this->__('Points') ?></span></span>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><?php echo $this->__('Price') ?></span></span>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><?php echo $this->__('Total Price') ?></span></span>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><?php echo $this->__('Tax Amount') ?></span></span>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><?php echo $this->__('Status') ?></span></span>
+                                    </th>
+                                    <th>
+                                        <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $totalPointEarn = 0;
+                            $totalPrice = 0;
+                            $tax = 0;
+                            foreach ($collection as $item) {
+                                $product = Mage::getModel('catalog/product')->load($item->getProductId());
+                                $pointEarn = $this->getPointEarning($product);
+                                $option_params = json_decode($item->getOptionParams(), true);
+                                if ($product->getStockItem()->getIsInStock()) {
+                                    $flag = false;
+                                    if ($product->getTypeId() == 'configurable') {
+                                        $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                            ->getProductByAttributes($option_params, $product)->getId();
+                                        $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                        foreach ($childProducts as $childProduct) {
+                                            $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                            if ($childProduct->getId() == $main_child_product) {
+                                                if ($qty <= 0) {
+                                                    $flag = true;
+                                                }
+                                                break;
                                             }
-                                            break;
                                         }
                                     }
+
+                                    if (!$flag)
+                                        $totalPointEarn += $pointEarn * $item->getQty();
                                 }
 
-                                if(!$flag)
-                                    $totalPointEarn += $pointEarn * $item->getQty();
-                            }
-
-                            $price_options = 0;
+                                $price_options = 0;
 
 
-                            ?>
-                            <tr>
-                                <td><a href="<?php echo $product->getProductUrl(true); ?>" class="product-image">
-                                        <img
-                                            src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(100); ?>"/></a>
-                                    <a href="<?php echo $product->getProductUrl(true); ?>" class="product-name">
-                                        <strong><?php echo $product->getName() ?></strong></a>
-                                    <?php if ($product->getTypeId() == 'configurable') { ?>
-                                        <?php
-                                        $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $product->getProductUrl(true); ?>" class="product-image">
+                                            <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(100); ?>"/></a>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo $product->getProductUrl(true); ?>" class="">
+                                            <strong><?php echo $product->getName() ?></strong></a>
+                                        <?php if ($product->getTypeId() == 'configurable') { ?>
+                                            <?php
+                                            $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
 
-                                        if ($_options && sizeof($option_params) > 0):?>
+                                            if ($_options && sizeof($option_params) > 0):?>
+                                                <dl class="item-options">
+                                                    <?php foreach ($_options as $_option) : ?>
+                                                        <?php
+
+                                                        $_attribute_value = 0;
+                                                        foreach ($option_params as $k => $v) {
+                                                            if ($k == $_option['attribute_id']) {
+                                                                $_attribute_value = $v;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if ($_attribute_value > 0) {
+                                                            ?>
+                                                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                                            <dd>
+                                                                <?php
+
+                                                                foreach ($_option['values'] as $val) {
+
+                                                                    if ($val['value_index'] == $_attribute_value) {
+                                                                        echo $val['default_label'];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </dd>
+                                                        <?php } ?>
+                                                    <?php endforeach; ?>
+                                                </dl>
+                                            <?php endif; ?>
+                                        <?php } else { ?>
                                             <dl class="item-options">
-                                                <?php foreach ($_options as $_option) : ?>
+                                                <?php foreach ($product->getOptions() as $o) { ?>
                                                     <?php
-
+                                                    $values = $o->getValues();
                                                     $_attribute_value = 0;
+
                                                     foreach ($option_params as $k => $v) {
-                                                        if ($k == $_option['attribute_id']) {
+                                                        if ($k == $o->getOptionId()) {
                                                             $_attribute_value = $v;
                                                             break;
                                                         }
                                                     }
-
                                                     if ($_attribute_value > 0) {
                                                         ?>
-                                                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                                        <dt><?php echo $this->escapeHtml($o->getTitle()) ?></dt>
                                                         <dd>
                                                             <?php
+                                                            foreach ($values as $val) {
+                                                                if (is_array($_attribute_value)) {
+                                                                    if (in_array($val->getOptionTypeId(), $_attribute_value)) {
+                                                                        echo $val->getTitle() . ' ';
+                                                                        $price_options += $val->getPrice();
 
-                                                            foreach ($_option['values'] as $val) {
-
-                                                                if ($val['value_index'] == $_attribute_value) {
-                                                                    echo $val['default_label'];
-                                                                    break;
+                                                                    }
+                                                                } else if ($val->getOptionTypeId() == $_attribute_value) {
+                                                                    echo $val->getTitle() . ' ';
+                                                                    $price_options += $val->getPrice();
                                                                 }
                                                             }
                                                             ?>
                                                         </dd>
                                                     <?php } ?>
-                                                <?php endforeach; ?>
+                                                <?php } ?>
                                             </dl>
-                                        <?php endif; ?>
-                                    <?php } else { ?>
-                                        <dl class="item-options">
-                                            <?php foreach ($product->getOptions() as $o) { ?>
-                                                <?php
-                                                $values = $o->getValues();
-                                                $_attribute_value = 0;
-
-                                                foreach ($option_params as $k => $v) {
-                                                    if ($k == $o->getOptionId()) {
-                                                        $_attribute_value = $v;
+                                        <?php } ?>
+                                        <?php
+                                        $itemPrice = ($product->getFinalPrice() + $price_options) * $item->getQty();
+                                        if ($product->getStockItem()->getIsInStock()) {
+                                            $flag = false;
+                                            if ($product->getTypeId() == 'configurable') {
+                                                $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                                    ->getProductByAttributes($option_params, $product)->getId();
+                                                $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                                foreach ($childProducts as $childProduct) {
+                                                    $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                                    if ($childProduct->getId() == $main_child_product) {
+                                                        if ($qty <= 0) {
+                                                            $flag = true;
+                                                        }
                                                         break;
                                                     }
                                                 }
-                                                if ($_attribute_value > 0) {
-                                                    ?>
-                                                    <dt><?php echo $this->escapeHtml($o->getTitle()) ?></dt>
-                                                    <dd>
-                                                        <?php
-                                                        foreach ($values as $val) {
-                                                            if (is_array($_attribute_value)) {
-                                                                if (in_array($val->getOptionTypeId(), $_attribute_value)) {
-                                                                    echo $val->getTitle() . ' ';
-                                                                    $price_options += $val->getPrice();
-
-                                                                }
-                                                            } else if ($val->getOptionTypeId() == $_attribute_value) {
-                                                                echo $val->getTitle() . ' ';
-                                                                $price_options += $val->getPrice();
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </dd>
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </dl>
-                                    <?php } ?>
-                                    <?php
-                                    $itemPrice = ($product->getFinalPrice() + $price_options) * $item->getQty();
-                                    if ($product->getStockItem()->getIsInStock()) {
-                                        $flag = false;
-                                        if ($product->getTypeId() == 'configurable') {
-                                            $main_child_product = Mage::getModel('catalog/product_type_configurable')
-                                                ->getProductByAttributes($option_params, $product)->getId();
-                                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
-                                            foreach ($childProducts as $childProduct) {
-                                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
-                                                if ($childProduct->getId() == $main_child_product) {
-                                                    if ($qty <= 0) {
-                                                        $flag = true;
-                                                    }
-                                                    break;
-                                                }
                                             }
-                                        }
 
-                                        if(!$flag)
-                                            $totalPrice += $itemPrice;
-                                    }
-                                    ?>
-                                </td>
-                                <td class="a-center"><input class="product-qty" name="<?php echo $item->getId(); ?>"
-                                                            value="<?php echo $item->getQty() ?>"></td>
-                                <td class="a-center"><?php echo $pointEarn * $item->getQty(); ?></td>
-                                <td class="a-center"><p
-                                        class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p>
-                                </td>
-                                <td class="a-center"><p
-                                        class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p>
-                                </td>
-                                <td class="a-center">
-                                    <?php
+                                            if (!$flag)
+                                                $totalPrice += $itemPrice;
+                                        }
+                                        ?>
+                                    </td>
+                                    <td class="a-center"><input class="product-qty" name="<?php echo $item->getId(); ?>"
+                                                                value="<?php echo $item->getQty() ?>"></td>
+                                    <td class="a-center"><?php echo $pointEarn * $item->getQty(); ?></td>
+                                    <td class="a-center"><p
+                                                class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p>
+                                    </td>
+                                    <td class="a-center"><p
+                                                class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p>
+                                    </td>
+                                    <td class="a-center">
+                                        <?php
                                         $item_tax_amount = $this->getTaxAmount($product, $item->getQty());
                                         if ($product->getStockItem()->getIsInStock()) {
                                             $flag = false;
@@ -263,48 +266,49 @@ $orders = $this->getCollection();
                                                 }
                                             }
 
-                                            if(!$flag)
+                                            if (!$flag)
                                                 $tax += $item_tax_amount;
                                         }
-                                        echo Mage::helper('core')->currency($item_tax_amount, true, false);?>
-                                </td>
-                                <td class="a-center">
-                                    <?php
-                                    if ($product->getStockItem()->getIsInStock()) {
-                                        $flag = false;
-                                        if ($product->getTypeId() == 'configurable') {
-                                            $main_child_product = Mage::getModel('catalog/product_type_configurable')
-                                                ->getProductByAttributes($option_params, $product)->getId();
-                                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
-                                            foreach ($childProducts as $childProduct) {
-                                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
-                                                if ($childProduct->getId() == $main_child_product) {
-                                                    if ($qty <= 0) {
-                                                        $flag = true;
+                                        echo Mage::helper('core')->currency($item_tax_amount, true, false); ?>
+                                    </td>
+                                    <td class="a-center">
+                                        <?php
+                                        if ($product->getStockItem()->getIsInStock()) {
+                                            $flag = false;
+                                            if ($product->getTypeId() == 'configurable') {
+                                                $main_child_product = Mage::getModel('catalog/product_type_configurable')
+                                                    ->getProductByAttributes($option_params, $product)->getId();
+                                                $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+                                                foreach ($childProducts as $childProduct) {
+                                                    $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                                    if ($childProduct->getId() == $main_child_product) {
+                                                        if ($qty <= 0) {
+                                                            $flag = true;
+                                                        }
+                                                        break;
                                                     }
-                                                    break;
                                                 }
                                             }
-                                        }
 
-                                        if(!$flag)
-                                            echo $this->__("In Stock");
-                                        else
+                                            if (!$flag)
+                                                echo $this->__("In Stock");
+                                            else
+                                                echo $this->__("Out of Stock");
+                                        } else {
                                             echo $this->__("Out of Stock");
-                                    } else {
-                                        echo $this->__("Out of Stock");
-                                    }
-                                    ?>
-                                </td>
-                                <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getId()) ?>"
-                                                        class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                        ?>
-                        </tbody>
-                    </table>
+                                        }
+                                        ?>
+                                    </td>
+                                    <td class="a-center"><a href="<?php echo $this->deleteItemsUrl($item->getId()) ?>"
+                                                            class="product-price a-center delete-trubox-items"><?php echo $this->__('Delete'); ?></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="total-trubox">
                         <p><?php echo $this->__('Subtotal <span>%s</span>', Mage::helper('core')->currency($totalPrice, true, false)) ?></p>
                         <p><?php echo $this->__('Total Profit Points <span>%s</span>', Mage::helper('rewardpoints/point')->format($totalPointEarn)) ?></p>
@@ -666,7 +670,7 @@ $orders = $this->getCollection();
                                 foreach ($paymentList as $k => $v) {
                                     ?>
                                     <option
-                                        value="<?php echo $k ?>" <?php if ($k == $payment->getCardType()) echo "selected" ?>><?php echo $v ?></option>
+                                            value="<?php echo $k ?>" <?php if ($k == $payment->getCardType()) echo "selected" ?>><?php echo $v ?></option>
                                     <?php
                                 }
                                 ?>
@@ -698,7 +702,7 @@ $orders = $this->getCollection();
                                         foreach ($monthList as $k => $v) {
                                             ?>
                                             <option
-                                                value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
@@ -711,7 +715,7 @@ $orders = $this->getCollection();
                                         foreach ($yearList as $k => $v) {
                                             ?>
                                             <option
-                                                value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
