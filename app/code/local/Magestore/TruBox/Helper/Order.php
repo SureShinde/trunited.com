@@ -207,12 +207,68 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                         );
                     }
                 } else {
-                    $data['email'][] = array(
-                        'product_name' => $product->getName(),
-                        'qty' => $item->getQty(),
-                        'price' => $item->getPrice(),
-                    );
-                    $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id), $data['email']);
+                    if($item->getOptionParams() != null){
+                        $name = $product->getName().'<br />';
+                        $option_params = json_decode($item->getOptionParams(), true);
+                        if ($product->getTypeId() == 'configurable') {
+                            $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                            if ($_options && sizeof($option_params) > 0){
+                                foreach ($_options as $_option){
+                                    $_attribute_value = 0;
+                                    foreach ($option_params as $k => $v) {
+                                        if ($k == $_option['attribute_id']) {
+                                            $_attribute_value = $v;
+                                            break;
+                                        }
+                                    }
+                                    if ($_attribute_value > 0) {
+                                        $name .= '<b>'.$_option['label'].'</b><br />';
+                                        foreach ($_option['values'] as $val) {
+                                            if ($val['value_index'] == $_attribute_value) {
+                                                $name .= '<i>'.$val['default_label'].'</i>';
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            foreach ($product->getOptions() as $o) {
+                                $values = $o->getValues();
+                                $_attribute_value = 0;
+
+                                foreach ($option_params as $k => $v) {
+                                    if ($k == $o->getOptionId()) {
+                                        $_attribute_value = $v;
+                                        break;
+                                    }
+                                }
+                                if ($_attribute_value > 0) {
+                                    $name .= '<b>'.$o->getTitle().'</b><br />';
+                                    foreach ($values as $val) {
+                                        if (is_array($_attribute_value)) {
+                                            if (in_array($val->getOptionTypeId(), $_attribute_value)) {
+                                                $name .= '<i>'.$val->getTitle().'</i>';
+                                            }
+                                        } else if ($val->getOptionTypeId() == $_attribute_value) {
+                                            $name .= '<i>'.$val->getTitle().'</i>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $data['email'][] = array(
+                            'product_name' => $name,
+                            'qty' => $item->getQty(),
+                            'price' => $item->getPrice(),
+                        );
+                    } else {
+                        $data['email'][] = array(
+                            'product_name' => $product->getName(),
+                            'qty' => $item->getQty(),
+                            'price' => $item->getPrice(),
+                        );
+                    }
                 }
             }
         }
@@ -271,7 +327,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $shipping_trubox = $this->getAddressByTruBoxId($customer_id, Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING);
 
-            $products = $this->getProductParams($customer_id, $data_items);
+            $prepare_data = $this->getProductParams($customer_id, $data_items);
+            $products = $prepare_data['product'];
             if (sizeof($products) == 0)
                 throw new Exception(
                     Mage::helper('trubox')->__('%s - No Items found!', $customer->getName())
@@ -418,6 +475,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'Order_id' => $increment_id
             );
 
+            if(sizeof($prepare_data['email']) > 0)
+            {
+                $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id), $prepare_data['email']);
+            }
+
 
         } catch (Exception $ex) {
             Mage::getSingleton('adminhtml/session')->addError(
@@ -521,7 +583,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             'items' => $products
         );
 
-        $rs = Mage::getModel('core/email_template')
+        Mage::getModel('core/email_template')
             ->setDesignConfig(array(
                 'area' => 'frontend',
                 'store' => Mage::app()->getStore()->getId()
@@ -534,10 +596,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             );
 
         $translate->setTranslateInline(true);
-        zend_debug::dump(Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()));
-        zend_debug::dump($customer->getEmail());
-        zend_debug::dump($rs);
-        exit;
         return $this;
     }
 
