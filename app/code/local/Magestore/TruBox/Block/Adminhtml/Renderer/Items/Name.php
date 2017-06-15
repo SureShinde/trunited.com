@@ -11,7 +11,7 @@ class Magestore_TruBox_Block_Adminhtml_Renderer_Items_Name extends Mage_Adminhtm
     public function render(Varien_Object $row)
     {
         $value = $row->getData();
-        $_data = Mage::helper('trubox/item')->getItemData($value['item_id']);
+        $_data = Mage::helper('trubox/item')->getItemData($value['entity_id']);
         return $_data['item_name'];
     }
 

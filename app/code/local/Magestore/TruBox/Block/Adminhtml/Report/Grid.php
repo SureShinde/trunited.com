@@ -11,103 +11,175 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
         $this->setSaveParametersInSession(true);
     }
 
+    protected function _getStore()
+    {
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        return Mage::app()->getStore($storeId);
+    }
+
     protected function _prepareCollection()
     {
-        $productsTableName = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_varchar');
-        $cataloginventoryStockStatusTable = Mage::getSingleton('core/resource')->getTableName('cataloginventory_stock_status');
+        $item_collection = Mage::getModel('trubox/item')->getCollection()
+                ->addFieldToSelect('item_id')
+                ->addFieldToSelect('product_id')
+                ->addFieldToSelect('qty')
+                ->addFieldToSelect('price')
+                ->addFieldToSelect('option_params')
+                ->addFieldToFilter('product_id', array('gt' => 0))
+            ;
+        $item_collection->getSelect()->columns(array('trubox_qty' => new Zend_Db_Expr ('SUM(qty)')));
+        $item_collection->getSelect()->columns(array('revenue' => new Zend_Db_Expr ('ROUND(SUM(qty) * price,2)')));
+        $item_collection ->getSelect()->group('product_id');
 
-        $entityTypeId = Mage::getModel('eav/entity')
-            ->setType('catalog_product')
-            ->getTypeId();
+        $catalogInventoryStockStatusTable = Mage::getSingleton('core/resource')->getTableName('cataloginventory_stock_status');
+        $earnAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product','rewardpoints_earn');
 
-        $prodNameAttrId = Mage::getModel('eav/entity_attribute')
-            ->loadByCode($entityTypeId, 'name')
-            ->getAttributeId();
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $store = Mage::app()->getStore($storeId);
+        $collection = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('sku')
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('attribute_set_id')
+            ->addAttributeToSelect('rewardpoints_earn')
+            ->addAttributeToSelect('type_id')
+            ->addAttributeToFilter('entity_id',array('in'=>$item_collection->getColumnValues('product_id')))
+        ;
 
-        $collection = Mage::getModel('trubox/item')->getCollection();
-
-        $collection->getSelect()->joinLeft(
-            array('cpev' => $productsTableName),
-            'cpev.entity_id=main_table.product_id AND cpev.attribute_id=' . $prodNameAttrId . '',
-            array('product_name' => 'value')
-        );
+        if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {
+            $collection->joinField('qty',
+                'cataloginventory/stock_item',
+                'qty',
+                'product_id=entity_id',
+                '{{table}}.stock_id=1',
+                'left');
+        }
 
         $collection->getSelect()->join(
-            array('iv' => $cataloginventoryStockStatusTable),
-            'iv.product_id = main_table.product_id',
+            array('iv' => $catalogInventoryStockStatusTable),
+            'iv.product_id = entity_id',
             array(
                 'stock_status' => 'iv.stock_status',
                 'stock_qty' => 'iv.qty',
             )
         );
 
-        $collection->getSelect()->columns(array('trubox_qty' => new Zend_Db_Expr ('SUM(main_table.qty)')));
-        $collection->getSelect()->columns(array('revenue' => new Zend_Db_Expr ('ROUND(SUM(main_table.qty) * main_table.price,2)')));
+        if ($store->getId()) {
+            //$collection->setStoreId($store->getId());
+            $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
+            $collection->addStoreFilter($store);
+            $collection->joinAttribute(
+                'name',
+                'catalog_product/name',
+                'entity_id',
+                null,
+                'inner',
+                $adminStore
+            );
+            $collection->joinAttribute(
+                'status',
+                'catalog_product/status',
+                'entity_id',
+                null,
+                'inner',
+                $store->getId()
+            );
+            $collection->joinAttribute(
+                'visibility',
+                'catalog_product/visibility',
+                'entity_id',
+                null,
+                'inner',
+                $store->getId()
+            );
+            $collection->joinAttribute(
+                'price',
+                'catalog_product/price',
+                'entity_id',
+                null,
+                'left',
+                $store->getId()
+            );
 
+        }
+        else {
+            $collection->addAttributeToSelect('price');
+            $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
+            $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        }
 
-        // SELECT sum(qty), product_id FROM `trtrubox_item` group BY product_id ORDER BY sum(qty) DESC
-        $collection ->getSelect()->group('main_table.product_id');
-        echo $collection->getSelect();
+        $collection->joinAttribute(
+            'rewardpoints_earn',
+            'catalog_product/rewardpoints_earn',
+            'entity_id',
+            null,
+            'inner',
+            Mage_Core_Model_App::ADMIN_STORE_ID
+        );
 
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 
     protected function _prepareColumns()
     {
-        /*$this->addColumn('item_id', array(
+        $this->addColumn('entity_id', array(
             'header' => Mage::helper('trubox')->__('ID'),
             'align' => 'right',
             'width' => '50px',
-            'index' => 'item_id',
-        ));*/
-
-        $this->addColumn('product_id', array(
-            'header' => Mage::helper('trubox')->__('ID'),
-            'align' => 'right',
-            'width' => '50px',
-            'index' => 'product_id',
+            'index' => 'entity_id',
         ));
 
-        $this->addColumn('product_name', array(
-            'header' => Mage::helper('trubox')->__('Product Name'),
-            'index' => 'product_name',
-            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_Items_Name',
-            'filter_condition_callback' => array($this, '_filterProductNameCallback')
-        ));
+        $this->addColumn('name',
+            array(
+                'header'=> Mage::helper('catalog')->__('Product Name'),
+                'index' => 'name',
+            )
+        );
 
-        $this->addColumn('price', array(
-            'header' => Mage::helper('trubox')->__('Product Price'),
-            'type' => 'price',
-            'currency_code' => Mage::app()->getStore()->getBaseCurrency()->getCode(),
-            'index' => 'price',
-        ));
+        $store = $this->_getStore();
+        $this->addColumn('price',
+            array(
+                'header'=> Mage::helper('catalog')->__('Product Price'),
+                'type'  => 'price',
+                'currency_code' => $store->getBaseCurrency()->getCode(),
+                'index' => 'price',
+            ));
 
         $this->addColumn('trubox_qty', array(
             'header' => Mage::helper('trubox')->__('TruBox Qty'),
             'index' => 'trubox_qty',
             'type' => 'number',
-            'align'     =>'left',
+            'align'     =>'right',
+            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_TruBox_Qty',
+            'filter_condition_callback' => array($this, '_filterQtyCallback')
         ));
 
         $this->addColumn('revenue', array(
             'header' => Mage::helper('trubox')->__('TruBox Revenue'),
             'index' => 'revenue',
             'type' => 'number',
-            'align'     =>'left',
+            'align'     =>'right',
+            'filter_index'     =>'revenue',
+            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_TruBox_Revenue',
+            'filter_condition_callback' => array($this, '_filterRevenueCallback')
         ));
 
-        $this->addColumn('stock_qty', array(
-            'header' => Mage::helper('trubox')->__('Inventory Qty'),
-            'index' => 'stock_qty',
-            'type' => 'number',
-            'align'     =>'left',
-        ));
+        if (Mage::helper('catalog')->isModuleEnabled('Mage_CatalogInventory')) {
+            $this->addColumn('qty',
+                array(
+                    'header'=> Mage::helper('catalog')->__('Inventory Qty'),
+                    'width' => '100px',
+                    'type'  => 'number',
+                    'index' => 'qty',
+                ));
+        }
 
         $this->addColumn('stock_status', array(
             'header'=> Mage::helper('trubox')->__('Status'),
             'index' => 'stock_status',
             'type'  => 'options',
+            'align' => 'right',
             'options' => array(
                 '1' => 'In stock',
                 '0' => 'Out of stock'
@@ -120,7 +192,9 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
             'header' => Mage::helper('trubox')->__('TruBox Points'),
             'index' => 'points',
             'type' => 'number',
-            'align'     =>'left',
+            'align'     =>'right',
+            'renderer' => 'Magestore_TruBox_Block_Adminhtml_Renderer_TruBox_Point',
+            'filter_condition_callback' => array($this, '_filterPointCallback')
         ));
 
         $this->addExportType('*/*/exportCsv', Mage::helper('trubox')->__('CSV'));
@@ -131,62 +205,7 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
-    }
-
-    protected function _filterCustomerNameCallback($collection, $column)
-    {
-        if (!$value = $column->getFilter()->getValue()) {
-            return $this;
-        }
-
-        $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
-
-        if (!empty($value)) {
-            $_customers = Mage::getModel('customer/customer')->getCollection()
-                ->addAttributeToSelect('entity_id')
-                ->addAttributeToSelect('firstname')
-                ->addAttributeToFilter('firstname', array('like' => '%' . $value . '%'))
-                ->setOrder('firstname', $dir);
-
-            $rs = $_customers->getColumnValues('entity_id');
-
-            if (sizeof($rs) == 0)
-                $collection->getSelect()->where('tb.customer_id IS NULL');
-            else
-                $collection->getSelect()->where('tb.customer_id IN (' . implode(',', $rs) . ')');
-        }
-
-
-        return $this;
-    }
-
-    protected function _filterCustomerEmailCallback($collection, $column)
-    {
-        if (!$value = $column->getFilter()->getValue()) {
-            return $this;
-        }
-
-        if (!empty($value)) {
-            $_customers = Mage::getModel('customer/customer')->getCollection()
-                ->addAttributeToSelect('entity_id')
-                ->addAttributeToSelect('email')
-                ->addAttributeToFilter('email', array('like' => '%' . $value . '%'));
-
-            $rs = array();
-            if (sizeof($_customers) > 0) {
-                foreach ($_customers as $_customer) {
-                    $rs[] = $_customer->getId();
-                }
-            }
-            if (sizeof($rs) == 0)
-                $collection->getSelect()->where('tb.customer_id IS NULL');
-            else
-                $collection->getSelect()->where('tb.customer_id IN (' . implode(',', $rs) . ')');
-        }
-
-
-        return $this;
+//        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }
 
     protected function _filterProductNameCallback($collection, $column)
@@ -228,7 +247,7 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
         return $this;
     }
 
-    public function _filterProductPriceCallback($collection, $column)
+    public function _filterQtyCallback($collection, $column)
     {
         if (!$value = $column->getFilter()->getValue()) {
             return $this;
@@ -236,6 +255,75 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
         $values = $column->getFilter()->getValue();
         $from = $values['from'];
         $to = $values['to'];
+
+        $item_collection = Mage::getModel('trubox/item')->getCollection()
+            ->addFieldToSelect('product_id')
+            ->addFieldToSelect('qty')
+            ->addFieldToFilter('product_id', array('gt' => 0))
+        ;
+
+        $item_collection ->getSelect()->group('product_id');
+
+        if($from != null && $to != null)
+            $item_collection->getSelect()->having('SUM(qty) <= '.$to.' and SUM(qty) >= '.$from);
+        else if($from == null && $to != null)
+            $item_collection->getSelect()->having('SUM(qty) <= '.$to);
+        else if($from != null && $to == null)
+            $item_collection->getSelect()->having('SUM(qty) >= '.$from);
+
+
+        $collection->addAttributeToFilter('entity_id',array('in'=>$item_collection->getColumnValues('product_id')));
+        return $this;
+    }
+
+    public function _filterRevenueCallback($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+        $values = $column->getFilter()->getValue();
+        $from = $values['from'];
+        $to = $values['to'];
+
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $table = $resource->getTableName('trubox/item');
+
+        if($from != null && $to != null)
+            $query = 'SELECT product_id, price FROM ' . $table . ' GROUP BY product_id HAVING (SUM(qty) * price) >= '.$from.' and (SUM(qty) * price) <='.$to;
+        else if($from == null && $to != null)
+            $query = 'SELECT product_id, price FROM ' . $table . ' GROUP BY product_id HAVING (SUM(qty) * price) <='.$to;
+        else if($from != null && $to == null)
+            $query = 'SELECT product_id, price FROM ' . $table . ' GROUP BY product_id HAVING (SUM(qty) * price) >= '.$from;
+
+
+        $revenue = $readConnection->fetchCol($query);
+        $collection->addAttributeToFilter('entity_id',array('in'=>$revenue));
+        return $this;
+    }
+
+    public function _filterPointCallback($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+        $values = $column->getFilter()->getValue();
+        $from = $values['from'];
+        $to = $values['to'];
+
+        $resource = Mage::getSingleton('core/resource');
+        $table = $resource->getTableName('trubox/item');
+
+        if($from != null && $to != null){
+            $collection->getSelect()->where('at_rewardpoints_earn.value * (SELECT SUM(qty) FROM ' . $table . ' WHERE product_id = e.entity_id GROUP BY product_id) >='.$from.' and at_rewardpoints_earn.value * (SELECT SUM(qty) FROM ' . $table . ' WHERE product_id = e.entity_id GROUP BY product_id) <= '.$to);
+        }
+        else if($from == null && $to != null){
+            $collection->getSelect()->where('at_rewardpoints_earn.value * (SELECT SUM(qty) FROM ' . $table . ' WHERE product_id = e.entity_id GROUP BY product_id) <= '.$to);
+        }
+        else if($from != null && $to == null){
+            $collection->getSelect()->where('at_rewardpoints_earn.value * (SELECT SUM(qty) FROM ' . $table . ' WHERE product_id = e.entity_id GROUP BY product_id) >='.$from);
+        }
+
         return $this;
     }
 
