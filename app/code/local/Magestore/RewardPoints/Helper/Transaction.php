@@ -245,12 +245,45 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
             {
                 if($count < ($size - $number_display))
                 {
-                    unset($data[$k]);
+                    /*unset($data[$k]);*/
                 }
 
                 $count++;
             }
         }
+
+        if($_SERVER['REMOTE_ADDR'] == '101.99.23.40')
+        {
+        	
+        }
+
+        $display = 2;
+        $_data = array();
+        $first_month = 0;
+        for ($i = 1; $i <= $display; $i++)
+        {
+        	if($first_month == 0)
+        		$_data[strtotime($this->addDaysToDate(date('d-n-Y',time()), 31))] = 0;
+        	else
+        		$_data[strtotime($this->addDaysToDate(date('d-n-Y',time()), 60))] = 0;
+
+        	$first_month++;
+        }
+
+        if(sizeof($_data) > 0)
+        {
+        	foreach ($_data as $_key => $_value) {
+        		foreach ($data as $key => $value) {
+        			if(date('m', $_key) == date('m', $key))
+        			{
+        				$_data[$_key] = $value;
+        				break;
+        			}
+        		}
+        	}
+        }
+
+        $data = $_data;
 
         return $data;
     }
