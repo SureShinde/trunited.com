@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<manageapiadmin_adminhtml_linkshare_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_linkshare" name="manageapi.linkshare" />
+		</reference>
+	</manageapiadmin_adminhtml_linkshare_index>
+</layout>

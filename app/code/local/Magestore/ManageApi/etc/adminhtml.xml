@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<manageapi module="manageapi" translate="title">
+			<title>Manage APIs</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<manageapi module="manageapi" translate="title">
+					<title>Linkshare API</title>
+					<sort_order>0</sort_order>
+					<action>manageapiadmin/adminhtml_linkshare</action>
+				</manageapi>
+				<settings module="manageapi" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/manageapi</action>
+				</settings>
+			</children>
+		</manageapi>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<manageapi module="manageapi" translate="title">
+										<title>ManageApi</title>
+										<sort_order>71</sort_order>									
+									</manageapi>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<manageapi module="manageapi" translate="title">
+						<title>ManageApi</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<manageapi module="manageapi" translate="title">
+								<title>Manage Items</title>
+								<sort_order>0</sort_order>
+								<action>manageapiadmin/adminhtml_manageapi</action>
+							</manageapi>
+							<settings module="manageapi" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/manageapi</action>
+							</settings>
+						</children>
+					</manageapi>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
