@@ -5,4 +5,28 @@
 			<block type="manageapi/adminhtml_linkshare" name="manageapi.linkshare" />
 		</reference>
 	</manageapiadmin_adminhtml_linkshare_index>
+
+	<manageapiadmin_adminhtml_hotelactions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_hotelactions" name="manageapi.priceline.hotelactions" />
+		</reference>
+	</manageapiadmin_adminhtml_hotelactions_index>
+
+	<manageapiadmin_adminhtml_flightactions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_flightactions" name="manageapi.priceline.flightactions" />
+		</reference>
+	</manageapiadmin_adminhtml_flightactions_index>
+
+	<manageapiadmin_adminhtml_caractions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_caractions" name="manageapi.priceline.caractions" />
+		</reference>
+	</manageapiadmin_adminhtml_caractions_index>
+
+	<manageapiadmin_adminhtml_vacationactions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_vacationactions" name="manageapi.priceline.vacationactions" />
+		</reference>
+	</manageapiadmin_adminhtml_vacationactions_index>
 </layout>

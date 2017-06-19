@@ -1,11 +1,79 @@
 <?php
 
-$installer = $this;
-$installer->startSetup();
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_TruBox
+ * @module     TruBox
+ * @author      Magestore Developer
+ *
+ * @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ *
+ */
 
-$installer->run("
+/**
+ * TruBox Index Controller
+ *
+ * @category    Magestore
+ * @package     Magestore_TruBox
+ * @author      Magestore Developer
+ */
+class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Action {
 
-DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
+    /**
+     * index action
+     */
+    public function indexAction() {
+        /* Run Link Share API */
+        Mage::helper('manageapi/linkshare')->processCron();
+        /* END Run Link Share API */
+
+        sleep(1);
+        /* Run Link Share API */
+        Mage::helper('manageapi/hotel')->processCron();
+        /* END Run Link Share API */
+
+        sleep(1);
+        /* Run Link Share API */
+        Mage::helper('manageapi/flight')->processCron();
+        /* END Run Link Share API */
+
+        sleep(1);
+        /* Run Link Share API */
+        Mage::helper('manageapi/car')->processCron();
+        /* END Run Link Share API */
+
+        sleep(1);
+        /* Run Link Share API */
+        Mage::helper('manageapi/vacation')->processCron();
+        /* END Run Link Share API */
+
+        $this->loadLayout();
+        $this->_title(Mage::helper('manageapi')->__('Manage API'));
+        $this->renderLayout();
+    }
+
+    //ALTER TABLE {$setup->getTable('trubox/address')} ADD `address_type` int(10) DEFAULT 2;
+    public function updateDbAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
             CREATE TABLE {$setup->getTable('manageapi/linkshare')} (
               `linkshare_id` int(11) unsigned NOT NULL auto_increment,
               `member_id` int(11) unsigned NOT NULL,
@@ -301,7 +369,10 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`vacation_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-    ");
-
-$installer->endSetup(); 
+            
+            
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+}

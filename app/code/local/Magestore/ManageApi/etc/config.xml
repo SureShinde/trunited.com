@@ -73,6 +73,18 @@
                     <linkshare>
                         <table>linkshare_actions</table>
                     </linkshare>
+                    <hotelactions>
+                        <table>priceline_hotel_actions</table>
+                    </hotelactions>
+                    <flightactions>
+                        <table>priceline_flight_actions</table>
+                    </flightactions>
+                    <caractions>
+                        <table>priceline_car_actions</table>
+                    </caractions>
+                    <vacationactions>
+                        <table>priceline_vacation_actions</table>
+                    </vacationactions>
                 </entities>
             </manageapi_mysql4>
         </models>
@@ -114,17 +126,39 @@
                     <cron_expr>* 1 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>manageapi/observer::processLinkShareCron</model>
+                    <model>manageapi/observer::processCron</model>
                 </run>
             </manageapi_get_data_from_link_share_api>
         </jobs>
     </crontab>
     <default>
         <manageapi>
-            <general>
+            <link_share>
                 <enable>1</enable>
                 <link_share_api><![CDATA[https://ran-reporting.rakutenmarketing.com/en/reports/signature-orders-report---by-member-and-order-id/filters?start_date={{start_date}}&end_date={{end_date}}&include_summary=N&network=1&tz=GMT&date_type=process&token=ZW5jcnlwdGVkYToyOntzOjU6IlRva2VuIjtzOjY0OiIwNWQyODE1NWI4YzVkNGEzOWNlM2ViN2E5NTdhMzU1NjJhOGYxMzg1Njg1NGRkZDc2YjJlYjZlNWI0MDg2MGQ5IjtzOjg6IlVzZXJUeXBlIjtzOjk6IlB1Ymxpc2hlciI7fQ%3D%3D]]></link_share_api>
-            </general>
+            </link_share>
+            <price_line>
+                <enable_hotel>1</enable_hotel>
+                <hotel_api><![CDATA[https://api.rezserver.com/api/shared/getTRK.Sales.Select.Hotel?refid=7844&api_key=04dbbbc0c546b154e6d4f4f9b34f8b52&format={{format}}&time_start={{start_date}}&time_end={{end_date}}&accountid_value=7844]]></hotel_api>
+                <hotel_days>1</hotel_days>
+                <hotel_format>xml</hotel_format>
+
+                <enable_flight>1</enable_flight>
+                <flight_api><![CDATA[https://api.rezserver.com/api/shared/getTRK.Sales.Select.Air?refid=7844&api_key=04dbbbc0c546b154e6d4f4f9b34f8b52&format={{format}}&time_start={{start_date}}&time_end={{end_date}}&accountid_value=7844]]></flight_api>
+                <flight_days>1</flight_days>
+                <flight_format>xml</flight_format>
+
+                <enable_car>1</enable_car>
+                <car_api><![CDATA[https://api.rezserver.com/api/shared/getTRK.Sales.Select.Car?refid=7844&api_key=04dbbbc0c546b154e6d4f4f9b34f8b52&format={{format}}&time_start={{start_date}}&time_end={{end_date}}&accountid_value=7844]]></car_api>
+                <car_days>1</car_days>
+                <car_format>xml</car_format>
+
+                <enable_vacation>1</enable_vacation>
+                <vacation_api><![CDATA[https://api.rezserver.com/api/shared/getTRK.Sales.Select.Vp?refid=7844&api_key=04dbbbc0c546b154e6d4f4f9b34f8b52&format={{format}}&time_start={{start_date}}&time_end={{end_date}}&accountid_value=7844]]></vacation_api>
+                <vacation_days>1</vacation_days>
+                <vacation_format>xml</vacation_format>
+
+            </price_line>
         </manageapi>
     </default>
 </config>

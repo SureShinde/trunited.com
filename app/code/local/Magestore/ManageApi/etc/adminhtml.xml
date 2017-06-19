@@ -6,10 +6,37 @@
 			<sort_order>71</sort_order>               
 			<children>
 				<manageapi module="manageapi" translate="title">
-					<title>Linkshare API</title>
+					<title>Link Share API</title>
 					<sort_order>0</sort_order>
 					<action>manageapiadmin/adminhtml_linkshare</action>
 				</manageapi>
+				<price_line module="manageapi" translate="title">
+					<title>Price Line APIs</title>
+					<sort_order>1</sort_order>
+					<children>
+						<hotel_actions module="manageapi" translate="title">
+							<title>PriceLine Hotel API</title>
+							<sort_order>1</sort_order>
+							<action>manageapiadmin/adminhtml_hotelactions</action>
+						</hotel_actions>
+						<flight_actions module="manageapi" translate="title">
+							<title>PriceLine Flight API</title>
+							<sort_order>2</sort_order>
+							<action>manageapiadmin/adminhtml_flightactions</action>
+						</flight_actions>
+						<car_actions module="manageapi" translate="title">
+							<title>PriceLine Car API</title>
+							<sort_order>3</sort_order>
+							<action>manageapiadmin/adminhtml_caractions</action>
+						</car_actions>
+						<vacation_actions module="manageapi" translate="title">
+							<title>PriceLine Vacation API</title>
+							<sort_order>4</sort_order>
+							<action>manageapiadmin/adminhtml_vacationactions</action>
+						</vacation_actions>
+					</children>
+				</price_line>
+
 				<settings module="manageapi" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
@@ -42,10 +69,36 @@
 						<sort_order>71</sort_order>               
 						<children>
 							<manageapi module="manageapi" translate="title">
-								<title>Manage Items</title>
+								<title>Link Share API</title>
 								<sort_order>0</sort_order>
-								<action>manageapiadmin/adminhtml_manageapi</action>
+								<action>manageapiadmin/adminhtml_linkshare</action>
 							</manageapi>
+							<price_line module="manageapi" translate="title">
+								<title>Price Line APIs</title>
+								<sort_order>1</sort_order>
+								<children>
+									<hotel_actions module="manageapi" translate="title">
+										<title>PriceLine Hotel API</title>
+										<sort_order>1</sort_order>
+										<action>manageapiadmin/adminhtml_hotelactions</action>
+									</hotel_actions>
+									<flight_actions module="manageapi" translate="title">
+										<title>PriceLine Flight API</title>
+										<sort_order>2</sort_order>
+										<action>manageapiadmin/adminhtml_flightactions</action>
+									</flight_actions>
+									<car_actions module="manageapi" translate="title">
+										<title>PriceLine Car API</title>
+										<sort_order>3</sort_order>
+										<action>manageapiadmin/adminhtml_caractions</action>
+									</car_actions>
+									<vacation_actions module="manageapi" translate="title">
+										<title>PriceLine Vacation API</title>
+										<sort_order>4</sort_order>
+										<action>manageapiadmin/adminhtml_vacationactions</action>
+									</vacation_actions>
+								</children>
+							</price_line>
 							<settings module="manageapi" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>

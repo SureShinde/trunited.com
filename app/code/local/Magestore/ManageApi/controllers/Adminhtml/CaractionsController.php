@@ -1,11 +1,11 @@
 <?php
 
-class Magestore_ManageApi_Adminhtml_LinkshareController extends Mage_Adminhtml_Controller_Action
+class Magestore_ManageApi_Adminhtml_CaractionsController extends Mage_Adminhtml_Controller_Action
 {
 	protected function _initAction(){
 		$this->loadLayout()
-			->_setActiveMenu('manageapi/linkshare')
-			->_addBreadcrumb(Mage::helper('adminhtml')->__('API Manager'), Mage::helper('adminhtml')->__('API Manager'));
+			->_setActiveMenu('manageapi/caractions')
+			->_addBreadcrumb(Mage::helper('adminhtml')->__('API Manager'), Mage::helper('adminhtml')->__('Car API Manager'));
 		return $this;
 	}
  
@@ -22,7 +22,7 @@ class Magestore_ManageApi_Adminhtml_LinkshareController extends Mage_Adminhtml_C
 		}else{
 			try {
 				foreach ($manageapiIds as $manageapiId) {
-					$manageapi = Mage::getModel('manageapi/linkshare')->load($manageapiId);
+					$manageapi = Mage::getModel('manageapi/caractions')->load($manageapiId);
 					$manageapi->delete();
 				}
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($manageapiIds)));
@@ -34,14 +34,14 @@ class Magestore_ManageApi_Adminhtml_LinkshareController extends Mage_Adminhtml_C
 	}
 
 	public function exportCsvAction(){
-		$fileName   = 'linkshare.csv';
-		$content	= $this->getLayout()->createBlock('manageapi/adminhtml_linkshare_grid')->getCsv();
+		$fileName   = 'caractions.csv';
+		$content	= $this->getLayout()->createBlock('manageapi/adminhtml_caractions_grid')->getCsv();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
 
 	public function exportXmlAction(){
-		$fileName   = 'linkshare.xml';
-		$content	= $this->getLayout()->createBlock('manageapi/adminhtml_linkshare_grid')->getXml();
+		$fileName   = 'caractions.xml';
+		$content	= $this->getLayout()->createBlock('manageapi/adminhtml_caractions_grid')->getXml();
 		$this->_prepareDownloadResponse($fileName,$content);
 	}
 }
