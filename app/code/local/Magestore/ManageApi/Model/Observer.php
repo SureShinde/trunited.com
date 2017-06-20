@@ -4,6 +4,7 @@ class Magestore_ManageApi_Model_Observer
 {
     public function processCron()
     {
+        Mage::log('Running API at '.date('Y-m-d H:i:s', time()), null, 'run_api.log');
         /* Run Link Share API */
         Mage::helper('manageapi/linkshare')->processCron();
         /* END Run Link Share API */

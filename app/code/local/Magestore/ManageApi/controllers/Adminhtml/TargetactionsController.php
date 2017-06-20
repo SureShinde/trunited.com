@@ -10,7 +10,6 @@ class Magestore_ManageApi_Adminhtml_TargetactionsController extends Mage_Adminht
 	}
  
 	public function indexAction(){
-	    Mage::helper('manageapi/target')->processCron();
 		$this->_initAction()
 			->renderLayout();
 	}

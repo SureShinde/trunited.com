@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+	<manageapiadmin_adminhtml_manageapi_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_manageapi" name="manageapi.manageapi" />
+		</reference>
+	</manageapiadmin_adminhtml_manageapi_index>
+
 	<manageapiadmin_adminhtml_linkshare_index>
 		<reference name="content">
 			<block type="manageapi/adminhtml_linkshare" name="manageapi.linkshare" />

@@ -46,6 +46,11 @@
 					<sort_order>3</sort_order>
 					<action>manageapiadmin/adminhtml_targetactions</action>
 				</target>
+				<manageapi module="manageapi" translate="title">
+					<title>Manage Items</title>
+					<sort_order>4</sort_order>
+					<action>manageapiadmin/adminhtml_manageapi/new</action>
+				</manageapi>
 				<settings module="manageapi" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
