@@ -299,6 +299,44 @@
 						</cj_api>
 					</fields>
 				</cj>
+				<target translate="label">
+					<label>Target API Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>4</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enable_target translate="label">
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable_target>
+						<target_api>
+							<label>Target API</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Please don't remove {{start_date}}, {{end_date}} variables in link</comment>
+						</target_api>
+						<target_days>
+							<label>Target Previous Days</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>The number of previous days. Default: 1</comment>
+						</target_days>
+					</fields>
+				</target>
 			</groups>
 		</manageapi>
 	</sections>

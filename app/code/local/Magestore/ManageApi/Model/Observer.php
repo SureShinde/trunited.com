@@ -27,5 +27,10 @@ class Magestore_ManageApi_Model_Observer
         /* Run Link Share API */
         Mage::helper('manageapi/vacation')->processCron();
         /* END Run Link Share API */
+
+        sleep(1);
+        /* Run CJ API */
+        Mage::helper('manageapi/cj')->processCron();
+        /* END Run CJ API */
     }
 }
