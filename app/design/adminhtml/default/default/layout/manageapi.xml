@@ -29,4 +29,10 @@
 			<block type="manageapi/adminhtml_vacationactions" name="manageapi.priceline.vacationactions" />
 		</reference>
 	</manageapiadmin_adminhtml_vacationactions_index>
+
+	<manageapiadmin_adminhtml_cjactions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_cjactions" name="manageapi.cj.cjactions" />
+		</reference>
+	</manageapiadmin_adminhtml_cjactions_index>
 </layout>

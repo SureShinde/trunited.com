@@ -85,6 +85,9 @@
                     <vacationactions>
                         <table>priceline_vacation_actions</table>
                     </vacationactions>
+                    <cjactions>
+                        <table>priceline_cj_actions</table>
+                    </cjactions>
                 </entities>
             </manageapi_mysql4>
         </models>
@@ -157,8 +160,13 @@
                 <vacation_api><![CDATA[https://api.rezserver.com/api/shared/getTRK.Sales.Select.Vp?refid=7844&api_key=04dbbbc0c546b154e6d4f4f9b34f8b52&format={{format}}&time_start={{start_date}}&time_end={{end_date}}&accountid_value=7844]]></vacation_api>
                 <vacation_days>1</vacation_days>
                 <vacation_format>xml</vacation_format>
-
             </price_line>
+            <cj>
+                <enable_cj>1</enable_cj>
+                <cj_developer_key><![CDATA[0085215047802fb30f7e12f949b2f3714d0ebfe94ec229762bb69aa3e4ae818ca6b5535f6ea7fd08e75b927689356e56d890359076c1d5e837b3f55ea3016b5a6b/10e72eeb35225948d1481570bf10dbc4dde78df6dafe2aabd82e803aabd1750b12bca8c2ff04b78ca3362760f5ec6b3d74c74a6982824fb292bc76759401e3b1]]></cj_developer_key>
+                <cj_api><![CDATA[https://commission-detail.api.cj.com/v3/commissions?date-type={{data_type}}&start-date={{start_date}}&end-date={{end_date}}]]></cj_api>
+                <cj_data_type>posting</cj_data_type>
+            </cj>
         </manageapi>
     </default>
 </config>

@@ -7,22 +7,38 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
     const PRICE_LINE_FIGHT = 'manage_api/priceline/fight.xml';
     const PRICE_LINE_CAR = 'manage_api/priceline/car.xml';
     const PRICE_LINE_VACATION = 'manage_api/priceline/vacation.xml';
+    const CJ_VACATION = 'manage_api/cj/cj.xml';
 
-    public function getDataConfig($file_name, $group='general')
+    public function getDataConfig($file_name, $group = 'general')
     {
         return Mage::getStoreConfig(
-            'manageapi/'.$group.'/'.$file_name,
+            'manageapi/' . $group . '/' . $file_name,
             Mage::app()->getStore()
         );
     }
 
-    public function getContentByCurl($url)
+    public function getContentByCurl($url, $param_header = array())
     {
+        if(sizeof($param_header) > 0)
+        {
+            foreach ($param_header as $_header) {
+                header($_header);
+            }
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if(sizeof($param_header) > 0)
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $param_header);
+
+        curl_setopt($ch, CURLOPT_POST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        try{
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+
+
+        try {
             $data = curl_exec($ch);
         } catch (Exception $ex) {
             return null;
@@ -38,7 +54,7 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
             unlink($file_name);
         }
 
-        try{
+        try {
             $file = fopen($file_name, "w+");
             fputs($file, $data);
         } catch (Exception $ex) {
@@ -65,11 +81,9 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
         $_data = null;
         $data = $this->getContentByCurl($url);
 
-        if($data != null)
-        {
+        if ($data != null) {
             $_file = $this->downloadFile($data, $file);
-            if($_file != null)
-            {
+            if ($_file != null) {
                 $_data = $this->getCsvData($_file);
             }
         }
@@ -82,13 +96,12 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
         return simplexml_load_string($str);
     }
 
-    public function getDataXML($url)
+    public function getDataXML($url, $param_header = array())
     {
         $_data = null;
-        $data = $this->getContentByCurl($url);
+        $data = $this->getContentByCurl($url, $param_header);
 
-        if($data != null)
-        {
+        if ($data != null) {
             $_data = $this->getXMLData($data);
         }
 

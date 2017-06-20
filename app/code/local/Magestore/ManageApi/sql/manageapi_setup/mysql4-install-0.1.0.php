@@ -301,6 +301,33 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`vacation_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+            DROP TABLE IF EXISTS {$setup->getTable('manageapi/cjactions')};
+            CREATE TABLE {$setup->getTable('manageapi/cjactions')} (
+              `cj_actions_id` int(10) unsigned NOT NULL auto_increment,
+              `action_status` VARCHAR(255) NULL,
+              `action_type` VARCHAR(255) NULL,
+              `aid` VARCHAR(255) NULL,
+              `commission_id` VARCHAR(255) NULL,
+              `country` VARCHAR(255) NULL,
+              `event_date` datetime NULL,
+              `locking_date` datetime NULL,
+              `order_id` VARCHAR(255) NULL,
+              `original` VARCHAR(255) NULL,
+              `original_action_id` VARCHAR(255) NULL,
+              `posting_date` datetime NULL,
+              `website_id` int(10) NULL,
+              `action_tracker_id` int(10) NULL,
+              `action_tracker_name` VARCHAR(255) NULL,
+              `cid` int(10) NULL,
+              `advertiser_name` VARCHAR(255) NULL,
+              `commission_amount` FLOAT NULL,
+              `order_discount` FLOAT NULL,
+              `sid` INT NULL,
+              `sale_amount` FLOAT NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`cj_actions_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
     ");
 

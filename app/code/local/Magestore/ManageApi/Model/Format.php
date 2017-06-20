@@ -12,12 +12,12 @@ class Magestore_ManageApi_Model_Format
     {
         return array(
             array(
-                'value' => 'json',
-                'label' => 'json',
+                'value' => Mage::helper('manageapi')->__('json'),
+                'label' => Mage::helper('manageapi')->__('json'),
             ),
             array(
-                'value' => 'xml',
-                'label' => 'xml',
+                'value' => Mage::helper('manageapi')->__('xml'),
+                'label' => Mage::helper('manageapi')->__('xml'),
             )
         );
     }
