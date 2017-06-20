@@ -353,7 +353,7 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
               `action_type` VARCHAR(255) NULL,
               `aid` VARCHAR(255) NULL,
               `commission_id` VARCHAR(255) NULL,
-              `country` VARCHAR(255) NULL,
+              `country` text NULL,
               `event_date` datetime NULL,
               `locking_date` datetime NULL,
               `order_id` VARCHAR(255) NULL,
@@ -371,6 +371,49 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
               `sale_amount` FLOAT NULL,
               `created_time` datetime NULL,
               PRIMARY KEY (`cj_actions_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+            DROP TABLE IF EXISTS {$setup->getTable('manageapi/targetactions')};
+            CREATE TABLE {$setup->getTable('manageapi/targetactions')} (
+              `target_actions_id` int(10) unsigned NOT NULL auto_increment,
+              `referral_date` text NULL,
+              `action_date` datetime NULL,
+              `locking_date` text NULL,
+              `adj_date` text NULL,
+              `scheduled_clearing_date` text NULL,
+              `action_id` VARCHAR(255) NULL,
+              `campaign` VARCHAR(255) NULL,
+              `action_tracker` VARCHAR(255) NULL,
+              `status` VARCHAR(255) NULL,
+              `status_detail` text NULL,
+              `category_list` text NULL,
+              `sku` text NULL,
+              `item_name` text NULL,
+              `category` text NULL,
+              `quantity` text NULL,
+              `sale_amount` FLOAT NULL,
+              `original_sale_amount` text NULL,
+              `payout` FLOAT NULL,
+              `original_payout` FLOAT NULL,
+              `vat` FLOAT NULL,
+              `promo_code` text NULL,
+              `ad` text NULL,
+              `referring_url` text NULL,
+              `referring_type` text NULL,
+              `ip_address` text NULL,
+              `geo_location` text NULL,
+              `subid1` INT NULL,
+              `subid2` text NULL,
+              `subid3` text NULL,
+              `sharedid` text NULL,
+              `date1` text NULL,
+              `date2` text NULL,
+              `paystub` text NULL,
+              `device` text NULL,
+              `os` text NULL,
+              `user_agent` text NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`target_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
             

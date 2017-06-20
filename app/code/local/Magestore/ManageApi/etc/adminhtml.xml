@@ -41,6 +41,11 @@
 					<sort_order>2</sort_order>
 					<action>manageapiadmin/adminhtml_cjactions</action>
 				</cj>
+				<target module="manageapi" translate="title">
+					<title>Target API</title>
+					<sort_order>3</sort_order>
+					<action>manageapiadmin/adminhtml_targetactions</action>
+				</target>
 				<settings module="manageapi" translate="title">
 					<title>Settings</title>
 					<sort_order>1000</sort_order>
@@ -105,9 +110,14 @@
 							</price_line>
 							<cj module="manageapi" translate="title">
 								<title>Cj API</title>
-								<sort_order>0</sort_order>
+								<sort_order>2</sort_order>
 								<action>manageapiadmin/adminhtml_cjactions</action>
 							</cj>
+							<target module="manageapi" translate="title">
+								<title>Target API</title>
+								<sort_order>3</sort_order>
+								<action>manageapiadmin/adminhtml_targetactions</action>
+							</target>
 							<settings module="manageapi" translate="title">
 								<title>Settings</title>
 								<sort_order>1000</sort_order>

@@ -35,4 +35,10 @@
 			<block type="manageapi/adminhtml_cjactions" name="manageapi.cj.cjactions" />
 		</reference>
 	</manageapiadmin_adminhtml_cjactions_index>
+
+	<manageapiadmin_adminhtml_targetactions_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_targetactions" name="manageapi.target.targetactions" />
+		</reference>
+	</manageapiadmin_adminhtml_targetactions_index>
 </layout>
