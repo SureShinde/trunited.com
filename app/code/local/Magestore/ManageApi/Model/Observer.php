@@ -34,8 +34,8 @@ class Magestore_ManageApi_Model_Observer
         /* END Run CJ API */
 
         sleep(1);
-        /* Run CJ API */
+        /* Run Target API */
         Mage::helper('manageapi/target')->processCron();
-        /* END Run CJ API */
+        /* END Run Target API */
     }
 }
