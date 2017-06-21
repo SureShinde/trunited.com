@@ -62,7 +62,8 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
             $select_apis = $data['select_api'];
 
             if (is_array($select_apis) && sizeof($select_apis) > 0) {
-                $api_called = '';
+                $api_called = array();
+
                 foreach ($select_apis as $api_name) {
                     if ($api_name == 1) {
                         // link share api
@@ -73,102 +74,110 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                             if($url != null)
                             {
                                 $_url = str_replace(array('{{start_date}}','{{end_date}}'),array($start_date, $end_date), $url);
-                                $api_called .= '<br /><a href="'.$_url.'" target="_blank">LINK SHARE API</a> <br />';
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">LINK SHARE API</a> ';
                                 $file = Mage::getBaseDir('media') . DS . Magestore_ManageApi_Helper_Data::LINK_SHARE_FILE;
                                 Mage::helper('manageapi/linkshare')->processAPI($_url, $file);
                             }
                         }
                     } else if ($api_name == 2) {
+                        // price line hotel api
                         $enable = $this->getHelperData()->getDataConfig('enable_hotel', 'price_line');
                         if ($enable) {
                             $url = $this->getHelperData()->getDataConfig('hotel_api', 'price_line');
                             if ($url != null) {
                                 $format = $this->getHelperData()->getDataConfig('hotel_format', 'price_line');
-                                $start_date = date('Y-m-d_00:00:00', strtotime($start_date));
-                                $end_data = date('Y-m-d_23:59:59', strtotime($end_date));
-                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date, $end_data, $format), $url);
-                                $api_called .= '<br /><a href="'.$_url.'" target="_blank">PRICE LINE HOTEL</a> <br />';
+                                $start_date_hotel = date('Y-m-d_00:00:00', strtotime($start_date));
+                                $end_date_hotel = date('Y-m-d_23:59:59', strtotime($end_date));
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_hotel, $end_date_hotel, $format), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE HOTEL API</a> ';
                                 Mage::helper('manageapi/hotel')->processAPI($_url);
                             }
                         }
                     } else if ($api_name == 3) {
-                        // price line hotel api
+                        // price line flight api
                         $enable = $this->getHelperData()->getDataConfig('enable_flight', 'price_line');
                         if ($enable) {
                             $url = $this->getHelperData()->getDataConfig('flight_api', 'price_line');
                             if ($url != null) {
                                 $format = $this->getHelperData()->getDataConfig('flight_format', 'price_line');
-                                $start_date = date('Y-m-d_00:00:00', strtotime($start_date));
-                                $end_data = date('Y-m-d_23:59:59', strtotime($end_date));
-                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date, $end_data, $format), $url);
-                                $api_called .= '<br /><a href="'.$_url.'" target="_blank">PRICE LINE FLIGHT</a> <br />';
+                                $start_date_flight = date('Y-m-d_00:00:00', strtotime($start_date));
+                                $end_date_flight = date('Y-m-d_23:59:59', strtotime($end_date));
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_flight, $end_date_flight, $format), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE FLIGHT API</a> ';
                                 Mage::helper('manageapi/flight')->processAPI($_url);
                             }
                         }
                     } else if ($api_name == 4) {
-                        // price line hotel api
+                        // price line car api
                         $enable = $this->getHelperData()->getDataConfig('enable_car', 'price_line');
                         if ($enable) {
                             $url = $this->getHelperData()->getDataConfig('car_api', 'price_line');
                             if ($url != null) {
                                 $format = $this->getHelperData()->getDataConfig('car_format', 'price_line');
-                                $start_date = date('Y-m-d_00:00:00', strtotime($start_date));
-                                $end_data = date('Y-m-d_23:59:59', strtotime($end_date));
-                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date, $end_data, $format), $url);
-                                $api_called .= '<br /><a href="'.$_url.'" target="_blank">PRICE LINE CAR</a> <br />';
+                                $start_date_car = date('Y-m-d_00:00:00', strtotime($start_date));
+                                $end_date_car = date('Y-m-d_23:59:59', strtotime($end_date));
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_car, $end_date_car, $format), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE CAR API</a> ';
                                 Mage::helper('manageapi/car')->processAPI($_url);
                             }
                         }
                     } else if ($api_name == 5) {
-                        // price line hotel api
+                        // price line vacation api
                         $enable = $this->getHelperData()->getDataConfig('enable_vacation', 'price_line');
                         if ($enable) {
                             $url = $this->getHelperData()->getDataConfig('vacation_api', 'price_line');
                             if ($url != null) {
                                 $format = $this->getHelperData()->getDataConfig('vacation_format', 'price_line');
-                                $start_date = date('Y-m-d_00:00:00', strtotime($start_date));
-                                $end_data = date('Y-m-d_23:59:59', strtotime($end_date));
-                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date, $end_data, $format), $url);
-                                $api_called .= '<br /><a href="'.$_url.'" target="_blank">PRICE LINE VACATION</a> <br />';
+                                $start_date_vacation = date('Y-m-d_00:00:00', strtotime($start_date));
+                                $end_date_vacation = date('Y-m-d_23:59:59', strtotime($end_date));
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_vacation, $end_date_vacation, $format), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE VACATION API</a> ';
                                 Mage::helper('manageapi/vacation')->processAPI($_url);
                             }
                         }
                     } else if ($api_name == 6) {
-                        // price line hotel api
+                        // cj api
                         $enable = $this->getHelperData()->getDataConfig('enable_cj', 'cj');
                         if ($enable) {
                             $url = $this->getHelperData()->getDataConfig('cj_api', 'cj');
                             if ($url != null) {
                                 $data_type = $this->getHelperData()->getDataConfig('cj_data_type', 'cj');
-                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{data_type}}'), array($start_date, $end_data, $data_type), $url);
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{data_type}}'), array($start_date, $end_date, $data_type), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">CJ API</a> ';
                                 Mage::helper('manageapi/cj')->processAPI($_url);
                             }
                         }
                     } else if ($api_name == 7) {
-                        // price line hotel api
-                        Mage::helper('manageapi/target')->processCron();
+                        // target api
+                        $enable = $this->getHelperData()->getDataConfig('enable_target', 'target');
+                        if ($enable) {
+                            $url = $this->getHelperData()->getDataConfig('target_api', 'target');
+                            if ($url != null) {
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}'), array($start_date, $end_date), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">TARGET API</a> ';
+                                Mage::helper('manageapi/target')->processAPI($_url);
+                            }
+                        }
                     }
                 }
 
-                zend_debug::dump($api_called);
-                exit;
+                if($api_called != '')
+                {
+                    Mage::getSingleton('adminhtml/session')->setData('url_called', $api_called);
+                    Mage::getSingleton('adminhtml/session')->setData('api_called', $select_apis);
+                    Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('manageapi')->__('APIs were successfully run'));
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addError('Error');
+                }
+            } else {
+                Mage::getSingleton('adminhtml/session')->addError('Unable to find API to run');
             }
 
-
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('manageapi')->__('Item was successfully saved'));
-            Mage::getSingleton('adminhtml/session')->setFormData(false);
-
-
-            $this->_redirect('*/*/');
+            $this->_redirect('*/*/new',array('run' => true));
             return;
-
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            Mage::getSingleton('adminhtml/session')->setFormData($data);
-            $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-
         }
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('manageapi')->__('Unable to find item to save'));
-        $this->_redirect('*/*/');
+        $this->_redirect('*/*/new');
     }
 
     public function deleteAction()

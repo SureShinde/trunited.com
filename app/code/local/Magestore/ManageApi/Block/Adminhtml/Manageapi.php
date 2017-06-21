@@ -8,5 +8,6 @@ class Magestore_Manageapi_Block_Adminhtml_Manageapi extends Mage_Adminhtml_Block
 		$this->_headerText = Mage::helper('manageapi')->__('Item Manager');
 		$this->_addButtonLabel = Mage::helper('manageapi')->__('Add Item');
 		parent::__construct();
+		$this->_removeButton('add');
 	}
 }

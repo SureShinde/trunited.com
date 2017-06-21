@@ -29,6 +29,6 @@ class Magestore_Manageapi_Block_Adminhtml_Manageapi_Edit extends Mage_Adminhtml_
 	public function getHeaderText(){
 		if(Mage::registry('manageapi_data') && Mage::registry('manageapi_data')->getId())
 			return Mage::helper('manageapi')->__("Edit Item '%s'", $this->htmlEscape(Mage::registry('manageapi_data')->getTitle()));
-		return Mage::helper('manageapi')->__('Add Item');
+		return Mage::helper('manageapi')->__('Run APIs');
 	}
 }

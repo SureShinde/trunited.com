@@ -53,6 +53,28 @@ class Magestore_Manageapi_Block_Adminhtml_Manageapi_Edit_Tab_Form extends Mage_A
             'after_element_html' => '<small></small>',
         ));
 
+
+
+
+        if($this->getRequest()->getParam('run'))
+        {
+            if(sizeof(Mage::getSingleton('adminhtml/session')->getData('url_called')) > 0){
+                $field_set = $form->addFieldset('manage_api_form', array('legend'=>Mage::helper('manageapi')->__('API LINKS')));
+                $i = 0;
+                foreach (Mage::getSingleton('adminhtml/session')->getData('url_called') as $k => $v)
+                {
+                    $field_set->addField($i, 'note', array(
+                        'text'     => $v,
+                        'after_element_html' => '<br /><small>Details: '.$k.'</small>',
+                    ));
+                    $i++;
+                }
+            }
+        } else {
+            Mage::getSingleton('adminhtml/session')->unsetData('url_called');
+            Mage::getSingleton('adminhtml/session')->unsetData('api_called');
+        }
+
 		$form->setValues($data);
 		return parent::_prepareForm();
 	}
