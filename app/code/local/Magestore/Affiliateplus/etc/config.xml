@@ -587,6 +587,7 @@
                 <is_sent_email_account_updated_transaction>1</is_sent_email_account_updated_transaction>
                 <is_sent_email_sales_request_payment>1</is_sent_email_sales_request_payment>
                 <is_sent_email_sales_representative_request_payment>1</is_sent_email_sales_representative_request_payment>
+                <request_payment_email_recipient>longvuxuan1989@gmail.com</request_payment_email_recipient>
                 <!--                add by viet
                 <is_sent_email_refund>1</is_sent_email_refund>
                 <sent_mail_refund_email_template>affiliateplus_email_sent_mail_refund_email_template</sent_mail_refund_email_template>                		

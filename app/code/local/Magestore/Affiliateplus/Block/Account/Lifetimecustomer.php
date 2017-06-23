@@ -59,7 +59,7 @@ class Magestore_Affiliateplus_Block_Account_Lifetimecustomer extends Mage_Core_B
 			'filter_index'  =>  'if (main_table.customer_name IS NULL, "N/A", main_table.customer_name)',
 			'render'  => 'getCustomerName'
 		));
-
+		
 		$grid->addColumn('customer_email', array(
 			'header' => $this->__('Customer Email'),
 			'index' => 'customer_email',
