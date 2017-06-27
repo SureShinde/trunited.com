@@ -42,6 +42,19 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
         $this->renderLayout();
     }
 
+    public function renameDbAction()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            RENAME TABLE trpriceline_cj_actions to trcj_actions;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
+        
+
     //ALTER TABLE {$setup->getTable('trubox/address')} ADD `address_type` int(10) DEFAULT 2;
     public function updateDbAction()
     {

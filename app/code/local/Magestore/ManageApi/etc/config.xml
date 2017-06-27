@@ -86,7 +86,7 @@
                         <table>priceline_vacation_actions</table>
                     </vacationactions>
                     <cjactions>
-                        <table>priceline_cj_actions</table>
+                        <table>cj_actions</table>
                     </cjactions>
                     <targetactions>
                         <table>target_actions</table>

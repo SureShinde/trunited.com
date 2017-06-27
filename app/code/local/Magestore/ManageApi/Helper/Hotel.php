@@ -18,16 +18,16 @@ class Magestore_ManageApi_Helper_Hotel extends Mage_Core_Helper_Abstract
         } else if (strpos($url, 'format=json') > 0) {
             $_data = $this->getHelperData()->getContentByCurl($url);
             $dt = json_decode($_data, true);
-            $data = $dt['getSharedTRK.Sales.Select.Car'];
+            $data = $dt['getSharedTRK.Sales.Select.Hotel'];
         } else
             return;
 
         if ($data != null && is_array($data) && sizeof($data) > 0 && isset($data['results']) && sizeof($data['results']) > 0) {
             $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+//            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
             try {
-                $connection->beginTransaction();
+//                $connection->beginTransaction();
                 $other_data = array();
                 foreach ($data['results'] as $k => $v) {
                     if ($k != 'sales_data') {
@@ -41,7 +41,7 @@ class Magestore_ManageApi_Helper_Hotel extends Mage_Core_Helper_Abstract
                 if (isset($data['results']['sales_data']) && sizeof($data['results']['sales_data']) > 0) {
                     if ($is_xml && isset($data['results']['sales_data']['sale']) && sizeof($data['results']['sales_data']['sale']) > 0) {
                         foreach ($data['results']['sales_data'] as $sale) {
-                            $model = Mage::getModel('manageapi/caractions');
+                            $model = Mage::getModel('manageapi/hotelactions');
                             foreach ($sale as $k => $v) {
                                 if (is_array($v))
                                     $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
@@ -55,7 +55,7 @@ class Magestore_ManageApi_Helper_Hotel extends Mage_Core_Helper_Abstract
                         }
                     } else if (!$is_xml) {
                         foreach ($data['results']['sales_data'] as $sale) {
-                            $model = Mage::getModel('manageapi/caractions');
+                            $model = Mage::getModel('manageapi/hotelactions');
                             foreach ($sale as $k => $v) {
                                 if (is_array($v))
                                     $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
@@ -79,10 +79,26 @@ class Magestore_ManageApi_Helper_Hotel extends Mage_Core_Helper_Abstract
                 }
 
                 $transactionSave->save();
-                $connection->commit();
+//                $connection->commit();
             } catch (Exception $e) {
-                $connection->rollback();
+//                $connection->rollback();
+                zend_debug::dump($e);
+                exit;
             }
+        } else {
+            $error_message = '';
+            $flag_error = false;
+            if($is_xml){
+                $errors = json_decode(json_encode((array)$_data), 1);
+                $error_message .= $errors['error']['status'];
+                $flag_error = true;
+            } else {
+                $errors = json_decode($_data, true);
+                $error_message .= $errors['getSharedTRK.Sales.Select.Hotel']['error']['status'];
+                $flag_error = true;
+            }
+            if($flag_error)
+                Mage::getSingleton('adminhtml/session')->addError('PRICE LINE HOTEL API: '.$error_message);
         }
     }
 

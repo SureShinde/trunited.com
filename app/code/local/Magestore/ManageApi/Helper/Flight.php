@@ -18,7 +18,7 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
         } else if (strpos($url, 'format=json') > 0) {
             $_data = $this->getHelperData()->getContentByCurl($url);
             $dt = json_decode($_data, true);
-            $data = $dt['getSharedTRK.Sales.Select.Car'];
+            $data = $dt['getSharedTRK.Sales.Select.Air'];
         } else
             return;
 
@@ -41,7 +41,7 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                 if (isset($data['results']['sales_data']) && sizeof($data['results']['sales_data']) > 0) {
                     if ($is_xml && isset($data['results']['sales_data']['sale']) && sizeof($data['results']['sales_data']['sale']) > 0) {
                         foreach ($data['results']['sales_data'] as $sale) {
-                            $model = Mage::getModel('manageapi/caractions');
+                            $model = Mage::getModel('manageapi/flightactions');
                             foreach ($sale as $k => $v) {
                                 if (is_array($v))
                                     $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
@@ -55,7 +55,7 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                         }
                     } else if (!$is_xml) {
                         foreach ($data['results']['sales_data'] as $sale) {
-                            $model = Mage::getModel('manageapi/caractions');
+                            $model = Mage::getModel('manageapi/flightactions');
                             foreach ($sale as $k => $v) {
                                 if (is_array($v))
                                     $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
@@ -83,6 +83,20 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
             } catch (Exception $e) {
                 $connection->rollback();
             }
+        } else {
+            $error_message = '';
+            $flag_error = false;
+            if($is_xml){
+                $errors = json_decode(json_encode((array)$_data), 1);
+                $error_message .= $errors['error']['status'];
+                $flag_error = true;
+            } else {
+                $errors = json_decode($_data, true);
+                $error_message .= $errors['getSharedTRK.Sales.Select.Air']['error']['status'];
+                $flag_error = true;
+            }
+            if($flag_error)
+                Mage::getSingleton('adminhtml/session')->addError('PRICE LINE FLIGHT API: '.$error_message);
         }
     }
 
