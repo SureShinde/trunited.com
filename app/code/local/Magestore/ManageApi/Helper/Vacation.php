@@ -90,6 +90,20 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
             } catch (Exception $e) {
                 $connection->rollback();
             }
+        } else {
+            $error_message = '';
+            $flag_error = false;
+            if($is_xml){
+                $errors = json_decode(json_encode((array)$_data), 1);
+                $error_message .= $errors['error']['status'];
+                $flag_error = true;
+            } else {
+                $errors = json_decode($_data, true);
+                $error_message .= $errors['getSharedTRK.Sales.Select.Vp']['error']['status'];
+                $flag_error = true;
+            }
+            if($flag_error)
+                Mage::getSingleton('adminhtml/session')->addError('PRICE LINE VACATION API: '.$error_message);
         }
     }
 

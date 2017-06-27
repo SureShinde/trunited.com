@@ -44,6 +44,9 @@ class Magestore_ManageApi_Helper_Cj extends Mage_Core_Helper_Abstract
             } catch (Exception $e) {
                 $connection->rollback();
             }
+        } else {
+            if(isset($data['error-message']))
+                Mage::getSingleton('adminhtml/session')->addError('CJ API: '.$data['error-message']);
         }
     }
 

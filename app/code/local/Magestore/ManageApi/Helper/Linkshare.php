@@ -13,15 +13,18 @@ class Magestore_ManageApi_Helper_Linkshare extends Mage_Core_Helper_Abstract
         if($data != null && is_array($data))
         {
             $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
             try {
-                $connection->beginTransaction();
 
                 if(sizeof($data) > 1)
                 {
                     $flag = 0;
                     foreach ($data as $ls) {
+                        if(sizeof($ls) == 2)
+                        {
+                            Mage::getSingleton('adminhtml/session')->addError('LINKSHARE API: '.$ls[0].$ls[1]);
+                            break;
+                        }
                         if($flag > 0)
                         {
                             $model = Mage::getModel('manageapi/linkshare');
@@ -41,12 +44,13 @@ class Magestore_ManageApi_Helper_Linkshare extends Mage_Core_Helper_Abstract
                         }
                         $flag++;
                     }
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addError('LINK SHARE API: Something was wrong with this response. Please click <a href="'.$url.'" target="_blank">here</a> view more detailed information.');
                 }
 
                 $transactionSave->save();
-                $connection->commit();
             } catch (Exception $e) {
-                $connection->rollback();
+
             }
         }
     }
