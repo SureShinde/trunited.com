@@ -3,6 +3,8 @@
     $helper_richsnippets = $this->helper('porto/richsnippets');
     $store = Mage::app()->getStore();
     $code  = $store->getCode();
+    $is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+    $login_url = Mage::helper('customproduct')->getLoginUrl();
 ?>
 <?php $_product = $this->getProduct(); ?>
 <?php
@@ -21,9 +23,11 @@
     if(!Mage::getStoreConfig("porto_settings/header/sticky_header", $code))
         $sticky_header = "no-sticky-header";
 ?>
+<?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) != 0){?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
+<?php }?>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view <?php if($move_product_tab): ?>moved-tab<?php endif;?>" <?php if($enabled_richsnippets): ?><?php echo $helper_richsnippets->getProductItemscope(); ?><?php endif; ?>>
     <div class="product-essential">
@@ -181,6 +185,7 @@ if($enable_addtocart_sticky){
                         <div class="std" <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
                     </div>
                 <?php endif;?>
+                <?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) != 0){?>
                 <div class="product-info">
                     <div <?php if($enabled_richsnippets) echo $helper_richsnippets->getOfferItemscope(); ?>>
                         <?php echo $this->getChildHtml('product_type_data'); ?>
@@ -197,21 +202,63 @@ if($enable_addtocart_sticky){
                     <?php echo $this->getChildHtml('alert_urls') ?>
                     <?php echo $this->getChildHtml('other');?>
                 </div>
+                <?php }?>
                 <?php if (!$this->hasOptions()):?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
-                        <?php if($_product->isSaleable()): ?>
-                            <?php echo $this->getChildHtml('addtocart') ?>
-                            <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                        <?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) == 0){?>
+                            <div class="shop-now">
+                                <a href="<?php echo Mage::helper('customproduct')->getShopNowUrl($_product);?>"
+                                   rel="nofollow" target="_blank" class="custom-url">
+                                    <?php echo $this->__('SHOP NOW');?></a>
+                            </div>
+                            <?php if(!$is_logged){?>
+                            <script type="text/javascript">
+                                $j = jQuery.noConflict();
+                                $j(document).ready(function() {
+                                    $j('.shop-now .custom-url').fancybox({
+                                        autoHeight: true,
+                                        minHeight: 10,
+                                        content: '<?php echo $login_url;?>'
+                                    });
+                                });
+                            </script>
+                            <?php }?>
+                        <?php } else {?>
+                            <?php if($_product->isSaleable()): ?>
+                                <?php echo $this->getChildHtml('addtocart') ?>
+                                <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                                <?php endif; ?>
                             <?php endif; ?>
-                        <?php endif; ?>
-                        <?php echo $this->getChildHtml('addto') ?>
+                            <?php echo $this->getChildHtml('addto') ?>
+                        <?php }?>
                     </div>
                     <?php echo $this->getChildHtml('extra_buttons') ?>
                 <?php elseif (!$_product->isSaleable()): ?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
-                        <?php echo $this->getChildHtml('addto') ?>
+                        <?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) == 0){?>
+                            <div class="shop-now">
+                                <a href="<?php echo Mage::helper('customproduct')->getShopNowUrl($_product);?>"
+                                   rel="nofollow" target="_blank" class="custom-url">
+                                    <?php echo $this->__('SHOP NOW');?></a>
+                            </div>
+                            <?php if(!$is_logged){?>
+                                <script type="text/javascript">
+                                    $j = jQuery.noConflict();
+                                    $j(document).ready(function() {
+                                        $j('.shop-now .custom-url').fancybox({
+                                            autoHeight: true,
+                                            minHeight: 10,
+                                            content: '<?php echo $login_url;?>'
+                                        });
+                                    });
+
+                                </script>
+                            <?php }?>
+                        <?php } else {?>
+                            <?php echo $this->getChildHtml('addto') ?>
+                        <?php }?>
                     </div>
                 <?php endif; ?>
 

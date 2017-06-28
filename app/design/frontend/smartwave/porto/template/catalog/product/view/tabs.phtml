@@ -12,7 +12,7 @@
     <ul>
         <?php $i = 0; ?>
         <?php foreach ($this->getTabs() as $_index => $_tab): ?>
-            <?php if($this->getChildHtml($_tab['alias'])): ?>
+            <?php if($this->getChildHtml($_tab['alias']) && strcasecmp($_tab['alias'], 'additional_tabbed') != 0): ?>
                 <li id="tab_<?php echo $_tab['alias'] ?>" class="<?php echo ($i==0)?' active first':''?>"><a href="#"><?php echo $_tab['title']?></a></li>
                 <?php $i++; ?>
             <?php endif; ?>
