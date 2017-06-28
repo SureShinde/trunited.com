@@ -237,6 +237,22 @@ $phone_collection = Mage::getModel('custompromotions/phonecode')->getCollection(
                             <input type="text" name="email" id="email_address" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
                         </div>
                     </li>
+                    <li class="fields">
+                        <?php
+                        $attribute = Mage::getModel('eav/config')->getAttribute('customer','preferred_language');
+                        ?>
+                        <label for="school" class="required"><em>*</em><?php echo $this->__('Preferred Language') ?></label>
+                        <div class="input-box">
+                            <select name="preferred_language" id="preferred_language" class="required-entry">
+                                <?php
+                                $options = $attribute->getSource()->getAllOptions();
+                                foreach($options as $option){
+                                    ?>
+                                    <option value='<?php echo $option['value']?>' <?php if($this->getFormData()->getPreferredLanguage() == $option['value']){ echo 'selected="selected"';}?>><?php echo $this->__($option['label'])?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </li>
                     <?php if ($this->isNewsletterEnabled()): ?>
                     <li class="control">
                         <input type="checkbox" name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />

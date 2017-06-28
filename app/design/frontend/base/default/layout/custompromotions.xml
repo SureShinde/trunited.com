@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <customer_account_create>
+        <reference name="customer_form_register">
+            <block type="custompromotions/language" name="customer_register_language"
+                   template="custompromotions/account/language.phtml"/>
+        </reference>
+    </customer_account_create>
+</layout>
