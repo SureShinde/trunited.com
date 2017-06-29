@@ -22,7 +22,21 @@ class Magestore_CustomProduct_Helper_Data extends Mage_Core_Helper_Abstract
     public function getShopNowUrl($product)
     {
         if($this->isLoggedIn())
-            return str_replace('{{customer_id}}',Mage::getSingleton('customer/session')->getCustomer()->getId(),$product->getShopNow());
-        else return '#';
+        {
+            if($product->getShopNow() != null)
+                return str_replace('{{customer_id}}',Mage::getSingleton('customer/session')->getCustomer()->getId(),$product->getShopNow());
+            else
+                return null;
+        } else
+            return '#';
+    }
+
+    public function isAppliedToProductType($type_id)
+    {
+        $types = Mage::helper('custompromotions/configuration')->getApplyToProductTypes();
+        if($types != null)
+            return in_array($type_id, $types);
+        else
+            return false;
     }
 }
