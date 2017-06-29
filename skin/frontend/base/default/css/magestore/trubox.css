@@ -195,7 +195,7 @@ a.addtrubox{
     background-color: #dddddd !important;
 }
 
-.shop-now a{
+.shop-now a, .short-description a.custom-url, #tab_description_tabbed_contents a.custom-url{
     font-size: 15px;
     color: #ffffff;
     /* font-family: 'Montserrat'; */
@@ -212,10 +212,11 @@ a.addtrubox{
     -o-transition: all .3s;
     transition: all .3s;
     border: none;
+    margin: 10px 0;
 }
 
 
-.shop-now a:hover{
+.shop-now a:hover, .short-description a.custom-url:hover, #tab_description_tabbed_contents a.custom-url:hover{
     background: #ec7b42;
     text-decoration: none;
     color: white;

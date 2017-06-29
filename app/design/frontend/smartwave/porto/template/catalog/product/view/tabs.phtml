@@ -3,17 +3,32 @@
     $code  = $store->getCode();
     $helper = Mage::helper("porto");
     $product_id = Mage::registry("current_product")->getId();
+    $product = Mage::getModel('catalog/product')->load($product_id);
+    $is_applied_product_type = Mage::helper('customproduct')->isAppliedToProductType($product->getTypeId());
     $tab_style = Mage::getStoreConfig("porto_settings/product_view/product_tab_style", $code);
+
+    $is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+    $customer_id = $is_logged ? Mage::getSingleton('customer/session')->getCustomer()->getId() : '#';
+
     if(!$tab_style)
         $tab_style = "horizontal";
+
 ?>
 <?php if($tab_style!="accordion"): ?>
 <div class="product-tabs <?php echo $tab_style; ?>">
     <ul>
         <?php $i = 0; ?>
         <?php foreach ($this->getTabs() as $_index => $_tab): ?>
-            <?php if($this->getChildHtml($_tab['alias']) && strcasecmp($_tab['alias'], 'additional_tabbed') != 0): ?>
-                <li id="tab_<?php echo $_tab['alias'] ?>" class="<?php echo ($i==0)?' active first':''?>"><a href="#"><?php echo $_tab['title']?></a></li>
+            <?php
+            if($this->getChildHtml($_tab['alias'])): ?>
+                <?php if($is_applied_product_type){?>
+                    <?php if(strcasecmp($_tab['alias'], 'additional_tabbed') != 0){?>
+                        <li id="tab_<?php echo $_tab['alias'] ?>" class="<?php echo ($i==0)?' active first':''?>"><a href="#"><?php echo $_tab['title']?></a></li>
+                    <?php }?>
+                <?php } else {?>
+                    <li id="tab_<?php echo $_tab['alias'] ?>" class="<?php echo ($i==0)?' active first':''?>"><a href="#"><?php echo $_tab['title']?></a></li>
+                <?php }?>
+
                 <?php $i++; ?>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -46,7 +61,16 @@
     <?php endif; ?>
     <?php foreach ($this->getTabs() as $_index => $_tab): ?>
         <?php if($this->getChildHtml($_tab['alias'])): ?>
-            <div class="tab-content" id="tab_<?php echo $_tab['alias'] ?>_contents"><?php echo $this->getChildHtml($_tab['alias']) ?></div>
+            <?php if($is_applied_product_type){?>
+                <?php if(strcasecmp($_tab['alias'], 'additional_tabbed') != 0){?>
+                    <div class="tab-content" id="tab_<?php echo $_tab['alias'] ?>_contents">
+                        <?php echo str_replace('{{customer_id}}', $customer_id, $this->getChildHtml($_tab['alias']) );?>
+                    </div>
+                <?php }?>
+            <?php } else {?>
+                <div class="tab-content" id="tab_<?php echo $_tab['alias'] ?>_contents"><?php echo $this->getChildHtml($_tab['alias']) ?></div>
+            <?php }?>
+
         <?php endif; ?>
     <?php endforeach; ?>
     <?php

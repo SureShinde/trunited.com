@@ -73,6 +73,14 @@
                         <can_use_qty_decimals>1</can_use_qty_decimals>
                         <price_model>customproduct/product_price</price_model>
                     </customproduct>
+                    <gfitcardproduct translate="label" module="customproduct">
+                        <label>Gift Card Product</label>
+                        <model>customproduct/giftcard_product_type</model>
+                        <is_qty>1</is_qty>
+                        <composite>0</composite>
+                        <can_use_qty_decimals>1</can_use_qty_decimals>
+                        <price_model>customproduct/giftcard_product_price</price_model>
+                    </gfitcardproduct>
                 </type>
             </product>
         </catalog>
