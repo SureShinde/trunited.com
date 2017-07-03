@@ -32,6 +32,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
     public function sendTruWalletAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
+        $day_of_expiration = $this->getRequest()->getParam('share_day_expiration');
         $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
@@ -61,6 +62,21 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
             return;
         }
 
+        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT)) {
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('truwallet')->__($day_of_expiration . ' is not a valid Integer number')
+            );
+            $this->_redirectUrl(Mage::getUrl('*/index/shareTruWallet'));
+            return;
+        } else if ($day_of_expiration < 1 || $day_of_expiration > 31) {
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('truwallet')->__('The # days of expiration is not smaller than 0 and greater than 31 ')
+            );
+            $this->_redirectUrl(Mage::getUrl('*/index/shareTruWallet'));
+            return;
+        }
+        $expiration_date = Mage::helper('truwallet/transaction')->addDaysToDate(now(), $day_of_expiration);
+
         $account = Mage::getModel('truwallet/customer')->load($customer->getId(), 'customer_id');
         if ($account->getTruwalletCredit() < 0 || $amount > $account->getTruwalletCredit()) {
             Mage::getSingleton('core/session')->addError(
@@ -77,11 +93,13 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
         if ($customer_receiver->getId())
             $is_exist = true;
 
-        if ($is_exist) {
+        /*if ($is_exist) {
             $status = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED;
         } else {
             $status = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING;
-        }
+        }*/
+
+        $status = Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING;
 
         $transactionSave = Mage::getModel('core/resource_transaction');
         $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
@@ -94,6 +112,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                 'title' => '',
                 'receiver_email' => $email,
                 'receiver_customer_id' => $is_exist ? $customer_receiver->getId() : '',
+                'expiration_date' => $expiration_date,
             );
             if ($truWalletAccount != null) {
                 $transaction_helper->createTransaction(
@@ -111,6 +130,7 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
                     'title' => '',
                     'receiver_email' => $customer_receiver->getEmail(),
                     'receiver_customer_id' => $customer_receiver->getId(),
+                    'expiration_date' => $expiration_date,
                 );
                 if ($receiverAccount != null) {
                     $transaction_helper->createTransaction(

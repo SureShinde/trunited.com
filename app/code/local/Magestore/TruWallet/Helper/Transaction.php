@@ -412,4 +412,10 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         }
     }
 
+    public function addDaysToDate($date, $days, $operator = '+')
+    {
+        $date = strtotime($operator." " . $days . " days", strtotime($date));
+        return date("Y-m-d H:i:s", $date);
+    }
+
 }

@@ -105,6 +105,13 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 	}
 
 	public function shareTruWalletAction(){
+        if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('truwallet')->__('You have to log in before sharing truWallet.')
+            );
+            $this->_redirectUrl(Mage::getUrl('customer/account/login/'));
+        }
+
 		$this->loadLayout();
 		$this->_title(Mage::helper('truwallet')->__('Share TruWallet Money'));
 		$this->renderLayout();
