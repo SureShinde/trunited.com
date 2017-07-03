@@ -252,10 +252,7 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
             }
         }
 
-        if($_SERVER['REMOTE_ADDR'] == '101.99.23.40')
-        {
-        	
-        }
+        
 
         $display = 2;
         $_data = array();
@@ -265,7 +262,7 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
         	if($first_month == 0)
         		$_data[strtotime($this->addDaysToDate(date('d-n-Y',time()), 31))] = 0;
         	else
-        		$_data[strtotime($this->addDaysToDate(date('d-n-Y',time()), 60))] = 0;
+        		$_data[strtotime($this->addDaysToDate(date('d-n-Y',time()), 62))] = 0;
 
         	$first_month++;
         }
@@ -284,6 +281,17 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
         }
 
         $data = $_data;
+
+        if($_SERVER['REMOTE_ADDR'] == '101.99.23.40' || $_SERVER['REMOTE_ADDR'] == '113.190.242.147')
+        {   
+            /*zend_debug::dump($data);
+            zend_debug::dump($_data);
+            foreach ($data as $key => $value) {
+                zend_debug::dump(date('d-m-Y', $key));
+                zend_debug::dump($value);
+            }
+            exit;*/
+        }
 
         return $data;
     }
