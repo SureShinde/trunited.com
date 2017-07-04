@@ -46,6 +46,8 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 				`changed_credit` DECIMAL(10,2) NOT NULL default 0,
 				`receiver_email` varchar(255) NULL,
 				`receiver_customer_id` INT unsigned NULL,
+				`recipient_id` INT unsigned,
+                `point_back` FLOAT,
 				PRIMARY KEY (`transaction_id`)
 			  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
@@ -220,5 +222,17 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		zend_debug::dump($_collection);
 
 	}
+
+    public function updateDb2Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+              ALTER TABLE {$setup->getTable('truwallet/transaction')} ADD recipient_id int(10) unsigned;
+              ALTER TABLE {$setup->getTable('truwallet/transaction')} ADD point_back FLOAT;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
 
 }

@@ -36,6 +36,52 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             $_data['changed_credit'] = isset($data['credit']) ? $data['credit'] : '';
             $_data['receiver_email'] = isset($data['receiver_email']) ? $data['receiver_email'] : '';
             $_data['receiver_customer_id'] = isset($data['receiver_customer_id']) ? $data['receiver_customer_id'] : '';
+            $_data['recipient_id'] = isset($data['recipient_id']) ? $data['recipient_id'] : '';
+
+            $transaction->setData($_data);
+            $transaction->save();
+
+            $result = $transaction;
+
+        } catch (Exception $ex) {
+            Mage::getSingleton('adminhtml/session')->addError(
+                Mage::helper('truwallet')->__($ex->getMessage())
+            );
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $recipient
+     * @param $data
+     * @param $type
+     * @param $status
+     * @return false|Mage_Core_Model_Abstract|null
+     */
+    public function createNonTransaction($recipient, $data, $type, $status)
+    {
+        $result = null;
+        try {
+
+            $transaction = Mage::getModel('truwallet/transaction');
+            $_data = array();
+            $_data['truwallet_id'] = '';
+            $_data['customer_id'] = '';
+            $_data['customer_email'] = isset($data['customer_email']) ? $data['customer_email'] : '';
+            $_data['title'] = isset($data['title']) ? $data['title'] : '';
+            $_data['action_type'] = $type;
+            $_data['store_id'] = Mage::app()->getStore()->getId();
+            $_data['status'] = $status;
+            $_data['created_time'] = now();
+            $_data['updated_time'] = now();
+            $_data['expiration_date'] = isset($data['expiration_date']) ? $data['expiration_date'] : '';
+            $_data['order_id'] = isset($data['order_id']) ? $data['order_id'] : '';
+            $_data['current_credit'] = 0;
+            $_data['changed_credit'] = isset($data['credit']) ? $data['credit'] : '';
+            $_data['receiver_email'] = $recipient->getEmail();
+            $_data['receiver_customer_id'] = $recipient->getId();
 
             $transaction->setData($_data);
             $transaction->save();
@@ -75,21 +121,21 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         $name = Mage::helper('truwallet')->__('There');
         $current_credit = 0;
         $link = '';
-        if($customer_exist) {
+        if ($customer_exist) {
             $email_path = Mage::getStoreConfig(self::XML_PATH_EMAIL_SHARE_EMAIL_CUSTOMER, $store);
             $receiver = Mage::getModel("customer/customer");
             $receiver->setWebsiteId($store->getWebsiteId());
             $receiver->loadByEmail($receiver_email);
-            if($receiver->getId()){
+            if ($receiver->getId()) {
                 $name = $receiver->getName();
                 $truWalletAccount = Mage::helper('truwallet/account')->loadByCustomerId($receiver->getId());
-                if($truWalletAccount->getId())
+                if ($truWalletAccount->getId())
                     $current_credit = $truWalletAccount->getTruwalletCredit();
             }
 
         } else {
-            $email_path =  Mage::getStoreConfig(self::XML_PATH_EMAIL_SHARE_EMAIL_NON_CUSTOMER, $store);
-            $link = Mage::getUrl('truwallet/transaction/register',array('email'=>$sender->getEmail()));
+            $email_path = Mage::getStoreConfig(self::XML_PATH_EMAIL_SHARE_EMAIL_NON_CUSTOMER, $store);
+            $link = Mage::getUrl('truwallet/transaction/register', array('email' => $sender->getEmail()));
         }
 
         $types = Magestore_TruWallet_Model_Type::getOptionArray();
@@ -139,7 +185,8 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
      * @param $status
      * @return string
      */
-    public function getStatusLabel($status) {
+    public function getStatusLabel($status)
+    {
         $statusHash = Magestore_TruWallet_Model_Status::getTransactionOptionArray();
         if (isset($statusHash[$status])) {
             return $statusHash[$status];
@@ -161,6 +208,9 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             return null;
     }
 
+    /**
+     * @param $customer
+     */
     public function checkCreditFromSharing($customer)
     {
         $receiver = Mage::helper('truwallet/account')->loadByCustomerId($customer->getId());
@@ -196,10 +246,9 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         $collection = Mage::getModel('truwallet/transaction')->getCollection()
             ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_SHARING)
             ->addFieldToFilter('status', Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING)
-            ->setOrder('transaction_id', 'desc')
-        ;
+            ->setOrder('transaction_id', 'desc');
 
-        Mage::log('Check Expiry Date - '.date('d-m-Y H:i:s',time()).' - Quantity: '.sizeof($collection), null, 'expiryDate.log');
+        Mage::log('Check Expiry Date - ' . date('d-m-Y H:i:s', time()) . ' - Quantity: ' . sizeof($collection), null, 'expiryDate.log');
         if (sizeof($collection) > 0) {
 
             $timestamp = Mage::getModel('core/date')->timestamp(time());
@@ -346,14 +395,13 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
     public function checkAddedTransaction($order_id, $customer_id)
     {
         $collection = Mage::getModel('truwallet/transaction')->getCollection()
-            ->addFieldToFilter('customer_id',$customer_id)
-            ->addFieldToFilter('order_id',$order_id)
-            ->addFieldToFilter('action_type',Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD)
-            ->setOrder('transaction_id','desc')
-            ->getFirstItem()
-        ;
+            ->addFieldToFilter('customer_id', $customer_id)
+            ->addFieldToFilter('order_id', $order_id)
+            ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD)
+            ->setOrder('transaction_id', 'desc')
+            ->getFirstItem();
 
-        if($collection->getId())
+        if ($collection->getId())
             return true;
         else
             return false;
@@ -362,14 +410,14 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
     public function addTruWalletFromProduct($order)
     {
         $helper = Mage::helper('truwallet');
-        if(!$helper->isEnableTruWalletProduct())
+        if (!$helper->isEnableTruWalletProduct())
             return $this;
 
         $order_status_configure = $helper->getTruWalletOrderStatus();
         $product_configure = $helper->getTruWalletSku();
         $value_configure = $helper->getTruWalletValue();
 
-        if($order_status_configure == '')
+        if ($order_status_configure == '')
             return $this;
 
         $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
@@ -377,26 +425,23 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
         $items = $order->getAllItems();
         $is_only_virtual = 0;
-        foreach($items as $item)
-        {
+        foreach ($items as $item) {
             $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if($product->getTypeId() != 'virtual')
-            {
+            if ($product->getTypeId() != 'virtual') {
                 $is_only_virtual++;
             }
         }
 
-        if((strcasecmp($order->getStatus(),$order_status_configure) == 0 || (strcasecmp($order->getStatus(),'complete') == 0 && $is_only_virtual == 0)) && !$flag){
+        if ((strcasecmp($order->getStatus(), $order_status_configure) == 0 || (strcasecmp($order->getStatus(), 'complete') == 0 && $is_only_virtual == 0)) && !$flag) {
             $items = $order->getAllItems();
-            try{
-                foreach($items as $orderItem) {
-                    if(strcasecmp($orderItem->getSku(),$product_configure) == 0)
-                    {
+            try {
+                foreach ($items as $orderItem) {
+                    if (strcasecmp($orderItem->getSku(), $product_configure) == 0) {
                         $credit = $value_configure * (int)$orderItem->getQtyOrdered();
                         $receiverAccount = Mage::helper('truwallet/account')->updateCredit($customer->getId(), $credit);
                         $params = array(
                             'credit' => $credit,
-                            'title' => Mage::helper('truwallet')->__('Purchased truWallet Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getEntityId())).'">'.$order->getIncrementId().'</a>'),
+                            'title' => Mage::helper('truwallet')->__('Purchased truWallet Gift Card on order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getEntityId())) . '">' . $order->getIncrementId() . '</a>'),
                         );
                         Mage::helper('truwallet/transaction')->createTransaction(
                             $receiverAccount,
@@ -414,7 +459,7 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
 
     public function addDaysToDate($date, $days, $operator = '+')
     {
-        $date = strtotime($operator." " . $days . " days", strtotime($date));
+        $date = strtotime($operator . " " . $days . " days", strtotime($date));
         return date("Y-m-d H:i:s", $date);
     }
 
