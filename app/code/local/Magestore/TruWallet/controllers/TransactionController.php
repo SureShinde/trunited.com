@@ -107,40 +107,88 @@ class Magestore_TruWallet_TransactionController extends Mage_Core_Controller_Fro
             $connection->beginTransaction();
 
             $truWalletAccount = Mage::helper('truwallet/account')->updateCredit($customer->getId(), -$amount);
+
+            $recipient_transaction_id = null;
+            $recipient_transaction = null;
+            /* create transaction for recipient first */
+            if ($is_exist) {
+                $receiverAccount = Mage::helper('truwallet/account')->updateCredit($customer_receiver->getId(), $amount);
+                $params = array(
+                    'credit' => $amount,
+                    'title' => '',
+                    'receiver_email' => $customer->getEmail(),
+                    'receiver_customer_id' => $customer->getId(),
+                    'expiration_date' => $expiration_date,
+                );
+                if ($receiverAccount != null) {
+                    $recipient_transaction = $transaction_helper->createTransaction(
+                        $receiverAccount,
+                        $params,
+                        Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
+                        $status
+                    );
+
+                    if($recipient_transaction != null && $recipient_transaction->getId())
+                        $recipient_transaction_id = $recipient_transaction->getId();
+                    else
+                        throw new Exception(
+                            Mage::helper('truwallet')->__('Cannot create a transaction for recipient.')
+                        );
+                }
+            } else {
+                $params = array(
+                    'credit' => $amount,
+                    'title' => '',
+                    'customer_email' => $email,
+                    'receiver_email' => $customer->getEmail(),
+                    'receiver_customer_id' => $customer->getId(),
+                    'expiration_date' => $expiration_date,
+                );
+
+                $recipient_transaction = $transaction_helper->createNonTransaction(
+                    $customer,
+                    $params,
+                    Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
+                    $status
+                );
+
+                if($recipient_transaction != null && $recipient_transaction->getId())
+                    $recipient_transaction_id = $recipient_transaction->getId();
+                else
+                    throw new Exception(
+                        Mage::helper('truwallet')->__('Cannot create a transaction for recipient.')
+                    );
+            }
+            /* END create transaction for recipient first */
+
+            /* CREATE transaction for sender */
             $params = array(
                 'credit' => -$amount,
                 'title' => '',
                 'receiver_email' => $email,
                 'receiver_customer_id' => $is_exist ? $customer_receiver->getId() : '',
                 'expiration_date' => $expiration_date,
+                'recipient_id' => $recipient_transaction_id,
             );
+
             if ($truWalletAccount != null) {
-                $transaction_helper->createTransaction(
+                $share_transaction = $transaction_helper->createTransaction(
                     $truWalletAccount,
                     $params,
                     Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_SHARING,  // type
                     $status
                 );
-            }
 
-            if ($is_exist) {
-                $receiverAccount = Mage::helper('truwallet/account')->updateCredit($customer_receiver->getId(), $amount);
-                $params = array(
-                    'credit' => $amount,
-                    'title' => '',
-                    'receiver_email' => $customer_receiver->getEmail(),
-                    'receiver_customer_id' => $customer_receiver->getId(),
-                    'expiration_date' => $expiration_date,
-                );
-                if ($receiverAccount != null) {
-                    $transaction_helper->createTransaction(
-                        $receiverAccount,
-                        $params,
-                        Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
-                        $status
+                if($share_transaction != null && $share_transaction->getId())
+                {
+                    $recipient_transaction->setData('recipient_id', $share_transaction->getId())->save();
+                } else {
+                    throw new Exception(
+                        Mage::helper('truwallet')->__('Cannot create a transaction for sender.')
                     );
                 }
             }
+            /* END transaction for sender */
 
             $transaction_helper->sendEmailWhenSharingTruWallet(
                 $customer->getId(),
