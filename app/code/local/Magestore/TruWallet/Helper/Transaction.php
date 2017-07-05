@@ -225,7 +225,6 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         else
             return null;
     }
-
     /**
      * @param $customer
      */
@@ -272,60 +271,60 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
         Mage::log('Check Expiry Date - ' . date('d-m-Y H:i:s', time()) . ' - Quantity: ' . sizeof($collection), null, 'expiryDate.log');
 
         if (sizeof($collection) > 0) {
-            $timestamp = Mage::getModel('core/date')->timestamp(time());
-            foreach ($collection as $transaction) {
-                $expiration_date = strtotime($transaction->getExpirationDate());
-                $compare_time = $this->compareExpireDate($expiration_date, $timestamp);
 
-                if ($compare_time > 0) {
+            if (sizeof($collection) > 0) {
+                $timestamp = Mage::getModel('core/date')->timestamp(time());
+                foreach ($collection as $transaction) {
+                    $expiration_date = strtotime($transaction->getExpirationDate());
+                    $compare_time = $this->compareExpireDate($expiration_date, $timestamp);
 
-                    /* user still dont register an new account */
-                    if ($transaction->getReceiverCustomerId() == 0) {
-                        $this->updateTransaction(
-                            $transaction,
-                            Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED,
-                            abs($transaction->getChangedCredit())
-                        );
+                    if ($compare_time > 0) {
 
-                        $rewardAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getCustomerId());
-                        $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($transaction->getChangedCredit()));
-                        $rewardAccount->save();
-                    }
-                    /* User created an new account and check the amount of truWallet in order to return back */
-                    else {
-                        $orders = $this->getCollectionOrderByCustomer($transaction->getReceiverCustomerId(), $expiration_date);
-                        $truWallet_used = 0;
-                        if($orders != null)
-                        {
-
-                            foreach ($orders as $order) {
-                                $truWallet_used += $order->getTruwalletDiscount();
-                            }
-                        }
-
-                        if($truWallet_used >= abs($transaction->getChangedCredit()))
-                        {
-                            $this->updateTransaction($transaction, Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED);
-                        } else {
-                            $return_points = abs($transaction->getChangedCredit()) - $truWallet_used;
-                            $rewardAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getCustomerId());
-                            $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($return_points));
-                            $rewardAccount->save();
-
-                            $receiveAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getReceiverCustomerId());
-                            $receiveAccount->setTruwalletCredit($receiveAccount->getTruwalletCredit() - abs($return_points));
-                            $receiveAccount->save();
-
+                        /* user still dont register an new account */
+                        if ($transaction->getReceiverCustomerId() == 0) {
                             $this->updateTransaction(
                                 $transaction,
-                                Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED,
-                                $return_points
+                                Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED,
+                                abs($transaction->getChangedCredit())
                             );
+
+                            $rewardAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getCustomerId());
+                            $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($transaction->getChangedCredit()));
+                            $rewardAccount->save();
+                        } /* User created an new account and check the amount of truWallet in order to return back */
+                        else {
+                            $orders = $this->getCollectionOrderByCustomer($transaction->getReceiverCustomerId(), $expiration_date);
+                            $truWallet_used = 0;
+                            if ($orders != null) {
+
+                                foreach ($orders as $order) {
+                                    $truWallet_used += $order->getTruwalletDiscount();
+                                }
+                            }
+
+                            if ($truWallet_used >= abs($transaction->getChangedCredit())) {
+                                $this->updateTransaction($transaction, Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED);
+                            } else {
+                                $return_points = abs($transaction->getChangedCredit()) - $truWallet_used;
+                                $rewardAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getCustomerId());
+                                $rewardAccount->setTruwalletCredit($rewardAccount->getTruwalletCredit() + abs($return_points));
+                                $rewardAccount->save();
+
+                                $receiveAccount = Mage::helper('truwallet/account')->loadByCustomerId($transaction->getReceiverCustomerId());
+                                $receiveAccount->setTruwalletCredit($receiveAccount->getTruwalletCredit() - abs($return_points));
+                                $receiveAccount->save();
+
+                                $this->updateTransaction(
+                                    $transaction,
+                                    Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED,
+                                    $return_points
+                                );
+                            }
                         }
                     }
                 }
+                exit;
             }
-            exit;
         }
 
     }
