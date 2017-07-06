@@ -237,4 +237,32 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
             return false;
         }
     }
+
+    public function getSuggestProductName($category_id)
+    {
+        $category = Mage::getModel('catalog/category')->load($category_id);
+        $result = '';
+        if($category->getId())
+        {
+            $products = $category->getProductCollection()
+                ->addAttributeToSelect('name')
+            ;
+
+            if(sizeof($products) > 0)
+            {
+                $flag = 1;
+                $count = sizeof($products);
+                foreach ($products as $product) {
+                    if($flag == $count)
+                        $result .= '"'.$product->getName().'"';
+                    else
+                        $result .= '"'.$product->getName().'",';
+
+                    $flag++;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

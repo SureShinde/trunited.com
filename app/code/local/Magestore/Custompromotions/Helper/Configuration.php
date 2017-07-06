@@ -105,4 +105,22 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
         else
             return null;
     }
+
+    public function getFilterAZCategories()
+    {
+        $types = $this->getDataConfig('category','categories_filtering');
+        if($types != null)
+            return explode(',', $types);
+        else
+            return null;
+    }
+
+    public function getSearchCategories()
+    {
+        $types = $this->getDataConfig('category','categories_searching');
+        if($types != null)
+            return explode(',', $types);
+        else
+            return null;
+    }
 }
