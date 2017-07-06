@@ -231,8 +231,8 @@ class Magestore_Affiliateplus_Model_Payment extends Mage_Core_Model_Abstract {
 
         $sendTo = array(
             array(
-                'email' => $sales['email'],
-                'name' => $sales['name'],
+                'email' => Mage::getStoreConfig('affiliateplus/email/request_payment_email_recipient'),
+                'name' => 'Admin',
             )
         );
 

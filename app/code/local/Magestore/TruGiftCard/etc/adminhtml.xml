@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<trugiftcard module="trugiftcard" translate="title">
+			<title>Trunited Gift Card</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<transaction module="trugiftcard" translate="title">
+					<title>Manage Transactions</title>
+					<sort_order>1</sort_order>
+					<action>trugiftcardadmin/adminhtml_transaction</action>
+				</transaction>
+				<settings module="trugiftcard" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/trugiftcard</action>
+				</settings>
+			</children>
+		</trugiftcard>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<trugiftcard module="trugiftcard" translate="title">
+										<title>Trunited Gift Card</title>
+										<sort_order>71</sort_order>									
+									</trugiftcard>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<trugiftcard module="trugiftcard" translate="title">
+						<title>Trunited Gift Card</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<transaction module="trugiftcard" translate="title">
+								<title>Manage Transactions</title>
+								<sort_order>1</sort_order>
+								<action>trugiftcardadmin/adminhtml_transaction</action>
+							</transaction>
+							<settings module="trugiftcard" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/trugiftcard</action>
+							</settings>
+						</children>
+					</trugiftcard>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

@@ -137,6 +137,15 @@
                 <class>Magestore_TruBox_Helper</class>
             </trubox>
         </helpers>
+        <template>
+            <email>
+                <trubox_email_out_of_stock>
+                    <label>Email template sent to customer when order has items are out of stock</label>
+                    <file>trubox/out_of_stock.html</file>
+                    <type>html</type>
+                </trubox_email_out_of_stock>
+            </email>
+        </template>
     </global>
     <default>
         <sales>
@@ -159,6 +168,9 @@
                 <shipping_method>freeshipping_freeshipping</shipping_method>
                 <shipping_amount>5</shipping_amount>
             </shipping>
+            <email>
+                <out_of_stock>trubox_email_out_of_stock</out_of_stock>
+            </email>
         </trubox>
     </default>
 </config>

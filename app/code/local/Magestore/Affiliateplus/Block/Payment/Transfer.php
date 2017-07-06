@@ -14,10 +14,19 @@ class Magestore_Affiliateplus_Block_Payment_Transfer extends Mage_Core_Block_Tem
     protected function _construct() {
         parent::_construct();
         $account = Mage::getSingleton('affiliateplus/session')->getAccount();
-        $collection = Mage::getModel('truwallet/transaction')->getCollection()
+        $object_transfer = Mage::helper('affiliateplus/config')->getTransferConfig();
+        if($object_transfer == 1)
+            $collection = Mage::getModel('truwallet/transaction')->getCollection()
+                    ->addFieldToFilter('customer_id', $account->getCustomerId())
+                    ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_TRANSFER)
+                    ->setOrder('transaction_id', 'DESC');
+        else if($object_transfer == 2)
+            $collection = Mage::getModel('trugiftcard/transaction')->getCollection()
                 ->addFieldToFilter('customer_id', $account->getCustomerId())
                 ->addFieldToFilter('action_type', Magestore_TruWallet_Model_Type::TYPE_TRANSACTION_TRANSFER)
                 ->setOrder('transaction_id', 'DESC');
+        else
+            $collection = null;
 
         $this->setCollection($collection);
     }

@@ -1,0 +1,93 @@
+.dashboard .trugiftcard, .box-trugiftcard-summary .info-summary
+{
+    padding-top: 5px;
+}
+
+.dashboard .box-trugiftcard-summary, .box-trugiftcard-summary {
+    color: #333;
+    font-size: 13px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #cecece;
+    margin-bottom: 15px;
+}
+
+.dashboard .box-trugiftcard-summary .box-head h2, .box-trugiftcard-summary .box-head h2 {
+    background: url(images/rewards.png) no-repeat scroll 0 0 transparent;
+    padding: 5px 0 5px 25px;
+    font-size: 15px;
+}
+
+.trugiftcard-money {
+    color: #3182be;
+    font-size: 13px;
+}
+
+.box-trugiftcard-history .box-head h2 {
+    background: url(images/transactions.png) no-repeat scroll 0 center transparent;
+    padding: 5px 0 5px 25px;
+    font-size: 15px;
+}
+
+#trugiftcard-payment-form #checkout-cc-button, #trugiftcard-payment-form #checkout-cc-button-cancel {
+    border-radius: 3px;
+}
+
+#trugiftcard-payment-form #checkout-cc-button span, #trugiftcard-payment-form #checkout-cc-button-cancel span {
+    background-color: #59c9aa !important;
+    height: 30px;
+    padding: 0 15px;
+    line-height: 29px;
+    border-radius: 3px;
+}
+
+#trugiftcard-payment-form .btn-trugiftcard {
+    padding-top: 10px;
+    clear: both;
+}
+
+#trugiftcard-payment-form #checkout_cc_input_alert {
+    float: left;
+    clear: both;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#notify-phone{
+    display: block;
+    margin-top: 5px;
+}
+
+.my-account .form-list .field
+{
+    margin-left: 0 !important;
+}
+
+#refers_error, #refers_mobile_error{
+    margin: 10px 0 0 0;
+}
+
+.account-create .no_referred_me_check
+{
+    background-color: #afafaf;
+    cursor: not-allowed;
+}
+.account-create .search_icon
+{
+    height: 38px;
+    width: 50px;
+    background-color: #00b5cb;
+    color: white;
+    position: absolute;
+    left: 0;
+    top: 0%;
+}
+
+.account-create #affiliate_name
+{
+    padding-left: 60px;
+}
+
+.account-create .for_affiliate_name
+{
+    white-space: normal !important;
+}

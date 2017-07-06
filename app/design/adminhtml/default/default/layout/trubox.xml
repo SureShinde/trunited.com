@@ -6,6 +6,12 @@
 		</reference>
 	</truboxadmin_adminhtml_items_index>
 
+	<truboxadmin_adminhtml_report_index>
+		<reference name="content">
+			<block type="trubox/adminhtml_report" name="trubox.report" />
+		</reference>
+	</truboxadmin_adminhtml_report_index>
+
 	<!--<sales_order_grid_update_handle>
 		<reference name="sales_order.grid">
 			<action method="addColumnAfter">

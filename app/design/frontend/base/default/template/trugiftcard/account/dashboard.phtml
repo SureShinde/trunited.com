@@ -1,0 +1,23 @@
+<div class="page-title">
+    <h1><?php echo $this->__('My Trunited Gift Card') ?></h1>
+</div>
+
+<div class="box-account box-info box-trugiftcard-summary">
+    <div class="box-head">
+        <h2><?php echo $this->__('Trunited Gift Card Information') ?></h2>
+    </div>
+    <div class="info-summary">
+        <p><strong>
+                <?php echo $this->__('Your Trunited Gift Card balance is') ?>
+                <strong class="trugiftcard-money">
+                    <?php echo $this->getTruWalletCredit()?>
+                </strong>
+                <img src="<?php echo $this->getSkinUrl('images/trugiftcard/trugiftcard.png') ?>" alt="truGiftCard"
+                     style="display: inline-block;">
+            </strong>
+            <br/>
+        </p>
+    </div>
+</div>
+
+<?php echo $this->getChildHtml('other') ?>

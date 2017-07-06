@@ -42,7 +42,7 @@ class Magestore_TruBox_Helper_Item extends Mage_Core_Helper_Abstract
         $option_params = json_decode($item->getOptionParams(), true);
         $product_url = Mage::helper("adminhtml")->getUrl("adminhtml/catalog_product/edit",array("id"=>$product->getId()));
 
-        $name = '<a href="'.$product_url.'"><strong>'.$product->getName().'</strong></a>';
+        $name = '<a href="'.$product_url.'" target="_blank"><strong>'.$product->getName().'</strong></a>';
         $name .= '<dl class="item-options">';
         if ($product->getTypeId() == 'configurable') {
             $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);

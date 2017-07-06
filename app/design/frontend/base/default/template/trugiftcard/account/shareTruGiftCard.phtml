@@ -1,0 +1,97 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints All Transactions
+ *
+ * @see Magestore_RewardPoints_Block_Account_Transactions
+ */
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Share Trunited Gift Card Money') ?></h1>
+</div>
+
+<div class="info-summary">
+    <p><strong>
+            <?php echo $this->__('Your Trunited Gift Card balance is') ?>
+            <strong class="trugiftcard-money">
+                <?php echo $this->getTruWalletCredit() ?>
+            </strong>
+            <img src="<?php echo $this->getSkinUrl('images/trugiftcard/trugiftcard.png') ?>" alt="truGiftCard"
+                 style="display: inline-block;">
+        </strong>
+        <br/>
+    </p>
+</div>
+
+<div class="page-description">
+    <?php
+    echo Mage::getModel('cms/block')->load('desc_sharing_truGiftCard')->getContent();
+    ?>
+
+</div>
+
+<hr class="share_separate"/>
+<h2 id="share_form_header"><?php echo $this->__('Share Trunited Gift Card'); ?></h2>
+<form id="trugiftcard_share_truGiftCard" action="<?php echo $this->getActionForm(); ?>" method="post">
+    <div class="form-group">
+        <label for="share_amount"><?php echo $this->__('Amount') ?></label>
+        <input id="share_amount" name="share_amount" value=""
+               class="required-entry form-control validate-greater-than-zero validate-number" type="text"
+               placeholder="<?php echo $this->__('Enter amount'); ?>"/>
+    </div>
+    <div class="form-group">
+        <label for="share_email"><?php echo $this->__('Email') ?></label>
+        <input id="share_email" name="share_email" value="" type="text"
+               class="required-entry form-control validate-email"
+               placeholder="<?php echo $this->__('Enter email'); ?>"/>
+    </div>
+    <div class="form-group">
+        <label for="message"><?php echo $this->__('Message') ?></label>
+        <textarea class="form-control validate-length" rows="3" id="message" name="message" onkeyup="check(this);"
+                  placeholder="Enter message"></textarea>
+        <em><?php echo $this->__('The message is limited to 150 characters') ?></em>
+    </div>
+    <button class="button button-config" title="<?php echo $this->__('Send'); ?>" type="submit">
+        <span><span><?php echo $this->__('Send truGiftCard Money'); ?></span></span>
+    </button>
+</form>
+
+<hr class="share_separate" style="clear: both; margin-top: 100px;"/>
+<h2 id="share_form_header"><?php echo $this->__('History Transactions'); ?></h2>
+<?php echo $this->getGridHtml() ?>
+<script type="text/javascript">
+    //<![CDATA[
+    var shareTruWalletForm = new VarienForm('trugiftcard_share_truGiftCard', true);
+    function check(Obj) {
+        var maxnum = Obj.value.length;
+        if (maxnum > 150) {
+            Obj.value = Obj.value.substring(0, 150);
+        }
+    }
+
+    Validation.add('validate-length', '<?php echo Mage::helper('trugiftcard')->__('The message is limited to 150 characters')?>', function (v) {
+        var message = $('message') ? $('message') : $$('.validate-cemail')[0];
+        return message.value.length <= 150;
+    });
+
+    //]]>
+</script>

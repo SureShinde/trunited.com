@@ -130,6 +130,43 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         return $truBoxFilter;
     }
 
+    public function getRate($product)
+    {
+        $productTaxId = $product->getData("tax_class_id");
+        $customer = $this->getCurrentCustomer();
+
+        $shippingAddress = $this->getShippingAddressTruBox();
+        $rate = 0;
+
+        if($shippingAddress != null && $shippingAddress->getId())
+        {
+        	$country = $shippingAddress->getCountry();
+	        $region = $shippingAddress->getRegionId();
+	        $postcode = $shippingAddress->getZipcode();
+	        $customerTaxId = $customer->getTaxClassId();
+
+	        $TaxRequest = new Varien_Object();
+	        $TaxRequest->setCountryId($country);
+	        $TaxRequest->setRegionId($region);
+	        $TaxRequest->setPostcode($postcode);
+	        $TaxRequest->setStore(Mage::app()->getStore());
+	        $TaxRequest->setCustomerClassId($customerTaxId);
+	        $TaxRequest->setProductClassId($productTaxId);
+
+	        $taxCalculationModel = Mage::getSingleton('tax/calculation');
+	        $rate = $taxCalculationModel->getRate($TaxRequest);
+        }
+
+        
+        return $rate;
+    }
+
+    public function getTaxAmount($product, $qty)
+    {
+        $percent = $this->getRate($product);
+        return ($product->getFinalPrice() * $percent * $qty) / 100;
+    }
+
     public function getCountryHtmlSelect($type)
     {
         if ($type == 'billing') {

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Magestore
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+/**
+ * Rewardpoints Account Dashboard Recent Transactions
+ * 
+ * @see Magestore_RewardPoints_Block_Account_Dashboard_Transactions
+ */
+?>
+
+<?php $_collection = $this->getCollection() ?>
+    <div class="box-account box-info box-trugiftcard-history">
+        <div class="box-head">
+            <h2><?php echo $this->__('Recent Transactions') ?></h2>
+            <?php if (count($_collection)): ?>
+                <a href="<?php echo $this->getUrl('*/*/transactions') ?>"><?php echo $this->__('View All') ?></a>
+            <?php endif; ?>
+        </div>
+        <table class="data-table" id="recent-transactions-history">
+            <colgroup>
+                <col class="title" />
+                <col class="type" />
+                <col width="10" class="current_credit" />
+                <col class="updated_on" />
+                <col class="expiration_on" />
+                <col class="order_id" />
+                <col class="receiver_email" />
+                <col width="10" class="status" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><?php echo $this->__('Title') ?></th>
+                    <th><?php echo $this->__('Type') ?></th>
+                    <th><?php echo $this->__('Amount') ?></th>
+                    <th><?php echo $this->__('Updated On') ?></th>
+                    <th><?php echo $this->__('Email') ?></th>
+                    <th><?php echo $this->__('Status') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($_collection)): ?>
+                    <?php
+                        $types = Magestore_TruGiftCard_Model_Type::getOptionArray();
+                        $statuses = Magestore_TruGiftCard_Model_Status::getTransactionOptionArray();
+                    ?>
+                    <?php foreach ($_collection as $_transaction): ?>
+                        <tr>
+                            <td><span class="label-cell"><?php echo $this->__('Title') ?></span><h2><?php echo $this->__($_transaction->getTitle()) ?></h2></td>
+                            <td class="a-right"><h2><?php echo $types[$_transaction->getActionType()]; ?></h2></td>
+                            <td class="a-right"><h2><?php echo Mage::helper('core')->currency($_transaction->getChangedCredit(), true, false); ?></h2></td>
+                            <td><?php echo $this->formatTime($_transaction->getUpdatedTime(), 'medium', true) ?></td>
+                            <td><a href="mailto:<?php echo $_transaction->getReceiverEmail();?>"><?php echo $_transaction->getReceiverEmail();?></a></td>
+                            <td><?php echo $statuses[$_transaction->getStatus()]; ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php else: ?>
+                        <tr>
+                            <td colspan="6">
+                                <span><?php echo $this->__('Your Trunited Gift Card balance hasn\'t had any transaction yet.') ?></span>
+                            </td>
+                        </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>

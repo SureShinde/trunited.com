@@ -50,13 +50,15 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 		if ($params = $this->getRequest()->getPost()) {
 			try {
 				$customer_params = explode(',',$params['customers']);
+				$customer_params = array_filter($customer_params);
 				if(sizeof($customer_params) > 0)
 				{
 					$truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/item');
 					$rs = array();
 					foreach ($customer_params as $identify_customer) {
-						if (!filter_var($identify_customer, FILTER_VALIDATE_INT) === false) {
-							$customer = Mage::getModel('customer/customer')->load($identify_customer);
+						$customer_id = trim($identify_customer);
+						if (!filter_var($customer_id, FILTER_VALIDATE_INT) === false) {
+							$customer = Mage::getModel('customer/customer')->load($customer_id);
 
 							if($customer->getId())
 							{
@@ -98,9 +100,9 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 
 
 							}
-						} else if(!filter_var($identify_customer, FILTER_VALIDATE_EMAIL) === false) {
+						} else if(!filter_var($customer_id, FILTER_VALIDATE_EMAIL) === false) {
 							$customer = Mage::getModel('customer/customer')->getCollection()
-								->addFieldToFilter('email', $identify_customer)
+								->addFieldToFilter('email', $customer_id)
 								->setOrder('entity_id', 'desc')
 								->getFirstItem()
 							;
@@ -152,7 +154,20 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 						}
 					}
 
-					$message = str_replace(array('[',']','{','}'),array('','','',''),json_encode($rs));
+					/*$message = str_replace(array('[',']','{','}'),array('','','',''),json_encode($rs));*/
+					$message = '';
+					if(sizeof($rs) > 0)
+					{
+						$flag = 0;
+						foreach ($rs as $re) {
+							if($flag > 0)
+								$message .= '- ';
+							$message .= str_replace(array('[',']','{','}'),array('','','',''),json_encode($re));
+							$message .= '<br />';
+							$flag++;
+						}
+
+					}
 					if(sizeof($rs) > 0)
 						Mage::getSingleton('adminhtml/session')->addSuccess(
 							Mage::helper('trubox')->__(

@@ -56,4 +56,8 @@ class Magestore_Affiliateplus_Helper_Config extends Mage_Core_Helper_Abstract
 		return $this->getCommissionConfig('allow_affiliate_get_commission_from_his_purchase', $store);
 	}
 
+	public function getTransferConfig($store = null){
+		return Mage::getStoreConfig('affiliateplus/payment/transfer_to',$store);
+	}
+
 }

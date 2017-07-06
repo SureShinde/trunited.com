@@ -648,6 +648,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </reduce_balance>
+
+                        <transfer_to translate="label">
+                            <label>Transfer To</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>affiliateplus/system_config_source_transfer</source_model>
+                            <sort_order>160</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </transfer_to>
                         
                     </fields>
                 </payment>
@@ -868,6 +878,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </request_payment_email_template>
+                        <request_payment_email_recipient translate="label">
+                            <label>Email Notification Withdrawal will be sent to</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>171</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </request_payment_email_recipient>
                         <process_payment_email_template translate="label">
                             <label>Email template sent to affiliate when withdrawal is processed</label>
                             <frontend_type>select</frontend_type>

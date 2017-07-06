@@ -1,4 +1,5 @@
 <?php
+
 /**
  * aheadWorks Co.
  *
@@ -23,7 +24,6 @@
  * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
  * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
  */
-
 class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminhtml_Block_Widget_Form
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
@@ -59,6 +59,24 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminht
             'title' => $this->__('Activation Event'),
             'values' => Mage::getModel('aweventdiscount/event')->eventsToArray(),
             'onchange' => 'checkEventField(this)'
+        ));
+
+        $_fieldset->addField('point_type', 'select', array(
+            'label' => $this->__('Award Point Type '),
+            'required' => false,
+            'name' => 'point_type',
+            'values' => array(
+                            1 => $this->__('Fixed amount discount'),
+                            2 => $this->__('Percent of product point discount'),
+                        ),
+            'disabled' => false,
+            'readonly' => false,
+        ));
+
+        $_fieldset->addField('point_amount', 'text', array(
+            'label'     => $this->__('Award Point Amount'),
+            'required'  => false,
+            'name'      => 'point_amount',
         ));
 
         $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')

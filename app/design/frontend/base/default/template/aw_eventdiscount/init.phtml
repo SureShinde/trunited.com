@@ -1,40 +1,9 @@
 <?php
-/**
- * aheadWorks Co.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://ecommerce.aheadworks.com/AW-LICENSE.txt
- *
- * =================================================================
- *                 MAGENTO EDITION USAGE NOTICE
- * =================================================================
- * This software is designed to work with Magento community edition and
- * its use on an edition other than specified is prohibited. aheadWorks does not
- * provide extension support in case of incorrect edition use.
- * =================================================================
- *
- * @category   AW
- * @package    AW_Eventdiscount
- * @version    1.0.5
- * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
- * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
- */
-?><div id='ebd_TL' style="text-align: center; position: fixed;padding 4px;z-index:-1;top:5px;left:5px;"></div>
-<div id='ebd_TC' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
-<div id='ebd_TR' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
-
-<div id='ebd_ML' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px;left:5px;"></div>
-<div id='ebd_MC' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
-<div id='ebd_MR' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
-
-<div id='ebd_BL' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px;left:5px;"></div>
-<div id='ebd_BC' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
-<div id='ebd_BR' style="text-align: center;position: fixed;padding 4px;z-index:-1;top:5px"></div>
+$type = Mage::helper('eventdiscount')->getTypeNotifyConfiguration();
+?>
 <script type="text/javascript">
+    $js = jQuery.noConflict();
+
     var s = null;
     Event.observe(window, 'load', function() {
         var url = '<?php echo $this->getAjaxUrl();?>';
@@ -44,75 +13,60 @@
             onSuccess:function (transport) {
                 var json = transport.responseText.evalJSON(true);
                 if (!json.error) {
-
                     json.timers.each(function (timer) {
-                        $('ebd_' + timer.position).innerHTML = $('ebd_' + timer.position).innerHTML + timer.html_block;
+                        showNotify(timer.html_block);
                         new AwEbd('HMS', timer.count_down, 'aw_eventdiscount_timer_' + timer.id, timer.color);
-                    });
-
-                    //top
-                    $('ebd_TC').style.marginLeft = '-' + ($('ebd_TC').getWidth() / 2) + 'px';
-                    $('ebd_TR').style.marginLeft = '-' + ($('ebd_TR').getWidth() + 5) + 'px';
-                    $('ebd_TC').style.left = "50%";
-                    $('ebd_TR').style.left = '100%';
-
-
-                    //center
-                    $('ebd_MC').style.marginLeft = '-' + ($('ebd_MC').getWidth() / 2) + 'px';
-                    $('ebd_MR').style.marginLeft = '-' + ($('ebd_MR').getWidth() + 5) + 'px';
-                    $('ebd_MC').style.left = '50%';
-                    $('ebd_MR').style.left = '100%';
-
-                    $('ebd_ML').style.marginTop = '-' + ($('ebd_ML').getHeight() / 2) + 'px';
-                    $('ebd_MR').style.marginTop = '-' + ($('ebd_MR').getHeight() / 2) + 'px';
-                    $('ebd_MC').style.marginTop = '-' + ($('ebd_MC').getHeight() / 2) + 'px';
-                    $('ebd_ML').style.top = $('ebd_MC').style.top = $('ebd_MR').style.top = '50%';
-
-                    //bottom
-                    $('ebd_BC').style.marginLeft = '-' + ($('ebd_BC').getWidth() / 2) + 'px';
-                    $('ebd_BR').style.marginLeft = '-' + ($('ebd_BR').getWidth() + 5) + 'px';
-                    $('ebd_BC').style.left = '50%';
-                    $('ebd_BR').style.left = '100%';
-
-                    $('ebd_BL').style.marginTop = '-' + ($('ebd_BL').getHeight() + 5) + 'px';
-                    $('ebd_BR').style.marginTop = '-' + ($('ebd_BR').getHeight() + 5) + 'px';
-                    $('ebd_BC').style.marginTop = '-' + ($('ebd_BC').getHeight() + 5) + 'px';
-                    $('ebd_BL').style.top = $('ebd_BC').style.top = $('ebd_BR').style.top = '100%';
-
-                    var positions = ['TL', 'TC', 'TR', 'ML', 'MC', 'MR', 'BL', 'BC', 'BR'];
-                    json.timers.each(function (timer) {
-                        switch (timer.appearing) {
-                            case 'fade':
-                            {
-                                $('aw_eventdiscount_timer_' + timer.id).setStyle('opacity:0;-moz-opacity:0;filter:alpha(opacity=0)');
-                                new Effect.Appear($('aw_eventdiscount_timer_' + timer.id), { duration:0.5,afterFinish: function(){($('aw_eventdiscount_timer_' + timer.id).setStyle('display:block;opacity:1;-moz-opacity:1;filter:alpha(opacity=1)'))}});
-                                break;
-                            }
-                            case 'slide':
-                            {
-                                $('aw_eventdiscount_timer_' + timer.id).setStyle('display:none;height:'+parseInt($('aw_eventdiscount_timer_' + timer.id).getHeight())+'px');
-                                Effect.SlideDown('aw_eventdiscount_timer_' + timer.id, {duration:0.5 });
-                                break;
-                            }
-                            case 'blink':
-                            {
-                                $('aw_eventdiscount_timer_' + timer.id).addClassName('aw_transparent');
-                                new Effect.Pulsate('aw_eventdiscount_timer_' + timer.id, { pulses:3, duration:1,afterFinish: function(){
-                                    $('aw_eventdiscount_timer_' + timer.id).removeClassName('aw_transparent');
-                                } });
-                                break;
-                            }
-                        }
-                        }
-                    );
-                    positions.each(function (position) {
-                        $('ebd_' + position).style.overflow = 'hidden';
-                        $('ebd_' + position).style.zIndex = '1000';
                     });
                 }
             }
         })
     });
+
+    function showNotify(html)
+    {
+        $js.notify({
+            title: '',
+            message: ''
+        },{
+            element: 'body',
+            position: null,
+            type: "<?php echo $type;?>", /* info, warning, danger, success */
+            allow_dismiss: true,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: {
+                from: "top",
+                align: "center"
+            },
+            offset: 5,
+            spacing: 10,
+            z_index: 1031,
+            delay: 0    ,
+            timer: 1000,
+            url_target: '_blank',
+            mouse_over: 'pause',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            onShow: null,
+            onShown: null,
+            onClose: null,
+            onClosed: null,
+            icon_type: 'class',
+            template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert">' +
+            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                /*'<span data-notify="icon"></span> ' +
+                 '<span data-notify="title">{1}</span> ' +
+                 '<span data-notify="message">{2}</span>' +
+                 '<div class="progress" data-notify="progressbar">' +
+                 '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                 '</div>' +
+                 '<a href="{3}" target="{4}" data-notify="url"></a>' +*/
+            html+
+            '</div>'
+        });
+    }
 
     function closeTimer(id) {
         var url = '<?php echo $this->getAjaxUrl();?>';

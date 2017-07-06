@@ -1,4 +1,4 @@
-<!--@subject {{var store.getFrontendName()}}: New request payment #{{var payment.getId()}} @-->
+<!--@subject Bank Withdrawal Request #{{var payment.getId()}} @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
@@ -26,8 +26,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <td valign="top">
                             <p>
                                 <strong>Hi {{htmlescape var=$payment.getSalesName()}}</strong>,<br/>
-                                One of your affiliates has requested payment for their commissions.
-                                Please log in to <a href="{{store url="adminhtml/index/"}}" style="color:#1E7EC8;">your admin area </a> and to review  this withdrawal request for approval. 
+                                The following Affiliate has requested a withdrawal from their account:
+
                             </p>
 
                             <p>Here are the account details:</p>
@@ -59,8 +59,10 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                     </tr>
                                 </tbody>
                             </table>
-                            <br/>
-
+                            <br/><br/>
+                            Please log in to <a href="{{store url="adminhtml/index/"}}" style="color:#1E7EC8;">your admin area </a> and to review  this withdrawal request for approval.
+                            <br/><br/>
+                            <p>Regards,</p>
                             <strong>{{var sender_name}}</strong></p>
                         </td>
                     </tr>

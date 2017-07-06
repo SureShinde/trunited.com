@@ -33,6 +33,9 @@
  */
 class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 {
+    const XML_PATH_EMAIL_OUT_OF_STOCK = 'trubox/email/out_of_stock';
+    const XML_PATH_EMAIL_SENDER = 'trubox/email/sender';
+
     protected $_shippingMethod = 'freeshipping_freeshipping';
     protected $_paymentMethod = 'authorizenet';
     protected $_freePaymentMethod = 'free';
@@ -74,6 +77,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                     {
                         if(sizeof($rs) > 0)
                             $flag[] = $rs;
+
+                        sleep(1);
                     } else {
 
                     }
@@ -175,20 +180,65 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $product = Mage::getModel('catalog/product')->load($item->getProductId());
 
                 if ($product->getIsInStock() && $product->isSaleable() === true) {
-
                     if($item->getOptionParams() != null){
                         $option_params = json_decode($item->getOptionParams(), true);
                         if($product->getTypeId() == 'configurable')
                         {
-                            $data[$item->getId()] = array(
-                                $item->getProductId() => array(
-                                    'qty' => $item->getQty(),
-                                    'super_attribute' => $option_params,
-                                    '_processing_params' => array(),
-                                )
-                            );
+                            $main_child_product = Mage::getModel('catalog/product_type_configurable')->getProductByAttributes($option_params, $product)->getId();
+                            $childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null,$product);
+                            $flag = false;
+                            foreach ($childProducts as $childProduct) {
+                                $qty = Mage::getModel('cataloginventory/stock_item')->loadByProduct($childProduct)->getQty();
+                                if ($childProduct->getId() == $main_child_product) {
+
+                                    if($qty <= 0)
+                                    {
+                                        $name = $product->getName().'<br />';
+                                        $flag = true;
+                                        $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                                        if ($_options && sizeof($option_params) > 0){
+                                            foreach ($_options as $_option){
+                                                $_attribute_value = 0;
+                                                foreach ($option_params as $k => $v) {
+                                                    if ($k == $_option['attribute_id']) {
+                                                        $_attribute_value = $v;
+                                                        break;
+                                                    }
+                                                }
+                                                if ($_attribute_value > 0) {
+                                                    $name .= '<small><b>'.$_option['label'].'</b></small><br />';
+                                                    foreach ($_option['values'] as $val) {
+                                                        if ($val['value_index'] == $_attribute_value) {
+                                                            $name .= '<small><i>'.$val['default_label'].'</i></small>';
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        $data['email'][] = array(
+                                            'product_name' => $name,
+                                            'qty' => $item->getQty(),
+                                            'price' => $item->getPrice(),
+                                        );
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if(!$flag)
+                            {
+                                $data['product'][$item->getId()] = array(
+                                    $item->getProductId() => array(
+                                        'qty' => $item->getQty(),
+                                        'super_attribute' => $option_params,
+                                        '_processing_params' => array(),
+                                    )
+                                );
+                            }
                         } else {
-                            $data[$item->getId()] = array(
+                            $data['product'][$item->getId()] = array(
                                 $item->getProductId() => array(
                                     'qty' => $item->getQty(),
                                     'options' => $option_params,
@@ -197,11 +247,74 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                             );
                         }
                     } else {
-                        $data[$item->getId()] = array(
+                        $data['product'][$item->getId()] = array(
                             $item->getProductId() => array(
                                 'qty' => $item->getQty(),
                                 '_processing_params' => array(),
                             )
+                        );
+                    }
+                } else {
+                    if($item->getOptionParams() != null){
+                        $name = $product->getName().'<br />';
+                        $option_params = json_decode($item->getOptionParams(), true);
+                        if ($product->getTypeId() == 'configurable') {
+                            $_options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
+                            if ($_options && sizeof($option_params) > 0){
+                                foreach ($_options as $_option){
+                                    $_attribute_value = 0;
+                                    foreach ($option_params as $k => $v) {
+                                        if ($k == $_option['attribute_id']) {
+                                            $_attribute_value = $v;
+                                            break;
+                                        }
+                                    }
+                                    if ($_attribute_value > 0) {
+                                        $name .= '<small><b>'.$_option['label'].'</b></small><br />';
+                                        foreach ($_option['values'] as $val) {
+                                            if ($val['value_index'] == $_attribute_value) {
+                                                $name .= '<small><i>'.$val['default_label'].'</i></small>';
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            foreach ($product->getOptions() as $o) {
+                                $values = $o->getValues();
+                                $_attribute_value = 0;
+
+                                foreach ($option_params as $k => $v) {
+                                    if ($k == $o->getOptionId()) {
+                                        $_attribute_value = $v;
+                                        break;
+                                    }
+                                }
+                                if ($_attribute_value > 0) {
+                                    $name .= '<small><b>'.$o->getTitle().'</b></small><br />';
+                                    foreach ($values as $val) {
+                                        if (is_array($_attribute_value)) {
+                                            if (in_array($val->getOptionTypeId(), $_attribute_value)) {
+                                                $name .= '<small><i>'.$val->getTitle().'</i></small>';
+                                            }
+                                        } else if ($val->getOptionTypeId() == $_attribute_value) {
+                                            $name .= '<small><i>'.$val->getTitle().'</i></small>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $data['email'][] = array(
+                            'product_name' => $name,
+                            'qty' => $item->getQty(),
+                            'price' => $item->getPrice(),
+                        );
+                    } else {
+                        $data['email'][] = array(
+                            'product_name' => $product->getName(),
+                            'qty' => $item->getQty(),
+                            'price' => $item->getPrice(),
                         );
                     }
                 }
@@ -262,7 +375,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $shipping_trubox = $this->getAddressByTruBoxId($customer_id, Magestore_TruBox_Model_Address::ADDRESS_TYPE_SHIPPING);
 
-            $products = $this->getProductParams($customer_id, $data_items);
+            $prepare_data = $this->getProductParams($customer_id, $data_items);
+            $products = $prepare_data['product'];
             if (sizeof($products) == 0)
                 throw new Exception(
                     Mage::helper('trubox')->__('%s - No Items found!', $customer->getName())
@@ -306,14 +420,6 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'fax' => '',
                 'vat_id' => '',
             );
-
-            if($customer_id == 8138)
-            {
-            	zend_debug::dump($billing_trubox->debug());
-            	zend_debug::dump($billing_trubox->getData('region_id'));
-            	zend_debug::dump($billingAddress);
-            	exit;
-            }
 
             $quote = Mage::getModel('sales/quote')->setStoreId(1);
 
@@ -417,6 +523,11 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 'Order_id' => $increment_id
             );
 
+            if(sizeof($prepare_data['email']) > 0 && $order_mail->getId())
+            {
+                $this->sendEmailOutOfStock(Mage::getModel('customer/customer')->load($customer_id), $prepare_data['email']);
+            }
+
 
         } catch (Exception $ex) {
             Mage::getSingleton('adminhtml/session')->addError(
@@ -496,6 +607,44 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             else
                 return null;
         }
+    }
+
+    /**
+     * @param $customer
+     * @param $products
+     * @return $this
+     */
+    public function sendEmailOutOfStock($customer, $products)
+    {
+        $store = Mage::app()->getStore();
+        $translate = Mage::getSingleton('core/translate');
+        $translate->setTranslateInline(false);
+
+        if (!$customer->getId())
+            return $this;
+
+        $email_path =  Mage::getStoreConfig(self::XML_PATH_EMAIL_OUT_OF_STOCK, $store);
+
+        $data = array(
+            'store' => $store,
+            'customer_name' => $customer->getName(),
+            'items' => $products
+        );
+
+        Mage::getModel('core/email_template')
+            ->setDesignConfig(array(
+                'area' => 'frontend',
+                'store' => Mage::app()->getStore()->getId()
+            ))->sendTransactional(
+                $email_path,
+                Mage::getStoreConfig(self::XML_PATH_EMAIL_SENDER, $store->getId()),
+                $customer->getEmail(),
+                $customer->getName(),
+                $data
+            );
+
+        $translate->setTranslateInline(true);
+        return $this;
     }
 
 }
