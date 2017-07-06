@@ -301,20 +301,17 @@ div.alphabet
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus{
     font-weight: normal;
     color: rgb(33, 33, 33);
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(153, 153, 153);
+    border: 1px solid rgb(153, 153, 153);
     border-image: initial;
     background: url(https://www.cardcash.com/images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x rgb(218, 218, 218);
 }
 ul.ui-widget-content.ui-autocomplete
 {
-    border-color: rgba(102, 175, 233, 0.6);
     border-radius: 4px;
     color: rgb(34, 34, 34);
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid rgba(102, 175, 233, 0.6);
     border-image: initial;
+    max-width: none !important;
     background: url(https://www.cardcash.com/images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x rgb(255, 255, 255);
 }
 
