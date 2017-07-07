@@ -319,3 +319,19 @@ ul.ui-widget-content.ui-autocomplete
 {
     padding: 6px .4em;
 }
+
+#search_header_form #search_header{
+    padding-right: 33px;
+    min-width: 30%;
+    margin-left: 10%;
+}
+
+#search_header_form button
+{
+    height: 25px;
+    width: 40px;
+    background-color: transparent;
+    color: black;
+    position: absolute;
+    margin-left: -37px;
+}
