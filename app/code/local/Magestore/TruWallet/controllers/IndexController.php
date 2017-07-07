@@ -3,9 +3,9 @@
 class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Action
 {
 	public function indexAction(){
-		$customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
-		if($customer->getId())
-			Mage::helper('truwallet/transaction')->checkCreditFromSharing($customer);
+//		$customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
+//		if($customer->getId())
+//			Mage::helper('truwallet/transaction')->checkCreditFromSharing($customer);
 
 		$this->loadLayout();
 		$this->_title(Mage::helper('truwallet')->__('My truWallet'));
@@ -46,6 +46,8 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 				`changed_credit` DECIMAL(10,2) NOT NULL default 0,
 				`receiver_email` varchar(255) NULL,
 				`receiver_customer_id` INT unsigned NULL,
+				`recipient_id` INT unsigned,
+                `point_back` FLOAT,
 				PRIMARY KEY (`transaction_id`)
 			  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
@@ -105,6 +107,13 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 	}
 
 	public function shareTruWalletAction(){
+        if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('truwallet')->__('You have to log in before sharing truWallet.')
+            );
+            $this->_redirectUrl(Mage::getUrl('customer/account/login/'));
+        }
+
 		$this->loadLayout();
 		$this->_title(Mage::helper('truwallet')->__('Share TruWallet Money'));
 		$this->renderLayout();
@@ -213,5 +222,18 @@ class Magestore_TruWallet_IndexController extends Mage_Core_Controller_Front_Act
 		zend_debug::dump($_collection);
 
 	}
+
+    public function updateDb2Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+              ALTER TABLE {$setup->getTable('truwallet/transaction')} ADD recipient_id int(10) unsigned;
+              ALTER TABLE {$setup->getTable('truwallet/transaction')} ADD point_back FLOAT;
+              ALTER TABLE {$setup->getTable('truwallet/transaction')} ADD order_filter_ids text;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
 
 }

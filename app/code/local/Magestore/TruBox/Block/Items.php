@@ -136,23 +136,28 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         $customer = $this->getCurrentCustomer();
 
         $shippingAddress = $this->getShippingAddressTruBox();
+        $rate = 0;
 
-        $country = $shippingAddress->getCountry();
-        $region = $shippingAddress->getRegionId();
-        $postcode = $shippingAddress->getZipcode();
-        $customerTaxId = $customer->getTaxClassId();
+        if($shippingAddress != null && $shippingAddress->getId())
+        {
+        	$country = $shippingAddress->getCountry();
+	        $region = $shippingAddress->getRegionId();
+	        $postcode = $shippingAddress->getZipcode();
+	        $customerTaxId = $customer->getTaxClassId();
 
-        $TaxRequest = new Varien_Object();
-        $TaxRequest->setCountryId($country);
-        $TaxRequest->setRegionId($region);
-        $TaxRequest->setPostcode($postcode);
-        $TaxRequest->setStore(Mage::app()->getStore());
-        $TaxRequest->setCustomerClassId($customerTaxId);
-        $TaxRequest->setProductClassId($productTaxId);
+	        $TaxRequest = new Varien_Object();
+	        $TaxRequest->setCountryId($country);
+	        $TaxRequest->setRegionId($region);
+	        $TaxRequest->setPostcode($postcode);
+	        $TaxRequest->setStore(Mage::app()->getStore());
+	        $TaxRequest->setCustomerClassId($customerTaxId);
+	        $TaxRequest->setProductClassId($productTaxId);
 
-        $taxCalculationModel = Mage::getSingleton('tax/calculation');
-        $rate = $taxCalculationModel->getRate($TaxRequest);
+	        $taxCalculationModel = Mage::getSingleton('tax/calculation');
+	        $rate = $taxCalculationModel->getRate($TaxRequest);
+        }
 
+        
         return $rate;
     }
 

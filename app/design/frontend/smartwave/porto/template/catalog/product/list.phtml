@@ -179,7 +179,7 @@ $_coreHelper = $this->helper('core');
                                     <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
                                 </div>
                                 <div class="action-area">
-                                    <?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) != 0){?>
+                                    <?php if(!Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())){?>
                                         <?php if (Mage::getStoreConfig("porto_settings/category/product_price", $code)): ?>
                                             <?php echo $this->getPriceHtml($_product, true) ?>
                                         <?php endif; ?>
@@ -297,12 +297,16 @@ $_coreHelper = $this->helper('core');
                                             </div>
                                         <?php endif; ?>
                                     <?php } else { $flag_shop_now = true;?>
+                                        <?php $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);
+                                            if($shop_now_url != null){
+                                        ?>
                                         <div class="actions">
-                                            <a href="<?php echo Mage::helper('customproduct')->getShopNowUrl($_product);?>"
+                                            <a href="<?php echo $shop_now_url;?>"
                                                rel="nofollow" target="_blank" class="addtocart custom-url">
                                                 <span><?php echo $this->__('SHOP NOW');?></span></a>
                                             <div class="clearer"></div>
                                         </div>
+                                        <?php }?>
 
                                     <?php }?>
                                 </div>
@@ -470,12 +474,12 @@ $_coreHelper = $this->helper('core');
                                     <?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
                                 <?php endif; ?>
 
-                                <?php if (Mage::getStoreConfig("porto_settings/category/product_price", $code) && strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) != 0): ?>
+                                <?php if (Mage::getStoreConfig("porto_settings/category/product_price", $code) && !Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())): ?>
                                     <?php echo $this->getPriceHtml($_product, true) ?>
                                 <?php endif; ?>
                                 <?php if (Mage::getStoreConfig("porto_settings/category/actions", $code)): ?>
                                     <div class="actions">
-                                        <?php if(strcasecmp($_product->getTypeId(),Magestore_CustomProduct_Model_Type::PRODUCT_TYPE_SHOP_NOW) != 0){?>
+                                        <?php if(!Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())){?>
                                             <?php if (Mage::getStoreConfig("porto_settings/category/qty_field", $code)): ?>
                                                 <?php if ($product->isSaleable() && $_product->getTypeId() != 'grouped'): ?>
                                                     <?php if (!($product->getTypeInstance(true)->hasOptions($product) || $product->isGrouped())) : ?>
@@ -577,12 +581,16 @@ $_coreHelper = $this->helper('core');
                                                 <?php } ?>
                                             <?php } ?>
                                         <?php } else { $flag_shop_now = true;?>
-                                            <div class="actions">
-                                                <a href="<?php  echo Mage::helper('customproduct')->getShopNowUrl($product);?>"
-                                                   rel="nofollow" target="_blank" class="addtocart custom-url">
-                                                    <span><?php echo $this->__('SHOP NOW');?></span></a>
-                                                <div class="clearer"></div>
-                                            </div>
+                                            <?php $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);
+                                            if($shop_now_url != null){
+                                                ?>
+                                                <div class="actions">
+                                                    <a href="<?php echo $shop_now_url;?>"
+                                                       rel="nofollow" target="_blank" class="addtocart custom-url">
+                                                        <span><?php echo $this->__('SHOP NOW');?></span></a>
+                                                    <div class="clearer"></div>
+                                                </div>
+                                            <?php }?>
 
                                         <?php }?>
                                         <div class="clearer"></div>

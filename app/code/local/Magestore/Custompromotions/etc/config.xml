@@ -198,6 +198,9 @@
             <cms_page>
                 <message_login>You have to login first ! Please click <a href="{{login_url}}" title="Login Customer">here</a> to login.</message_login>
             </cms_page>
+            <custom_product>
+                <product_type>customproduct,gfitcardproduct</product_type>
+            </custom_product>
         </custompromotions>
     </default>
 </config>

@@ -1,44 +1,112 @@
 <?php
-    $store = Mage::app()->getStore();
-    $code  = $store->getCode();
-    
-    $_helper    = $this->helper('catalog/output');
-    $_category  = $this->getCurrentCategory();
-    $_showcartbutton = Mage::getStoreConfig('porto_settings/category_grid/show_addtocart', $code);
-    $_showcartbutton = Mage::getStoreConfig('porto_settings/category_grid/show_addtolinks', $code);
-    $_imgHtml   = '';
-    if ($_imgUrl = $_category->getImageUrl()) {
-        $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->escapeHtml($_category->getName()).'" title="'.$this->escapeHtml($_category->getName()).'" /></p>';
-        $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
-    }
+$store = Mage::app()->getStore();
+$code = $store->getCode();
+
+$_helper = $this->helper('catalog/output');
+$_category = $this->getCurrentCategory();
+$_showcartbutton = Mage::getStoreConfig('porto_settings/category_grid/show_addtocart', $code);
+$_showcartbutton = Mage::getStoreConfig('porto_settings/category_grid/show_addtolinks', $code);
+$_imgHtml = '';
+if ($_imgUrl = $_category->getImageUrl()) {
+    $_imgHtml = '<p class="category-image"><img src="' . $_imgUrl . '" alt="' . $this->escapeHtml($_category->getName()) . '" title="' . $this->escapeHtml($_category->getName()) . '" /></p>';
+    $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+}
+$current_category_id = $this->getRequest()->getParam('id');
 ?>
 <?php echo $_imgHtml ?>
 <?php
-    if(!Mage::getStoreConfig("porto_settings/category/fullwidth_description",$code)){
-        if($_description=$_category->getDescription()){
-?>
-<div class="category-description std">
-<?php
+if (!Mage::getStoreConfig("porto_settings/category/fullwidth_description", $code)) {
+    if ($_description = $_category->getDescription()) {
+        ?>
+        <div class="category-description std">
+            <?php
             echo $_helper->categoryAttribute($_category, $_description, 'description');
-?>
-</div>
-<?php
-        }
+            ?>
+        </div>
+        <?php
     }
+}
 ?>
 <div class="page-title category-title">
-    <?php if($this->IsRssCatalogEnable() && $this->IsTopCategory()): ?>
-        <a href="<?php echo $this->getRssLink() ?>" class="link-rss"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
+    <?php if ($this->IsRssCatalogEnable() && $this->IsTopCategory()): ?>
+        <a href="<?php echo $this->getRssLink() ?>"
+           class="link-rss"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
     <?php endif; ?>
     <h1><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 </div>
 
+<?php
+$categories_search = Mage::helper('custompromotions/configuration')->getSearchCategories();
+if ($categories_search != null && is_array($categories_search) && sizeof($categories_search) > 0 && in_array($current_category_id, $categories_search)) {
+    $product_suggest_names = Mage::helper('custompromotions')->getSuggestProductName($current_category_id);
+    $keywordData = Mage::app()->getRequest()->getParam('quick_keyword');
+?>
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j( function() {
+        var availableTags = [<?php echo $product_suggest_names?>];
+        $j( "#tags" ).autocomplete({
+            source: availableTags
+        });
+    } );
+</script>
+<div class="ui-widget quick-icon">
+    <form action="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" method="post">
+        <label for="tags"><?php echo $this->__('Quick Search');?>: </label>
+        <input id="tags" name="quick_keyword" class="input-text" value="<?php echo $keywordData;?>" placeholder="<?php echo $this->__('Search products by name');?>" />
+        <button class="search_icon button "><i class="fa fa-search"></i></button>
+    </form>
+</div>
+<?php }?>
+
+<?php
+
+$categories_filter = Mage::helper('custompromotions/configuration')->getFilterAZCategories();
+if ($categories_filter != null && is_array($categories_filter) && sizeof($categories_filter) > 0 && in_array($current_category_id, $categories_filter)) {
+    $search_array = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'ALL');
+    if (strstr($this->helper('core/url')->getCurrentUrl(), "&")) {
+        $separator = '&';
+    } else {
+        $separator = '?';
+    }
+
+    ?>
+    <div class="alphabet">
+        <form id="alp" action="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" method="post">
+            <ul class="view-mode-list-bot">
+                <?php
+                $postData = Mage::app()->getRequest()->getParam('alpha');
+                $keywordData = Mage::app()->getRequest()->getParam('quick_keyword');
+                foreach ($search_array as $search_array_value){?>
+                    <li class="<?php if (strcasecmp($postData, $search_array_value) == 0) { ?>active<?php } ?>">
+                        <a href="<?php echo $search_array_value; ?>" title="<?php echo '' ?>"
+                           class="<?php echo 'ap'; ?>">
+                            <?php echo $search_array_value; ?>
+                        </a>
+                    </li>
+                <?php }?>
+            </ul>
+            <input type="hidden" id="alpha" name="alpha" value="<?php echo $postData; ?>"/>
+            <input type="hidden" id="quick_keyword" name="quick_keyword" value="<?php echo $keywordData; ?>"/>
+        </form>
+        <script type="text/javascript">
+            $j = jQuery.noConflict();
+            $j('a.ap').click(function () {
+                $j('#alpha').val($j(this).attr('href'));
+                $j('#alp').submit();
+                return false;
+            });
+        </script>
+    </div>
+    <div class="divider"></div>
+<?php } ?>
+
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 
-<?php if($this->isContentMode()): ?>
+<?php if ($this->isContentMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
 
-<?php elseif($this->isMixedMode()): ?>
+<?php elseif ($this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
     <?php echo $this->getProductListHtml() ?>
 

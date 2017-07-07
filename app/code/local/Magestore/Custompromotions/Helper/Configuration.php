@@ -96,4 +96,31 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
     {
         return Mage::helper('trugiftcard')->getTruGiftCardOrderStatus();
     }
+
+    public function getApplyToProductTypes()
+    {
+        $types = $this->getDataConfig('custom_product','product_type');
+        if($types != null)
+            return explode(',', $types);
+        else
+            return null;
+    }
+
+    public function getFilterAZCategories()
+    {
+        $types = $this->getDataConfig('category','categories_filtering');
+        if($types != null)
+            return explode(',', $types);
+        else
+            return null;
+    }
+
+    public function getSearchCategories()
+    {
+        $types = $this->getDataConfig('category','categories_searching');
+        if($types != null)
+            return explode(',', $types);
+        else
+            return null;
+    }
 }

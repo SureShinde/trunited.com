@@ -250,6 +250,9 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
         $from = $values['from'];
         $to = $values['to'];
 
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+
         $item_collection = Mage::getModel('trubox/item')->getCollection()
             ->addFieldToSelect('product_id')
             ->addFieldToSelect('qty')
@@ -262,6 +265,9 @@ class Magestore_TruBox_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_
             $item_collection->getSelect()->having('SUM(qty) <= ' . $to);
         else if ($from != null && $to == null)
             $item_collection->getSelect()->having('SUM(qty) >= ' . $from);
+
+        $qty = $readConnection->fetchCol($item_collection->getSelect());
+        $collection->addAttributeToFilter('entity_id', array('in' => $qty));
         return $this;
     }
 

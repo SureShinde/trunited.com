@@ -5,8 +5,8 @@ $installer->startSetup();
 
 $installer->run("
 
-DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
-            CREATE TABLE {$setup->getTable('manageapi/linkshare')} (
+DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
+            CREATE TABLE {$this->getTable('manageapi/linkshare')} (
               `linkshare_id` int(11) unsigned NOT NULL auto_increment,
               `member_id` int(11) unsigned NOT NULL,
               `advertiser_name` varchar(255) NOT NULL,
@@ -19,8 +19,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`linkshare_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/hotelactions')};
-            CREATE TABLE {$setup->getTable('manageapi/hotelactions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/hotelactions')};
+            CREATE TABLE {$this->getTable('manageapi/hotelactions')} (
               `hotel_actions_id` int(10) unsigned NOT NULL auto_increment,
               `confirmed_subtotal` text NULL DEFAULT '',
               `confirmed_commission` text NULL DEFAULT '',
@@ -86,8 +86,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`hotel_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/flightactions')};
-            CREATE TABLE {$setup->getTable('manageapi/flightactions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/flightactions')};
+            CREATE TABLE {$this->getTable('manageapi/flightactions')} (
               `flight_actions_id` int(10) unsigned NOT NULL auto_increment,
               `air_offer_id` INT(10) NULL ,
               `reservation_date_time` datetime NULL ,
@@ -145,8 +145,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`flight_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/caractions')};
-            CREATE TABLE {$setup->getTable('manageapi/caractions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/caractions')};
+            CREATE TABLE {$this->getTable('manageapi/caractions')} (
               `car_actions_id` int(10) unsigned NOT NULL auto_increment,
               `driver_fname` VARCHAR (255) NULL ,
               `driver_lname` VARCHAR (255) NULL ,
@@ -224,8 +224,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`car_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/vacationactions')};
-            CREATE TABLE {$setup->getTable('manageapi/vacationactions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/vacationactions')};
+            CREATE TABLE {$this->getTable('manageapi/vacationactions')} (
               `vacation_actions_id` int(10) unsigned NOT NULL auto_increment,
               `date` datetime NULL ,
               `car_driver_fname` text NULL ,
@@ -302,8 +302,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`vacation_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/cjactions')};
-            CREATE TABLE {$setup->getTable('manageapi/cjactions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/cjactions')};
+            CREATE TABLE {$this->getTable('manageapi/cjactions')} (
               `cj_actions_id` int(10) unsigned NOT NULL auto_increment,
               `action_status` VARCHAR(255) NULL,
               `action_type` VARCHAR(255) NULL,
@@ -329,8 +329,8 @@ DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshare')};
               PRIMARY KEY (`cj_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            DROP TABLE IF EXISTS {$setup->getTable('manageapi/targetactions')};
-            CREATE TABLE {$setup->getTable('manageapi/targetactions')} (
+            DROP TABLE IF EXISTS {$this->getTable('manageapi/targetactions')};
+            CREATE TABLE {$this->getTable('manageapi/targetactions')} (
               `target_actions_id` int(10) unsigned NOT NULL auto_increment,
               `referral_date` text NULL,
               `action_date` datetime NULL,
