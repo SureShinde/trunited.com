@@ -26,14 +26,7 @@
                 <?php echo $this->getChildHtml('topLinks'); ?>
             </div>
             <p class="welcome-msg"><?php echo $this->getChildHtml('welcome'); ?> <?php echo $this->getAdditionalHtml(); ?></p>
-            <form id="search_header_form" action="<?php echo $this->getUrl('catalogsearch/result/');?>" method="get">
-                <div class="form-search no-padding">
-                    <input id="search_header" type="text" name="q" class="input-text" title=""
-                           placeholder="<?php echo $this->__('Search Trunited and Global Brands');?>" autocomplete="off" />
-                    <button type="submit" title="Search" class="button"><i class="icon-search"></i></button>
-                    <div class="clearer"></div>
-                </div>
-            </form>
+            <?php //echo $this->getChildHtml('topSearch');?>
             <div class="clearer"></div>
         </div>
     </div>
