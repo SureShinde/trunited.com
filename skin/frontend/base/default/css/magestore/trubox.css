@@ -320,18 +320,31 @@ ul.ui-widget-content.ui-autocomplete
     padding: 6px .4em;
 }
 
-#search_header_form #search_header{
+#search_header_form #search{
     padding-right: 33px;
     min-width: 30%;
     margin-left: 10%;
+    height: 30px;
 }
 
 #search_header_form button
 {
-    height: 25px;
+    height: 30px;
     width: 40px;
     background-color: transparent;
     color: black;
     position: absolute;
     margin-left: -37px;
+}
+
+#search_header_form .form-search .search-autocomplete ul {
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+#search_header_form .form-search .search-autocomplete ul li{
+    text-align: left;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #777;
 }
