@@ -26,7 +26,7 @@
                 <?php echo $this->getChildHtml('topLinks'); ?>
             </div>
             <p class="welcome-msg"><?php echo $this->getChildHtml('welcome'); ?> <?php echo $this->getAdditionalHtml(); ?></p>
-            <?php //echo $this->getChildHtml('topSearch');?>
+            <?php echo $this->getChildHtml('topSearch');?>
             <div class="clearer"></div>
         </div>
     </div>
@@ -41,10 +41,10 @@
             <?php echo $this->getChildHtml('minicart'); ?>
         </div>
         <div class="menu-icon"><a href="javascript:void(0)" title="<?php echo $this->__('Menu'); ?>"><i class="fa fa-bars"></i></a></div>
-        <div class="search-area">
-            <a href="javascript:void(0)" class="search-icon"><i class="icon-search"></i></a>
-            <?php echo $this->getChildHtml('topSearch'); ?>
-        </div>
+<!--        <div class="search-area">-->
+<!--            <a href="javascript:void(0)" class="search-icon"><i class="icon-search"></i></a>-->
+<!--            --><?php //echo $this->getChildHtml('topSearch'); ?>
+<!--        </div>-->
         <?php echo $this->getChildHtml('topMenu') ?>
         <?php echo $this->getChildHtml("demo_header_tooltip"); ?>
     </div>
