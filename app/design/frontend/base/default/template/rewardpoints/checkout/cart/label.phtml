@@ -33,6 +33,8 @@
     $_earningPoints = $this->getEarningPoint();
     $_bonusPoints = $this->getBonusPoint();
     $_earningPointsByCoupon = Mage::helper('rewardpoints/calculation_earning')->getEarningPointByCoupon();
+    $session = Mage::getSingleton('customer/session');
+    $_dt = $session->getData('event_discount');
     ?>
     <?php if ($_spendingPoint || $_earningPoints  || $_earningPointsByCoupon): ?>
         <?php if ($this->getColspan() == 1): ?><thead><?php endif ?>
@@ -43,7 +45,18 @@
                                 echo $this->__('Customer will earn');
                             else {
                                 if(Mage::getSingleton('customer/session')->isLoggedIn() || $this->getQuote()->getCustomerGroupId() > 0){
-                                    echo $this->__('You will earn');
+                                    if($_dt == null)
+                                        echo $this->__('You will earn');
+                                    else {
+                                        if(isset($_dt['type']) && $_dt['type'] == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_FIXED)
+                                        {
+                                            echo $this->__('You will earn (+ '. $_dt['amount'].' point from event)');
+                                        } else if(isset($_dt['type']) && $_dt['type'] == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_PERCENT){
+                                            echo $this->__('You will earn (+ '. $_dt['amount'].'% point from event)');
+                                        } else {
+                                            echo $this->__('You will earn');
+                                        }
+                                    }
                                 }else{
 									if(Mage::helper('core')->isModuleOutputEnabled('Magestore_Onestepcheckout') && $this->getRequest()->getModuleName() == 'onestepcheckout'){
 										echo "<a href='javascript:void(0);' onclick='login_popup.show();'>".$this->__('Login')."</a> ". $this->__('to earn');

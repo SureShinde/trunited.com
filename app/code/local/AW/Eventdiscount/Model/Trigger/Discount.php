@@ -28,7 +28,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 {
     public function setDiscount($observer)
     {
-
+        $session = Mage::getSingleton('customer/session');
         if (!Mage::getModel('customer/session')->isLoggedIn()) {
             return $this;
         }
@@ -42,10 +42,11 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 
 
         if (empty($actions)) {
+            $session->unsetData('event_discount');
             return $this;
         }
 
-        $session = Mage::getSingleton('customer/session');
+
         $quote = $observer->getEvent()->getQuote();
 
         //add one by one discounts
@@ -58,14 +59,8 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                 continue;
             }
 
-            /*if ($action['type'] === AW_Eventdiscount_Model_Source_Action::FIXED) {
-                $baseDiscount = $action['action'];
-            }
-            if ($action['type'] === AW_Eventdiscount_Model_Source_Action::PERCENT) {
-                $baseDiscount = $action['action'] / 100 * $quote->getBaseSubtotalWithDiscount();
-            }*/
-
             $baseDiscount = $this->calculateDiscount($action['timer_id'], $action['type'], $action['action'], $quote);
+            $awardPoint = $this->calculatePoint($action['timer_id'], $quote);
 
             if ($baseDiscount == 0) {
                 continue;
@@ -74,7 +69,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             $action['action'] = $baseDiscount;
             $discount = Mage::app()->getStore()->convertPrice($baseDiscount);
             $formattedPrice = Mage::helper('core')->currency($baseDiscount, true, false);
-            $discountDescription = Mage::helper('eventdiscount')->__('Discount Login')
+            $discountDescription = Mage::helper('eventdiscount')->__('Discount Event')
                 . (count($actions) > 1 ? '&nbsp;#' . $numberPromo++ : '')
                 . '&nbsp;-&nbsp;' . $formattedPrice
             ;
@@ -104,6 +99,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                     ->setGrandTotal(0)
                     ->setBaseGrandTotal(0)
                 ;
+
                 if ($address->getAddressType() == $canAddItems) {
                     $address
                         ->setSubtotal((float)$quote->getSubtotal())
@@ -117,6 +113,17 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                     if ($address->getDiscountDescription()) {
                         $discountDescription = $address->getDiscountDescription() . ', ' . $discountDescription;
                     }
+
+                    if($awardPoint['point'] > 0)
+                    {
+                        $session->setData('event_discount', array(
+                            'amount' => $awardPoint['amount'],
+                            'type' => $awardPoint['type'],
+                        ));
+                        $address->setRewardpointsEarn($awardPoint['point']);
+                    }
+
+
                     $address
                         ->setDiscountDescription($discountDescription)
                         ->setBaseDiscountAmount($address->getBaseDiscountAmount() - $baseDiscount)
@@ -164,5 +171,34 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
         }
 
         return $discount;
+    }
+
+    public function calculatePoint($timer_id, $quote)
+    {
+        $point = 0;
+        $product_collection = Mage::helper('eventdiscount')->getTimerProductCollection($timer_id);
+        $timer = Mage::getModel('aweventdiscount/timer')->load($timer_id);
+
+        if(sizeof($product_collection) > 0)
+        {
+            $product_ids = $product_collection->getColumnValues('product_id');
+
+            foreach ($quote->getAllItems() as $item) {
+                if(in_array($item->getProduct()->getId(), $product_ids))
+                {
+                    $product_point = Mage::helper('rewardpointsrule/calculation_earning')->getCatalogItemEarningPoints($item);
+                    if($timer->getPointType() == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_FIXED)
+                        $point += $timer->getPointAmount() * $item->getQty();
+                    else if($timer->getPointType() == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_PERCENT)
+                        $point += ($timer->getPointAmount() / 100) * $item->getQty() * $product_point;
+                }
+            }
+        }
+
+        return array(
+            'point' => $point,
+            'type'  => $timer->getPointType(),
+            'amount'  => $timer->getPointAmount(),
+        );
     }
 }

@@ -1,0 +1,22 @@
+<div class="box-account box-info box-trugiftcard-summary">
+    <div class="box-head">
+        <h2><?php echo $this->__('Trunited Gift Card Information') ?></h2>
+    </div>
+    <div class="info-summary">
+        <p><strong>
+                <?php echo $this->__('Your Trunited Gift Card balance is') ?>
+                <strong class="trugiftcard-money"><?php echo $this->getTrugiftcardCredit() ?></strong>
+                <img src="<?php echo $this->getSkinUrl('images/trugiftcard/trugiftcard.png') ?>" alt="truGiftCard"
+                     style="display: inline-block;">
+            </strong>
+            <br/>
+        </p>
+
+        <p><strong class="trugiftcard-money">
+                <a href="<?php echo $this->getUrl('trugiftcard/index/index') ?>"
+                   title="<?php echo $this->__('View My Trunited Gift Card') ?>">
+                    <?php echo $this->__('View My Trunited Gift Card') ?>
+                </a>
+            </strong></p>
+    </div>
+</div>

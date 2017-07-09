@@ -3,6 +3,9 @@
     $helper_richsnippets = $this->helper('porto/richsnippets');
     $store = Mage::app()->getStore();
     $code  = $store->getCode();
+    $is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+    $customer_id = $is_logged ? Mage::getSingleton('customer/session')->getCustomer()->getId() : '#';
+    $login_url = Mage::helper('customproduct')->getLoginUrl();
 ?>
 <?php $_product = $this->getProduct(); ?>
 <?php
@@ -20,10 +23,16 @@
     $sticky_header = "";
     if(!Mage::getStoreConfig("porto_settings/header/sticky_header", $code))
         $sticky_header = "no-sticky-header";
+
+    $is_applied_product_type = Mage::helper('customproduct')->isAppliedToProductType($product->getTypeId());
+    $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);
+
 ?>
+<?php if(!$is_applied_product_type){?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
+<?php }?>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <div class="product-view <?php if($move_product_tab): ?>moved-tab<?php endif;?>" <?php if($enabled_richsnippets): ?><?php echo $helper_richsnippets->getProductItemscope(); ?><?php endif; ?>>
     <div class="product-essential">
@@ -178,9 +187,14 @@ if($enable_addtocart_sticky){
                 <?php if ($_product->getShortDescription()):?>
                     <div class="short-description">
                         <h2><?php echo $this->__('Quick Overview') ?></h2>
-                        <div class="std" <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
+                        <div class="std" <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>>
+                            <?php
+                            echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description'));
+                            ?>
+                        </div>
                     </div>
                 <?php endif;?>
+                <?php if(!$is_applied_product_type){?>
                 <div class="product-info">
                     <div <?php if($enabled_richsnippets) echo $helper_richsnippets->getOfferItemscope(); ?>>
                         <?php echo $this->getChildHtml('product_type_data'); ?>
@@ -197,21 +211,43 @@ if($enable_addtocart_sticky){
                     <?php echo $this->getChildHtml('alert_urls') ?>
                     <?php echo $this->getChildHtml('other');?>
                 </div>
+                <?php }?>
                 <?php if (!$this->hasOptions()):?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
-                        <?php if($_product->isSaleable()): ?>
-                            <?php echo $this->getChildHtml('addtocart') ?>
-                            <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                        <?php if($is_applied_product_type ){?>
+                            <?php if($shop_now_url != null){?>
+                                <div class="shop-now">
+                                    <a href="<?php echo $shop_now_url;?>"
+                                       rel="nofollow" target="_blank" class="custom-url">
+                                        <?php echo $this->__('SHOP NOW');?></a>
+                                </div>
+                            <?php }?>
+                        <?php } else {?>
+                            <?php if($_product->isSaleable()): ?>
+                                <?php echo $this->getChildHtml('addtocart') ?>
+                                <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                                <?php endif; ?>
                             <?php endif; ?>
-                        <?php endif; ?>
-                        <?php echo $this->getChildHtml('addto') ?>
+                            <?php echo $this->getChildHtml('addto') ?>
+                        <?php }?>
                     </div>
                     <?php echo $this->getChildHtml('extra_buttons') ?>
                 <?php elseif (!$_product->isSaleable()): ?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
-                        <?php echo $this->getChildHtml('addto') ?>
+                        <?php if($is_applied_product_type){?>
+                            <?php if($shop_now_url != null){?>
+                            <div class="shop-now">
+                                <a href="<?php echo $shop_now_url;?>"
+                                   rel="nofollow" target="_blank" class="custom-url">
+                                    <?php echo $this->__('SHOP NOW');?></a>
+                            </div>
+                            <?php }?>
+
+                        <?php } else{?>
+                            <?php echo $this->getChildHtml('addto') ?>
+                        <?php }?>
                     </div>
                 <?php endif; ?>
 
@@ -420,6 +456,19 @@ if($enable_addtocart_sticky){
     </div>
     <?php echo $this->getChildHtml('upsell_products'); ?>
 </div>
+<?php if(!$is_logged){?>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j(document).ready(function() {
+            $j('a.custom-url').fancybox({
+                autoHeight: true,
+                minHeight: 10,
+                content: '<?php echo $login_url;?>'
+            });
+        });
+
+    </script>
+<?php }?>
 <script type="text/javascript">
     jQuery(function($){
         $("body.quickview-index-view .no-rating a, body.quickview-index-view .ratings a").off('click').on("click",function(e){

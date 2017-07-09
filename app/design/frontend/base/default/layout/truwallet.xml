@@ -31,6 +31,7 @@
                 <block type="rewardpoints/account" name="rewardpoints.account_dashboard"
                        template="rewardpoints/account.phtml"/>
                 <block type="truwallet/account" name="truwallet.account_dashboard" template="truwallet/account.phtml"/>
+                <block type="trugiftcard/account" name="trugiftcard.account_dashboard" template="trugiftcard/account.phtml"/>
                 <block type="sales/order_recent" name="sales.order_recent" template="sales/order/recent.phtml"/>
             </block>
         </reference>

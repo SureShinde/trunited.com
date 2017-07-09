@@ -1,7 +1,7 @@
 .aw_eventdiscount_timer_container_default {
     margin-bottom: 5px;
          font: 12px/1.5em Arial, Helvetica, sans-serif;
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
 }
 *+html .aw_eventdiscount_timer_container_default {
     width:213px;
@@ -22,15 +22,17 @@ a.aw_eventdiscount_timer_container_default {
 }
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_days_container {
     float: left;
+    width: 25%;
 }
 
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_hours_container {
     float: left;
-    margin-left: 10px;
+    width: 25%;
 }
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_minutes_container,
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_seconds_container {
     float: left;
+    width: 20%;
 }
 .aw_eventdiscount_timer_container_default span.aw_eventdiscount_days,
 .aw_eventdiscount_timer_container_default span.aw_eventdiscount_hours,
@@ -77,14 +79,13 @@ a.aw_eventdiscount_timer_container_default {
 }
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_title {
     font-size: 17px;
-    background-color: #FFFFFF;
     color: #07AFF7;
-    width: 210px;
+    margin: 10px 0;
 }
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_notice {
-    background-color: #FFFFFF;
-    color: #07AFF7;
-    width: 210px;
+    color: #07aff7;
+    margin: 10px;
+    font-size: 15px;
 }
 .aw_eventdiscount_timer_container_default div.aw_eventdiscount_timer_close {
     float: right;
@@ -106,19 +107,29 @@ a.aw_eventdiscount_timer_container_default {
     text-align: center;
 }
 .aw_days{
-    width: 24%;
+    width: 26%;
 }
 .aw_hours{
     width: 24%;
 }
 .aw_mins{
-    width: 29%;
+    width: 26%;
 }
 .aw_secs{
-    width: 23%;
+    width: 20%;
 }
 .aw_transparent {
     opacity:0;
     -moz-opacity:0;
     filter:alpha(opacity=0);
+}
+
+.alert button.close
+{
+    float: right;
+    font-size: 20px;
+}
+
+.alert{
+    padding: 0 !important;
 }

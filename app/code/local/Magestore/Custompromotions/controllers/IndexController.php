@@ -568,4 +568,66 @@ INSERT INTO {$setup->getTable('mobile_codes')} (`id`, `iso`, `name`, `nicename`,
 
     }
 
+    public function addLanguageAction()
+    {
+        $setup = new Mage_Eav_Model_Entity_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("");
+
+        $entityTypeId = $setup->getEntityTypeId('customer');
+        $attributeSetId = $setup->getDefaultAttributeSetId($entityTypeId);
+        $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
+
+
+        $installer->addAttribute("customer", "preferred_language",  array(
+            "type"     => "varchar",
+            "backend"  => "eav/entity_attribute_backend_array",
+            "label"    => "Preferred Language",
+            "input"    => "select",
+            "source"   => "eav/entity_attribute_source_table",
+            "visible"  => true,
+            "required" => false,
+            "default" => "",
+            "frontend" => "",
+            "unique"     => true,
+            "note"       => "Preferred Language",
+            'option'     => [
+                'values' => [
+                    'english' => 'English',
+                    'spanish' => 'Spanish',
+                ]
+            ],
+
+        ));
+
+        $attribute   = Mage::getSingleton("eav/config")->getAttribute("customer", "preferred_language");
+        $setup->addAttributeToGroup(
+            $entityTypeId,
+            $attributeSetId,
+            $attributeGroupId,
+            'preferred_language',
+            '101'
+        );
+
+        $used_in_forms=array();
+        $used_in_forms[]="adminhtml_customer";
+        $used_in_forms[]="checkout_register";
+        $used_in_forms[]="customer_account_create";
+        $used_in_forms[]="customer_account_edit";
+        $used_in_forms[]="adminhtml_checkout";
+
+        $attribute->setData("used_in_forms", $used_in_forms)
+            ->setData("is_used_for_customer_segment", true)
+            ->setData("is_system", 0)
+            ->setData("is_user_defined", 1)
+            ->setData("is_visible", 1)
+            ->setData("sort_order", 100)
+        ;
+        $attribute->save();
+
+        $installer->endSetup();
+        echo "success";
+    }
+
 }

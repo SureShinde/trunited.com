@@ -1,4 +1,7 @@
-<?php if($this->getCollection()->getSize()): ?>
+<?php if($this->getCollection()->getSize()):
+    $postData = Mage::app()->getRequest()->getParam('alpha');
+    $keywordData = Mage::app()->getRequest()->getParam('quick_keyword');
+?>
 <div class="toolbar">
     <?php if( $this->isExpanded() ): ?>
     <div class="sorter">
@@ -6,7 +9,8 @@
             <label><?php echo $this->__('Sort By') ?>:</label>
             <select onchange="setLocation(this.value)">
             <?php foreach($this->getAvailableOrders() as $_key=>$_order): ?>
-                <option value="<?php echo $this->getOrderUrl($_key, 'asc') ?>"<?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
+                <option value="<?php echo $this->getNewUrl($postData, $keywordData, $this->getOrderUrl($_key, 'asc'))?>"
+                    <?php if($this->isOrderCurrent($_key)): ?> selected="selected"<?php endif; ?>>
                     <?php echo $this->__($_order) ?>
                 </option>
             <?php endforeach; ?>
@@ -26,7 +30,7 @@
                 <?php if($this->isModeActive($_code)): ?>
                     <strong title="<?php echo $_label ?>" class="<?php echo strtolower($_code); ?>"><i class="icon-mode-<?php echo strtolower($_code); ?>"></i></strong>&nbsp;
                 <?php else: ?>
-                    <a href="<?php echo $this->getModeUrl($_code) ?>" title="<?php echo $_label ?>" class="<?php echo strtolower($_code); ?>"><i class="icon-mode-<?php echo strtolower($_code); ?>"></i></a>&nbsp;
+                    <a href="<?php echo $this->getNewUrl($postData, $keywordData, $this->getModeUrl($_code));?>" title="<?php echo $_label ?>" class="<?php echo strtolower($_code); ?>"><i class="icon-mode-<?php echo strtolower($_code); ?>"></i></a>&nbsp;
                 <?php endif; ?>
             <?php endforeach; ?>
             <?php endif; ?>
@@ -46,7 +50,7 @@
             <label><?php echo $this->__('Show') ?>:</label>
             <select onchange="setLocation(this.value)">
             <?php foreach ($this->getAvailableLimit() as  $_key=>$_limit): ?>
-                <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
+                <option value="<?php echo $this->getNewUrl($postData, $keywordData, $this->getLimitUrl($_key));?>" <?php if($this->isLimitCurrent($_key)): ?> selected="selected"<?php endif ?>>
                     <?php echo $_limit ?>
                 </option>
             <?php endforeach; ?>

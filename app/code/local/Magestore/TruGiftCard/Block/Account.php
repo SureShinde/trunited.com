@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Magestore
  * 
@@ -15,16 +14,26 @@
  * version in the future.
  * 
  * @category    Magestore
- * @package     Magestore_RewardPointsCoupon
+ * @package     Magestore_TruGiftCard
  * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
  * @license     http://www.magestore.com/license-agreement.html
  */
--->
-<config>
-    <modules>
-        <Magestore_RewardPointsCoupon>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Magestore_RewardPointsCoupon>
-    </modules>
-</config>
+
+/**
+ * TruGiftCard show on customer account dashboard Block
+ * 
+ * @category    Magestore
+ * @package     Magestore_TruGiftCard
+ * @author      Magestore Developer
+ */
+class Magestore_TruGiftCard_Block_Account extends Mage_Core_Block_Template
+{
+    public function _prepareLayout(){
+        return parent::_prepareLayout();
+    }
+
+    public function getTruGiftCardCredit()
+    {
+        return Mage::helper('trugiftcard/account')->getTruGiftCardCredit();
+    }
+}

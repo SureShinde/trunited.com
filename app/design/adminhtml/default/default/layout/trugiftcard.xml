@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<adminhtml_system_config_edit>
+		<reference name="head">
+			<action method="addJs"><file>jscolor/jscolor.js</file></action>
+		</reference>
+	</adminhtml_system_config_edit>
+
+	<trugiftcardadmin_adminhtml_trugiftcard_index>
+		<reference name="content">
+			<block type="trugiftcard/adminhtml_trugiftcard" name="trugiftcard" />
+		</reference>
+	</trugiftcardadmin_adminhtml_trugiftcard_index>
+	<trugiftcardadmin_adminhtml_customer_index>
+		<reference name="content">
+			<block type="trugiftcard/adminhtml_customer" name="trugiftcard.customer" />
+		</reference>
+	</trugiftcardadmin_adminhtml_customer_index>
+	<trugiftcardadmin_adminhtml_transaction_index>
+		<reference name="content">
+			<block type="trugiftcard/adminhtml_transaction" name="trugiftcard.transaction" />
+		</reference>
+	</trugiftcardadmin_adminhtml_transaction_index>
+
+	<adminhtml_customer_edit>
+		<reference name="customer_edit_tabs">
+			<action method="addTab">
+				<name>trugiftcard_tab</name>
+				<block>trugiftcard/adminhtml_customer_edit_tab_trugiftcard</block>
+			</action>
+		</reference>
+	</adminhtml_customer_edit>
+	<trugiftcardadmin_adminhtml_customer_grid>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="trugiftcard/adminhtml_customer_edit_tab_history" name="trugiftcard_history" />
+		</block>
+	</trugiftcardadmin_adminhtml_customer_grid>
+
+	<!-- SHOW DISCOUNT ORDER, INVOICE, PDF, EMAIL -->
+
+	<!--<adminhtml_sales_order_view>
+		<reference name="order_totals">
+			<block type="trugiftcard/order_totals" />
+		</reference>
+	</adminhtml_sales_order_view>
+
+	<adminhtml_sales_order_invoice_new>
+		<reference name="invoice_totals">
+			<block type="trugiftcard/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_new>
+	<adminhtml_sales_order_invoice_updateqty>
+		<reference name="invoice_totals">
+			<block type="trugiftcard/order_invoice_totals"/>
+		</reference>
+	</adminhtml_sales_order_invoice_updateqty>
+	<adminhtml_sales_order_invoice_view>
+		<reference name="invoice_totals">
+			<block type="trugiftcard/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_view>
+
+	<adminhtml_sales_order_invoice_print>
+		<reference name="invoice_totals">
+			<block type="trugiftcard/order_invoice_totals" />
+		</reference>
+	</adminhtml_sales_order_invoice_print>
+
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/order_creditmemo_totals" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_updateqty>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/order_creditmemo_totals" />
+		</reference>
+		<reference name="submit_before">
+			<block type="trugiftcard/order_creditmemo_controls" name="trugiftcard.balance" template="trugiftcard/sales/creditmemo/refund.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_updateqty>
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="submit_before">
+			<block type="trugiftcard/order_creditmemo_controls" name="trugiftcard.balance" template="trugiftcard/sales/creditmemo/refund.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_view>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/order_creditmemo_totals" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_view>
+
+	<adminhtml_sales_order_create_index>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/magestore/trugiftcard.js</name>
+				<params/>
+			</action>
+		</reference>
+		<reference name="items_grid">
+			<block type="trugiftcard/order_create_credit" template="trugiftcard/form.phtml" name="trugiftcard.using" />
+		</reference>
+	</adminhtml_sales_order_create_index>
+	<adminhtml_sales_order_create_load_block_data>
+		<reference name="items_grid">
+			<block type="trugiftcard/order_create_credit" template="trugiftcard/form.phtml" name="trugiftcard.using" />
+		</reference>
+	</adminhtml_sales_order_create_load_block_data>
+	<adminhtml_sales_order_create_load_block_items>
+		<reference name="items_grid">
+			<block type="trugiftcard/order_create_credit" template="trugiftcard/form.phtml" name="trugiftcard.using" />
+		</reference>
+	</adminhtml_sales_order_create_load_block_items>
+
+	<adminhtml_sales_order_view>
+		<reference name="order_totals">
+			<block type="trugiftcard/adminhtml_totals_order_point" name="trugiftcard.total.point" />
+		</reference>
+	</adminhtml_sales_order_view>
+
+	<adminhtml_sales_order_creditmemo_new>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/adminhtml_totals_creditmemo_point" name="trugiftcard.total.point" />
+		</reference>
+		<reference name="submit_before">
+			<block type="trugiftcard/adminhtml_totals_creditmemo_rewards" name="trugiftcard.total.earned" template="trugiftcard/totals/creditmemo/rewards.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_new>
+	<adminhtml_sales_order_creditmemo_updateqty>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/adminhtml_totals_creditmemo_point" name="trugiftcard.total.point" />
+		</reference>
+		<reference name="submit_before">
+			<block type="trugiftcard/adminhtml_totals_creditmemo_rewards" name="trugiftcard.total.earned" template="trugiftcard/totals/creditmemo/rewards.phtml" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_updateqty>
+	<adminhtml_sales_order_creditmemo_view>
+		<reference name="creditmemo_totals">
+			<block type="trugiftcard/adminhtml_totals_creditmemo_point" name="trugiftcard.total.point" />
+		</reference>
+	</adminhtml_sales_order_creditmemo_view>-->
+
+</layout>

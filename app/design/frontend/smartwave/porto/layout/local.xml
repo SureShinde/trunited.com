@@ -38,6 +38,7 @@
             <action method="addCss"><stylesheet>css/animate.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/porto.js</name></action>
             <action method="addJs"><script>smartwave/bootstrap/js/bootstrap.min.js</script></action>
+            <action method="addJs"><script>smartwave/bootstrap/js/bootstrap-notify.min.js</script></action>
             <action method="addItem"><type>skin_js</type><name>js/lib/imagesloaded.js</name></action>
             
             <action method="removeItem"><type>skin_css</type><name>css/styles.css</name></action> 
