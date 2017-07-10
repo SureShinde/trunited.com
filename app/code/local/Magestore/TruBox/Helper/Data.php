@@ -75,6 +75,36 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/general/physical_only_product');
     }
 
+    public function isEnableCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/enable_coupon_code');
+    }
+
+    public function getCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/coupon_code');
+    }
+
+    public function getStartCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/start_date_code');
+    }
+
+    public function getEndCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/end_date_code');
+    }
+
+    public function getTypeCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/type_code');
+    }
+
+    public function getAmountCouponCode()
+    {
+        return Mage::getStoreConfig('trubox/general/coupon_code_amount');
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
@@ -279,6 +309,43 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
             ->addFieldToFilter('customer_id',Mage::getSingleton('customer/session')->getCustomer()->getId())
             ->addFieldToFilter('onestepcheckout_giftwrap_amount', 0)
             ->setOrder('created_at', 'desc');
+    }
+
+    public function checkOrderFromTruBox($customer_id)
+    {
+        $order_collection = Mage::getModel('sales/order')->getCollection()
+            ->addFieldToFilter('state', array('in' => Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates()))
+            ->addFieldToFilter('status', array('in' => array(
+                Mage_Sales_Model_Order::STATE_COMPLETE,
+                Mage_Sales_Model_Order::STATE_PROCESSING,
+            )))
+            ->addAttributeToFilter('customer_id', $customer_id)
+            ->addAttributeToFilter('created_by', Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES)
+            ->getFirstItem()
+            ;
+
+        if(isset($order_collection) && $order_collection->getId())
+            return true;
+        else
+            return false;
+    }
+
+    public function hasSaveCode($customer_id)
+    {
+        $customer = Mage::getModel('customer/customer')->load($customer_id);
+        if(!isset($customer) || !$customer->getId())
+            return null;
+
+        $coupon_collection = Mage::getModel('trubox/coupon')->getCollection()
+            ->addFieldToFilter('customer_id', $customer_id)
+            ->addFieldToFilter('status', Magestore_TruBox_Model_Status::COUPON_CODE_STATUS_PENDING)
+            ->getFirstItem()
+            ;
+
+        if($coupon_collection->getId())
+            return $coupon_collection;
+        else
+            return null;
     }
 
 }

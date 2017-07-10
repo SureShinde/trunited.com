@@ -81,6 +81,10 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         return Mage::getBaseUrl() . 'trubox/index/savePayment';
     }
 
+    public function saveCouponCodeUrl() {
+        return Mage::getBaseUrl() . 'trubox/index/saveCouponCode';
+    }
+
     public function deleteItemsUrl($id) {
         return Mage::getBaseUrl() . 'trubox/index/deleteItems?id=' . $id;
     }
@@ -272,6 +276,16 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     public function getListOrders()
     {
         return Mage::helper('trubox')->getOrdersByCustomer();
+    }
+
+    public function isEnableCouponCode()
+    {
+        return Mage::helper('trubox')->isEnableCouponCode();
+    }
+
+    public function hasCouponCode()
+    {
+        return Mage::helper('trubox')->hasSaveCode(Mage::getSingleton('customer/session')->getCustomer()->getId());
     }
 
 }

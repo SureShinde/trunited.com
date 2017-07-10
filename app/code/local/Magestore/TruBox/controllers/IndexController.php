@@ -587,6 +587,32 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         echo "success";
     }
 
+    public function updateDb7Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            DROP TABLE IF EXISTS {$setup->getTable('trubox/coupon')};
+
+            CREATE TABLE {$setup->getTable('trubox/coupon')} (
+              `trubox_coupon_id` int(10) unsigned NOT NULL auto_increment,
+              `customer_id` int(10) NOT NULL,
+              `order_id` int(10) NULL,
+              `coupon_code` VARCHAR(255) NOT NULL,
+              `type_code` smallint(6) NOT NULL,
+              `amount` smallint(6) NOT NULL,
+              `status` smallint(6) NOT NULL,
+              `updated_time` datetime NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`trubox_coupon_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
     public function updatePriceAction()
     {
         Mage::helper('trubox/item')->updatePrice();
@@ -658,6 +684,75 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         }
 
         echo 'success';
+    }
+
+    public function saveCouponCodeAction()
+    {
+        $coupon_code = $this->getRequest()->getParam('coupon_code');
+        $helper = Mage::helper('trubox');
+        $enable = $helper->isEnableCouponCode();
+        $default_code = $helper->getCouponCode();
+        $start_date = $helper->getStartCouponCode();
+        $end_date = $helper->getEndCouponCode();
+
+        try{
+            if(!$enable)
+                throw new Exception(
+                    $helper->__('The coupon code has been disabled.')
+                );
+
+            if(strtotime($start_date) > time() || strtotime($end_date) < time() || $start_date == null || $end_date == null)
+                throw new Exception(
+                    $helper->__('The coupon code has not been started.')
+                );
+
+            if($default_code == null)
+                throw new Exception(
+                    $helper->__('The coupon code has not been configured.')
+                );
+
+            if(!isset($coupon_code) || $coupon_code == null){
+               throw new Exception(
+                   $helper->__('The coupon code is not valid. Please enter the new coupon code.')
+                );
+            }
+
+            if(strcasecmp($coupon_code, $default_code) != 0)
+                throw new Exception(
+                    $helper->__('The coupon code was wrong. Please enter the new coupon code and try it again.')
+                );
+
+            $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+            $check_order = $helper->checkOrderFromTruBox($customer_id);
+            if($check_order)
+                throw new Exception(
+                    $helper->__('You had the orders from TruBox before. So, you can\'t save this code.')
+                );
+
+            $coupon_model = Mage::getModel('trubox/coupon');
+            $data = array(
+                'customer_id'   => $customer_id,
+                'coupon_code'   => $coupon_code,
+                'type_code'   => $helper->getTypeCouponCode(),
+                'amount'   => $helper->getAmountCouponCode(),
+                'status'   => Magestore_TruBox_Model_Status::COUPON_CODE_STATUS_PENDING,
+                'updated_time'   => now(),
+                'created_time'   => now(),
+            );
+            $coupon_model->setData($data);
+            $coupon_model->save();
+
+            Mage::getSingleton('core/session')->addSuccess(
+                $helper->__('The promotion code has been saved successfully!')
+            );
+
+        } catch (Exception $ex) {
+            Mage::getSingleton('core/session')->addError(
+                $ex->getMessage()
+            );
+        }
+
+        $this->_redirectUrl(Mage::getUrl('*/*/'));
     }
 
 }

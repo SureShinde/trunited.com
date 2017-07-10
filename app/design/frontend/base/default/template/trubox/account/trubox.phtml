@@ -64,8 +64,41 @@ $orders = $this->getCollection();
         ?>
     </div>
     <br style="clear: both"/>
+    <?php if($this->isEnableCouponCode()){?>
     <hr class="share_separate"/>
-
+    <div class="trubox-coupon-code">
+        <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
+        <?php $code = $this->hasCouponCode();?>
+        <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
+            <?php if($code == null){?>
+            <div class="fieldsets">
+                <ul class="form-list">
+                    <li class="fields">
+                        <div class="wide">
+                            <label for="telephone" class="required"><em>*</em>
+                                <?php echo $this->__('Enter promotion code') ?>
+                            </label>
+                            <div class="input-box">
+                                <input type="text" name="coupon_code" value="" title="<?php echo $this->__('The promotion code') ?>" class="input-text required-entry"
+                                       id="coupon_code" placeholder="<?php echo $this->__('Enter the promotion code') ?>">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="buttons-set">
+                <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
+                <button class="button btn-cart" type="submit">
+                    <span><span><?php echo $this->__('Save Coupon Code') ?></span></span>
+                </button>
+            </div>
+            <?php } else {?>
+                <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode()));?></p>
+            <?php }?>
+        </form>
+    </div>
+    <?php }?>
+    <hr class="share_separate"/>
     <div class="box-account box-info box-trubox-summary">
         <div class="trubox-items">
             <h2 class="trubox-header"><?php echo $this->__('Trubox Items') ?></h2>
@@ -331,7 +364,7 @@ $orders = $this->getCollection();
             <?php } ?>
         </div>
     </div>
-    <hr class="share_separate">
+    <hr class="share_separate" />
     <?php if (Mage::helper('trubox')->isEnableOrdersSection()) { ?>
         <div class="box-account box-info box-trubox-summary">
             <div class="trubox-orders">
@@ -762,6 +795,7 @@ $orders = $this->getCollection();
     var trubox_shipping_address = new VarienForm('trubox-shipping-address', true);
     var trubox_billing_address = new VarienForm('trubox-billing-address', true);
     var trubox_payment_information = new VarienForm('trubox-payment-information', true);
+    var trubox_coupon_code = new VarienForm('trubox-coupon-code', true);
 
     $j = jQuery.noConflict();
     $j('.page-title').focus();
