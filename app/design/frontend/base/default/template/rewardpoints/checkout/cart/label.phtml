@@ -50,9 +50,11 @@
                                     else {
                                         if(isset($_dt['type']) && $_dt['type'] == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_FIXED)
                                         {
-                                            echo $this->__('You will earn (+ '. $_dt['amount'].' point from event)');
+//                                            echo $this->__('You will earn (+ '. $_dt['amount'].' point from event)');
+                                            echo $_dt['text'];
                                         } else if(isset($_dt['type']) && $_dt['type'] == AW_Eventdiscount_Model_Source_Action::AWARD_POINT_PERCENT){
-                                            echo $this->__('You will earn (+ '. $_dt['amount'].'% point from event)');
+//                                            echo $this->__('You will earn (+ '. $_dt['amount'].'% point from event)');
+                                            echo $_dt['text'];
                                         } else {
                                             echo $this->__('You will earn');
                                         }

@@ -257,10 +257,11 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                 $model->loadPost($data)->save();
 
                 /* Update timer product table */
-
                 if(isset($data['links']['products']))
                 {
-                    unset($data['products'][0]);
+                    if(strcasecmp($data['products'][0],'on') == 0)
+                        unset($data['products'][0]);
+
                     $product_ids = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['links']['products']);
                     Mage::helper('eventdiscount')->saveTimerProduct($model->getId(), $data['products']);
                 }

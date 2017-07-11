@@ -71,11 +71,12 @@ class AW_Eventdiscount_Model_Trigger extends Mage_Core_Model_Abstract
         $actionCollection = Mage::getModel('aweventdiscount/action')->getCollection();
         $timerModel = Mage::getModel('aweventdiscount/timer')->load($timer->getId());
         $actionCollection->loadByTimerId($timerModel->getId());
+        
         $data = array('timer_id' => $timerModel->getId(),
             'customer_id' => $event->getCustomer()->getId(),
             'created_at' => Mage::getModel('core/date')->gmtDate(),
             'duration' => $timerModel->getDuration(),
-            'active_to' => gmdate(self::DATETIME_PHP_FORMAT, gmdate('U') + $timerModel->getDuration()),
+            'active_to' => date('Y-m-d H:i:s',time()+$timerModel->getDuration()),
             'status' => AW_Eventdiscount_Model_Source_Trigger_Status::IN_PROGGRESS,
             'action' => serialize($actionCollection->getData()),
             'quote_hash' => (!is_null($event->getData('quote_hash'))?$event->getData('quote_hash'):0),

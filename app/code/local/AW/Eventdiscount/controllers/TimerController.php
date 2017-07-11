@@ -61,6 +61,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
                     $item->save();
                     continue;
                 }
+
                 $item->setData('html_block', Mage::getBlockSingleton('eventdiscount/timer')->setTimer($item)->toHtml());
                 $item->setData('count_down', $item->getActiveToTimestamp() - gmdate('U'));
 
@@ -121,6 +122,19 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $installer->run("
             ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `point_type` TINYINT;
             ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `point_amount` FLOAT;
+
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb3Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `text_promotion` VARCHAR(255) ;
 
 		");
         $installer->endSetup();

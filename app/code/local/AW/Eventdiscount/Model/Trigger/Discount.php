@@ -33,8 +33,10 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             return $this;
         }
         $triggers = $this->getActiveTriggers();
+
         $actions = array();
         foreach ($triggers as $trigger) {
+
             foreach (unserialize($trigger->getData('action')) as $action) {
                 array_push($actions, $action);
             }
@@ -51,6 +53,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 
         //add one by one discounts
         $numberPromo = 1;
+
         foreach ($actions as &$action) {
 
             if ($action['type'] !== AW_Eventdiscount_Model_Source_Action::FIXED
@@ -92,6 +95,9 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                 ->save()
             ;
             $canAddItems = $quote->isVirtual() ? ('billing') : ('shipping');
+
+            $timer = Mage::getModel('aweventdiscount/timer')->load($action['timer_id']);
+
             foreach ($quote->getAllAddresses() as $address) {
                 $address
                     ->setSubtotal(0)
@@ -119,6 +125,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                         $session->setData('event_discount', array(
                             'amount' => $awardPoint['amount'],
                             'type' => $awardPoint['type'],
+                            'text' => $timer->getData('text_promotion'),
                         ));
                         $address->setRewardpointsEarn($awardPoint['point']);
                     }

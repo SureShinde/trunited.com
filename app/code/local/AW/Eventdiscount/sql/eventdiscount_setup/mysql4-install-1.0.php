@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS `{$this->getTable('aweventdiscount/timer')}` (
   `conditions_serialized` text NOT NULL,
   `event` tinytext NOT NULL,
   `limit` int(11) NOT NULL DEFAULT  '0',
+  `text_promotion` VARCHAR(255),
+  `point_type` TINYINT,
+  `point_amount` FLOAT,
   `limit_per_customer` int(11) NOT NULL DEFAULT  '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
