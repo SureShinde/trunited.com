@@ -198,7 +198,6 @@ a.addtrubox{
 .shop-now a, .short-description a.custom-url, #tab_description_tabbed_contents a.custom-url{
     font-size: 15px;
     color: #ffffff;
-    /* font-family: 'Montserrat'; */
     height: 43px;
     width: 154px;
     background: #00b5cb;
@@ -226,7 +225,7 @@ ul.view-mode-list-bot
 {
     margin: 30px 0;
     text-align: center;
-    padding-left: 3%;
+    /*padding-left: 3%;*/
 }
 
 ul.view-mode-list-bot > li
@@ -287,8 +286,8 @@ div.alphabet
 
 .quick-icon button
 {
-    height: 31px;
-    width: 31px !important;
+    height: 33px;
+    width: 33px !important;
     background-color: #00b5cb !important;
     color: white;
     position: absolute;
