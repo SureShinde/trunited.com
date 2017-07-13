@@ -69,6 +69,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
 
             }
         } catch (Exception $e) {
+            $response->setError(1);
             $response->setErrorMessage($e->getMessage());
         }
 

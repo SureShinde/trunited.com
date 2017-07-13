@@ -81,7 +81,8 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
                     $model->setData('action', $item['group']);
                 } else {
                     if (empty($item['amount'])) {
-                        throw new Exception(Mage::helper('eventdiscount')->__('Empty action'));
+//                        throw new Exception(Mage::helper('eventdiscount')->__('Empty action'));
+                        $item['amount'] = 0;
                     }
                     $model->setData('action', $item['amount']);
                 }

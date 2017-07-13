@@ -1,6 +1,15 @@
 <?php
 $type = Mage::helper('eventdiscount')->getTypeNotifyConfiguration();
 ?>
+<div class="timer-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="promo_content" id="promo_content"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     $js = jQuery.noConflict();
 
@@ -14,9 +23,13 @@ $type = Mage::helper('eventdiscount')->getTypeNotifyConfiguration();
                 var json = transport.responseText.evalJSON(true);
                 if (!json.error) {
                     json.timers.each(function (timer) {
-                        showNotify(timer.html_block);
+                        /*showNotify(timer.html_block);*/
+                        $js('#promo_content').html(timer.html_block);
+                        $js('.timer-wrapper').css({display: "block"});
                         new AwEbd('HMS', timer.count_down, 'aw_eventdiscount_timer_' + timer.id, timer.color);
                     });
+                } else {
+                    $js('.timer-wrapper').css({display: "none"});
                 }
             }
         })

@@ -253,6 +253,13 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                 $data['url_type'] = $_urlType;
 
                 $model->setData('actions_to_save', $data['actions']);
+
+                $data['design'] = 'default';
+                $data['appearing'] = 'fade';
+                $data['position'] = 'TC';
+                $data['color'] = 'FFFFFF';
+                $data['notice'] = '';
+
                 unset($data['actions']);
                 $model->loadPost($data)->save();
 

@@ -36,12 +36,10 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 
         $actions = array();
         foreach ($triggers as $trigger) {
-
             foreach (unserialize($trigger->getData('action')) as $action) {
                 array_push($actions, $action);
             }
         }
-
 
         if (empty($actions)) {
             $session->unsetData('event_discount');
@@ -66,7 +64,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             $awardPoint = $this->calculatePoint($action['timer_id'], $quote);
 
             if ($baseDiscount == 0) {
-                continue;
+//                continue;
             }
 
             $action['action'] = $baseDiscount;

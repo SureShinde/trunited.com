@@ -48,12 +48,12 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tabs extends Mage_Adminhtml_Bl
             'content' => $this->getLayout()->createBlock('eventdiscount/adminhtml_timer_edit_tab_rules')->toHtml(),
             'active'  => ($this->getRequest()->getParam('tab') == 'timer_tabs_rules') ? true : false,
         ));
-        $this->addTab('design', array(
+        /*$this->addTab('design', array(
             'label'   => $this->__('Design'),
             'title'   => $this->__('Design'),
             'content' => $this->getLayout()->createBlock('eventdiscount/adminhtml_timer_edit_tab_design')->toHtml(),
             'active'  => ($this->getRequest()->getParam('tab') == 'timer_tabs_design') ? true : false,
-        ));
+        ));*/
         $this->addTab('products', array(
             'label'   => $this->__('Products'),
             'title'   => $this->__('Products'),

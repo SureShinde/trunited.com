@@ -329,6 +329,7 @@ ul.ui-widget-content.ui-autocomplete
     border-color: #FFF;
     font-size: 14px;
     min-width: 30%;
+    max-width: 30%;
     padding: 1px;
     display: inline-block;
 }
