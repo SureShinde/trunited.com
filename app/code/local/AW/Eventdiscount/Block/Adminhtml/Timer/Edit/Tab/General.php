@@ -165,6 +165,14 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_General extends Mage_Admin
             'title'   => $this->__('Open URL in new window'),
             'checked' => $_data->getData('url_type'),
         ));
+
+        $_fieldset->addField('text_promotion', 'textarea', array(
+            'name'    => 'text_promotion',
+            'label'   => $this->__('The text promotion'),
+            'title'   => $this->__('The text promotion'),
+            'required' => true,
+            'note'     => $this->__('The text will be displayed on both cart and checkout pages')
+        ));
         $form->setValues($_data->getData());
         return parent::_prepareForm();
     }

@@ -198,7 +198,6 @@ a.addtrubox{
 .shop-now a, .short-description a.custom-url, #tab_description_tabbed_contents a.custom-url{
     font-size: 15px;
     color: #ffffff;
-    /* font-family: 'Montserrat'; */
     height: 43px;
     width: 154px;
     background: #00b5cb;
@@ -226,7 +225,7 @@ ul.view-mode-list-bot
 {
     margin: 30px 0;
     text-align: center;
-    padding-left: 3%;
+    /*padding-left: 3%;*/
 }
 
 ul.view-mode-list-bot > li
@@ -287,8 +286,8 @@ div.alphabet
 
 .quick-icon button
 {
-    height: 31px;
-    width: 31px !important;
+    height: 33px;
+    width: 33px !important;
     background-color: #00b5cb !important;
     color: white;
     position: absolute;
@@ -321,20 +320,26 @@ ul.ui-widget-content.ui-autocomplete
 }
 
 #search_header_form #search{
-    padding-right: 33px;
+    color: #FFF;
+    height: 24px;
+    text-transform: lowercase;
+    background-color: #00b5cb;
+    margin: 0 3px 0 22px;
+    border-width: 0 0 1px 0;
+    border-color: #FFF;
+    font-size: 14px;
     min-width: 30%;
-    margin-left: 10%;
-    height: 30px;
+    max-width: 30%;
+    padding: 1px;
+    display: inline-block;
 }
 
 #search_header_form button
 {
-    height: 30px;
-    width: 40px;
     background-color: transparent;
-    color: black;
+    color: white;
     position: absolute;
-    margin-left: -37px;
+    top: 7px;
 }
 
 #search_header_form .form-search .search-autocomplete ul {
@@ -344,7 +349,61 @@ ul.ui-widget-content.ui-autocomplete
 
 #search_header_form .form-search .search-autocomplete ul li{
     text-align: left;
-    padding: 5px 10px;
+    padding: 5px 15px;
     cursor: pointer;
-    color: #777;
+    color: #00b5cb;
+    font-weight: normal;
+    line-height: 1.42857;
+    font-family: opensans,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+}
+
+#search_header_form .form-search .search-autocomplete ul li:first-letter
+{
+    text-transform: capitalize;
+}
+
+#search_header_form .form-search .search-autocomplete ul li:hover
+{
+    background-color: #E5F7FA;
+}
+
+#search_header_form .navigation-search-clear-button
+{
+    border: none;
+    background: transparent;
+    position: absolute;
+    top: 8px;
+    margin-left: -13px;
+    display: none;
+}
+
+#search_header_form .dropdown-menu-caret{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    position: absolute;
+    transform: rotate(180deg);
+    right: 10px;
+    top: -9px;
+    left: 15px;
+    color: #00b5cb;
+    border-top: 9px dashed #00b5cb;
+    border-right: 9px solid transparent;
+    border-left: 9px solid transparent;
+}
+
+#search_header_form .search-autocomplete
+{
+    top: 37px !important;
+    border: 2px solid #00b5cb;
+}
+
+#search_header_form .btn-search
+{
+    display: -webkit-inline-box;
 }

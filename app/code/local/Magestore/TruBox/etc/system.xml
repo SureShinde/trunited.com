@@ -163,6 +163,75 @@
 							<show_in_store>1</show_in_store>
 							<comment>Sku's that are "TruBox Only Products". Any sku added to this config textbox will only have the ADD TO TRUBOX button on product listing and product details pages.</comment>
 						</physical_only_product>
+
+						<coupon_code_separator translate="label comment">
+							<label>The Promotion Code</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</coupon_code_separator>
+						<enable_coupon_code translate="label">
+							<label>Enable Coupon Code</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>15</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>If it's set to disable, the coupon code won't be displayed on My TruBox page and the customers won't also be received the bonus points from the coupon code</comment>
+						</enable_coupon_code>
+						<coupon_code  translate="label">
+							<label>The Coupon Code</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>16</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>The customer will save this code to his account and will be received the bonus points when they create TruBox orders from August 8, 2017</comment>
+						</coupon_code>
+						<start_date_code translate="label">
+							<label>Start Date</label>
+							<frontend_type>text</frontend_type>
+							<frontend_model>trubox/adminhtml_system_configuration_date</frontend_model>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</start_date_code>
+						<end_date_code translate="label">
+							<label>End Date</label>
+							<frontend_type>text</frontend_type>
+							<frontend_model>trubox/adminhtml_system_configuration_date</frontend_model>
+							<sort_order>18</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</end_date_code>
+						<type_code translate="label">
+							<label>Apply</label>
+							<frontend_type>select</frontend_type>
+							<source_model>trubox/coupon_type</source_model>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</type_code>
+						<coupon_code_amount translate="label">
+							<label>Discount Amount</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment></comment>
+						</coupon_code_amount>
 					</fields>				
 				</general>
 				<shipping>

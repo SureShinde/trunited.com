@@ -7,8 +7,8 @@
             </action>
             <block type="eventdiscount/design"/>
         </reference>
-        <reference name="before_body_end">
+        <!--<reference name="before_body_end">
             <block type="eventdiscount/init" template="aw_eventdiscount/init.phtml"/>
-        </reference>
+        </reference>-->
     </default>
 </layout>

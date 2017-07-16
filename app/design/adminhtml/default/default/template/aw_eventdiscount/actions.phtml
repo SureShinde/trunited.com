@@ -68,7 +68,7 @@
             '<option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>'+
                 <?php endforeach;?>
                 '</select>'+
-                '<input style="margin-left: 10px; min-width: 160px;" id="action_'+id+'" name="actions['+id+'][amount]" value="" title="Action" type="text" class=" input-text required-entry"> '+
+                '<input style="margin-left: 10px; min-width: 160px;" id="action_'+id+'" name="actions['+id+'][amount]" value="0" title="Action" type="text" class=" input-text required-entry"> '+
              '<button style="margin-left: 10px;" class="delete" id="remove_'+id+'" onclick="actions.del(this); return false;"><span><?php echo $this->__('Remove')?></span></button>'
             },
             createId : function () {
@@ -128,7 +128,7 @@
                         <option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>
                 <?php endforeach;?>
             </select>
-            <input style="margin-left: 10px; min-width: 160px;" id="action-0" name="actions[0][amount]" value="" title="Action" type="text"  id="action_a-1" class=" input-text required-entry">
+            <input style="margin-left: 10px; min-width: 160px;" id="action-0" name="actions[0][amount]" value="0" title="Action" type="text"  id="action_a-1" class=" input-text required-entry">
             </div>
 <?php endif;?>
 </div>

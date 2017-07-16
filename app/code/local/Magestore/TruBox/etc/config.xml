@@ -111,6 +111,9 @@
                     <order>
                         <table>trubox_order</table>
                     </order>
+                    <coupon>
+                        <table>trubox_coupon_code</table>
+                    </coupon>
                 </entities>
             </trubox_mysql4>
         </models>
@@ -163,6 +166,12 @@
                 <enable_orders_section>1</enable_orders_section>
                 <enable_product_listing>1</enable_product_listing>
                 <physical_only_product>GP588568-100,GP588568-50,GP588568-25,GP588568,GP348965-50,GP348965,GP183219-50,GP183219</physical_only_product>
+                <enable_coupon_code>1</enable_coupon_code>
+                <coupon_code>TRUBOX20</coupon_code>
+                <start_date_code>07/1/2017</start_date_code>
+                <end_date_code>08/5/2017</end_date_code>
+                <type_code>1</type_code>
+                <coupon_code_amount>20</coupon_code_amount>
             </general>
             <shipping>
                 <shipping_method>freeshipping_freeshipping</shipping_method>
