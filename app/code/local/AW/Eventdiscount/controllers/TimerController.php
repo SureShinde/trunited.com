@@ -35,6 +35,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
 
     public function ajaxAction()
     {
+        $cookie = Mage::getModel('core/cookie');
         $response = new Varien_Object();
         $responseTimer = array();
         $response->setError(0);
@@ -52,19 +53,22 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
              $triggerCollection->addNotLoadIdFilter(Mage::getModel('customer/session')->getClosedTimerId());
             $quote = Mage::getSingleton('checkout/session')->getQuote();
             $items = $quote->getAllItems();
+
             if (!$triggerCollection->getSize()) throw new Exception($this->__('Trigger not found for this customer'));
             foreach ($triggerCollection as $item) {
-                if(!Mage::helper('eventdiscount')->checkProductCondition($item->getData('timer_id'), $items))
+
+                $timer = Mage::getModel('aweventdiscount/timer')->load($item->getData('timer_id'));
+                if(!$timer->getId() || ($timer->getId() && strcasecmp($timer->getEvent(), AW_Eventdiscount_Model_Event::PROMOTION) == 0 && !$cookie->get('promotion_code') ))
                     continue;
 
                 if (($item->getData('trigger_event') == AW_Eventdiscount_Model_Event::CARTUPDATE)
-                    && (!$quote->hasItems())
+                    && (!$quote->hasItems() || !Mage::helper('eventdiscount')->checkProductCondition($item->getData('timer_id'), $items))
                 ) {
                     $item->setTriggerStatus(AW_Eventdiscount_Model_Source_Trigger_Status::MISSED);
                     $item->save();
                     continue;
                 }
-
+                
                 $item->setData('html_block', Mage::getBlockSingleton('eventdiscount/timer')->setTimer($item)->toHtml());
                 $item->setData('count_down', $item->getActiveToTimestamp() - gmdate('U'));
 

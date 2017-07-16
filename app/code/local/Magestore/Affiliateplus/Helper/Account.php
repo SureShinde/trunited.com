@@ -255,11 +255,16 @@ class Magestore_Affiliateplus_Helper_Account extends Mage_Core_Helper_Abstract {
 
     public function getAffiliateInfoFromCookie(){
         $cookie = Mage::getSingleton('core/cookie');
+        $account_code = $cookie->get('account_code');
+        if($account_code)
+        {
+            $account = Mage::getModel('affiliateplus/account')->loadByIdentifyCode($account_code);
+            if(isset($account) && $account->getId())
+                return $account;
+        }
+
         $map_index = $cookie->get('affiliateplus_map_index');
         if($map_index) {
-//            for ($i = $map_index; $i > 0; $i--) {
-//                $accountCode = $cookie->get("affiliateplus_account_code_$i");
-//            }
             $accountCode = $cookie->get("affiliateplus_account_code_$map_index");
 
             if (Mage::getStoreConfig('affiliateplus/general/url_param_value') == 2) {

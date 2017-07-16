@@ -90,6 +90,37 @@
                             <show_in_store>1</show_in_store>
                             <comment>Characters that will not be generated to Identity Code</comment>
                         </remove_string>
+
+
+                        <show_separator_personal translate="label">
+                            <label>Personal URL</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>105</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </show_separator_personal>
+                        <personal_param translate="label">
+                            <label>The param of Personal Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>106</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </personal_param>
+                        <personal_value translate="label">
+                            <label>The value of Personal Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>107</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                <model>affiliateplusreferfriend/system_config_source_dynamiccomment_personal_comment</model>
+                            </comment>
+                        </personal_value>
                     </fields>
                 </general>
                 <email>

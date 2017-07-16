@@ -30,6 +30,7 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
     const LOGIN = 'login';
     const CARTUPDATE = 'cartupdate';
     const REGISTRATION = 'registration';
+    const PROMOTION = 'promotion';
 
     public $timersCollection = null;
 
@@ -58,6 +59,7 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
             self::CARTUPDATE => Mage::helper('eventdiscount')->__('Cart update'),
             self::LOGIN => Mage::helper('eventdiscount')->__('Log in'),
             self::REGISTRATION => Mage::helper('eventdiscount')->__('New registration'),
+            self::PROMOTION => Mage::helper('eventdiscount')->__('Promotion Url'),
         );
     }
 

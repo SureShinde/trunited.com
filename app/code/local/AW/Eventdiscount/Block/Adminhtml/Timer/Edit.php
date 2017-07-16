@@ -1,4 +1,5 @@
 <?php
+
 /**
  * aheadWorks Co.
  *
@@ -23,7 +24,6 @@
  * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
  * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
  */
-
 class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
     public function __construct()
@@ -101,7 +101,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
 
     public function getBackUrl()
     {
-        if($this->getRequest()->getParam('back')=='stat')
+        if ($this->getRequest()->getParam('back') == 'stat')
             return $this->getUrl('*/aweventdiscount_stat/index/');
         return parent::getBackUrl();
     }

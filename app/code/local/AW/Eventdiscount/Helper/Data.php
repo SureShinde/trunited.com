@@ -1,4 +1,5 @@
 <?php
+
 /**
  * aheadWorks Co.
  *
@@ -23,13 +24,12 @@
  * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
  * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
  */
-
 class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
 {
     public static function customerGroupsToArray()
     {
         $customerGroups = Mage::getResourceModel('customer/group_collection')
-            ->addFieldToFilter('customer_group_id', array('gt'=> 0))
+            ->addFieldToFilter('customer_group_id', array('gt' => 0))
             ->load()->toOptionArray();
         return $customerGroups;
     }
@@ -61,7 +61,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     public static function isNewRules()
     {
         if ((version_compare(Mage::getVersion(), '1.7.0.0', '>=')
-            && Mage::helper('awall/versions')->getPlatform() == AW_ALL_Helper_Versions::CE_PLATFORM) ||
+                && Mage::helper('awall/versions')->getPlatform() == AW_ALL_Helper_Versions::CE_PLATFORM) ||
             (version_compare(Mage::getVersion(), '1.12.0.0', '>=')
                 && Mage::helper('awall/versions')->getPlatform() == AW_ALL_Helper_Versions::EE_PLATFORM)
         ) {
@@ -79,20 +79,18 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
         try {
             $connection->beginTransaction();
 
-            if(sizeof($collection) > 0 && sizeof($product_ids) > 0)
-            {
+            if (sizeof($collection) > 0 && sizeof($product_ids) > 0) {
                 foreach ($collection as $timer_product) {
                     $timer_product->delete();
                 }
             }
 
-            if(sizeof($product_ids) > 0)
-            {
+            if (sizeof($product_ids) > 0) {
                 foreach ($product_ids as $pid) {
                     $model = Mage::getModel('aweventdiscount/product');
                     $_data = array(
                         'timer_id' => $timer_id,
-                        'product_id'    => $pid
+                        'product_id' => $pid
                     );
                     $model->setData($_data);
                     $transactionSave->addObject($model);
@@ -110,8 +108,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $collection = Mage::getModel('aweventdiscount/product')->getCollection()
             ->addFieldToFilter('timer_id', $timer_id)
-            ->setOrder('timer_product_id', 'desc')
-        ;
+            ->setOrder('timer_product_id', 'desc');
 
         return $collection;
     }
@@ -125,8 +122,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $collection = $this->getTimerProductCollection($timer_id);
 
-        if(sizeof($collection) > 0)
-        {
+        if (sizeof($collection) > 0) {
             foreach ($collection as $product) {
                 $product->delete();
             }
@@ -145,29 +141,44 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function checkProductCondition($timer_id, $items)
     {
-        if(sizeof($items) <= 0 || !isset($timer_id))
+        if (sizeof($items) <= 0 || !isset($timer_id))
             return false;
 
         $collection = Mage::getModel('aweventdiscount/product')->getCollection()
             ->addFieldToSelect('product_id')
-            ->addFieldToFilter('timer_id', $timer_id)
-        ;
+            ->addFieldToFilter('timer_id', $timer_id);
 
         $products = $collection->getColumnValues('product_id');
 
-        if(sizeof($collection) <= 0 || sizeof($products) <= 0)
+        if (sizeof($collection) <= 0 || sizeof($products) <= 0)
             return false;
 
         $flag = false;
-        foreach($items as $item)
-        {
-            if(in_array($item->getProductId(), $products))
-            {
+        foreach ($items as $item) {
+            if (in_array($item->getProductId(), $products)) {
                 $flag = true;
                 break;
             }
         }
 
         return $flag;
+    }
+
+    public function saveCookie($accountCode, $expiredTime, $toTop = false)
+    {
+        $cookie = Mage::getSingleton('core/cookie');
+        if ($expiredTime)
+            $cookie->setLifeTime(intval($expiredTime) * 86400);
+
+        $data = explode('-', $accountCode);
+        if(sizeof($data) == 2)
+        {
+            $cookie->set("promotion_code", $accountCode);
+            $cookie->set("account_code", $data[1]);
+        }
+
+        if ($toTop) {
+            $cookie->set($accountCode, date('Y-m-d'));
+        }
     }
 }
