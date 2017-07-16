@@ -142,4 +142,32 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('awall/eventdiscount/cms', $store);
     }
+
+    public function checkProductCondition($timer_id, $items)
+    {
+        if(sizeof($items) <= 0 || !isset($timer_id))
+            return false;
+
+        $collection = Mage::getModel('aweventdiscount/product')->getCollection()
+            ->addFieldToSelect('product_id')
+            ->addFieldToFilter('timer_id', $timer_id)
+        ;
+
+        $products = $collection->getColumnValues('product_id');
+
+        if(sizeof($collection) <= 0 || sizeof($products) <= 0)
+            return false;
+
+        $flag = false;
+        foreach($items as $item)
+        {
+            if(in_array($item->getProductId(), $products))
+            {
+                $flag = true;
+                break;
+            }
+        }
+
+        return $flag;
+    }
 }

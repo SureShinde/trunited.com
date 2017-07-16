@@ -48,6 +48,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 
 
         $quote = $observer->getEvent()->getQuote();
+        $items = $quote->getAllItems();
 
         //add one by one discounts
         $numberPromo = 1;
@@ -57,6 +58,11 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
             if ($action['type'] !== AW_Eventdiscount_Model_Source_Action::FIXED
                 && $action['type'] !== AW_Eventdiscount_Model_Source_Action::PERCENT
             ) {
+                continue;
+            }
+
+            if(!Mage::helper('eventdiscount')->checkProductCondition($action['timer_id'], $items))
+            {
                 continue;
             }
 
@@ -154,6 +160,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
         $session->setData('eventdiscounts', $actions);
         return $this;
     }
+
 
     public function calculateDiscount($timer_id, $type, $amount, $quote)
     {

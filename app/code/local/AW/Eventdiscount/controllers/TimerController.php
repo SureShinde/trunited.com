@@ -51,9 +51,12 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
             $triggerCollection->addTimeLimitFilter();
              $triggerCollection->addNotLoadIdFilter(Mage::getModel('customer/session')->getClosedTimerId());
             $quote = Mage::getSingleton('checkout/session')->getQuote();
+            $items = $quote->getAllItems();
             if (!$triggerCollection->getSize()) throw new Exception($this->__('Trigger not found for this customer'));
             foreach ($triggerCollection as $item) {
-                //Check quote triggers
+                if(!Mage::helper('eventdiscount')->checkProductCondition($item->getData('timer_id'), $items))
+                    continue;
+
                 if (($item->getData('trigger_event') == AW_Eventdiscount_Model_Event::CARTUPDATE)
                     && (!$quote->hasItems())
                 ) {
