@@ -68,7 +68,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
                     $item->save();
                     continue;
                 }
-                
+
                 $item->setData('html_block', Mage::getBlockSingleton('eventdiscount/timer')->setTimer($item)->toHtml());
                 $item->setData('count_down', $item->getActiveToTimestamp() - gmdate('U'));
 

@@ -129,8 +129,9 @@
                 <url_param_value>1</url_param_value>
                 <length_identity_code>5</length_identity_code>
                 <remove_string>o,O,0,i,I,1</remove_string>
+                <enable_personal_url>1</enable_personal_url>
                 <personal_param>promo</personal_param>
-                <personal_value>24HRSALE-kpra8</personal_value>
+                <personal_value>24HRSALE-{{identify_code}}</personal_value>
                 <!-- end editing -->
             </general>
             <refer>

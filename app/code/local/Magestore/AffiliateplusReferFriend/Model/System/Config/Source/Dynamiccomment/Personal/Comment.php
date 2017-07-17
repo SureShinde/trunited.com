@@ -12,7 +12,7 @@ class Magestore_AffiliateplusReferFriend_Model_System_Config_Source_Dynamiccomme
              var comment = $('dynamic_personal_comment');
              var param = $('affiliateplus_general_personal_param').getValue();
              var param_value = $('affiliateplus_general_personal_value').getValue();
-             comment.innerHTML = 'Ex: " . Mage::getUrl() . "?'+ param +'='+param_value;
+             comment.innerHTML = 'E.g: " . Mage::getUrl() . "?'+ param +'='+param_value;
             }
 
             function init_personal_comment()

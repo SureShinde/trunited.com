@@ -173,8 +173,12 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
         $data = explode('-', $accountCode);
         if(sizeof($data) == 2)
         {
-            $cookie->set("promotion_code", $accountCode);
-            $cookie->set("account_code", $data[1]);
+            $affiliate = Mage::getModel('affiliateplus/account')->load($accountCode);
+            if(isset($affiliate) && $affiliate->getId())
+            {
+                $cookie->set("promotion_code", $accountCode);
+                $cookie->set("account_code", $data[1]);
+            }
         }
 
         if ($toTop) {

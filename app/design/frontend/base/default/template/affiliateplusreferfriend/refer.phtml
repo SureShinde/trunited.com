@@ -49,6 +49,15 @@ $parameter = $this->getUrlParameter();
                                 </div>
                                 <div class="guide"><?php echo $this->getUrlParameterDescription();?></div>
                             </li>
+                            <?php if($this->getEnableNewPersonalUrl()){?>
+                                <li class="control">
+                                    <label for="use-personal-url"><?php echo $this->__('Your Personal Parameter') ?></label>
+                                    <div class="actions identify_code">
+                                        <?php echo '?' . $this->getParamNewPersonalUrl().'='.$this->getFormatNewPersonalUrl();?>
+                                    </div>
+                                    <div class="guide"><?php echo $this->getNewPersonalUrlDescription();?></div>
+                                </li>
+                            <?php }?>
                             <!--customize by viet -->
                             <li class="control">
                                 <label for="use-personal-url"><?php echo $this->__('Email') ?></label>

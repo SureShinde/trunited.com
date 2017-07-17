@@ -22,14 +22,10 @@ class AW_Eventdiscount_Model_Event_Promotion extends AW_Eventdiscount_Model_Even
         $request = $controller->getRequest();
         $config = Mage::helper('affiliateplus/config');
         $param = $config->getGeneralConfig('personal_param');
-        $value = $config->getGeneralConfig('personal_value');
         $accountCode = $request->getParam($param);
 
-        if(strcasecmp($accountCode, $value) == 0 && $value != '')
-        {
-            $expiredTime = $config->getGeneralConfig('expired_time');
-            Mage::helper('eventdiscount')->saveCookie($accountCode, $expiredTime, false);
-        }
+        $expiredTime = $config->getGeneralConfig('expired_time');
+        Mage::helper('eventdiscount')->saveCookie($accountCode, $expiredTime, false);
 
     }
 }
