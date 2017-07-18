@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `{$this->getTable('aweventdiscount/trigger')}` (
   KEY `status` (`trigger_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/giftcard')}` (
+CREATE TABLE IF NOT EXISTS `{$this->getTable('aweventdiscount/giftcard')}` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `timer_id` int(10) unsigned NOT NULL,
   `amount_from` FLOAT unsigned NOT NULL,
@@ -93,6 +93,13 @@ CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/giftcard')}` (
   `reward_new_customer` FLOAT unsigned NOT NULL,
   `reward_referrer` FLOAT unsigned NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `{$this->getTable('aweventdiscount/product')}` (
+  `timer_product_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `timer_id` int(10) unsigned NOT NULL,
+  `product_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`timer_product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
     ");
