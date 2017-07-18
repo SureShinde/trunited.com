@@ -86,4 +86,50 @@ class Magestore_TruGiftCard_Model_Observer
                 $result->isAvailable = false;
         }
     }
+
+    public function orderCancelAfter($observer)
+    {
+        $order = $observer->getOrder();
+        $order_id = $order->getEntityId();
+
+        $transactions = Mage::getModel('trugiftcard/transaction')->getCollection()
+            ->addFieldToFilter('order_id', $order_id)
+            ->addFieldToFilter('status', Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED)
+            ->setOrder('transaction_id', 'desc')
+            ;
+
+        if(sizeof($transactions) > 0)
+        {
+            foreach ($transactions as $transaction) {
+                $amount_credit = $transaction->getData('changed_credit');
+                Mage::helper('trugiftcard/account')->updateCredit($transaction->getCustomerId(), -$amount_credit);
+                $transaction->setData('status', Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED);
+                $transaction->setData('updated_time', now());
+                $transaction->save();
+            }
+        }
+    }
+
+    public function creditmemoSaveAfter(Varien_Event_Observer $observer)
+    {
+        $creditmemo = $observer->getEvent()->getCreditmemo();
+        $order_id = $creditmemo->getOrderId();
+
+        $transactions = Mage::getModel('trugiftcard/transaction')->getCollection()
+            ->addFieldToFilter('order_id', $order_id)
+            ->addFieldToFilter('status', Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED)
+            ->setOrder('transaction_id', 'desc')
+        ;
+
+        if(sizeof($transactions) > 0)
+        {
+            foreach ($transactions as $transaction) {
+                $amount_credit = $transaction->getData('changed_credit');
+                Mage::helper('trugiftcard/account')->updateCredit($transaction->getCustomerId(), -$amount_credit);
+                $transaction->setData('status', Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_CANCELLED);
+                $transaction->setData('updated_time', now());
+                $transaction->save();
+            }
+        }
+    }
 }

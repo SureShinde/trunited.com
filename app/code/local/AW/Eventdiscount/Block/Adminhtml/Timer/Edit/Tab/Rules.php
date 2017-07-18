@@ -66,17 +66,17 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminht
             'required' => false,
             'name' => 'point_type',
             'values' => array(
-                            1 => $this->__('Fixed amount discount'),
-                            2 => $this->__('Percent of product point discount'),
-                        ),
+                1 => $this->__('Fixed amount discount'),
+                2 => $this->__('Percent of product point discount'),
+            ),
             'disabled' => false,
             'readonly' => false,
         ));
 
         $_fieldset->addField('point_amount', 'text', array(
-            'label'     => $this->__('Award Point Amount'),
-            'required'  => false,
-            'name'      => 'point_amount',
+            'label' => $this->__('Award Point Amount'),
+            'required' => false,
+            'name' => 'point_amount',
         ));
 
         $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')
@@ -104,11 +104,19 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminht
         if ($_data->getData('status') === null)
             $_data->setData('status', 1);
 
+        $rendererGiftCard = new  AW_Eventdiscount_Block_Adminhtml_Renderer_Giftcard_Renderer();
+        $giftCardFieldset = $form->addFieldset('giftcard_fieldset', array(
+            'legend' => $this->__('Reward Trunited Gift Card')
+        ));
+        $giftCardFieldset->addField('giftcard_type', 'text', array('name' => 'giftcard_type'))->setRenderer($rendererGiftCard);
+
         $rendererActions = new  AW_Eventdiscount_Block_Adminhtml_Renderer_Actions_Renderer();
         $actionsFieldset = $form->addFieldset('actions_fieldset', array(
             'legend' => $this->__('Action')
         ));
         $actionsFieldset->addField('type', 'text', array('name' => 'type'))->setRenderer($rendererActions);
+
+
         $form->setValues($_data->getData());
         return parent::_prepareForm();
     }

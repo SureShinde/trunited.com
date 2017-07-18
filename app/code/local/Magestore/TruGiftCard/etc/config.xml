@@ -179,6 +179,23 @@
                     </trugiftcard_payment_method_is_active>
                 </observers>
             </payment_method_is_active>
+            <order_cancel_after>
+                <observers>
+                    <trugiftcard_order_save_after>
+                        <type>singleton</type>
+                        <class>trugiftcard/observer</class>
+                        <method>orderCancelAfter</method>
+                    </trugiftcard_order_save_after>
+                </observers>
+            </order_cancel_after>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <trugiftcard_sales_order_creditmemo_save_after>
+                        <class>trugiftcard/observer</class>
+                        <method>creditmemoSaveAfter</method>
+                    </trugiftcard_sales_order_creditmemo_save_after>
+                </observers>
+            </sales_order_creditmemo_save_after>
             <!--paypal_prepare_line_items>
                 <observers>
                     <trugiftcard_paypal>

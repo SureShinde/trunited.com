@@ -87,6 +87,9 @@
                     <product>
                         <table>aw_eventdiscount_timer_product</table>
                     </product>
+                    <giftcard>
+                        <table>aw_eventdiscount_gift_card</table>
+                    </giftcard>
                 </entities>
             </eventdiscount_resource>
         </models>
