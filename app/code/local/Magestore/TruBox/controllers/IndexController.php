@@ -91,13 +91,13 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $billing['region_id'] = Mage::helper('trubox/order')->checkRegionId($billing['country'], $billing['region'], $billing['region_id']);
             if($billing['region_id'] == null)
                 throw new Exception(
-                    Mage::helper('trubox')->__('Please enter the State/Province in Billing Address.')
+                    Mage::helper('trubox')->__('Please enter the State in Billing Address.')
                 );
 
             $shipping['region_id'] = Mage::helper('trubox/order')->checkRegionId($shipping['country'], $shipping['region'], $shipping['region_id']);
             if($shipping['region_id'] == null)
                 throw new Exception(
-                    Mage::helper('trubox')->__('Please enter the State/Province in Shipping Address.')
+                    Mage::helper('trubox')->__('Please enter the State in Shipping Address.')
                 );
 
 
@@ -135,7 +135,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             /* end save data to shipping address */
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('You have updated TruBox Address successfully !')
+                Mage::helper('trubox')->__('You have updated TruBox address successfully!')
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -168,7 +168,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $payment->save();
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('You have updated Payment Information successfully !')
+                Mage::helper('trubox')->__('You have updated Payment Information successfully!')
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -192,7 +192,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $item->delete();
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('You have deleted item successfully !')
+                Mage::helper('trubox')->__('You have deleted item successfully!')
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -214,7 +214,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             }
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('You have deleted all items successfully !')
+                Mage::helper('trubox')->__('You have deleted all items successfully!')
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -244,7 +244,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             $transactionSave->save();
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('You have updated item(s) successfully !')
+                Mage::helper('trubox')->__('You have updated item(s) successfully!')
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -305,7 +305,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             if(Mage::helper('trubox')->isInExclusionList($product))
             {
                 throw new Exception(
-                    Mage::helper('trubox')->__('You can not add this product to TruBox')
+                    Mage::helper('trubox')->__('You cannot add this product to TruBox')
                 );
             }
 
@@ -698,35 +698,35 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         try{
             if(!$enable)
                 throw new Exception(
-                    $helper->__('The coupon code has been disabled.')
+                    $helper->__('The promotion code has been disabled.')
                 );
 
             if(strtotime($start_date) > time() || strtotime($end_date) < time() || $start_date == null || $end_date == null)
                 throw new Exception(
-                    $helper->__('The coupon code has not been started.')
+                    $helper->__('The promotion code has not yet started.')
                 );
 
             if($default_code == null)
                 throw new Exception(
-                    $helper->__('The coupon code has not been configured.')
+                    $helper->__('The promotion code has not been configured.')
                 );
 
             if(!isset($coupon_code) || $coupon_code == null){
                throw new Exception(
-                   $helper->__('The coupon code is not valid. Please enter the new coupon code.')
+                   $helper->__('The promotion code is not valid. Please enter a new promotion code and try again.')
                 );
             }
 
             if(strcasecmp($coupon_code, $default_code) != 0)
                 throw new Exception(
-                    $helper->__('The coupon code was wrong. Please enter the new coupon code and try it again.')
+                    $helper->__('The promotion code is not valid. Please enter a new promotion code and try again.')
                 );
 
             $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
             $check_order = $helper->checkOrderFromTruBox($customer_id);
             if($check_order)
                 throw new Exception(
-                    $helper->__('You had the orders from TruBox before. So, you can\'t save this code.')
+                    $helper->__('The promotion code entered is for new TruBox customers only. Please enter a different code and try again.')
                 );
 
             $coupon_model = Mage::getModel('trubox/coupon');

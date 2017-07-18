@@ -30,14 +30,14 @@
     </modules>
     <frontend>
         <secure_url>
-            <trubox_checkout>/trubox/checkout</trubox_checkout>
+            <trubox_checkout>/mytrubox/checkout</trubox_checkout>
         </secure_url>
         <routers>
             <trubox>
                 <use>standard</use>
                 <args>
                     <module>Magestore_TruBox</module>
-                    <frontName>trubox</frontName>
+                    <frontName>mytrubox</frontName>
                 </args>
             </trubox>
         </routers>

@@ -2,9 +2,10 @@
 $store_id = Mage::app()->getStore()->getStoreId();
 $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
 ?>
+
 <?php if ($check_responsvie): ?>
     <div class="bg-fade" id="navi-bg" style="display:none">&nbsp</div>
-    <div class="navbar-default affiliate-navigation hidden-lg hidden-md col-sm-6 col-xs-10 aff-mobile" role="navigation">
+    <div class="navbar-default affiliate-navigation  col-sm-6 col-xs-10 aff-mobile" role="navigation">
         <div class="container-fluid">
 
             <div class="collapse1 navbar-collapse-aff" id="nav-aff" >
@@ -31,4 +32,4 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
         </div>
         <a class="navbar-hidden" style="cursor:pointer">&nbsp;</a>
     </div>
-<?php endif; ?> 
+<?php endif; ?>
