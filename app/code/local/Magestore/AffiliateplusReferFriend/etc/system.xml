@@ -139,6 +139,35 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </discount_param_description>
+
+                        <enable_send_sms_promotion translate="label">
+                            <label>Enable sending sms</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>110</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable_send_sms_promotion>
+                        <content_sms_to_new_customer translate="label">
+                            <label>Sms content to new customer</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>111</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Please dont change the name of variables in the content. You can remove it if not need.</comment>
+                        </content_sms_to_new_customer>
+                        <content_sms_to_referrer translate="label">
+                            <label>Sms content to referrer</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>112</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Please dont change the name of variables in the content. You can remove it if not need.</comment>
+                        </content_sms_to_referrer>
                     </fields>
                 </general>
                 <email>

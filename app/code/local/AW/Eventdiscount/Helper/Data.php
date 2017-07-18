@@ -1,29 +1,7 @@
 <?php
+require_once Mage::getBaseDir('lib') . '/Twilio/autoload.php';
+use Twilio\Rest\Client;
 
-/**
- * aheadWorks Co.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://ecommerce.aheadworks.com/AW-LICENSE.txt
- *
- * =================================================================
- *                 MAGENTO EDITION USAGE NOTICE
- * =================================================================
- * This software is designed to work with Magento community edition and
- * its use on an edition other than specified is prohibited. aheadWorks does not
- * provide extension support in case of incorrect edition use.
- * =================================================================
- *
- * @category   AW
- * @package    AW_Eventdiscount
- * @version    1.0.5
- * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
- * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
- */
 class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
 {
     public static function customerGroupsToArray()
@@ -316,6 +294,73 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
                 Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
             );
 
+            $this->sendSMS(
+                $trigger->getCustomerId(),
+                $trigger->getReferrerId(),
+                $order->getIncrementId(),
+                $obj[0]['reward_new_customer'],
+                $obj[0]['reward_referrer']
+            );
+        }
+    }
+
+    public function sendSMS($new_customer_id, $referrer_id, $order_id, $new_amount, $referrer_amount)
+    {
+        $config = Mage::helper('affiliateplus/config');
+        if($config->getGeneralConfig('enable_send_sms_promotion'))
+        {
+            $verify_helper = Mage::helper('custompromotions/verify');
+            $sid = $verify_helper->getAccountSID();
+            $token = $verify_helper->getAuthToken();
+            $from = $verify_helper->getSenderNumber();
+            $mobile_prefix = $verify_helper->getMobileCode();
+
+            $new_customer_content = $config->getGeneralConfig('content_sms_to_new_customer');
+            $referrer_content = $config->getGeneralConfig('content_sms_to_referrer');
+
+            $new_customer = Mage::getModel('customer/customer')->load($new_customer_id);
+            if(isset($new_customer) && $new_customer->getId() && $new_customer->getPhoneNumber() != null && $new_customer_content != null)
+            {
+                $phone = $verify_helper->getPhoneNumberFormat($mobile_prefix, $new_customer->getPhoneNumber());
+                $content = str_replace(
+                    array('{{reward_amount}}','{{order_id}}'),
+                    array(Mage::helper('core')->currency($new_amount,true,false), $order_id),
+                    $new_customer_content
+                );
+                $message = $content . " \n\n Text STOP to quit ";
+                try {
+                    $client = new Client($sid, $token);
+                    $client->messages->create(
+                        $phone,
+                        array(
+                            'from' => $from,
+                            'body' => $message
+                        )
+                    );
+                } catch (Exception $e) {}
+            }
+
+            $referrer = Mage::getModel('customer/customer')->load($referrer_id);
+            if(isset($referrer) && $referrer->getId() && $referrer->getPhoneNumber() != null && $referrer_content != null)
+            {
+                $phone_referrer = $verify_helper->getPhoneNumberFormat($mobile_prefix, $referrer->getPhoneNumber());
+                $content_referrer = str_replace(
+                    array('{{reward_amount}}','{{order_id}}','{{first_name}}','{{email}}'),
+                    array(Mage::helper('core')->currency($referrer_amount,true,false), $order_id, $new_customer->getFirstname(), $new_customer->getEmail()),
+                    $referrer_content
+                );
+                $message_referrer = $content_referrer . " \n\n Text STOP to quit ";
+                try {
+                    $client = new Client($sid, $token);
+                    $client->messages->create(
+                        $phone_referrer,
+                        array(
+                            'from' => $from,
+                            'body' => $message_referrer
+                        )
+                    );
+                } catch (Exception $e) {}
+            }
 
         }
     }
