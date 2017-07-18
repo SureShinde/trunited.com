@@ -11,6 +11,8 @@ class Magestore_TruGiftCard_Model_Type extends Varien_Object
 	const TYPE_TRANSACTION_CHECKOUT_ORDER = 7;
 	const TYPE_TRANSACTION_REFUND_ORDER = 8;
 	const TYPE_TRANSACTION_PURCHASE_GIFT_CARD = 9;
+	const TYPE_TRANSACTION_RECEIVE_REWARD_FROM_PROMOTION = 10;
+	const TYPE_TRANSACTION_RECEIVE_REWARD_FROM_REFERRED_PROMOTION = 11;
 //	const TYPE_TRANSACTION_RECEIVE_FROM_ECHECK_PAYMENT = 10;
 
 	static public function getOptionArray(){
@@ -24,6 +26,8 @@ class Magestore_TruGiftCard_Model_Type extends Varien_Object
 			self::TYPE_TRANSACTION_CHECKOUT_ORDER   => Mage::helper('trugiftcard')->__('Spend truGiftCard balance to purchase order'),
 			self::TYPE_TRANSACTION_REFUND_ORDER   => Mage::helper('trugiftcard')->__('Retrieve truGiftCard balance spent on refunded order'),
 			self::TYPE_TRANSACTION_PURCHASE_GIFT_CARD   => Mage::helper('trugiftcard')->__('Purchased truGiftCard Gift Card on order'),
+			self::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_PROMOTION   => Mage::helper('trugiftcard')->__('Received truGiftCard rewards from promotion'),
+			self::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_REFERRED_PROMOTION   => Mage::helper('trugiftcard')->__('Received Tru gift card rewards from referring the customers on the promotion'),
 //			self::TYPE_TRANSACTION_RECEIVE_FROM_ECHECK_PAYMENT   => Mage::helper('trugiftcard')->__('Received truGiftCard money from Sharing'),
 		);
 	}

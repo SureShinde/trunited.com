@@ -38,7 +38,7 @@ if (AW_Eventdiscount_Helper_Data::isNewRules()) {
         }
     }
 } else {
-    class AW_Eventdiscount_Model_Timer_Abstract extends  Mage_Rule_Model_Rule
+    class AW_Eventdiscount_Model_Timer_Abstract extends Mage_Rule_Model_Rule
     {
         public function getConditionsInstance()
         {
@@ -52,6 +52,7 @@ if (AW_Eventdiscount_Helper_Data::isNewRules()) {
 
     }
 }
+
 class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
 {
     public function _construct()
@@ -65,6 +66,9 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
         parent::_afterLoad();
         $collection = Mage::getModel('aweventdiscount/action')->getCollection()->loadByTimerId($this->getId());
         $this->setData('action_values', $collection->getData());
+
+        $collection_giftCard = Mage::getModel('aweventdiscount/giftcard')->getCollection()->loadByTimerId($this->getId());
+        $this->setData('giftcard_values', $collection_giftCard->getData());
         return $this;
     }
 
@@ -72,24 +76,39 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
     {
         parent::_afterSave();
         if (Mage::app()->getFrontController()->getRequest()->getActionName() !== 'massStatus') {
-        $collection = Mage::getModel('aweventdiscount/action')->getCollection();
-        $collection->deleteByTimerId($this->getId());
-        $model = Mage::getModel('aweventdiscount/action');
-        if ($this->hasData('actions_to_save'))
-            foreach ($this->getData('actions_to_save') as $item) {
-                if ($item['type'] === AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP) {
-                    $model->setData('action', $item['group']);
-                } else {
-                    if (empty($item['amount'])) {
-//                        throw new Exception(Mage::helper('eventdiscount')->__('Empty action'));
-                        $item['amount'] = 0;
+            $collection = Mage::getModel('aweventdiscount/action')->getCollection();
+            $collection->deleteByTimerId($this->getId());
+            $model = Mage::getModel('aweventdiscount/action');
+            if ($this->hasData('actions_to_save')) {
+                foreach ($this->getData('actions_to_save') as $item) {
+                    if ($item['type'] === AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP) {
+                        $model->setData('action', $item['group']);
+                    } else {
+                        if (empty($item['amount'])) {
+                            $item['amount'] = 0;
+                        }
+                        $model->setData('action', $item['amount']);
                     }
-                    $model->setData('action', $item['amount']);
+                    $model->setData('type', $item['type']);
+                    $model->setData('timer_id', $this->getId());
+                    $model->save();
+                    $model->setData('id', null);
                 }
-                $model->setData('type', $item['type']);
-                $model->setData('timer_id', $this->getId());
-                $model->save();
-                $model->setData('id', null);
+            }
+
+            $collection_giftCard = Mage::getModel('aweventdiscount/giftcard')->getCollection();
+            $collection_giftCard->deleteByTimerId($this->getId());
+            $model_giftCard = Mage::getModel('aweventdiscount/giftcard');
+            if ($this->hasData('giftcard_to_save')) {
+                foreach ($this->getData('giftcard_to_save') as $item) {
+                    $model_giftCard->setData('amount_from', $item['amount_from']);
+                    $model_giftCard->setData('amount_to', $item['amount_to']);
+                    $model_giftCard->setData('reward_new_customer', $item['reward_new_customer']);
+                    $model_giftCard->setData('reward_referrer', $item['reward_referrer']);
+                    $model_giftCard->setData('timer_id', $this->getId());
+                    $model_giftCard->save();
+                    $model_giftCard->setData('id', null);
+                }
             }
         }
         return $this;
@@ -100,12 +119,10 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
         parent::_beforeSave();
         if (is_array($this->getCustomerGroupIds())) {
             $this->setCustomerGroupIds(join(',', $this->getCustomerGroupIds()));
-        }
-        ;
+        };
         if (is_array($this->getStoreIds())) {
             $this->setStoreIds(join(',', $this->getStoreIds()));
-        }
-        ;
+        };
         return $this;
     }
 
@@ -114,6 +131,9 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
         parent::_beforeDelete();
         $collection = Mage::getModel('aweventdiscount/action')->getCollection();
         $collection->deleteByTimerId($this->getId());
+
+        $collection_giftCard = Mage::getModel('aweventdiscount/giftcard')->getCollection();
+        $collection_giftCard->deleteByTimerId($this->getId());
 
         $collection_trigger = Mage::getModel('aweventdiscount/trigger')->getCollection();
         $collection_trigger->deleteByTimerId($this->getId());

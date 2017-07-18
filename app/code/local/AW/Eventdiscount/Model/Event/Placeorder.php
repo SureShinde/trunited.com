@@ -26,7 +26,7 @@
 
 class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Event
 {
-    public function finishTriggers($ignoredIds)
+    public function finishTriggers($ignoredIds, $order)
     {
         $triggers = Mage::getModel('aweventdiscount/trigger')->getActiveTriggers();
         foreach ($triggers as $trigger) {
@@ -61,10 +61,12 @@ class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Eve
                 ->setTriggerStatus(AW_Eventdiscount_Model_Source_Trigger_Status::USED)
                 ->save()
             ;
-            $timerModel = Mage::getModel('aweventdiscount/timer')->load($trigger->getTimerId());
-            Mage::helper('awcore/logger')->log($timerModel,
-                'Timer used: ' . $timerModel->getTimerName(), null, 'Customer id: ' .  $customer->getId()
-            );
+
+            /* Check if trigger type is promotion */
+            if(strcasecmp($trigger->getData('trigger_event'), AW_Eventdiscount_Model_Event::PROMOTION) == 0) {
+                Mage::helper('eventdiscount')->checkFinishPromotion($trigger, $order);
+            }
+            /* END Check if trigger type is promotion */
         }
     }
 
@@ -102,12 +104,13 @@ class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Eve
             if ($this->checkQuote($newEvent)) {
                $ignoredIds = $this->activateTriggers($newEvent);
             }
-            $this->finishTriggers($ignoredIds);
+            $this->finishTriggers($ignoredIds, $observer->getEvent()->getOrder());
         }
         if ($register) {
             Mage::dispatchEvent('customer_register_success',
                 array('account_controller' => Mage::app()->getFrontController(), 'customer' => $customer)
             );
         }
+
     }
 }

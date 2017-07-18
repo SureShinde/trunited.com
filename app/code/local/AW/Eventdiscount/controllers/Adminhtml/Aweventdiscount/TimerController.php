@@ -253,6 +253,7 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
                 $data['url_type'] = $_urlType;
 
                 $model->setData('actions_to_save', $data['actions']);
+                $model->setData('giftcard_to_save', $data['giftcard']);
 
                 $data['design'] = 'default';
                 $data['appearing'] = 'fade';

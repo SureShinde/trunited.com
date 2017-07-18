@@ -60,6 +60,9 @@ class AW_Eventdiscount_Model_Event_Registration extends AW_Eventdiscount_Model_E
         $cms = Mage::helper('eventdiscount')->getCMSPage();
         $url = Mage::getUrl($cms);
         Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
+
+        $customer = $observer->getCustomer();
+        Mage::helper('eventdiscount')->checkPromotionCookieAfterRegistering($customer);
         return;
     }
 }
