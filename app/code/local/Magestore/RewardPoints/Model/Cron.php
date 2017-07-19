@@ -241,8 +241,7 @@ class Magestore_RewardPoints_Model_Cron
                 );
 
                 if(date('Y',strtotime($date)) == date('Y', $t) &&
-                    date('m',strtotime($date)) == date('m', $t) &&
-                    date('d',strtotime($date)) == date('d', $t))
+                    date('m',strtotime($date)) == date('m', $t))
                 {
                     try {
                         $transaction->completeTransaction();

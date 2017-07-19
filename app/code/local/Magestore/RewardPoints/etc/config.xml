@@ -558,7 +558,7 @@
             </rewardpoints>
             <rewardpoints_check_expiry_date_on_hold_transaction>
                 <schedule>
-                    <cron_expr>* * */1 * *</cron_expr>
+                    <cron_expr>0 0 1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>rewardpoints/cron::checkExpiryDateOnHoldTransaction</model>
