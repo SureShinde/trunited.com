@@ -5,6 +5,9 @@
             <action method="addCss">
                 <stylesheet>css/magestore/trugiftcard.css</stylesheet>
             </action>
+            <action method="addJs">
+                <script>magestore/trugiftcard/trugiftcard.js</script>
+            </action>
         </reference>
     </default>
     <trugiftcard_index_index>
@@ -86,4 +89,62 @@
             <block type="trugiftcard/account_shareTruGiftCard" name="trugiftcard.shareTruGiftCard" template="trugiftcard/account/shareTruGiftCard.phtml" />
         </reference>
     </trugiftcard_index_sharetrugiftcard>
+
+    <sales_order_view>
+        <reference name="order_items">
+        </reference>
+        <reference name="order_totals">
+            <block type="trugiftcard/order_totals" name="trugiftcard.order.totals" />
+        </reference>
+    </sales_order_view>
+
+    <sales_order_print>
+        <reference name="sales.order.print">
+        </reference>
+        <reference name="order_totals">
+            <block type="trugiftcard/order_totals" name="trugiftcard.order.totals" />
+        </reference>
+    </sales_order_print>
+
+    <sales_email_order_items>
+        <reference name="order_totals">
+            <block type="trugiftcard/order_totals" name="trugiftcard.order.totals" />
+        </reference>
+    </sales_email_order_items>
+
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block type="trugiftcard/order_invoice_totals" name="trugiftcard.order.invoice.totals" />
+        </reference>
+    </sales_order_invoice>
+
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block type="trugiftcard/order_invoice_totals" name="trugiftcard.order.invoice.totals" />
+        </reference>
+    </sales_order_printinvoice>
+
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+            <block type="trugiftcard/order_invoice_totals" name="trugiftcard.order.invoice.totals" />
+        </reference>
+    </sales_email_order_invoice_items>
+
+    <sales_order_creditmemo>
+        <reference name="creditmemo_totals">
+            <block type="trugiftcard/order_creditmemo_totals" name="trugiftcard.order.creditmemo.totals" />
+        </reference>
+    </sales_order_creditmemo>
+
+    <sales_order_printcreditmemo>
+        <reference name="creditmemo_totals">
+            <block type="trugiftcard/order_creditmemo_totals" name="trugiftcard.creditmemo.order.totals" />
+        </reference>
+    </sales_order_printcreditmemo>
+
+    <sales_email_order_creditmemo_items>
+        <reference name="creditmemo_totals">
+            <block type="trugiftcard/order_creditmemo_totals" name="trugiftcard.creditmemo.order.totals" />
+        </reference>
+    </sales_email_order_creditmemo_items>
 </layout>

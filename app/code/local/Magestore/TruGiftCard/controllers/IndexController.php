@@ -53,6 +53,58 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 		echo "success";
 	}
 
+	public function updateDb2Action(){
+		$setup = new Mage_Core_Model_Resource_Setup();
+		$installer = $setup;
+		$installer->startSetup();
+		$installer->run("");
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_earn', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_spent', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_base_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_base_amount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_amount', 'decimal(12,4) NOT NULL default 0');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_earn', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_spent', 'int(11) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_base_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_discount', 'decimal(12,4) NOT NULL default 0');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'trugiftcard_base_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'trugiftcard_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'trugiftcard_base_discount', 'decimal(12,4) NOT NULL default 0');
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'trugiftcard_discount', 'decimal(12,4) NOT NULL default 0');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'base_trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'base_trugiftcard_discount_for_shipping', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_discount_for_shipping', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'base_trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'base_trugiftcard_shipping_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order'), 'trugiftcard_shipping_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'base_trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'base_trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'base_trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'base_trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'base_trugiftcard_discount', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'base_trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		$installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'trugiftcard_hidden_tax', 'decimal(12,4) NULL');
+		
+		$installer->endSetup();
+		echo "success";
+	}
+
+
 	public function transactionsAction(){
 		$this->loadLayout();
 		$this->_title(Mage::helper('trugiftcard')->__('truGiftCard Transactions'));

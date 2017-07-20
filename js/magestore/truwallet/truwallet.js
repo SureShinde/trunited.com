@@ -1,22 +1,3 @@
-function checkOutLoadCustomerCredit(json) {
-    if ($('truwallet_container')) {
-        $('truwallet_container').remove();
-    }
-    var eladd = getElement();
-    eladd.insert({
-        before: json.html
-    });
-}
-
-function getElement() {
-    var method_load = $('checkout-payment-method-load');
-    if (method_load.down('#checkout-payment-method-load') == undefined) {
-        return method_load;
-    } else {
-        return method_load.down('#checkout-payment-method-load');
-    }
-}
-
 function changeSendStatus(hide, my_email, url) {
     var email = $('truwallet_email_input').value;
     var value = $('truwallet_value_input').value;
@@ -181,8 +162,6 @@ function updateCustomerCredit(url, current_amount, state) {
     if (isNumeric(amount) && amount !== "" && (amount - 0 >= 0) && (amount - current_amount <= 0)) {
         $('loading-credit').show();
         $('truwallet_cc_success_img').hide();
-        $('checkout-cc-button').hide();
-        $('checkout-cc-button-cancel').hide();
         new Ajax.Request(url, {
             method: 'post',
             postBody: '',
@@ -195,10 +174,8 @@ function updateCustomerCredit(url, current_amount, state) {
                         backgroundColor: 'rgb(253, 246, 228)'
                     });
                     $('loading-credit').hide();
-                    $('checkout-cc-button').show();
-                    $('checkout-cc-button-cancel').show();
                     $('truwallet_cc_success_img').show();
-                    $('checkout-cc-button').style.marginLeft = '0';
+                    $('checkout-cc-input').value = res.amount;
                     amount = res.amount;
                     if (res.saveshippingurl) {
                         var shipping_method_url = res.saveshippingurl;

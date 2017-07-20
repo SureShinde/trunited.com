@@ -1370,9 +1370,11 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $payment_method_html = $this->getLayout()->getBlock('onestepcheckout_payment_method')->toHtml();
         $review_total_html = $this->getLayout()->getBlock('review_info')->toHtml();
         $trubox_method = $this->getLayout()->createBlock('onestepcheckout/trubox_option')->setTemplate('onestepcheckout/trubox.phtml')->toHtml();
+        $trunited_discounts = $this->getLayout()->createBlock('onestepcheckout/trugiftcard')->setTemplate('onestepcheckout/trugiftcard.phtml')->toHtml();
         $result['payment_method'] = $payment_method_html;
         $result['review'] = $review_total_html;
         $result['trubox_method'] = $trubox_method;
+        $result['trunited_discounts'] = $trunited_discounts;
         $result['hide_trubox'] = Mage::helper('other')->dropShipInCart();
         if ($isShipping) {
             $shipping_method_html = $this->getLayout()->getBlock('onestepcheckout_shipping_method')->toHtml();

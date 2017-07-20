@@ -66,35 +66,11 @@
 		</reference>
 	</adminhtml_sales_order_invoice_print>
 
-	<adminhtml_sales_order_creditmemo_new>
-		<reference name="creditmemo_totals">
-			<block type="truwallet/order_creditmemo_totals" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_new>
-	<adminhtml_sales_order_creditmemo_updateqty>
-		<reference name="creditmemo_totals">
-			<block type="truwallet/order_creditmemo_totals" />
-		</reference>
-		<reference name="submit_before">
-			<block type="truwallet/order_creditmemo_controls" name="truwallet.balance" template="truwallet/sales/creditmemo/refund.phtml" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_updateqty>
-	<adminhtml_sales_order_creditmemo_new>
-		<reference name="submit_before">
-			<block type="truwallet/order_creditmemo_controls" name="truwallet.balance" template="truwallet/sales/creditmemo/refund.phtml" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_new>
-	<adminhtml_sales_order_creditmemo_view>
-		<reference name="creditmemo_totals">
-			<block type="truwallet/order_creditmemo_totals" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_view>
-
 	<adminhtml_sales_order_create_index>
 		<reference name="head">
 			<action method="addItem">
 				<type>skin_js</type>
-				<name>js/magestore/truwallet.js</name>
+				<name>js/magestore/trugiftcard.js</name>
 				<params/>
 			</action>
 		</reference>
@@ -113,15 +89,10 @@
 		</reference>
 	</adminhtml_sales_order_create_load_block_items>
 
-	<adminhtml_sales_order_view>
-		<reference name="order_totals">
-			<block type="truwallet/adminhtml_totals_order_point" name="truwallet.total.point" />
-		</reference>
-	</adminhtml_sales_order_view>
-
 	<adminhtml_sales_order_creditmemo_new>
 		<reference name="creditmemo_totals">
 			<block type="truwallet/adminhtml_totals_creditmemo_point" name="truwallet.total.point" />
+			<block type="truwallet/order_creditmemo_totals" />
 		</reference>
 		<reference name="submit_before">
 			<block type="truwallet/adminhtml_totals_creditmemo_rewards" name="truwallet.total.earned" template="truwallet/totals/creditmemo/rewards.phtml" />

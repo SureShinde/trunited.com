@@ -41,7 +41,7 @@ class Magestore_TruWallet_Block_Adminhtml_Totals_Creditmemo_Point
         if ($creditmemo->getTruwalletEarn() > 0) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'truwallet_earn_label',
-                'label' => $this->__('Refund truWallet Balances'),
+                'label' => $this->__('Refund TruWallet Balances'),
                 'value' => $creditmemo->getTruwalletEarn(),
                 'is_formated'   => true,
             )), 'subtotal');

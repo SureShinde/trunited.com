@@ -41,7 +41,7 @@ class Magestore_TruWallet_Block_Order_Invoice_Totals extends Mage_Core_Block_Tem
 
         $totalsBlock->addTotal(new Varien_Object(array(
             'code' => $this->getCode(),
-            'label' => Mage::helper('truwallet')->__('truWallet Balance'),
+            'label' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
             'value' => -$invoice->getTruwalletDiscount(),
             'base_value' => -$invoice->getBaseTruwalletDiscount(),
             )), 'subtotal');

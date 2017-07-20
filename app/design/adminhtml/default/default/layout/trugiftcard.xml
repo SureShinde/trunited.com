@@ -38,7 +38,7 @@
 
 	<!-- SHOW DISCOUNT ORDER, INVOICE, PDF, EMAIL -->
 
-	<!--<adminhtml_sales_order_view>
+	<adminhtml_sales_order_view>
 		<reference name="order_totals">
 			<block type="trugiftcard/order_totals" />
 		</reference>
@@ -66,11 +66,6 @@
 		</reference>
 	</adminhtml_sales_order_invoice_print>
 
-	<adminhtml_sales_order_creditmemo_new>
-		<reference name="creditmemo_totals">
-			<block type="trugiftcard/order_creditmemo_totals" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_new>
 	<adminhtml_sales_order_creditmemo_updateqty>
 		<reference name="creditmemo_totals">
 			<block type="trugiftcard/order_creditmemo_totals" />
@@ -79,11 +74,7 @@
 			<block type="trugiftcard/order_creditmemo_controls" name="trugiftcard.balance" template="trugiftcard/sales/creditmemo/refund.phtml" />
 		</reference>
 	</adminhtml_sales_order_creditmemo_updateqty>
-	<adminhtml_sales_order_creditmemo_new>
-		<reference name="submit_before">
-			<block type="trugiftcard/order_creditmemo_controls" name="trugiftcard.balance" template="trugiftcard/sales/creditmemo/refund.phtml" />
-		</reference>
-	</adminhtml_sales_order_creditmemo_new>
+
 	<adminhtml_sales_order_creditmemo_view>
 		<reference name="creditmemo_totals">
 			<block type="trugiftcard/order_creditmemo_totals" />
@@ -113,15 +104,10 @@
 		</reference>
 	</adminhtml_sales_order_create_load_block_items>
 
-	<adminhtml_sales_order_view>
-		<reference name="order_totals">
-			<block type="trugiftcard/adminhtml_totals_order_point" name="trugiftcard.total.point" />
-		</reference>
-	</adminhtml_sales_order_view>
-
 	<adminhtml_sales_order_creditmemo_new>
 		<reference name="creditmemo_totals">
 			<block type="trugiftcard/adminhtml_totals_creditmemo_point" name="trugiftcard.total.point" />
+			<block type="trugiftcard/order_creditmemo_totals" />
 		</reference>
 		<reference name="submit_before">
 			<block type="trugiftcard/adminhtml_totals_creditmemo_rewards" name="trugiftcard.total.earned" template="trugiftcard/totals/creditmemo/rewards.phtml" />
@@ -139,6 +125,6 @@
 		<reference name="creditmemo_totals">
 			<block type="trugiftcard/adminhtml_totals_creditmemo_point" name="trugiftcard.total.point" />
 		</reference>
-	</adminhtml_sales_order_creditmemo_view>-->
+	</adminhtml_sales_order_creditmemo_view>
 
 </layout>

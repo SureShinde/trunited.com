@@ -396,7 +396,7 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
                         $receiverAccount = Mage::helper('trugiftcard/account')->updateCredit($customer->getId(), $credit);
                         $params = array(
                             'credit' => $credit,
-                            'title' => Mage::helper('trugiftcard')->__('Purchased truGiftCard Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getEntityId())).'">'.$order->getIncrementId().'</a>'),
+                            'title' => Mage::helper('trugiftcard')->__('Purchased Trunited Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$order->getEntityId())).'">'.$order->getIncrementId().'</a>'),
                         );
                         Mage::helper('trugiftcard/transaction')->createTransaction(
                             $receiverAccount,

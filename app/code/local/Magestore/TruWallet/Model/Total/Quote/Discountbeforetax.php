@@ -152,7 +152,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discountbeforetax extends Mage_Sales
         if ($customer_credit_discount > 0) {
             $address->addTotal(array(
                 'code' => $this->getCode(),
-                'title' => Mage::helper('truwallet')->__('truWallet Balance'),
+                'title' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
                 'value' => -$customer_credit_discount,
             ));
         }

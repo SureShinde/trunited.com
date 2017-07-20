@@ -45,7 +45,7 @@ class Magestore_RewardPoints_Model_Cron
         }
         
         // complete holding transactions
-        $holdingDays = array();
+        /*$holdingDays = array();
         foreach ($stores as $_store) {
             $_holdDays = (int)Mage::getStoreConfig(
                 Magestore_RewardPoints_Helper_Calculation_Earning::XML_PATH_HOLDING_DAYS, $_store
@@ -61,7 +61,7 @@ class Magestore_RewardPoints_Model_Cron
             foreach ($holdingDays as $_holdDays => $_storeIds) {
                 $this->completeHoldingTransaction($_holdDays, $_storeIds);
             }
-        }
+        }*/
         
         // expire transactions
         Varien_Profiler::start('REWARDPOINTS_CRON::expireTransactions');

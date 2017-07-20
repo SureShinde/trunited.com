@@ -1,0 +1,97 @@
+<?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
+<?php $_code = 'trugiftcard'; ?>
+<?php if (Mage::helper('trugiftcard')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
+    <dl id="<?php echo $_code ?>_container">
+        <?php if (Mage::helper('customer')->isLoggedIn()): ?>
+            <dt class="<?php echo $_code ?>">
+                <span style="font-weight: normal;">
+                    <?php echo $this->getLabelCurrent() ?>:
+                    <b id="trugiftcard_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b>
+                </span>
+            <form action="" method="post" onsubmit="return false;" id="trugiftcard-payment-form">
+                <div class="checkout-credit-use">
+                        <span style="margin-right: 5px;"><strong
+                                style="font-weight: normal;"> <?php echo $this->getLabelApplied() ?>: </strong></span>
+
+                    <div class="trugiftcard_input" id="trugiftcard_input">
+                        <input type="text" id="trugiftcard_amount" name="trugiftcard_amount"
+                               class="input-text validate-number validate-zero-or-greater required-entry form-control"
+                               value="<?php echo number_format($this->getCreditUsed(), 2); ?>"/>
+
+                        <div class="validation-advice" style="display:none"
+                             id="advice-validate-number-checkout_cc_smaller"><?php echo $this->__('Please enter a number smaller than %s.', $this->getCustomerCreditLabel()); ?></div>
+                    </div>
+                    <img id="trugiftcard_cc_success_img" style=" display: none; margin-left: 4px;"
+                         src="<?php echo $this->getSkinUrl('images/trugiftcard/i_msg-success.gif') ?>"/>
+                    <div class="clear" style="clear: both;"></div>
+                    <div id="loading-tgc-credit" style="display: none;margin-left: 7px;margin-top: 12px;">
+                        <p id="trugiftcard_cc_show_loading">
+                            <img src="<?php echo $this->getSkinUrl('images/trugiftcard/opc-ajax-loader.gif') ?>"/>
+                            <?php echo $this->__('Loading...') ?>
+                        </p>
+                    </div>
+                    <?php if (Mage::helper('trugiftcard')->getEnableChangeBalance()) { ?>
+                        <span class="edit-credit" id="checkout-cc-img"><img
+                                style="cursor: pointer;height: 15px;width: 15px;margin-left: 3px;"
+                                onclick="showEditText(this);"
+                                src="<?php echo $this->getSkinUrl('images/trugiftcard/btn_edit.gif'); ?>"></span>
+                    <?php } ?>
+                    <?php
+                    $moduleOnestepActive = Mage::getConfig()->getModuleConfig('Magestore_Onestepcheckout')->is('active', 'true');
+                    ?>
+                    <div class="buttons btn-trugiftcard">
+                        <?php
+                        if ($moduleOnestepActive && Mage::getStoreConfig('onestepcheckout/general/active') == '1') {
+                            ?>
+                            <button type="submit" class="button" id="checkout-tgc-button"
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', '<?php echo $this->getCustomerCredit() ?>' , '<?php echo $state ?>' );">
+                                <span><span><?php echo Mage::helper('trugiftcard')->__('Apply') ?></span></span>
+                            </button>
+
+                            <button type="button" class="button" id="checkout-tgc-button-cancel"
+                                    <?php if(Mage::getSingleton('checkout/session')->getBaseTrugiftcardCreditAmount() <= 0){?>style="display: none"<?php }?>
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0 , '<?php echo $state ?>' );">
+                                <span><span><?php echo Mage::helper('trugiftcard')->__('Cancel') ?></span></span>
+                            </button>
+
+                        <?php } else { ?>
+                            <button type="submit" class="button" id="checkout-tgc-button" style="display: none;"
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>','<?php echo $this->getCustomerCredit() ?>', '<?php echo $state ?>');">
+                                <span><span><?php echo Mage::helper('trugiftcard')->__('Apply') ?></span></span>
+                            </button>
+                            <button type="button" class="button" id="checkout-tgc-button-cancel"
+                                    <?php if(Mage::getSingleton('checkout/session')->getBaseTrugiftcardCreditAmount() <= 0){?>style="display: none"<?php }?>
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0, '<?php echo $state ?>');">
+                                <span><span><?php echo Mage::helper('trugiftcard')->__('Cancel') ?></span></span>
+                            </button>
+                        <?php } ?>
+                    </div>
+                </div>
+            </form>
+        <?php else: ?>
+            <div>
+                <div class="checkout-cart-credit-amount">
+                    <p>
+                        <?php echo $this->__('Please ') . "<a href=\"" . $this->getUrl('customer/account/login') . "\">" . $this->__('login') . "</a>" . $this->__(' to use customer credit.'); ?>
+                    </p>
+                </div>
+            </div>
+        <?php endif ?>
+        <script type="text/javascript">
+            var ccPaymentForm = new VarienForm('trugiftcard-payment-form', true);
+        </script>
+        <style type="text/css">
+            #onestepcheckout-payment-methods #trugiftcard_container .trugiftcard {
+                background-color: #<?php echo $this->getBackgroundColor()?>;
+                color: #<?php echo $this->getTextColor()?>;
+                border: 1px solid #<?php echo $this->getBackgroundColor()?>;
+            }
+            #trugiftcard_amount{
+                float: left;
+                width: 93% !important;
+            }
+        </style>
+        </dt>
+    </dl>
+<?php endif; ?>
+
