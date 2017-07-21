@@ -227,4 +227,6 @@ function updateCustomerCreditTGC(url, current_amount, state) {
         });
     }
 
+    return false;
+
 }

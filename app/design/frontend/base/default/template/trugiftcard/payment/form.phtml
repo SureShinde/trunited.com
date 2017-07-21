@@ -44,24 +44,24 @@
                         if ($moduleOnestepActive && Mage::getStoreConfig('onestepcheckout/general/active') == '1') {
                             ?>
                             <button type="submit" class="button" id="checkout-tgc-button"
-                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', '<?php echo $this->getCustomerCredit() ?>' , '<?php echo $state ?>' );">
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', '<?php echo $this->getCustomerCredit() ?>' , '<?php echo $state ?>' ); return false;">
                                 <span><span><?php echo Mage::helper('trugiftcard')->__('Apply') ?></span></span>
                             </button>
 
                             <button type="button" class="button" id="checkout-tgc-button-cancel"
                                     <?php if(Mage::getSingleton('checkout/session')->getBaseTrugiftcardCreditAmount() <= 0){?>style="display: none"<?php }?>
-                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0 , '<?php echo $state ?>' );">
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0 , '<?php echo $state ?>' );return false;">
                                 <span><span><?php echo Mage::helper('trugiftcard')->__('Cancel') ?></span></span>
                             </button>
 
                         <?php } else { ?>
                             <button type="submit" class="button" id="checkout-tgc-button" style="display: none;"
-                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>','<?php echo $this->getCustomerCredit() ?>', '<?php echo $state ?>');">
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>','<?php echo $this->getCustomerCredit() ?>', '<?php echo $state ?>');return false;">
                                 <span><span><?php echo Mage::helper('trugiftcard')->__('Apply') ?></span></span>
                             </button>
                             <button type="button" class="button" id="checkout-tgc-button-cancel"
                                     <?php if(Mage::getSingleton('checkout/session')->getBaseTrugiftcardCreditAmount() <= 0){?>style="display: none"<?php }?>
-                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0, '<?php echo $state ?>');">
+                                    onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', 0, '<?php echo $state ?>');return false;">
                                 <span><span><?php echo Mage::helper('trugiftcard')->__('Cancel') ?></span></span>
                             </button>
                         <?php } ?>
