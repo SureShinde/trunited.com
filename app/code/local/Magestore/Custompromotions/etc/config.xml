@@ -201,6 +201,11 @@
             <custom_product>
                 <product_type>customproduct,gfitcardproduct</product_type>
             </custom_product>
+            <ytd_mtd>
+                <enable>1</enable>
+                <profit>Amount paid out to members in {{current_year}}</profit>
+                <shared>Amount shared with Trunited shoppers so far this month</shared>
+            </ytd_mtd>
         </custompromotions>
     </default>
 </config>
