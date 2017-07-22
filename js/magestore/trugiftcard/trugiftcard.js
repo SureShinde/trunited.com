@@ -172,61 +172,37 @@ function validateCheckOutCC(current_amount) {
     }
 }
 function updateCustomerCreditTGC(url, current_amount, state) {
-    var tgc_amount = $('trugiftcard_amount');
-    var amount = tgc_amount.value;
-    if (current_amount == 0) {
-        amount = 0;
-    }
 
-    var tgc_button = $('checkout-tgc-button');
-    var tgc_button_cancel = $('checkout-tgc-button-cancel');
-    var tgc_img = $('trugiftcard_cc_success_img');
     var tgc_loading_img = $('loading-tgc-credit');
+    var tgc_checkbox = document.getElementById("used_trugiftcard");
 
-    if (isNumeric(amount) && amount !== "" && (amount - 0 >= 0) && (amount - current_amount <= 0)) {
-        tgc_loading_img.show();
-        tgc_img.hide();
-        tgc_button.hide();
-        if (tgc_button_cancel != null)
-            tgc_button_cancel.hide();
-        new Ajax.Request(url, {
-            method: 'post',
-            postBody: '',
-            parameters: {'trugiftcard_amount': amount, 'state': state},
-            onComplete: function (response) {
+    var is_checked = document.getElementById("used_trugiftcard").checked;
 
-                if (response.responseText.isJSON()) {
-                    if (typeof(reloadAllBlock) != 'undefined') reloadAllBlock();
-                    var res = response.responseText.evalJSON();
-                    tgc_amount.setStyle({
-                        backgroundColor: 'rgb(253, 246, 228)'
-                    });
+    tgc_loading_img.show();
 
-                    tgc_amount.value = res.amount;
-                    tgc_loading_img.hide();
-                    tgc_button.show();
+    new Ajax.Request(url, {
+        method: 'post',
+        postBody: '',
+        parameters: {'is_checked': is_checked, 'state': state},
+        onComplete: function (response) {
+            if (response.responseText.isJSON()) {
+                if (typeof(reloadAllBlock) != 'undefined') reloadAllBlock();
+                var res = response.responseText.evalJSON();
 
-                    if (res.amount > 0) {
-                        tgc_button_cancel.show();
-                        tgc_img.show();
-                        console.log('aaaaaaaaaaaaa');
-                    } else {
-                        tgc_button_cancel.hide();
-                        tgc_img.hide();
-                    }
+                tgc_loading_img.hide();
+                if(res.check == 2)
+                    tgc_checkbox.checked = true;
+                else
+                    tgc_checkbox.checked = false;
 
-                    if (res.saveshippingurl) {
-                        var shipping_method_url = res.saveshippingurl;
-                        save_shipping_method(shipping_method_url, 1, 1);
-                    } else if (res.payment_html) {
-                        //reload payment
-                        $('checkout-payment-method-load').update(res.payment_html);
-                    }
+                if (res.saveshippingurl) {
+                    var shipping_method_url = res.saveshippingurl;
+                    save_shipping_method(shipping_method_url, 1, 1);
+                } else if (res.payment_html) {
+                    //reload payment
+                    $('checkout-payment-method-load').update(res.payment_html);
                 }
             }
-        });
-    }
-
-    return false;
-
+        }
+    });
 }

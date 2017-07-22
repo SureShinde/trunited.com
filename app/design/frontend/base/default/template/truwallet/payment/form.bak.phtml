@@ -10,33 +10,37 @@
                        onclick="changeUseCustomercredit(this, '<?php echo $this->getUrl('truwallet/index/checkCredit') ?>');"
                        checked="checked"/>
 
-                <!--<span style="padding-left:10px">
-                    <?php /*echo $this->getLabelCurrent() */?>:
-                    <b id="truwallet_balance"> <?php /*echo $this->getAvaiableCustomerCreditLabel() */?> </b>
+                <span style="padding-left:10px">
+                    <?php echo $this->getLabelCurrent() ?>:
+                    <b id="truwallet_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b>
                 </span>
-                <form action="" method="post" onsubmit="return false;" id="truwallet-payment-form">
-                    <div class="checkout-credit-use">
-                        <span style="margin-right: 5px;">
-                            <strong style="margin-left: 7px;"> <?php /*echo $this->getLabelApplied() */?>: </strong>
-                        </span>
-                        <span id="checkout-cc-input"><?php /*echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false); */?></span>
+            <form action="" method="post" onsubmit="return false;" id="truwallet-payment-form">
+                <div class="checkout-credit-use">
+                            <span style="margin-right: 5px;"><strong
+                                    style="margin-left: 7px;"> <?php echo $this->getLabelApplied() ?>: </strong></span>
+                            <span id="checkout-cc-input"><?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false); ?></span>
 
+                    <div style="display: none"
+                         class="checkout_cc_input_alert" id="checkout_cc_input_alert">
+                        <input type="text" id="checkout_cc_inputtext"
+                               onchange="validateCheckOutCC(<?php echo $this->getCustomerCredit() ?>);"
+                               class="input-text validate-number validate-zero-or-greater required-entry form-control"
+                               value="<?php echo $this->getCreditUsed(); ?>"/>
+
+                        <div class="validation-advice" style="display:none"
+                             id="advice-validate-number-checkout_cc_smaller"><?php echo $this->__('Please enter a number smaller than %s.', $this->getCustomerCreditLabel()); ?></div>
                     </div>
-                </form>-->
-                <input type="text" id="checkout_cc_inputtext" style="display: none;"
-                       onchange="validateCheckOutCC(<?php echo $this->getCustomerCredit() ?>);"
-                       class="input-text validate-number validate-zero-or-greater required-entry form-control"
-                       value="<?php echo $this->getCreditUsed(); ?>"/>
-                <div class="<?php echo $_code ?>_wrapper">
-                    <div class="truwallet-img">
-                        <img src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/truwallet.png');?>" title="<?php echo $this->__('TruWallet Balance')?>" />
-                        <span class="current_balance"><?php echo $this->getAvaiableCustomerCreditLabel() ?></span>
-                        <span class="current_balance_text"><?php echo $this->__('Current TruWallet Balance') ?></span>
-                    </div>
-                    <div class="used">
-                        <span><?php echo $this->getLabelApplied();?> : <?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false);?></span>
+                    <img id="truwallet_cc_success_img" style=" display: none;margin-right: 4px;"
+                         src="<?php echo $this->getSkinUrl('images/truwallet/i_msg-success.gif') ?>"/>
+
+                    <div id="loading-credit" style="display: none;margin-left: 7px;margin-top: 12px;">
+                        <p id="truwallet_cc_show_loading">
+                            <img src="<?php echo $this->getSkinUrl('images/truwallet/opc-ajax-loader.gif') ?>"/>
+                            <?php echo $this->__('Loading...') ?>
+                        </p>
                     </div>
                 </div>
+            </form>
         <?php else: ?>
             <div>
                 <div class="checkout-cart-credit-amount">
@@ -67,9 +71,9 @@
         </script>
         <style type="text/css">
             #onestepcheckout-trunited-discounts #truwallet_container .truwallet {
-                background-color: # <?php echo $this->getBackgroundColor()?>;
-                color: # <?php echo $this->getTextColor()?>;
-                border: 1px solid # <?php echo $this->getBackgroundColor()?>;
+                background-color: #<?php echo $this->getBackgroundColor()?>;
+                color: #<?php echo $this->getTextColor()?>;
+                border: 1px solid #<?php echo $this->getBackgroundColor()?>;
             }
         </style>
         </dt>

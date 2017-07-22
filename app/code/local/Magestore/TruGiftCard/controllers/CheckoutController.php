@@ -44,11 +44,20 @@ class Magestore_TruGiftCard_CheckoutController extends Mage_Core_Controller_Fron
         $account = Mage::helper('trugiftcard/account')->getCurrentAccount();
 
         if ($request->isPost()) {
-            if (is_numeric($request->getParam('trugiftcard_amount'))) {
+            if (($request->getParam('is_checked'))) {
                 if(Mage::helper('custompromotions')->truWalletInCart())
+                    $is_check = 0;
+                else
+                    $is_check = $request->getParam('is_checked');
+
+                $check = false;
+                if($is_check == 'true')
+                {
+                    $amount = Mage::getModel('checkout/session')->getQuote()->getGrandTotal();
+                    $check = true;
+                }
+                else
                     $amount = 0;
-                else 
-                    $amount = $request->getParam('trugiftcard_amount');
 
                 $session->setCancelCredit(true);
 
@@ -90,6 +99,8 @@ class Magestore_TruGiftCard_CheckoutController extends Mage_Core_Controller_Fron
                     $html = $this->_getPaymentMethodsHtml();
                     $result['payment_html'] = $html;
                 }
+
+                $result['check'] = !$check ? 1 : 2;
                 $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
             }
         }

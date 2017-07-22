@@ -160,8 +160,6 @@ function updateCustomerCredit(url, current_amount, state) {
     }
 
     if (isNumeric(amount) && amount !== "" && (amount - 0 >= 0) && (amount - current_amount <= 0)) {
-        $('loading-credit').show();
-        $('truwallet_cc_success_img').hide();
         new Ajax.Request(url, {
             method: 'post',
             postBody: '',
@@ -170,11 +168,6 @@ function updateCustomerCredit(url, current_amount, state) {
                 if (response.responseText.isJSON()) {
 					if (typeof(reloadAllBlock) != 'undefined') reloadAllBlock();
                     var res = response.responseText.evalJSON();
-                    $('checkout_cc_inputtext').setStyle({
-                        backgroundColor: 'rgb(253, 246, 228)'
-                    });
-                    $('loading-credit').hide();
-                    $('truwallet_cc_success_img').show();
                     $('checkout-cc-input').value = res.amount;
                     amount = res.amount;
                     if (res.saveshippingurl) {

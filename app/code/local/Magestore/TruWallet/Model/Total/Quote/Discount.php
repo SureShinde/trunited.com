@@ -172,8 +172,8 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
 
         //update address
-        if($baseTruWalletDiscount == $baseDiscountTotal)
-            $session->setBaseTrugiftcardCreditAmount(null);
+//        if($baseTruWalletDiscount == $baseDiscountTotal)
+//            $session->setBaseTrugiftcardCreditAmount(null);
 
         $address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
         $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount + $wrapTotal);
