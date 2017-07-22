@@ -24,7 +24,7 @@ $accountInfo = Mage::helper('affiliateplus/account')->getAffiliateInfoFromCookie
 $cookie = Mage::getSingleton('core/cookie');
 $account_code = $cookie->get('account_code');
 $display = true;
-if(isset($accountInfo) && $accountInfo->getId() && $account_code)
+if(isset($accountInfo) && $accountInfo != null && $accountInfo->getId() && $account_code)
     $display = false;
 ?>
 

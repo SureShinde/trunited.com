@@ -48,7 +48,7 @@
                     <name>trugiftcard_dashboard</name>
                     <path>trugiftcard/index/shareTruGiftCard</path>
                     <label helper="trugiftcard/getShareTruGiftCardLabel"/>
-                    <enable>true</enable>
+                    <enable>1</enable>
                     <order>20</order>
                 </action>
                 <action method="addLink" translate="label" module="trugiftcard">

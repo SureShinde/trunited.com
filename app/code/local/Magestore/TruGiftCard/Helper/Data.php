@@ -100,6 +100,11 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trugiftcard/transfer/message', $store);
     }
 
+    public function getEnableSharing($store = null)
+    {
+        return Mage::getStoreConfig('trugiftcard/sharegiftcard/enable', $store);
+    }
+
 
     public function isShowWarningMessage()
     {

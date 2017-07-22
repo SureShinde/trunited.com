@@ -416,7 +416,7 @@
         <jobs>
             <trugiftcard_check_expiry_date_sharing_truGiftCard>
                 <schedule>
-                    <cron_expr>* * */1 * *</cron_expr>
+                    <cron_expr>* * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>trugiftcard/observer::checkExpiryDate</model>
@@ -436,9 +436,9 @@
                 <order_status>complete</order_status>
                 <notify_message>Important: truGiftCard cannot be used as a payment option for Gift Cards.</notify_message>
             </product>
-            <sharewallet>
-                <expire_date>7</expire_date>
-            </sharewallet>
+            <sharegiftcard>
+                <enable>1</enable>
+            </sharegiftcard>
             <transfer>
                 <enable>1</enable>
                 <bonus>6</bonus>

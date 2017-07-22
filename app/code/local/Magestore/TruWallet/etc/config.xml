@@ -426,6 +426,7 @@
                 <reward_point>3</reward_point>
             </truwallet_payment>
             <sharewallet>
+                <enable>0</enable>
                 <expire_date>7</expire_date>
             </sharewallet>
             <spending>

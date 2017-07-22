@@ -94,15 +94,25 @@
 						</notify_message>
 					</fields>
 				</product>
-				<sharewallet>
-					<label>Share truGiftCard Configuration</label>
+				<sharegiftcard>
+					<label>Sharing Trunited Gift Card Configuration</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>3</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
 					<fields>
-						<expire_date translate="label comment">
+						<enable>
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable>
+						<!--<expire_date translate="label comment">
 							<label>Expiry Date for Sharing truGiftCard</label>
 							<frontend_type>text</frontend_type>
 							<sort_order>10</sort_order>
@@ -110,9 +120,9 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<comment>day(s)that the truGiftCard money will be returned to sender</comment>
-						</expire_date>
+						</expire_date>-->
 					</fields>
-				</sharewallet>
+				</sharegiftcard>
 				<transfer>
 					<label>Affiliate Transfers Money To truGiftCard Configuration</label>
 					<frontend_type>text</frontend_type>

@@ -32,6 +32,7 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
     public function sendTruGiftCardAction()
     {
         $amount = $this->getRequest()->getParam('share_amount');
+        $day_of_expiration = $this->getRequest()->getParam('share_day_expiration');
         $message = $this->getRequest()->getParam('message');
         $email = filter_var($this->getRequest()->getParam('share_email'), FILTER_SANITIZE_EMAIL);
         $customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomerId());
@@ -47,7 +48,7 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
 
         if (strcasecmp($email, $customer->getEmail()) == 0) {
             Mage::getSingleton('core/session')->addError(
-                Mage::helper('trugiftcard')->__('You cannot share truGiftCard balance to your email')
+                Mage::helper('trugiftcard')->__('You cannot share truWallet balance to your email')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
@@ -60,6 +61,21 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
         }
+
+        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT)) {
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('trugiftcard')->__($day_of_expiration . ' is not a valid Integer number')
+            );
+            $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
+            return;
+        } else if ($day_of_expiration < 1 || $day_of_expiration > 31) {
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('trugiftcard')->__('The # days of expiration is not smaller than 0 and greater than 31 ')
+            );
+            $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
+            return;
+        }
+        $expiration_date = Mage::helper('trugiftcard/transaction')->addDaysToDate(now(), $day_of_expiration);
 
         $account = Mage::getModel('trugiftcard/customer')->load($customer->getId(), 'customer_id');
         if ($account->getTrugiftcardCredit() < 0 || $amount > $account->getTrugiftcardCredit()) {
@@ -77,11 +93,7 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
         if ($customer_receiver->getId())
             $is_exist = true;
 
-        if ($is_exist) {
-            $status = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-        } else {
-            $status = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-        }
+        $status = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
 
         $transactionSave = Mage::getModel('core/resource_transaction');
         $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
@@ -89,38 +101,87 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
             $connection->beginTransaction();
 
             $truGiftCardAccount = Mage::helper('trugiftcard/account')->updateCredit($customer->getId(), -$amount);
-            $params = array(
-                'credit' => -$amount,
-                'title' => '',
-                'receiver_email' => $email,
-                'receiver_customer_id' => $is_exist ? $customer_receiver->getId() : '',
-            );
-            if ($truGiftCardAccount != null) {
-                $transaction_helper->createTransaction(
-                    $truGiftCardAccount,
-                    $params,
-                    Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING,  // type
-                    $status
-                );
-            }
 
+            $recipient_transaction_id = null;
+            $recipient_transaction = null;
+            /* create transaction for recipient first */
             if ($is_exist) {
                 $receiverAccount = Mage::helper('trugiftcard/account')->updateCredit($customer_receiver->getId(), $amount);
                 $params = array(
                     'credit' => $amount,
                     'title' => '',
-                    'receiver_email' => $customer_receiver->getEmail(),
-                    'receiver_customer_id' => $customer_receiver->getId(),
+                    'receiver_email' => $customer->getEmail(),
+                    'receiver_customer_id' => $customer->getId(),
+                    'expiration_date' => $expiration_date,
                 );
                 if ($receiverAccount != null) {
-                    $transaction_helper->createTransaction(
+                    $recipient_transaction = $transaction_helper->createTransaction(
                         $receiverAccount,
                         $params,
                         Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
                         $status
                     );
+
+                    if ($recipient_transaction != null && $recipient_transaction->getId())
+                        $recipient_transaction_id = $recipient_transaction->getId();
+                    else
+                        throw new Exception(
+                            Mage::helper('trugiftcard')->__('Cannot create a transaction for recipient.')
+                        );
+                }
+            } else {
+                $params = array(
+                    'credit' => $amount,
+                    'title' => '',
+                    'customer_email' => $email,
+                    'receiver_email' => $customer->getEmail(),
+                    'receiver_customer_id' => $customer->getId(),
+                    'expiration_date' => $expiration_date,
+                );
+
+                $recipient_transaction = $transaction_helper->createNonTransaction(
+                    $customer,
+                    $params,
+                    Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING,  // type
+                    $status
+                );
+
+                if ($recipient_transaction != null && $recipient_transaction->getId())
+                    $recipient_transaction_id = $recipient_transaction->getId();
+                else
+                    throw new Exception(
+                        Mage::helper('trugiftcard')->__('Cannot create a transaction for recipient.')
+                    );
+            }
+            /* END create transaction for recipient first */
+
+            /* CREATE transaction for sender */
+            $params = array(
+                'credit' => -$amount,
+                'title' => '',
+                'receiver_email' => $email,
+                'receiver_customer_id' => $is_exist ? $customer_receiver->getId() : '',
+                'expiration_date' => $expiration_date,
+                'recipient_transaction_id' => $recipient_transaction_id,
+            );
+
+            if ($truGiftCardAccount != null) {
+                $share_transaction = $transaction_helper->createTransaction(
+                    $truGiftCardAccount,
+                    $params,
+                    Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING,  // type
+                    $status
+                );
+
+                if ($share_transaction != null && $share_transaction->getId()) {
+                    $recipient_transaction->setData('recipient_transaction_id', $share_transaction->getId())->save();
+                } else {
+                    throw new Exception(
+                        Mage::helper('trugiftcard')->__('Cannot create a transaction for sender.')
+                    );
                 }
             }
+            /* END transaction for sender */
 
             $transaction_helper->sendEmailWhenSharingTruGiftCard(
                 $customer->getId(),
@@ -163,12 +224,18 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
             $transaction->setStatus(Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED);
             $transaction->save();
 
-            $truGiftCardAccount = Mage::getModel('trugiftcard/customer')->load($transaction->getTruwalletId());
-            if ($truGiftCardAccount->getId()) {
-                $current_credit = $truGiftCardAccount->getTrugiftcardCredit();
+            $truGiftCardAccountAccount = Mage::getModel('trugiftcard/customer')->load($transaction->getTrugiftcardId());
+            if ($truGiftCardAccountAccount->getId()) {
+                $current_credit = $truGiftCardAccountAccount->getTrugiftcardCredit();
                 $_new_credit = $current_credit + abs($transaction->getChangedCredit());
-                $truGiftCardAccount->setTrugiftcardCredit($_new_credit);
-                $truGiftCardAccount->save();
+                $truGiftCardAccountAccount->setTrugiftcardCredit($_new_credit);
+                $truGiftCardAccountAccount->save();
+
+                $receiver_transaction = Mage::getModel('trugiftcard/transaction')->load($transaction->getRecipientTransactionId());
+                if($receiver_transaction != null && $receiver_transaction->getId())
+                {
+                    $receiver_transaction->setStatus(Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED)->save();
+                }
             }
 
             $connection->commit();

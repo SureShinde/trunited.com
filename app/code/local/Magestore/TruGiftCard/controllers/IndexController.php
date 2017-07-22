@@ -8,7 +8,7 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 			Mage::helper('trugiftcard/transaction')->checkCreditFromSharing($customer);
 
 		$this->loadLayout();
-		$this->_title(Mage::helper('trugiftcard')->__('My truGiftCard'));
+		$this->_title(Mage::helper('trugiftcard')->__('My Trunited Gift Card'));
 		$this->renderLayout();
 	}
 
@@ -104,16 +104,44 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 		echo "success";
 	}
 
+	public function updateDb3Action(){
+		$setup = new Mage_Core_Model_Resource_Setup();
+		$installer = $setup;
+		$installer->startSetup();
+		$installer->run("
+              ALTER TABLE {$setup->getTable('trugiftcard/transaction')} ADD recipient_transaction_id int(10) unsigned;
+              ALTER TABLE {$setup->getTable('trugiftcard/transaction')} ADD point_back FLOAT;
+              ALTER TABLE {$setup->getTable('trugiftcard/transaction')} ADD order_filter_ids text;
+        ");
+		$installer->endSetup();
+		echo "success";
+	}
+
 
 	public function transactionsAction(){
 		$this->loadLayout();
-		$this->_title(Mage::helper('trugiftcard')->__('truGiftCard Transactions'));
+		$this->_title(Mage::helper('trugiftcard')->__('Trunited Gift Card Transactions'));
 		$this->renderLayout();
 	}
 
 	public function shareTruGiftCardAction(){
+		if(!Mage::helper('trugiftcard')->getEnableSharing())
+		{
+			Mage::getSingleton('core/session')->addError(
+				Mage::helper('trugiftcard')->__('The sharing Trunited Gift Card feature has been disabled.')
+			);
+			$this->_redirectUrl(Mage::getUrl('*/*/'));
+			return;
+		}
 		$this->loadLayout();
-		$this->_title(Mage::helper('trugiftcard')->__('Share TruGiftCard Money'));
+		$this->_title(Mage::helper('trugiftcard')->__('Share Trunited Gift Card Money'));
 		$this->renderLayout();
 	}
+
+	public function checkAction()
+	{
+		Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+	}
+
+
 }
