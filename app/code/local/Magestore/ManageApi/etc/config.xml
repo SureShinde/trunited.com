@@ -127,14 +127,14 @@
     </global>
     <crontab>
         <jobs>
-            <manageapi_get_data_from_api>
+            <manageapi_get_data_from_apis>
                 <schedule>
-                    <cron_expr>0 1 * * *</cron_expr>
+                    <cron_expr>* * */1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>manageapi/observer::processCron</model>
                 </run>
-            </manageapi_get_data_from_api>
+            </manageapi_get_data_from_apis>
         </jobs>
     </crontab>
     <default>
