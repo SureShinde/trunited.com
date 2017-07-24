@@ -42,7 +42,7 @@ class Magestore_TruWallet_Block_Order_Totals extends Mage_Core_Block_Template
                 'code' => $this->getCode(),
                 'value' => -$order->getTruwalletDiscount(),
                 'base_value' => -$order->getBaseTruwalletDiscount(),
-                'label' => Mage::helper('truwallet')->__('truWallet Balance'),
+                'label' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
             )), 'subtotal');
         }
     }

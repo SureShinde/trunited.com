@@ -1,0 +1,48 @@
+<?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
+<?php $_code = 'trugiftcard'; ?>
+<?php if (Mage::helper('trugiftcard')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
+    <dl id="<?php echo $_code ?>_container">
+        <?php if (Mage::helper('customer')->isLoggedIn()): ?>
+        <dt class="<?php echo $_code ?>">
+            <div class="<?php echo $_code ?>_wrapper">
+                <div class="<?php echo $_code ?>-img">
+                    <img src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png');?>" title="<?php echo $this->__('Trunited Gift Card Balance')?>" />
+                    <span class="current_balance"><?php echo $this->getAvaiableCustomerCreditLabel() ?></span>
+                    <span class="current_balance_text"><?php echo $this->__('Trunited Gift Card Balance') ?></span>
+                </div>
+                <?php if($this->getCurrentCreditAmountLabel() > 0){?>
+                <div class="used">
+                    <span><?php echo $this->getLabelApplied();?> : <?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false);?></span>
+                </div>
+                <?php }?>
+                <div class="check_used">
+                    <input type="checkbox" id="used_trugiftcard" name="used_trugiftcard" title="<?php echo $this->getLabelApplied()?>"
+                           onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', '<?php echo $this->getCustomerCredit()?>' , '<?php echo $state ?>' ); return false;"
+                            <?php if($this->getCurrentCreditAmountLabel() > 0){?>checked="checked"<?php }?>
+                           />
+                    <label for="used_trugiftcard"><?php echo $this->__('Apply Gift Card Balance')?></label>
+                </div>
+                <div class="clear"></div>
+                <div id="loading-tgc-credit" style="display: none;margin-top: 12px;">
+                    <p id="trugiftcard_cc_show_loading">
+                        <img src="<?php echo $this->getSkinUrl('images/trugiftcard/opc-ajax-loader.gif')?>"/>
+                        <?php echo $this->__('Loading...')?>
+                    </p>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var ccPaymentForm = new VarienForm('trugiftcard-payment-form', true);
+            </script>
+        </dt>
+        <?php else: ?>
+            <div>
+                <div class="checkout-cart-credit-amount">
+                    <p>
+                        <?php echo $this->__('Please ') . "<a href=\"" . $this->getUrl('customer/account/login') . "\">" . $this->__('login') . "</a>" . $this->__(' to use customer credit.'); ?>
+                    </p>
+                </div>
+            </div>
+        <?php endif ?>
+    </dl>
+<?php endif; ?>
+

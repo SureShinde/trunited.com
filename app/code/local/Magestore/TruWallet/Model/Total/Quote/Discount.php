@@ -172,6 +172,9 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
 
         //update address
+//        if($baseTruWalletDiscount == $baseDiscountTotal)
+//            $session->setBaseTrugiftcardCreditAmount(null);
+
         $address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
         $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount + $wrapTotal);
         $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseTruWalletDiscount + $wrapTotal);
@@ -203,7 +206,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         if ($customer_credit_discount > 0) {
             $address->addTotal(array(
                 'code' => $this->getCode(),
-                'title' => Mage::helper('truwallet')->__('truWallet Balance'),
+                'title' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
                 'value' => -Mage::helper('core')->currency($customer_credit_discount, false, false)
             ));
         }

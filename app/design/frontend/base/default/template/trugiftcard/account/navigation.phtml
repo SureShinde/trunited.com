@@ -6,7 +6,8 @@
         <ul id="trugiftcard-navigation-<?php echo $this->getNameInLayout() ?>">
             <?php $_links = $this->getLinks() ?>
             <?php foreach ($_links as $_link): ?>
-            	<?php if (!$_link->getEnable()) continue; ?>
+            	<?php if (!$_link->getEnable() || (strpos(trim($_link->getLabel()), 'Trunited Gift Card Money') > 0
+                        && !Mage::helper('trugiftcard')->getEnableSharing() )) continue; ?>
                 <?php if ($this->isActive($_link)): ?>
                     <li class="current"><strong><?php echo $_link->getLabel() ?></strong></li>
                 <?php else: ?>

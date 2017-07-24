@@ -100,6 +100,11 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('truwallet/transfer/message', $store);
     }
 
+    public function getEnableSharing($store = null)
+    {
+        return Mage::getStoreConfig('truwallet/sharewallet/enable', $store);
+    }
+
 
     public function isShowWarningMessage()
     {

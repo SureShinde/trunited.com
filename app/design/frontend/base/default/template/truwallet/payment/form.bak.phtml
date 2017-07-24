@@ -1,0 +1,82 @@
+<?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
+<?php $_code = 'truwallet';
+?>
+<?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
+    <dl id="<?php echo $_code ?>_container">
+        <?php if (Mage::helper('customer')->isLoggedIn()): ?>
+            <dt class="<?php echo $_code ?>">
+                <input type="checkbox" style="display:none" name="payment[<?php echo $_code ?>]"
+                       id="<?php echo $_code . "check" ?>"
+                       onclick="changeUseCustomercredit(this, '<?php echo $this->getUrl('truwallet/index/checkCredit') ?>');"
+                       checked="checked"/>
+
+                <span style="padding-left:10px">
+                    <?php echo $this->getLabelCurrent() ?>:
+                    <b id="truwallet_balance"> <?php echo $this->getAvaiableCustomerCreditLabel() ?> </b>
+                </span>
+            <form action="" method="post" onsubmit="return false;" id="truwallet-payment-form">
+                <div class="checkout-credit-use">
+                            <span style="margin-right: 5px;"><strong
+                                    style="margin-left: 7px;"> <?php echo $this->getLabelApplied() ?>: </strong></span>
+                            <span id="checkout-cc-input"><?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false); ?></span>
+
+                    <div style="display: none"
+                         class="checkout_cc_input_alert" id="checkout_cc_input_alert">
+                        <input type="text" id="checkout_cc_inputtext"
+                               onchange="validateCheckOutCC(<?php echo $this->getCustomerCredit() ?>);"
+                               class="input-text validate-number validate-zero-or-greater required-entry form-control"
+                               value="<?php echo $this->getCreditUsed(); ?>"/>
+
+                        <div class="validation-advice" style="display:none"
+                             id="advice-validate-number-checkout_cc_smaller"><?php echo $this->__('Please enter a number smaller than %s.', $this->getCustomerCreditLabel()); ?></div>
+                    </div>
+                    <img id="truwallet_cc_success_img" style=" display: none;margin-right: 4px;"
+                         src="<?php echo $this->getSkinUrl('images/truwallet/i_msg-success.gif') ?>"/>
+
+                    <div id="loading-credit" style="display: none;margin-left: 7px;margin-top: 12px;">
+                        <p id="truwallet_cc_show_loading">
+                            <img src="<?php echo $this->getSkinUrl('images/truwallet/opc-ajax-loader.gif') ?>"/>
+                            <?php echo $this->__('Loading...') ?>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        <?php else: ?>
+            <div>
+                <div class="checkout-cart-credit-amount">
+                    <p>
+                        <?php echo $this->__('Please ') . "<a href=\"" . $this->getUrl('customer/account/login') . "\">" . $this->__('login') . "</a>" . $this->__(' to use customer credit.'); ?>
+                    </p>
+                </div>
+            </div>
+        <?php endif ?>
+        <script type="text/javascript">
+            var ccPaymentForm = new VarienForm('truwallet-payment-form', true);
+            $j = jQuery.noConflict();
+            $j(document).ready(function () {
+                <?php if($this->getCurrentCreditAmount() == 0 && $this->isReloadAutomatically() && !Mage::helper('custompromotions')->truWalletInCart()){?>
+                updateCustomerCredit(
+                    '<?php echo $this->getUpdateUrl(); ?>',
+                    '<?php if(Mage::helper('custompromotions')->truWalletInCart()) echo '0'; else echo $this->getCustomerCredit() ?>',
+                    '<?php echo $state ?>'
+                );
+                <?php } else if(Mage::helper('custompromotions')->truWalletInCart() && $this->isReloadAutomatically()){?>
+                updateCustomerCredit(
+                    '<?php echo $this->getUpdateUrl(); ?>',
+                    '0',
+                    '<?php echo $state ?>'
+                );
+                <?php }?>
+            });
+        </script>
+        <style type="text/css">
+            #onestepcheckout-trunited-discounts #truwallet_container .truwallet {
+                background-color: #<?php echo $this->getBackgroundColor()?>;
+                color: #<?php echo $this->getTextColor()?>;
+                border: 1px solid #<?php echo $this->getBackgroundColor()?>;
+            }
+        </style>
+        </dt>
+    </dl>
+<?php endif; ?>
+

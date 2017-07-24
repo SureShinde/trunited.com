@@ -230,4 +230,24 @@ class Magestore_AffiliateplusReferFriend_Block_Refer extends Mage_Core_Block_Tem
         }
         return $this->getData('personal_path');
     }
+
+    public function getEnableNewPersonalUrl()
+    {
+        return $this->_getHelper()->getGeneralConfig('enable_personal_url');
+    }
+
+    public function getParamNewPersonalUrl()
+    {
+        return $this->_getHelper()->getGeneralConfig('personal_param');
+    }
+
+    public function getFormatNewPersonalUrl()
+    {
+        return str_replace('{{identify_code}}',$this->getIdentifyCode(), $this->_getHelper()->getGeneralConfig('personal_value'));
+    }
+
+    public function getNewPersonalUrlDescription()
+    {
+        return $this->_getHelper()->getGeneralConfig('discount_param_description');
+    }
 }

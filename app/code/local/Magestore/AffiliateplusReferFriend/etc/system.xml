@@ -90,6 +90,84 @@
                             <show_in_store>1</show_in_store>
                             <comment>Characters that will not be generated to Identity Code</comment>
                         </remove_string>
+
+
+                        <show_separator_personal translate="label">
+                            <label>Personal URL</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>affiliateplus/adminhtml_field_separator</frontend_model>
+                            <sort_order>105</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </show_separator_personal>
+                        <enable_personal_url translate="label">
+                            <label>Show on Referred Page</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>106</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable_personal_url>
+                        <personal_param translate="label">
+                            <label>The param of Personal Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>107</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </personal_param>
+                        <personal_value translate="label">
+                            <label>The format of Personal Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>108</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                <model>affiliateplusreferfriend/system_config_source_dynamiccomment_personal_comment</model>
+                            </comment>
+                        </personal_value>
+                        <discount_param_description translate="label">
+                            <label>Afffiliate Discount URL Parameter Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>109</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </discount_param_description>
+
+                        <enable_send_sms_promotion translate="label">
+                            <label>Enable sending sms</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>110</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable_send_sms_promotion>
+                        <content_sms_to_new_customer translate="label">
+                            <label>Sms content to new customer</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>111</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Please dont change the name of variables in the content. You can remove it if not need.</comment>
+                        </content_sms_to_new_customer>
+                        <content_sms_to_referrer translate="label">
+                            <label>Sms content to referrer</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>112</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Please dont change the name of variables in the content. You can remove it if not need.</comment>
+                        </content_sms_to_referrer>
                     </fields>
                 </general>
                 <email>

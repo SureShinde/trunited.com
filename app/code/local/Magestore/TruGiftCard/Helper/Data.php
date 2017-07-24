@@ -25,7 +25,7 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->__('Share Trunited Gift Card Money') . ' ' . $image;
     }
 
-    public function formatTruwallet($credit)
+    public function formatTrugiftcard($credit)
     {
         return Mage::helper('core')->currency($credit, true, false);
     }
@@ -100,6 +100,11 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trugiftcard/transfer/message', $store);
     }
 
+    public function getEnableSharing($store = null)
+    {
+        return Mage::getStoreConfig('trugiftcard/sharegiftcard/enable', $store);
+    }
+
 
     public function isShowWarningMessage()
     {
@@ -170,599 +175,67 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
 
     }
 
-
-    public function synchronizeCredit()
+    public function isShowTrunitedDiscountSection()
     {
-        $reward_customers = Mage::getModel('rewardpoints/customer')->getCollection()
-            ->setOrder('reward_id','desc')
-        ;
+        if(!Mage::getSingleton('customer/session')->isLoggedIn())
+            return false;
 
-        if(count($reward_customers) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_customers as $reward)
-                {
-                    $truGiftCard_customer = Mage::getModel('trugiftcard/customer');
-                    $truGiftCard_customer->setData('customer_id', $reward->getCustomerId());
-                    $truGiftCard_customer->setData('trugiftcard_credit', $reward->getProductCredit());
-                    $truGiftCard_customer->setData('created_time', now());
-                    $truGiftCard_customer->setData('updated_time', now());
-                    $transactionSave->addObject($truGiftCard_customer);
-                }
+        if(!$this->isEnable() && !Mage::helper('truwallet')->isEnable())
+            return false;
 
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
+        $account = Mage::helper('trugiftcard/account')->loadByCustomerId(Mage::getSingleton('customer/session')->getCustomer()->getId());
+        $account_truWallet = Mage::helper('truwallet/account')->loadByCustomerId(Mage::getSingleton('customer/session')->getCustomer()->getId());
 
+        if(!isset($account) && !isset($account_truWallet))
+            return false;
+
+        if ($account->getTrugiftcardCredit() == 0 && $account_truWallet->getTruwalletCredit() == 0)
+            return false;
+
+        return true;
     }
 
-    public function synchronizeTransaction()
+    public function isShowTruWallet()
     {
-        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type',array('in'=>array(0,3,4,5)))
-            ->setOrder('transaction_id','desc')
-        ;
+        if(!Mage::getSingleton('customer/session')->isLoggedIn())
+            return false;
 
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getCustomerId());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $transaction->getTitle();
-                        $_data['store_id'] = $transaction->getStoreId();
+        if(!Mage::helper('truwallet')->isEnable())
+            return false;
 
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
+        $account_truWallet = Mage::helper('truwallet/account')->loadByCustomerId(Mage::getSingleton('customer/session')->getCustomer()->getId());
 
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
+        if(!isset($account_truWallet))
+            return false;
 
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
+        if ($account_truWallet->getTruwalletCredit() == 0)
+            return false;
 
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
-
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        switch($transaction->getActionType())
-                        {
-                            case 0:
-                                $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_BY_ADMIN;
-                                break;
-
-                            case 3:
-                                $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_TRANSFER;
-                                break;
-
-                            case 4:
-                                $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING;
-                                break;
-
-                            case 5:
-                                $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING;
-                                break;
-                        }
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
-
+        return true;
     }
 
-    public function synchFeb()
+    public function isShowTruGiftCard()
     {
-        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type',Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_SPEND)
-            ->addFieldToFilter('action',array('like'=>'%spending_order%'))
-            ->setOrder('transaction_id','desc')
-        ;
+        $session = Mage::getSingleton('checkout/session');
+        if(!Mage::getSingleton('customer/session')->isLoggedIn())
+            return false;
 
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->updateCredit($transaction->getCustomerId(), $transaction->getProductCredit());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $transaction->getTitle();
-                        $_data['store_id'] = $transaction->getStoreId();
+        if(!$this->isEnable())
+            return false;
 
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
+        $account = Mage::helper('trugiftcard/account')->loadByCustomerId(Mage::getSingleton('customer/session')->getCustomer()->getId());
 
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
+        if(!isset($account))
+            return false;
 
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
+//        if($session->getBaseTruwalletCreditAmount() >= (Mage::getModel('checkout/session')->getQuote()->getGrandTotal() + $wrapTotal))
+//        if(Mage::getModel('checkout/session')->getQuote()->getGrandTotal() <= 0)
+//            return false;
 
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
+        if ($account->getTrugiftcardCredit() == 0)
+            return false;
 
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_CHECKOUT_ORDER;
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
+        return true;
     }
 
-    public function synchGiftCard()
-    {
-        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type', 8)
-            ->setOrder('transaction_id','desc')
-        ;
-
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getCustomerId());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $transaction->getTitle();
-                        $_data['store_id'] = $transaction->getStoreId();
-
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
-
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
-
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
-
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
-
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD;
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
-    }
-
-    public function synchTransfer()
-    {
-        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type',3)
-            ->addFieldToFilter('customer_id',array('gt' => 0))
-            ->setOrder('transaction_id','desc')
-        ;
-
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->updateCredit($transaction->getCustomerId(), $transaction->getProductCredit());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $transaction->getTitle();
-                        $_data['store_id'] = $transaction->getStoreId();
-
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
-
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
-
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
-
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
-
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_TRANSFER;
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
-    }
-
-     public function synchPurchaseGiftCard()
-    {
-        $reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type',8)
-            ->addFieldToFilter('customer_id',array('gt' => 0))
-            ->addFieldToFilter('transaction_id',array('in' => array(8902,9245,10648)))
-            ->setOrder('transaction_id','desc')
-        ;
-
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->updateCredit($transaction->getCustomerId(), $transaction->getProductCredit());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $this->__('Purchased truGiftCard Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$transaction->getOrderId())).'">'.$transaction->getOrderIncrementId().'</a>');
-                        $_data['store_id'] = $transaction->getStoreId();
-
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
-
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
-
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
-
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
-
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD;
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }
-    }
-
-    public function synchOrder()
-    {
-        $orders = Mage::getModel('sales/order')->getCollection()
-            ->addAttributeToFilter('created_at',array(
-                'from' => '2017-02-09',
-                'to'    => '2017-02-11'
-            ))
-            ->setOrder('entity_id','desc')
-            ;
-
-        $data_order = array();
-        foreach($orders as $order)
-        {
-            $items = $order->getAllItems();
-            foreach($items as $item)
-            {
-                if(strcasecmp($item->getSku(),'TWGIFTCARD') == 0)
-                {
-                    $data_order[] = array(
-                        'order' => $order,
-                        'qty' => $item->getQtyOrdered(),
-                    );
-                }
-            }
-        }
-//        zend_debug::dump($data_order);
-//        exit;
-
-        if(sizeof($data_order) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($data_order as $order)
-                {
-                    $do = $order['order'];
-                    $qty = $order['qty'];
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->loadByCustomerId($do->getCustomerId());
-                    $customer = Mage::getModel('customer/customer')->load($do->getCustomerId());
-                    if($do->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $do->getCustomerId();
-                        $_data['customer_email'] = $customer->getEmail();
-                        $_data['title'] = $this->__('Purchased truGiftCard Gift Card on order #<a href="'.Mage::getUrl('sales/order/view',array('order_id'=>$do->getEntityId())).'">'.$do->getIncrementId().'</a>');
-                        $_data['store_id'] = $do->getStoreId();
-
-                        $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD;
-
-                        $_data['created_time'] = $do->getCreatedAt();
-                        $_data['updated_time'] = $do->getUpdatedAt();
-                        $_data['expiration_date'] = '';
-                        $_data['order_id'] = $do->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $qty * $this->getTruGiftCardValue();
-                        $_data['receiver_email'] = '';
-                        $_data['receiver_customer_id'] = '';
-                        
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        }
-
-        /*$reward_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type', 8)
-            ->setOrder('transaction_id','desc')
-        ;
-
-        if(count($reward_transactions) > 0)
-        {
-            $transactionSave = Mage::getModel('core/resource_transaction');
-            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            try {
-                $connection->beginTransaction();
-                foreach ($reward_transactions as $transaction)
-                {
-                    $trugiftcard_account = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getCustomerId());
-                    if($transaction->getCustomerId() != null && $trugiftcard_account != null)
-                    {
-                        $truGiftCard_transaction = Mage::getModel('trugiftcard/transaction');
-                        $_data = array();
-                        $_data['trugiftcard_id'] = $trugiftcard_account->getId();
-                        $_data['customer_id'] = $transaction->getCustomerId();
-                        $_data['customer_email'] = $transaction->getCustomerEmail();
-                        $_data['title'] = $transaction->getTitle();
-                        $_data['store_id'] = $transaction->getStoreId();
-
-                        switch($transaction->getStatus())
-                        {
-                            case 3:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED;
-                                break;
-
-                            case 4:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED;
-                                break;
-
-                            case 1:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING;
-                                break;
-
-                            case 2:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_ON_HOLD;
-                                break;
-
-                            case 5:
-                                $_data['status'] = Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_EXPIRED;
-                                break;
-                        }
-
-                        $_data['action_type'] = Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_PURCHASE_GIFT_CARD;
-
-                        $_data['created_time'] = $transaction->getCreatedTime();
-                        $_data['updated_time'] = $transaction->getUpdatedTime();
-                        $_data['expiration_date'] = $transaction->getExpirationDate();
-                        $_data['order_id'] = $transaction->getOrderId() == 0 ? null : $transaction->getOrderId();
-                        $_data['current_credit'] = $trugiftcard_account->getTrugiftcardCredit();
-                        $_data['changed_credit'] = $transaction->getProductCredit();
-                        $_data['receiver_email'] = $transaction->getReceiverEmail();
-                        $_data['receiver_customer_id'] = $transaction->getReceiverCustomerId();
-
-                        $truGiftCard_transaction->setData($_data);
-                        $transactionSave->addObject($truGiftCard_transaction);
-                    }
-                }
-
-                $transactionSave->save();
-                $connection->commit();
-                echo 'success';
-            } catch (Exception $e) {
-                $connection->rollback();
-                zend_debug::dump($e->getMessage());
-            }
-        } else {
-            echo 'Empty';
-        }*/
-    }
-	
 }

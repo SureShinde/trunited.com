@@ -1,4 +1,5 @@
 <?php
+
 /**
  * aheadWorks Co.
  *
@@ -23,7 +24,6 @@
  * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
  * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
  */
-
 class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
     public function __construct()
@@ -40,11 +40,21 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
         $this->_formScripts[] = "
             window.onload = function(){
             var ruleEventValue = $('rule_event').options[$('rule_event').selectedIndex].value;
-            if( ruleEventValue != '" . AW_Eventdiscount_Model_Event::ORDER . "'
-                && ruleEventValue != '" . AW_Eventdiscount_Model_Event::CARTUPDATE . "'
+            if(ruleEventValue == '" . AW_Eventdiscount_Model_Event::ORDER . "' || ruleEventValue == '" . AW_Eventdiscount_Model_Event::CARTUPDATE . "'
             ){
+                $('rule_conditions_fieldset').up().show();
+                $('rule_giftcard_fieldset').previous().hide();
+                $('rule_giftcard_fieldset').hide();
+            } else if(ruleEventValue == '" . AW_Eventdiscount_Model_Event::PROMOTION . "'){
                 $('rule_conditions_fieldset').up().hide();
+                $('rule_giftcard_fieldset').previous().show();
+                $('rule_giftcard_fieldset').show();
+            } else {
+                $('rule_conditions_fieldset').up().hide();
+                $('rule_giftcard_fieldset').previous().hide();
+                $('rule_giftcard_fieldset').hide();
             }
+
             new Control.ColorPicker('rule_color', {
                 IMAGE_BASE : '" . $this->getSkinUrl('aw_eventdiscount/images/') . "',
              onUpdate :function(value){
@@ -62,15 +72,23 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
                 editForm.submit(url.replace(/{{tab_id}}/ig,timer_tabsJsTabs.activeTab.id));
             }
             function checkEventField(elem) {
-            if(elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::ORDER . "'
-                || elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::CARTUPDATE . "'
-            ){
-                $('rule_conditions_fieldset').up().show();
-            }else {
-            $('rule_conditions_fieldset').up().hide();
+                if(elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::ORDER . "'
+                    || elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::CARTUPDATE . "'
+                ){
+                    $('rule_conditions_fieldset').up().show();
+                    $('rule_giftcard_fieldset').previous().hide();
+                    $('rule_giftcard_fieldset').hide();
+                } else if(elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::PROMOTION . "'){
+                    $('rule_conditions_fieldset').up().hide();
+                    $('rule_giftcard_fieldset').previous().show();
+                    $('rule_giftcard_fieldset').show();
+                } else {
+                    $('rule_conditions_fieldset').up().hide();
+                    $('rule_giftcard_fieldset').previous().hide();
+                    $('rule_giftcard_fieldset').hide();
+                }
             }
 
-            }
             function switchFonts(input) {
             if(input.checked){
             $$('.aw_eventdiscount_timer')[0].style.color='#'+$('rule_color').value;
@@ -101,7 +119,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
 
     public function getBackUrl()
     {
-        if($this->getRequest()->getParam('back')=='stat')
+        if ($this->getRequest()->getParam('back') == 'stat')
             return $this->getUrl('*/aweventdiscount_stat/index/');
         return parent::getBackUrl();
     }

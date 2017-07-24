@@ -1,28 +1,28 @@
-<?php if ($this->canRefundTruWallet()): ?>
+<?php if ($this->canRefundTruGiftCard()): ?>
     <p>
-        <label for="creditmemo_refund_truWallet">
-            <?php echo $this->__('Return spent truWallet balances to customer’s balance (%s Funds)',
-                Mage::helper('core')->currency($this->getMaxTruWalletRefund(), true, false));
+        <label for="creditmemo_refund_truGiftCard">
+            <?php echo $this->__('Return spent Trunited Gift Card balances to customer’s balance (%s Funds)',
+                Mage::helper('core')->currency($this->getMaxTruGiftCardRefund(), true, false));
             ?>
         </label>
 
-        <input type="text" name="creditmemo[refund_truWallet]" value="<?php echo $this->getCurrentTruWallet() ?>" id="creditmemo_refund_truWallet"
-               class="input-text not-nagetive-amount" style="width: 60px; text-align: right; margin-left: 10px;" onchange="checkRefundTruWallet(this)" />
+        <input type="text" name="creditmemo[refund_truGiftCard]" value="<?php echo $this->getCurrentTruGiftCard() ?>" id="creditmemo_refund_truGiftCard"
+               class="input-text not-nagetive-amount" style="width: 60px; text-align: right; margin-left: 10px;" onchange="checkRefundTruGiftCard(this)" />
 
         <script type="text/javascript">
-            maxTruWalletRefund = <?php echo $this->getMaxTruWalletRefund() ? $this->getMaxTruWalletRefund() : '0' ?>;
-            function checkRefundTruWallet(el) {
+            maxTruGiftCardRefund = <?php echo $this->getMaxTruGiftCardRefund() ? $this->getMaxTruGiftCardRefund() : '0' ?>;
+            function checkRefundTruGiftCard(el) {
                 if (el.value < 0) {
                     el.value = 0;
                 }
-                if (el.value > maxTruWalletRefund) {
-                    el.value = maxTruWalletRefund;
+                if (el.value > maxTruGiftCardRefund) {
+                    el.value = maxTruGiftCardRefund;
                 }
             }
         </script>
     </p>
 <?php elseif($this->getMaxPointRefund() == 0): ?>
     <p>
-        <input type="hidden" name="creditmemo[refund_truWallet]" value="0" id="creditmemo_refund_truWallet" class="input-text not-nagetive-amount" />
+        <input type="hidden" name="creditmemo[refund_truGiftCard]" value="0" id="creditmemo_refund_truGiftCard" class="input-text not-nagetive-amount" />
     </p>
 <?php endif ?>

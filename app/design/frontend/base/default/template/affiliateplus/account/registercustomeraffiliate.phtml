@@ -18,9 +18,17 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<?php $names = $this->getAffiliateName(); ?>
+<?php
+$names = $this->getAffiliateName();
+$accountInfo = Mage::helper('affiliateplus/account')->getAffiliateInfoFromCookie();
+$cookie = Mage::getSingleton('core/cookie');
+$account_code = $cookie->get('account_code');
+$display = true;
+if(isset($accountInfo) && $accountInfo != null && $accountInfo->getId() && $account_code)
+    $display = false;
+?>
 
-<div class="fieldset">
+<div class="fieldset" <?php if(!$display){?> style="display: none"<?php }?>>
     <h2 class="legend"><?php echo $this->__('Affiliate Referral Information') ?></h2>
 
     <ul class="form-list">
@@ -30,7 +38,7 @@
 
                 <div class="input-box who_refers_me">
                     <?php
-                    $accountInfo = Mage::helper('affiliateplus/account')->getAffiliateInfoFromCookie();
+
                     $email_refer = Mage::getSingleton('core/session')->getEmailRefer();
                     $affiliate_account = null;
                     if ($email_refer != null) {

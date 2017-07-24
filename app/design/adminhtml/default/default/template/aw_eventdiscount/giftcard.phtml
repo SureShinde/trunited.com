@@ -1,0 +1,122 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ *
+ * =================================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * =================================================================
+ * This software is designed to work with Magento community edition and
+ * its use on an edition other than specified is prohibited. aheadWorks does not
+ * provide extension support in case of incorrect edition use.
+ * =================================================================
+ *
+ * @category   AW
+ * @package    AW_Eventdiscount
+ * @version    1.0.5
+ * @copyright  Copyright (c) 2010-2012 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/AW-LICENSE.txt
+ */
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    var giftCard = function () {
+        return {
+            del: function (obj) {
+                if (confirm('<?php echo $this->__('Are you sure you want to delete it?') ?>')) {
+                    fieldSet = obj.up('div.fieldset');
+                    fieldSet.remove();
+                }
+            },
+            add: function (obj) {
+                var id = this.createId();
+                var newElement = document.createElement('div');
+                newElement.addClassName('fieldset');
+                newElement.setAttribute("id", 'giftcard-' + id);
+
+                newElement.innerHTML = this.getTemplate();
+                $('giftcard_fieldset').appendChild(newElement);
+            },
+            getTemplate: function () {
+                var id = this.getId();
+                return '<label for="amount_from_' + id + '"><?php echo $this->__('Amount From:');?></label> ' +
+                    '<input style="margin-left: 10px; min-width: 160px;" id="amount_from_' + id + '" name="giftcard[' + id + '][amount_from]" value="0" title="Amount from" type="text" class=" input-text required-entry"> ' +
+                    '<label for="amount_to_' + id + '" style="margin-left: 30px;"><?php echo $this->__('Amount To:');?></label> ' +
+                    '<input style="margin-left: 10px; min-width: 160px;" id="amount_to_' + id + '" name="giftcard[' + id + '][amount_to]" value="0" title="To" type="text" class=" input-text required-entry"> ' +
+                    '<label for="reward_new_customer_' + id + '" style="margin-left: 30px;"> <?php echo $this->__('Reward To New Customer:');?></label> ' +
+                    '<input style="margin-left: 10px; min-width: 160px;" id="reward_new_customer_' + id + '" name="giftcard[' + id + '][reward_new_customer]" value="0" title="Reward To New Customer" type="text" class=" input-text required-entry"> ' +
+                    '<label for="reward_referrer_' + id + '" style="margin-left: 30px;"><?php echo $this->__('Reward To Referrer:');?></label> ' +
+                    '<input style="margin-left: 10px; min-width: 160px;" id="reward_referrer_' + id + '" name="giftcard[' + id + '][reward_referrer]" value="0" title="Reward To Referrer" type="text" class=" input-text required-entry"> ' +
+                    '<button style="margin-left: 10px;" class="delete" id="remove_' + id + '" onclick="giftCard.del(this); return false;"><span><?php echo $this->__('Remove')?></span></button>'
+            },
+            createId: function () {
+                return lastId++;
+            },
+            getId: function () {
+                return lastId;
+            }
+        }
+    }();
+
+    //]]>
+</script>
+<?php $giftCards = $this->getTimer()->getGiftcardValues();?>
+<button class="add" type="button" id="giftcard_fieldset_button" onclick="giftCard.add(); return false;">
+    <span><?php echo $this->__('Add action'); ?></span></button><br><br>
+<?php $i = 0; ?>
+<div id="giftcard_fieldset">
+    <?php if ($giftCards): ?>
+        <?php foreach ($giftCards as $giftCard): ?>
+            <div class="fieldset" id="giftcard-<?php echo $i; ?>">
+                <label for="amount_from_<?php echo $i; ?>"><?php echo $this->__('Amount From:'); ?></label>
+                <input style="margin-left: 10px; min-width: 160px;" id="amount_from_<?php echo $i; ?>" name="giftcard[<?php echo $i; ?>][amount_from]"
+                       value="<?php echo $giftCard['amount_from']; ?>" title="<?php echo $this->__('Amount From'); ?>" type="text" class=" input-text required-entry">
+
+                <label for="amount_to_<?php echo $i; ?>" style="margin-left: 30px;"><?php echo $this->__('Amount To:'); ?></label>
+                <input style="margin-left: 10px; min-width: 160px;" id="amount_to_<?php echo $i; ?>" name="giftcard[<?php echo $i; ?>][amount_to]"
+                       value="<?php echo $giftCard['amount_to']; ?>" title="<?php echo $this->__('Amount To'); ?>" type="text" class=" input-text required-entry">
+
+                <label for="reward_new_customer_<?php echo $i; ?>" style="margin-left: 30px;"> <?php echo $this->__('Reward To New Customer:'); ?></label>
+                <input style="margin-left: 10px; min-width: 160px;" id="reward_new_customer_<?php echo $i; ?>" name="giftcard[<?php echo $i; ?>][reward_new_customer]"
+                       value="<?php echo $giftCard['reward_new_customer']; ?>" title="<?php echo $this->__('Reward To New Customer'); ?>" type="text" class=" input-text required-entry">
+
+                <label for="reward_referrer_<?php echo $i; ?>" style="margin-left: 30px;"><?php echo $this->__('Reward To Referrer:'); ?></label>
+                <input style="margin-left: 10px; min-width: 160px;" id="reward_referrer_<?php echo $i; ?>" name="giftcard[<?php echo $i; ?>][reward_referrer]"
+                       value="<?php echo $giftCard['reward_referrer']; ?>" title="<?php echo $this->__('Reward To Referrer'); ?>" type="text" class=" input-text required-entry">
+                <?php if ($i > 0): ?>
+                    <button style="margin-left: 10px;" class="delete" id="remove_<?php echo $i; ?>"
+                            onclick="actions.del(this); return false;"><span><?php echo $this->__("Remove"); ?></span>
+                    </button>
+                <?php endif; ?>
+            </div>
+            <?php $i++; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="fieldset" id="giftcard-0">
+            <label for="amount_from_0"><?php echo $this->__('Amount From:'); ?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="amount_from_0" name="giftcard[0][amount_from]" value="0"
+                   title="<?php echo $this->__('Amount From'); ?>" type="text" class=" input-text required-entry">
+
+            <label for="amount_to_0" style="margin-left: 30px;"><?php echo $this->__('Amount To:'); ?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="amount_to_0" name="giftcard[0][amount_to]" value="0"
+                    title="<?php echo $this->__('Amount To'); ?>" type="text" class=" input-text required-entry">
+
+            <label for="reward_new_customer_0" style="margin-left: 30px;"> <?php echo $this->__('Reward To New Customer:'); ?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="reward_new_customer_0" name="giftcard[0][reward_new_customer]"
+                    value="0" title="<?php echo $this->__('Reward To New Customer'); ?>" type="text" class=" input-text required-entry">
+
+            <label for="reward_referrer_0" style="margin-left: 30px;"><?php echo $this->__('Reward To Referrer:'); ?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="reward_referrer_0" name="giftcard[0][reward_referrer]" value="0"
+                    title="<?php echo $this->__('Reward To Referrer'); ?>" type="text" class=" input-text required-entry">
+        </div>
+    <?php endif; ?>
+</div>
+<script type="text/javascript">
+    var lastId = <?php echo $i;?>;
+</script>

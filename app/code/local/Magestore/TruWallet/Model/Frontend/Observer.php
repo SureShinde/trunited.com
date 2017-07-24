@@ -37,11 +37,11 @@ class Magestore_TruWallet_Model_Frontend_Observer {
     public function truwalletPaymentMethod($observer) {
         $block = $observer['block'];
         if ($block instanceof Mage_Checkout_Block_Onepage_Payment_Methods || $block instanceof Magestore_Webpos_Block_Onepage_Payment_Methods) {
-            $transport = $observer['transport'];
+            /*$transport = $observer['transport'];
             $html_addcredit = $block->getLayout()->createBlock('truwallet/payment_form')->renderView();
             $html = $transport->getHtml();
             $html .= '<script type="text/javascript">checkOutLoadCustomerCredit(' . Mage::helper('core')->jsonEncode(array('html' => $html_addcredit)) . ');enableCheckbox();</script>';
-            $transport->setHtml($html);
+            $transport->setHtml($html);*/
         }
     }
 

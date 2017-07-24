@@ -50,6 +50,15 @@
                     </aweventdiscount_customer_register_success>
                 </observers>
             </customer_register_success>
+            <controller_action_predispatch>
+                <observers>
+                    <aweventdiscount_controller_action_before>
+                        <type>singleton</type>
+                        <class>aweventdiscount/event_promotion</class>
+                        <method>controllerActionPredispatch</method>
+                    </aweventdiscount_controller_action_before>
+                </observers>
+            </controller_action_predispatch>
         </events>
     </frontend>
     <global>
@@ -78,6 +87,9 @@
                     <product>
                         <table>aw_eventdiscount_timer_product</table>
                     </product>
+                    <giftcard>
+                        <table>aw_eventdiscount_gift_card</table>
+                    </giftcard>
                 </entities>
             </eventdiscount_resource>
         </models>

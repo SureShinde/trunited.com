@@ -1,0 +1,19 @@
+<?php if ($this->isEnable()) {?>
+<div class="box-account box-info box-ytd-mtd-summary">
+    <div class="info-summary">
+        <p>
+            <strong>
+                <?php echo $this->getLabelForProfit();?> : <strong class="trugiftcard-money"><?php echo Mage::helper('other')->ytd();?></strong>
+            </strong>
+            <br>
+        </p>
+
+        <p>
+            <strong>
+                <?php echo $this->getLabelForSharing();?> : <strong class="trugiftcard-money"><?php echo Mage::helper('other')->mtd();?></strong>
+            </strong>
+            <br>
+        </p>
+    </div>
+</div>
+<?php }?>

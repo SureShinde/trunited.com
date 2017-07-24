@@ -176,6 +176,11 @@ function save_address_information(save_address_url, update_address_shipping, upd
         }
     }
 
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
+
     if (update_address_payment == 1) {
         var payment_method_section = $$('div.onestepcheckout-payment-methods')[0];
         paymentLoad();
@@ -225,6 +230,12 @@ function save_address_information(save_address_url, update_address_shipping, upd
                     if (update_address_shipping == 1) {
                         save_shipping_method(shipping_method_url, 0, 1);
                     }
+
+                    if($('order-trunited-discounts-section') != 'undefined')
+                    {
+                        trunitedDiscountShow();
+                        $('order-trunited-discounts-section').update(response.trunited_discounts);
+                    }
                     
 					checkvalidEmail();
                     if ((update_address_shipping == 1) || (update_address_payment == 1) || (update_address_review == 1)) {
@@ -272,6 +283,12 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
         var review = $('checkout-review-load');
         reviewLoad();
     }
+
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
+
     var parameters = {
         shipping_method: shipping_method,
         payment_method: payment_method
@@ -315,10 +332,17 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     }
                 }
 
+                if($('order-trunited-discounts-section') != 'undefined')
+                {
+                    trunitedDiscountShow();
+                    $('order-trunited-discounts-section').update(response.trunited_discounts);
+                }
+
                 if (update_shipping_review == 1) {
                     review.update(response.review);
                     reviewShow();
                 }
+
                 checkvalidEmail();
 
                 if(response.is_plastic)
@@ -380,6 +404,10 @@ function add_coupon_code(add_coupon_url) {
     };
     paymentLoad();
     reviewLoad();
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
     var request = new Ajax.Request(add_coupon_url, {
         method: 'post',
         onFailure: '',
@@ -389,6 +417,10 @@ function add_coupon_code(add_coupon_url) {
             if (response.error) {
                 paymentShow();
                 reviewShow();
+                if($('order-trunited-discounts-section') != 'undefined')
+                {
+                    trunitedDiscountShow();
+                }
                 $('remove_coupon_code_button').hide();
                 alert(response.message);
             }
@@ -439,6 +471,10 @@ function remove_coupon_code(add_coupon_url) {
     };
     paymentLoad();
     reviewLoad();
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
     var request = new Ajax.Request(add_coupon_url, {
         method: 'post',
         onFailure: '',
@@ -448,6 +484,10 @@ function remove_coupon_code(add_coupon_url) {
             if (response.error) {
                 paymentShow();
                 reviewShow();
+                if($('order-trunited-discounts-section') != 'undefined')
+                {
+                    trunitedDiscountShow();
+                }
             }
             else {
                 save_address_information(save_address_url, 1, 1, 1);
@@ -1049,6 +1089,10 @@ function deleteproduct(id, url, ms) {
         shippingLoad();
         paymentLoad();
         reviewLoad();
+        if($('order-trunited-discounts-section') != 'undefined')
+        {
+            trunitedDiscountLoad();
+        }
         $('onestepcheckout-button-place-order').disabled = true;
         $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
         $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1079,6 +1123,11 @@ function deleteproduct(id, url, ms) {
                                     shippingShow();
                                     paymentShow();
                                     reviewShow();
+                                    if($('order-trunited-discounts-section') != 'undefined')
+                                    {
+                                        trunitedDiscountShow();
+                                        $('order-trunited-discounts-section').update(result.trunited_discounts);
+                                    }
                                     $('onestepcheckout-button-place-order').disabled = false;
                                     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                                     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1090,6 +1139,10 @@ function deleteproduct(id, url, ms) {
                                 shippingShow();
                                 paymentShow();
                                 reviewShow();
+                                if($('order-trunited-discounts-section') != 'undefined')
+                                {
+                                    trunitedDiscountShow();
+                                }
                                 $('onestepcheckout-button-place-order').disabled = false;
                                 $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                                 $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1116,7 +1169,10 @@ function minusproduct(id, url) {
     paymentLoad();
     reviewLoad();
     truboxLoad();
-
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1174,6 +1230,11 @@ function minusproduct(id, url) {
                                 paymentShow();
                                 reviewShow();
                                 truboxShow();
+                                if($('order-trunited-discounts-section') != 'undefined')
+                                {
+                                    trunitedDiscountShow();
+                                    $('order-trunited-discounts-section').update(result.trunited_discounts);
+                                }
                                 $('onestepcheckout-button-place-order').disabled = false;
                                 $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                                 $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1189,6 +1250,10 @@ function minusproduct(id, url) {
                     paymentShow();
                     reviewShow();
                     truboxShow();
+                    if($('order-trunited-discounts-section') != 'undefined')
+                    {
+                        trunitedDiscountShow();
+                    }
                     $('onestepcheckout-button-place-order').disabled = false;
                     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1206,6 +1271,10 @@ function addproduct(id, url) {
     reviewLoad();
     paymentLoad();
     truboxLoad();
+    if($('order-trunited-discounts-section') != 'undefined')
+    {
+        trunitedDiscountLoad();
+    }
     $('onestepcheckout-button-place-order').disabled = true;
     $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').addClassName('place-order-loader');
@@ -1222,6 +1291,11 @@ function addproduct(id, url) {
                             paymentShow();
                             reviewShow();
                             truboxShow();
+                            if($('order-trunited-discounts-section') != 'undefined')
+                            {
+                                trunitedDiscountShow();
+
+                            }
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                             $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1247,6 +1321,11 @@ function addproduct(id, url) {
                             reviewShow();
                             paymentShow();
                             truboxShow();
+                            if($('order-trunited-discounts-section') != 'undefined')
+                            {
+                                trunitedDiscountShow();
+                                $('order-trunited-discounts-section').update(result.trunited_discounts);
+                            }
                             $('onestepcheckout-button-place-order').disabled = false;
                             $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                             $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1261,6 +1340,10 @@ function addproduct(id, url) {
                     paymentShow();
                     reviewShow();
                     truboxShow();
+                    if($('order-trunited-discounts-section') != 'undefined')
+                    {
+                        trunitedDiscountShow();
+                    }
                     $('onestepcheckout-button-place-order').disabled = false;
                     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
                     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
@@ -1349,6 +1432,24 @@ function paymentLoad() {
     $('ajax-payment').show();
     $('control_overlay_payment').show();
     $('onestepcheckout-payment-methods').setStyle({
+        'opacity': '0.3',
+        'filter': 'alpha(opacity=30)'
+    });
+}
+
+function trunitedDiscountShow() {
+    $('ajax-trunited-discounts').hide();
+    $('control_overlay_trunited_discounts').hide();
+    $('onestepcheckout-trunited-discounts').setStyle({
+        'opacity': '1',
+        'filter': 'alpha(opacity=100)'
+    });
+}
+
+function trunitedDiscountLoad() {
+    $('ajax-trunited-discounts').show();
+    $('control_overlay_trunited_discounts').show();
+    $('onestepcheckout-trunited-discounts').setStyle({
         'opacity': '0.3',
         'filter': 'alpha(opacity=30)'
     });

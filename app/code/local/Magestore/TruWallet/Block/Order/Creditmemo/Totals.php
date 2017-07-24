@@ -42,7 +42,7 @@ class Magestore_TruWallet_Block_Order_Creditmemo_Totals extends Mage_Core_Block_
         if ($creditmemo->getTruwalletDiscount() > 0.0001) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code' => $this->getCode(),
-                'label' => Mage::helper('truwallet')->__('truWallet Balance'),
+                'label' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
                 'value' => -$creditmemo->getTruwalletDiscount(),
                 'base_value' => -$creditmemo->getBaseTruwalletDiscount(),
                 )), 'subtotal');

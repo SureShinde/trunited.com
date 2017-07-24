@@ -31,6 +31,17 @@
                 </Magestore_TruGiftCard>
             </modules>
         </translate>
+        <!--<events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <trugiftcard_block_to_html>
+                        <type>singleton</type>
+                        <class>trugiftcard/frontend_observer</class>
+                        <method>trugiftcardPaymentMethod</method>
+                    </trugiftcard_block_to_html>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>-->
     </frontend>
     <admin>
         <routers>
@@ -179,7 +190,25 @@
                     </trugiftcard_payment_method_is_active>
                 </observers>
             </payment_method_is_active>
-            <!--paypal_prepare_line_items>
+            <order_cancel_after>
+                <observers>
+                    <trugiftcard_order_save_after>
+                        <type>singleton</type>
+                        <class>trugiftcard/observer</class>
+                        <method>orderCancelAfter</method>
+                    </trugiftcard_order_save_after>
+                </observers>
+            </order_cancel_after>
+            <sales_order_creditmemo_save_after>
+                <observers>
+                    <trugiftcard_sales_order_creditmemo_save_after>
+                        <class>trugiftcard/observer</class>
+                        <method>creditmemoSaveAfter</method>
+                    </trugiftcard_sales_order_creditmemo_save_after>
+                </observers>
+            </sales_order_creditmemo_save_after>
+
+            <paypal_prepare_line_items>
                 <observers>
                     <trugiftcard_paypal>
                         <type>singleton</type>
@@ -215,15 +244,6 @@
                     </trugiftcard_order_save_after>
                 </observers>
             </sales_order_save_after>
-            <order_cancel_after>
-                <observers>
-                    <trugiftcard_order_save_after>
-                        <type>singleton</type>
-                        <class>trugiftcard/observer</class>
-                        <method>orderCancelAfter</method>
-                    </trugiftcard_order_save_after>
-                </observers>
-            </order_cancel_after>
 
             <controller_action_predispatch>
                 <observers>
@@ -244,14 +264,6 @@
                     </trugiftcard_adminhtml_sales_order_creditmemo_register_before>
                 </observers>
             </adminhtml_sales_order_creditmemo_register_before>
-            <sales_order_creditmemo_save_after>
-                <observers>
-                    <trugiftcard_sales_order_creditmemo_save_after>
-                        <class>trugiftcard/observer</class>
-                        <method>creditmemoSaveAfter</method>
-                    </trugiftcard_sales_order_creditmemo_save_after>
-                </observers>
-            </sales_order_creditmemo_save_after>
 
             <controller_action_predispatch_checkout_cart_add>
                 <observers>
@@ -270,7 +282,7 @@
                         <method>paymentMethodIsActive</method>
                     </trugiftcard_payment_method_is_active>
                 </observers>
-            </payment_method_is_active>-->
+            </payment_method_is_active>
 
         </events>
         <template>
@@ -297,7 +309,7 @@
                 </trugiftcard_email_share_email_expiry_date>
             </email>
         </template>
-        <!--<sales>
+        <sales>
             <quote>
                 <totals>
                     <trugiftcard>
@@ -398,13 +410,13 @@
                     <to_quote_address>*</to_quote_address>
                 </trugiftcard_shipping_hidden_tax>
             </sales_convert_order_address>
-        </fieldsets>-->
+        </fieldsets>
     </global>
     <crontab>
         <jobs>
             <trugiftcard_check_expiry_date_sharing_truGiftCard>
                 <schedule>
-                    <cron_expr>* * */1 * *</cron_expr>
+                    <cron_expr>* * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>trugiftcard/observer::checkExpiryDate</model>
@@ -424,14 +436,23 @@
                 <order_status>complete</order_status>
                 <notify_message>Important: truGiftCard cannot be used as a payment option for Gift Cards.</notify_message>
             </product>
-            <sharewallet>
-                <expire_date>7</expire_date>
-            </sharewallet>
+            <sharegiftcard>
+                <enable>1</enable>
+            </sharegiftcard>
             <transfer>
                 <enable>1</enable>
                 <bonus>6</bonus>
                 <message>You will be received 6% bonus when transfers money to truGiftCard</message>
             </transfer>
+            <spending>
+                <tax>1</tax>
+                <shipping>0</shipping>
+                <background_color>DFF0D8</background_color>
+                <text_color>3C763D</text_color>
+                <current_label>Trunited Gift Card balance</current_label>
+                <applied_label>Enter amount to apply on this order</applied_label>
+                <discount_label>Gift Card Discount</discount_label>
+            </spending>
             <email>
                 <enable>1</enable>
                 <share_email_customer>trugiftcard_email_share_email_customer</share_email_customer>

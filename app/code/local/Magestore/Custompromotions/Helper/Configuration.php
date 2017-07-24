@@ -123,4 +123,19 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
         else
             return null;
     }
+
+    public function enableYTDMTD()
+    {
+        return $this->getDataConfig('ytd_mtd','enable');
+    }
+
+    public function getLabelForProfit()
+    {
+        return str_replace('{{current_year}}',date('Y', time()), $this->getDataConfig('ytd_mtd','profit'));
+    }
+
+    public function getLabelForSharing()
+    {
+        return $this->getDataConfig('ytd_mtd','shared');
+    }
 }

@@ -3,7 +3,7 @@ $store_id = Mage::app()->getStore()->getStoreId();
 $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
 ?>
 
-<div class="navbar-default affiliate-navigation col-lg-3 col-md-3 <?php if ($check_responsvie): ?>hidden-sm hidden-xs<?php else: ?>col-sm-3 col-xs-3<?php endif; ?> " role="navigation">
+<div style="display:none !important;" class="navbar-default affiliate-navigation col-lg-3 col-md-3  <?php if ($check_responsvie): ?>hidden-sm  hidden-lg hidden-md hidden-xs<?php else: ?><?php endif; ?> " role="navigation">
     <div class="container-fluid">
 
         <div class="collapse1 navbar-collapse-aff" id="nav-aff" >
@@ -30,6 +30,9 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
     </div>
     <a class="navbar-hidden" style="cursor:pointer">&nbsp;</a>
 </div>
+
+
+<a class="navbar-hidden" style="cursor:pointer">&nbsp;e</a>
 <script type="text/javascript">
     var $nav = jQuery.noConflict();
     $nav(document).ready(function () {

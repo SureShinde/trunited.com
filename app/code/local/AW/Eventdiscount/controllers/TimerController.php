@@ -35,6 +35,7 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
 
     public function ajaxAction()
     {
+        $cookie = Mage::getModel('core/cookie');
         $response = new Varien_Object();
         $responseTimer = array();
         $response->setError(0);
@@ -49,13 +50,21 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
             $triggerCollection->addCustomerIdFilter($customerId);
             $triggerCollection->addStatusFilter();
             $triggerCollection->addTimeLimitFilter();
-             $triggerCollection->addNotLoadIdFilter(Mage::getModel('customer/session')->getClosedTimerId());
+            $triggerCollection->addNotLoadIdFilter(Mage::getModel('customer/session')->getClosedTimerId());
             $quote = Mage::getSingleton('checkout/session')->getQuote();
+            $items = $quote->getAllItems();
+
             if (!$triggerCollection->getSize()) throw new Exception($this->__('Trigger not found for this customer'));
+
             foreach ($triggerCollection as $item) {
-                //Check quote triggers
+
+                $timer = Mage::getModel('aweventdiscount/timer')->load($item->getData('timer_id'));
+                if(!$timer->getId() || ($timer->getId() && strcasecmp($timer->getEvent(), AW_Eventdiscount_Model_Event::PROMOTION) == 0 &&
+                        !Mage::helper('eventdiscount')->checkShowPromotion($customerId)))
+                    continue;
+
                 if (($item->getData('trigger_event') == AW_Eventdiscount_Model_Event::CARTUPDATE)
-                    && (!$quote->hasItems())
+                    && (!$quote->hasItems() || !Mage::helper('eventdiscount')->checkProductCondition($item->getData('timer_id'), $items))
                 ) {
                     $item->setTriggerStatus(AW_Eventdiscount_Model_Source_Trigger_Status::MISSED);
                     $item->save();
@@ -137,6 +146,70 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $installer->run("
             ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `text_promotion` VARCHAR(255) ;
 
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb4Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE `{$setup->getTable('aweventdiscount/trigger')}` ADD COLUMN `cookie` TINYINT DEFAULT 0;
+            ALTER TABLE `{$setup->getTable('aweventdiscount/trigger')}` ADD COLUMN `updated_at` TIMESTAMP NULL DEFAULT NULL ;
+            ALTER TABLE `{$setup->getTable('aweventdiscount/trigger')}` ADD COLUMN `referrer_id` int(10) unsigned NULL ;
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb5Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/giftcard')}` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `timer_id` int(10) unsigned NOT NULL,
+              `amount_from` FLOAT unsigned NOT NULL,
+              `amount_to` FLOAT unsigned NOT NULL,
+              `reward_new_customer` FLOAT unsigned NOT NULL,
+              `reward_referrer` FLOAT unsigned NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb6Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            DROP TABLE `{$setup->getTable('aweventdiscount/trigger')}`;
+            CREATE TABLE IF NOT EXISTS `{$setup->getTable('aweventdiscount/trigger')}` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `timer_id` int(10) unsigned NOT NULL,
+              `customer_id` int(10) unsigned NOT NULL,
+              `created_at`  TIMESTAMP NULL DEFAULT NULL,
+              `duration` bigint(20) NOT NULL COMMENT 'in second',
+              `active_to` TIMESTAMP NULL DEFAULT NULL,
+              `trigger_status` enum('in_progress','missed','used') NOT NULL DEFAULT 'in_progress',
+              `action` text NOT NULL,
+              `quote_hash` text NOT NULL,
+              `amount_serialized`  text NOT NULL,
+              `trigger_event` tinytext NOT NULL,
+              `cookie` TINYINT DEFAULT 0,
+              `updated_at` TIMESTAMP NULL DEFAULT NULL,
+              `referrer_id` int(10) unsigned NULL,
+              PRIMARY KEY (`id`),
+              KEY `status` (`trigger_status`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 		");
         $installer->endSetup();
         echo "success";

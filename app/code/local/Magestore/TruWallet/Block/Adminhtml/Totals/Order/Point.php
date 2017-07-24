@@ -49,7 +49,7 @@ class Magestore_TruWallet_Block_Adminhtml_Totals_Order_Point extends Mage_Adminh
         if ($refundEarnedTruWallet > 0) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'truWallet_refund_earned',
-                'label' => $this->__('Refund truWallet Funds'),
+                'label' => $this->__('Refund TruWallet Funds'),
                 'value' => $display_balance,
                 'is_formated'   => true,
                 'area'  => 'footer',
