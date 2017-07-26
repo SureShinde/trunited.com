@@ -1,13 +1,15 @@
 <?php
 
-class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front_Action {
+class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front_Action
+{
 
     /**
      * get Account helper
      *
      * @return Magestore_Affiliateplus_Helper_Account
      */
-    protected function _getAccountHelper() {
+    protected function _getAccountHelper()
+    {
         return Mage::helper('affiliateplus/account');
     }
 
@@ -16,7 +18,8 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
      *
      * @return Magestore_Affiliateplus_Helper_Data
      */
-    protected function _getHelper() {
+    protected function _getHelper()
+    {
         return Mage::helper('affiliateplus');
     }
 
@@ -25,7 +28,8 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
      *
      * @return Magestore_Affiliateplus_Helper_Config
      */
-    protected function _getConfigHelper() {
+    protected function _getConfigHelper()
+    {
         return Mage::helper('affiliateplus/config');
     }
 
@@ -34,7 +38,8 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
      *
      * @return Magestore_Affiliateplus_Helper_Payment
      */
-    protected function _getPaymentHelper() {
+    protected function _getPaymentHelper()
+    {
         return Mage::helper('affiliateplus/payment');
     }
 
@@ -43,16 +48,18 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
      *
      * @return Mage_Core_Model_Session
      */
-    protected function _getCoreSession() {
-        return Mage::getSingleton('core/session') ;
+    protected function _getCoreSession()
+    {
+        return Mage::getSingleton('core/session');
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) {
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) {
             return $this->_redirectUrl(Mage::getBaseUrl());
         }
-        
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -60,7 +67,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             if ($this->_getAccountHelper()->getAccount()->getApproved() == 1)
                 $this->_getCoreSession()->addError($this->_getHelper()->__('Your affiliate account is currently disabled. Please contact us to resolve this issue.'));
             // elseif (!$this->_getCoreSession()->getData('has_been_signup'))
-                // $this->_getCoreSession()->addNotice($this->_getHelper()->__('Your affiliate registration is awaiting for approval. Please be patient.'));
+            // $this->_getCoreSession()->addNotice($this->_getHelper()->__('Your affiliate registration is awaiting for approval. Please be patient.'));
         }
         $this->loadLayout();
         $page = Mage::getSingleton('cms/page');
@@ -71,10 +78,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function materialsAction() {
+    public function materialsAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -89,10 +97,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function listTransactionAction() {
+    public function listTransactionAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -103,10 +112,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function paymentsAction() {
+    public function paymentsAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -121,10 +131,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function viewPaymentAction() {
+    public function viewPaymentAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -143,10 +154,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function paymentFormAction() {
+    public function paymentFormAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -176,28 +188,29 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         if (!$this->_getAccountHelper()->isEnoughBalance()) {
             $baseCurrency = Mage::app()->getStore()->getBaseCurrency();
             $this->_getCoreSession()->addNotice($this->__('The minimum balance required to request withdrawal is %s'
-                            , $baseCurrency->format($this->_getConfigHelper()->getPaymentConfig('payment_release'), array(), false)));
+                , $baseCurrency->format($this->_getConfigHelper()->getPaymentConfig('payment_release'), array(), false)));
             return $this->_redirect('affiliateplus/index/listTransaction');
         }
-		//is purchased 99affiliate product?
+        //is purchased 99affiliate product?
         if (!$this->_getAccountHelper()->isPaidAffiliateFee()) {
-			$affiliateFeeProduct = Mage::getModel('catalog/product')->load(177);
-			if($affiliateFeeProduct)
-				$url = $affiliateFeeProduct->getProductUrl();
-			else
-				$url = Mage::helper('core/url')->getCurrentUrl();
-            
-			$this->_getCoreSession()->addError($this->__('A signed affiliate agreement is required to withdraw affiliate funds. Please <a href="%s">click here</a>.',$url));
+            $affiliateFeeProduct = Mage::getModel('catalog/product')->load(177);
+            if ($affiliateFeeProduct)
+                $url = $affiliateFeeProduct->getProductUrl();
+            else
+                $url = Mage::helper('core/url')->getCurrentUrl();
+
+            $this->_getCoreSession()->addError($this->__('A signed affiliate agreement is required to withdraw affiliate funds. Please <a href="%s">click here</a>.', $url));
             return $this->_redirect('affiliateplus/index/listTransaction');
         }
-		//is purchased 99affiliate product?
+        //is purchased 99affiliate product?
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('Request Payment'));
         $this->renderLayout();
     }
 
-    public function transferFormAction(){
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+    public function transferFormAction()
+    {
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
 
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
@@ -208,7 +221,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             return $this->_redirect('affiliateplus/account/login');
 
         $transfer_amount = $this->getRequest()->getParam('transfer_amount');
-        if($transfer_amount < 0 || !is_numeric($transfer_amount)){
+        if ($transfer_amount < 0 || !is_numeric($transfer_amount)) {
             $this->_getCoreSession()->addNotice($this->__('Please enter a number greater than 0 to transfer.'));
             return $this->_redirect('affiliateplus/index/payments');
         }
@@ -221,18 +234,18 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         }
 
         $affiliate_account = $this->_getAccountHelper()->getAccount();
-        if(!$affiliate_account->getId()){
+        if (!$affiliate_account->getId()) {
             $this->_getCoreSession()->addNotice($this->__('Please login to your account first.'));
             return $this->_redirect('affiliateplus/account/login');
         }
         $balance = $affiliate_account->getBalance();
-        if($transfer_amount > $balance){
+        if ($transfer_amount > $balance) {
             $this->_getCoreSession()->addNotice($this->__('The maximum balance required to transfer dollars is %s'
                 , $baseCurrency->format($balance, array(), false)));
             return $this->_redirect('affiliateplus/index/payments');
         }
 
-        try{
+        try {
             $customer = Mage::getModel('customer/customer')->load($affiliate_account->getCustomerId());
             /*$transferObject = new Varien_Object();
             $transferObject->setData('product_credit', $transfer_amount);
@@ -243,12 +256,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 );*/
 
             $object_transfer = Mage::helper('affiliateplus/config')->getTransferConfig();
-            if($object_transfer == 1)
-            {
+            if ($object_transfer == 1) {
                 $enable_bonus = Mage::helper('truwallet')->getEnableTransferBonus();
-                if($enable_bonus){
+                if ($enable_bonus) {
                     $percent = Mage::helper('truwallet')->getTransferBonus();
-                    $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100 ;
+                    $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100;
                 } else {
                     $new_amount = $transfer_amount;
                 }
@@ -270,11 +282,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                         Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_COMPLETED
                     );
                 }
-            } else if($object_transfer == 2) {
+            } else if ($object_transfer == 2) {
                 $enable_bonus = Mage::helper('trugiftcard')->getEnableTransferBonus();
-                if($enable_bonus){
+                if ($enable_bonus) {
                     $percent = Mage::helper('trugiftcard')->getTransferBonus();
-                    $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100 ;
+                    $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100;
                 } else {
                     $new_amount = $transfer_amount;
                 }
@@ -299,10 +311,9 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             }
 
 
-
             $storeId = Mage::app()->getStore()->getStoreId();
             $scope = Mage::getStoreConfig('affiliateplus/account/balance', $storeId);
-            if($scope == 'store'){
+            if ($scope == 'store') {
 
             } else {
                 $storeId = null;
@@ -314,22 +325,23 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             $affiliateAccount->setBalance($balance)->save();
             Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
 
-            if($object_transfer == 1)
+            if ($object_transfer == 1)
                 $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
-            else if($object_transfer == 2)
+            else if ($object_transfer == 2)
                 $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to Trunited Gift Card successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
-        } catch(Exception $ex){
+        } catch (Exception $ex) {
             $this->_getCoreSession()->addError($ex->getMessage());
         }
         return $this->_redirect('affiliateplus/index/payments');
     }
 
-    public function requestPaymentAction() {
+    public function requestPaymentAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -373,34 +385,34 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $amount = $amount / $store->convertPrice(1);
         if ($amount < $this->_getConfigHelper()->getPaymentConfig('payment_release')) {
             $this->_getCoreSession()->addNotice($this->__('The minimum balance required to request withdrawal is %s'
-                            , Mage::helper('core')->currency($this->_getConfigHelper()->getPaymentConfig('payment_release'), true, false)));
+                , Mage::helper('core')->currency($this->_getConfigHelper()->getPaymentConfig('payment_release'), true, false)));
             return $this->_redirect('affiliateplus/index/paymentForm');
         }
 
         if ($amountInclTax = $this->getRequest()->getParam('amount_incl_tax')) {
             if ($amountInclTax > $amount && $amountInclTax > $account->getBalance()) {
                 $this->_getCoreSession()->addError($this->__('The withdrawal requested cannot exceed your current balance (%s).'
-                                , Mage::helper('core')->currency($account->getBalance(), true, false)));
+                    , Mage::helper('core')->currency($account->getBalance(), true, false)));
                 return $this->_redirect('affiliateplus/index/paymentForm');
             }
         }
         if ($amount > $account->getBalance()) {
             $this->_getCoreSession()->addError($this->__('The withdrawal requested cannot exceed your current balance (%s).'
-                            , Mage::helper('core')->currency($account->getBalance(), true, false)));
+                , Mage::helper('core')->currency($account->getBalance(), true, false)));
 
             return $this->_redirect('affiliateplus/index/paymentForm');
         }
 
         $payment = Mage::getModel('affiliateplus/payment')
-                ->setPaymentMethod($paymentCode)
-                ->setAmount($amount)
-                ->setAccountId($account->getId())
-                ->setAccountName($account->getName())
-                ->setAccountEmail($account->getEmail())
-                ->setRequestTime(now())
-                ->setStatus(1)
-                ->setIsRequest(1)
-                ->setIsPayerFee(0);
+            ->setPaymentMethod($paymentCode)
+            ->setAmount($amount)
+            ->setAccountId($account->getId())
+            ->setAccountName($account->getName())
+            ->setAccountEmail($account->getEmail())
+            ->setRequestTime(now())
+            ->setStatus(1)
+            ->setIsRequest(1)
+            ->setIsPayerFee(0);
         if ($this->_getConfigHelper()->getPaymentConfig('who_pay_fees') == 'payer' && $paymentCode == 'paypal')
             $payment->setIsPayerFee(1);
 
@@ -432,14 +444,14 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             //Change paypal email for affiliate account
             if ($paypalEmail && $paypalEmail != $account->getPaypalEmail()) {
                 $accountModel = Mage::getModel('affiliateplus/account')
-                        ->setStoreId($store->getId())
-                        ->load($account->getId());
+                    ->setStoreId($store->getId())
+                    ->load($account->getId());
                 try {
                     $accountModel->setPaypalEmail($paypalEmail)
-                            ->setId($account->getId())
-                            ->save();
+                        ->setId($account->getId())
+                        ->save();
                 } catch (Exception $e) {
-                    
+
                 }
             }
 
@@ -470,12 +482,13 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
 
     /**
      * Add by blanka 29/11/2012
-     * 
+     *
      */
-    public function confirmRequestAction() {
+    public function confirmRequestAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -510,21 +523,21 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                     $params['email'] = $params['paypal_email'];
                 else
                     $params['email'] = $account->getPaypalEmail();
-            }else if ($params['payment_method'] == 'moneybooker') {
+            } else if ($params['payment_method'] == 'moneybooker') {
 
                 if (isset($params['moneybooker_email']) && $params['moneybooker_email'])
                     $params['email'] = $params['moneybooker_email'];
                 else
                     $params['email'] = $account->getMoneybookerEmail();
             }
-        }else {
+        } else {
             $params['payment_method'] = $params['payment_method'];
             if ($params['payment_method'] == 'paypal') {
                 if (isset($params['paypal_email']) && $params['paypal_email'])
                     $params['email'] = $params['paypal_email'];
                 else
                     $params['email'] = $account->getPaypalEmail();
-            }else if ($params['payment_method'] == 'moneybooker') {
+            } else if ($params['payment_method'] == 'moneybooker') {
                 if (isset($params['moneybooker_email']) && $params['moneybooker_email'])
                     $params['email'] = $params['moneybooker_email'];
                 else
@@ -569,10 +582,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
 
     /* End edit */
 
-    public function referrersAction() {
+    public function referrersAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -583,20 +597,22 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->renderLayout();
     }
 
-    public function listCategoriesAction() {
+    public function listCategoriesAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
         $this->_redirectUrl(Mage::getBaseUrl());
     }
 
-    public function cancelPaymentAction() {
+    public function cancelPaymentAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -620,10 +636,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
 //        return $this->_redirectUrl($url);
     }
 
-    public function verifyPaymentAction() {
+    public function verifyPaymentAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         $this->loadLayout();
         $block = $this->getLayout()->createBlock('affiliateplus/payment_verify');
         $block->setTemplate('affiliateplus/payment/verify.phtml');
@@ -635,9 +652,9 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             try {
                 $account = Mage::getModel('affiliateplus/account')->load($account->getId());
                 $account->setData($method . '_email', $email)
-                        ->save();
+                    ->save();
             } catch (Exception $e) {
-                
+
             }
         }
         $verify = Mage::getModel('affiliateplus/payment_verify')->loadExist($account->getId(), $email, $method);
@@ -652,7 +669,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 try {
                     $verify->save();
                 } catch (Exception $e) {
-                    
+
                 }
             } else {
                 $block->setError('1');
@@ -661,10 +678,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->getResponse()->setBody($block->toHtml());
     }
 
-    public function verifyCodeAction() {
+    public function verifyCodeAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         $request = $this->getRequest();
         $method = $request->getParam('payment_method');
         $email = $request->getParam('email');
@@ -687,17 +705,18 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             else
                 $url = Mage::getUrl('affiliates/index/' . $action, array('payment_method' => $method, 'amount' => $amount, 'moneybooker_email' => $email));
             return $this->_redirectUrl($url);
-        }else {
+        } else {
             $this->_getCoreSession()->addError('Your email was unsuccessfully verified!');
             $url = Mage::getUrl('affiliates/index/paymentForm', array('payment_method' => $method));
             return $this->_redirectUrl($url);
         }
     }
 
-    public function checkVerifyAction() {
+    public function checkVerifyAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         $request = $this->getRequest();
         $method = $request->getParam('payment_method');
         $email = $request->getParam('email');
@@ -716,10 +735,11 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         }
     }
 
-    public function sendVerifyEmailAction() {
+    public function sendVerifyEmailAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         $account = Mage::getSingleton('affiliateplus/session')->getAccount();
         $request = $this->getRequest();
         $method = $request->getParam('payment_method');
@@ -737,9 +757,10 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
     /**
      * @return mixed
      */
-    public function substoreAction() {
+    public function substoreAction()
+    {
         // Changed By Adam 28/07/2014
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled())
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled())
             return $this->_redirectUrl(Mage::getBaseUrl());
         if (Mage::helper('affiliateplus/account')->accountNotLogin())
             return $this->_redirect('affiliateplus/account/login');
@@ -748,11 +769,12 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->getLayout()->getBlock('head')->setTitle(Mage::helper('affiliateplus')->__('Sub Store Url'));
         $this->renderLayout();
     }
-	
-	public function myconnectionsAction() {
+
+    public function myconnectionsAction()
+    {
         // Added By Aellon tech 17/12/2016
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
@@ -762,20 +784,51 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         $this->getLayout()->getBlock('head')->setTitle($this->__('My Connections'));
         $this->renderLayout();
     }
-	
+
+    public function myconnectionsgridAction()
+    {
+        // Added By Aellon tech 17/12/2016
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
+        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
+            return;
+        }
+        if ($this->_getAccountHelper()->accountNotLogin())
+            return $this->_redirect('affiliateplus/account/login');
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('My Connections Grid'));
+        $this->renderLayout();
+    }
+
+    public function myconnectionstreeviewAction()
+    {
+        // Added By Aellon tech 17/12/2016
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+
+        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
+            return;
+        }
+        if ($this->_getAccountHelper()->accountNotLogin())
+            return $this->_redirect('affiliateplus/account/login');
+        $this->loadLayout();
+        $this->getLayout()->getBlock('head')->setTitle($this->__('My Connections'));
+        $this->renderLayout();
+    }
+
 
     /**
-     *	Changed by Adam (27/08/2016): show list lifetimecustomer in frontend
+     *    Changed by Adam (27/08/2016): show list lifetimecustomer in frontend
      */
-    public function lifetimecustomerAction() {
+    public function lifetimecustomerAction()
+    {
         if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
             return;
         }
 
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) {
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) {
             return $this->_redirectUrl(Mage::getBaseUrl());
         }
-        if(Mage::helper('affiliateplus/account')->accountNotLogin()) {
+        if (Mage::helper('affiliateplus/account')->accountNotLogin()) {
             return $this->_redirect('affiliates/account/login');
         }
 
@@ -785,9 +838,12 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
     }
 
     /*Changed By Adam (27/08/2016): change commission to affiliate manually*/
-    public function listUpdateBanlanceTransactionAction() {
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
-        if(!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)){ return; }
+    public function listUpdateBanlanceTransactionAction()
+    {
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+        if (!Mage::helper('magenotification')->checkLicenseKeyFrontController($this)) {
+            return;
+        }
         if ($this->_getAccountHelper()->accountNotLogin())
             return $this->_redirect('affiliateplus/account/login');
         $this->loadLayout();
@@ -798,8 +854,9 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
     /**
      * Added By Adam (31/08/2016): display product list in the substore
      */
-    public function viewAction() {
-        if(!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
+    public function viewAction()
+    {
+        if (!Mage::helper('affiliateplus')->isAffiliateModuleEnabled()) return $this->_redirectUrl(Mage::getBaseUrl());
 
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('Affiliate Page Shop'));
@@ -807,24 +864,23 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
     }
 
 
-
-
     /**
      * Added By Adam (31/08/2016): check if the product is already assign to an affiliate.
      */
-    public function addproductAction() {
+    public function addproductAction()
+    {
         $accountId = $this->getRequest()->getParam('accountid');
         $productId = $this->getRequest()->getParam('productid');
         $error = true;
-        if(!Mage::helper('affiliateplus')->checkExistAccountProduct($accountId, $productId)){
-            try{
+        if (!Mage::helper('affiliateplus')->checkExistAccountProduct($accountId, $productId)) {
+            try {
                 $model = Mage::getModel('affiliateplus/accountproduct')
                     ->setAccountId($accountId)
                     ->setProductId($productId)
                     ->save();
                 $error = false;
 //                $message = Mage::helper('affiliateplus')->__('The product has been added to your substore successfully.');
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $error = true;
 //                $message = Mage::helper('affiliateplus')->__('You cannot add this product to your substore');
             }
@@ -832,7 +888,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             $error = true;
 //            $message = Mage::helper('affiliateplus')->__('You cannot add this product to your substore');
         }
-        if($error) {
+        if ($error) {
             $html = "<div class='error-msg'>" . $this->__('You cannot add this product to your substore') . "</div>";
         } else {
             $html = "<div class='success-msg'>" . $this->__('The product has been added to your substore successfully.') . "</div>";
