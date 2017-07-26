@@ -170,7 +170,8 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
                     $truGiftCardAccount,
                     $params,
                     Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING,  // type
-                    $status
+                    $status,
+                    $expiration_date
                 );
 
                 if ($share_transaction != null && $share_transaction->getId()) {
@@ -189,7 +190,8 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
                 $is_exist,
                 $email,
                 $message,
-                $status
+                $status,
+                $expiration_date
             );
 
             $transactionSave->save();

@@ -105,9 +105,10 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
      * @param $receiver_email
      * @param $message
      * @param $status
+     * @param $expiration_date
      * @return $this
      */
-    public function sendEmailWhenSharingTruGiftCard($sender_id, $amount, $customer_exist, $receiver_email, $message, $status)
+    public function sendEmailWhenSharingTruGiftCard($sender_id, $amount, $customer_exist, $receiver_email, $message, $status, $expiration_date)
     {
         $store = Mage::app()->getStore();
         if (!Mage::getStoreConfigFlag(self::XML_PATH_EMAIL_ENABLE, $store->getId())) {
@@ -149,6 +150,7 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
             'status' => $this->getStatusLabel($status),
             'register_link' => $link,
             'message' => $message,
+            'expiration_date' => date('m/d/Y h:ia', strtotime($expiration_date)),
         );
 
         /*if($_SERVER['REMOTE_ADDR'] == '101.99.23.40')
