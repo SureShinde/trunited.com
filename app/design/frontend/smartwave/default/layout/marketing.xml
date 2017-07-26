@@ -1,9 +1,0 @@
-<frontend>
-        <layout>
-            <updates>
-                <inchoo_core>
-                    <file>trunited_core.xml</file>
-                </inchoo_core>
-            </updates>
-        </layout>
-    </frontend>

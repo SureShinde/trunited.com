@@ -416,7 +416,7 @@
         <jobs>
             <trugiftcard_check_expiry_date_sharing_truGiftCard>
                 <schedule>
-                    <cron_expr>* * * * *</cron_expr>
+                    <cron_expr>0 */1 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>trugiftcard/observer::checkExpiryDate</model>

@@ -15,14 +15,14 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getMyTruGiftCardLabel()
     {
-        $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/trugiftcard/point.png').'" />';
+        $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/trugiftcard/tgc_icon.png').'" />';
         return $this->__('My Trunited Gift Card') . ' ' . $image;
     }
 
     public function getShareTruGiftCardLabel()
     {
-        $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/trugiftcard/point.png').'" />';
-        return $this->__('Share Trunited Gift Card Money') . ' ' . $image;
+        $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/trugiftcard/tgc_icon.png').'" />';
+        return $this->__('Share Trunited Gift Card') . ' ' . $image;
     }
 
     public function formatTrugiftcard($credit)

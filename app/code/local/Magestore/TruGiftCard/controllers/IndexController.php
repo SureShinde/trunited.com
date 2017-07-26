@@ -3,9 +3,6 @@
 class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_Action
 {
 	public function indexAction(){
-		$customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
-		if($customer->getId())
-			Mage::helper('trugiftcard/transaction')->checkCreditFromSharing($customer);
 
 		$this->loadLayout();
 		$this->_title(Mage::helper('trugiftcard')->__('My Trunited Gift Card'));

@@ -18,8 +18,8 @@ class Magestore_TruGiftCard_Model_Type extends Varien_Object
 	static public function getOptionArray(){
 		return array(
 			self::TYPE_TRANSACTION_BY_ADMIN	=> Mage::helper('trugiftcard')->__('Changed by Admin'),
-			self::TYPE_TRANSACTION_SHARING   => Mage::helper('trugiftcard')->__('Sharing truGiftCard money'),
-			self::TYPE_TRANSACTION_RECEIVE_FROM_SHARING   => Mage::helper('trugiftcard')->__('Received truGiftCard money from Sharing'),
+			self::TYPE_TRANSACTION_SHARING   => Mage::helper('trugiftcard')->__('Sharing Trunited Gift Card'),
+			self::TYPE_TRANSACTION_RECEIVE_FROM_SHARING   => Mage::helper('trugiftcard')->__('Received Trunited Gift Card from sharing'),
 			self::TYPE_TRANSACTION_TRANSFER   => Mage::helper('trugiftcard')->__('Transfer dollars from balance to truGiftCard'),
 			self::TYPE_TRANSACTION_PAYOUT_EARNING   => Mage::helper('trugiftcard')->__('Payout earnings'),
 			self::TYPE_TRANSACTION_CANCEL_ORDER   => Mage::helper('trugiftcard')->__('Retrieve truGiftCard balance spent on cancelled order'),
