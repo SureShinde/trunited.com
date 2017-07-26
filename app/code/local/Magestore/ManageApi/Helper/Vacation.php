@@ -59,7 +59,7 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
                             $model->setData($_dt);
 
                             $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
-                            if($customer != null && $customer->getId() && floor($_dt['commission']) > 0){
+                            if($customer != null && $customer->getId() && floor($_dt['commission']) > 0 && strcasecmp($_dt['status'],'Active') == 0){
                                 Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                         'product_credit_title' => 0,
                                         'product_credit' => 0,
@@ -90,7 +90,7 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
                             $model->setData($_dt);
 
                             $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
-                            if($customer != null && $customer->getId() && floor($_dt['commission']) > 0){
+                            if($customer != null && $customer->getId() && floor($_dt['commission']) > 0 && strcasecmp($_dt['status'],'Active') == 0){
                                 Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                         'product_credit_title' => 0,
                                         'product_credit' => 0,
@@ -104,7 +104,6 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
                                     ))
                                 );
                             }
-                            
                             $transactionSave->addObject($model);
                         }
                     }
