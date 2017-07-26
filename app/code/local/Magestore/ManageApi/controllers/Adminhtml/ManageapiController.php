@@ -76,7 +76,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $_url = str_replace(array('{{start_date}}','{{end_date}}'),array($start_date, $end_date), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">LINK SHARE API</a> ';
                                 $file = Mage::getBaseDir('media') . DS . Magestore_ManageApi_Helper_Data::LINK_SHARE_FILE;
-                                Mage::helper('manageapi/linkshare')->processAPI($_url, $file);
+                                Mage::helper('manageapi/linkshare')->processAPI($_url, $file, $start_date);
                             }
                         }
                     } else if ($api_name == 2) {
@@ -90,7 +90,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $end_date_hotel = date('Y-m-d_23:59:59', strtotime($end_date));
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_hotel, $end_date_hotel, $format), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE HOTEL API</a> ';
-                                Mage::helper('manageapi/hotel')->processAPI($_url);
+                                Mage::helper('manageapi/hotel')->processAPI($_url, $start_date);
                             }
                         }
                     } else if ($api_name == 3) {
@@ -104,7 +104,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $end_date_flight = date('Y-m-d_23:59:59', strtotime($end_date));
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_flight, $end_date_flight, $format), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE FLIGHT API</a> ';
-                                Mage::helper('manageapi/flight')->processAPI($_url);
+                                Mage::helper('manageapi/flight')->processAPI($_url, $start_date);
                             }
                         }
                     } else if ($api_name == 4) {
@@ -118,7 +118,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $end_date_car = date('Y-m-d_23:59:59', strtotime($end_date));
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_car, $end_date_car, $format), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE CAR API</a> ';
-                                Mage::helper('manageapi/car')->processAPI($_url);
+                                Mage::helper('manageapi/car')->processAPI($_url, $start_date);
                             }
                         }
                     } else if ($api_name == 5) {
@@ -132,7 +132,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $end_date_vacation = date('Y-m-d_23:59:59', strtotime($end_date));
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date_vacation, $end_date_vacation, $format), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">PRICE LINE VACATION API</a> ';
-                                Mage::helper('manageapi/vacation')->processAPI($_url);
+                                Mage::helper('manageapi/vacation')->processAPI($_url, $start_date);
                             }
                         }
                     } else if ($api_name == 6) {
@@ -144,7 +144,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 $data_type = $this->getHelperData()->getDataConfig('cj_data_type', 'cj');
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{data_type}}'), array($start_date, $end_date, $data_type), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">CJ API</a> ';
-                                Mage::helper('manageapi/cj')->processAPI($_url);
+                                Mage::helper('manageapi/cj')->processAPI($_url, $start_date);
                             }
                         }
                     } else if ($api_name == 7) {
@@ -155,7 +155,7 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                             if ($url != null) {
                                 $_url = str_replace(array('{{start_date}}', '{{end_date}}'), array($start_date, $end_date), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">TARGET API</a> ';
-                                Mage::helper('manageapi/target')->processAPI($_url);
+                                Mage::helper('manageapi/target')->processAPI($_url, $start_date);
                             }
                         }
                     }

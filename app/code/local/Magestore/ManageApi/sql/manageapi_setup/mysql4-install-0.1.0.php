@@ -4,21 +4,23 @@ $installer = $this;
 $installer->startSetup();
 
 $installer->run("
-
 DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
             CREATE TABLE {$this->getTable('manageapi/linkshare')} (
               `linkshare_id` int(11) unsigned NOT NULL auto_increment,
-              `member_id` int(11) unsigned NOT NULL,
+              `member_id` VARCHAR(255) NOT NULL,
+              `mid` VARCHAR(255) NOT NULL,
               `advertiser_name` varchar(255) NOT NULL,
-              `order_id` int(11) unsigned NOT NULL,
+              `order_id` VARCHAR(255)  NOT NULL,
               `transaction_date` datetime NULL,
+              `sku` VARCHAR(255) NULL,
               `sales` FLOAT unsigned,
+              `items` VARCHAR(255) NULL,
               `total_commission` FLOAT unsigned,
               `process_date` datetime NULL,
               `created_at` datetime NULL,
               PRIMARY KEY (`linkshare_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/hotelactions')};
             CREATE TABLE {$this->getTable('manageapi/hotelactions')} (
               `hotel_actions_id` int(10) unsigned NOT NULL auto_increment,
@@ -85,14 +87,14 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`hotel_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/flightactions')};
             CREATE TABLE {$this->getTable('manageapi/flightactions')} (
               `flight_actions_id` int(10) unsigned NOT NULL auto_increment,
-              `air_offer_id` INT(10) NULL ,
+              `air_offer_id` VARCHAR(255) NULL ,
               `reservation_date_time` datetime NULL ,
               `session_id` VARCHAR(255) NULL ,
-              `accountid` INT(10) NULL ,
+              `accountid` VARCHAR(255) NULL ,
               `refid` VARCHAR(255) NULL,
               `site_name` VARCHAR(255) NULL,
               `refclickid` VARCHAR(255) NULL,
@@ -103,8 +105,8 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `commission` FLOAT NULL,
               `insurance_commission` VARCHAR(255) NULL,
               `ratecat` VARCHAR(255) NULL,
-              `passengers` INT(10) NULL,
-              `insured_passengers` INT(10) NULL,
+              `passengers` VARCHAR(255) NULL,
+              `insured_passengers` VARCHAR(255) NULL,
               `air_search_type` VARCHAR (255) NULL,
               `start_date_time` datetime NULL ,
               `end_date_time` datetime NULL ,
@@ -135,7 +137,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `confirmed_commission` text NULL DEFAULT '',
               `confirmed_fee` text NULL DEFAULT '',
               `confirmed_total_earnings` text NULL DEFAULT '',
-              `reconciled_status` text NULL DEFAULT '',   
+              `reconciled_status` text NULL DEFAULT '',
               `invoice_number` text NULL DEFAULT '',
               `confirmed_insurance_commission` text NULL DEFAULT '',
               `insurance_reconciled_status` text NULL DEFAULT '',
@@ -144,7 +146,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`flight_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/caractions')};
             CREATE TABLE {$this->getTable('manageapi/caractions')} (
               `car_actions_id` int(10) unsigned NOT NULL auto_increment,
@@ -173,18 +175,18 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `confirmed_insurance_commission` text NULL,
               `insurance_reconciled_status` text NULL,
               `insurance_invoice_number` text NULL,
-              `accountid` INT(10) NULL,
-              `refid` INT(10) NULL,
+              `accountid` VARCHAR(255) NULL,
+              `refid` VARCHAR(255) NULL,
               `ratecat` VARCHAR (255) NULL,
               `site_name` VARCHAR (255) NULL,
-              `portal` INT (10) NULL,
+              `portal` VARCHAR(255) NULL,
               `refclickid` text NULL,
               `requestid` VARCHAR (255) NULL,
               `insurance_flag` VARCHAR (255) NULL,
               `total` FLOAT NULL,
               `sub_total` FLOAT NULL,
               `tax` FLOAT NULL,
-              `insured_days` INT NULL,
+              `insured_days` VARCHAR(255) NULL,
               `currency` VARCHAR (255) NULL,
               `user_name` VARCHAR(255) NULL,
               `user_middlename` text NULL,
@@ -200,12 +202,12 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `car_type` VARCHAR(255) NULL,
               `company_name` VARCHAR(255) NULL,
               `company_code` VARCHAR(255) NULL,
-              `num_days` INT NULL,
+              `num_days` VARCHAR(255) NULL,
               `pickup_location` VARCHAR(255) NULL,
               `dropoff_location` VARCHAR(255) NULL,
               `bookingid` VARCHAR(255) NULL,
-              `tripid` INT NULL,
-              `newsletter_optin` INT NULL,
+              `tripid` VARCHAR(255) NULL,
+              `newsletter_optin` VARCHAR(255) NULL,
               `device` VARCHAR (255) NULL,
               `ins_subtotal` text NULL,
               `insurance_commission` text NULL,
@@ -213,7 +215,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `fee` FLOAT NULL,
               `commission` FLOAT NULL,
               `rate_type` VARCHAR (255) NULL,
-              `phn_sale` INT NULL,
+              `phn_sale` VARCHAR(255) NULL,
               `member_id` text NULL,
               `invoice_date` text NULL,
               `pending_commission` text NULL,
@@ -223,7 +225,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`car_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/vacationactions')};
             CREATE TABLE {$this->getTable('manageapi/vacationactions')} (
               `vacation_actions_id` int(10) unsigned NOT NULL auto_increment,
@@ -241,7 +243,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `car_dropoff_location_state` text NULL ,
               `car_dropoff_location_country` text NULL ,
               `flights` text NULL ,
-              `insurance_fee` INT NULL ,
+              `insurance_fee` VARCHAR(255) NULL ,
               `orig_airport_code` VARCHAR (255) NULL ,
               `dest_airport_code` VARCHAR (255) NULL ,
               `hotel_city` text NULL ,
@@ -257,10 +259,10 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `confirmed_insurance_commission` text NULL,
               `insurance_reconciled_status` text NULL,
               `insurance_invoice_number` text NULL,
-              `accountid` INT(10) NULL,
-              `refid` INT(10) NULL,
+              `accountid` VARCHAR(255) NULL,
+              `refid` VARCHAR(255) NULL,
               `site_name` VARCHAR (255) NULL,
-              `portal` INT (10) NULL,
+              `portal` VARCHAR(255) NULL,
               `refclickid` text NULL,
               `total` FLOAT NULL,
               `sub_total` FLOAT NULL,
@@ -280,7 +282,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `user_location_state` VARCHAR(255) NULL,
               `user_country` VARCHAR(255) NULL,
               `user_zip` VARCHAR(255) NULL,
-              `tripid` INT NULL,
+              `tripid` VARCHAR(255) NULL,
               `depart_date_time` datetime NULL,
               `return_date_time` datetime NULL,
               `check_in_date_time` datetime NULL,
@@ -290,9 +292,9 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `device` VARCHAR(255) NULL,
               `rate_type` text NULL,
               `member_id` text NULL,
-              `rooms` INT NULL,
-              `hotelid` INT NULL,
-              `cityid` INT NULL,
+              `rooms` VARCHAR(255) NULL,
+              `hotelid` VARCHAR(255) NULL,
+              `cityid` VARCHAR(255) NULL,
               `invoice_date` text NULL,
               `pending_commission` text NULL,
               `status` VARCHAR(255) NULL,
@@ -301,7 +303,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `created_time` datetime NULL,
               PRIMARY KEY (`vacation_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/cjactions')};
             CREATE TABLE {$this->getTable('manageapi/cjactions')} (
               `cj_actions_id` int(10) unsigned NOT NULL auto_increment,
@@ -309,26 +311,26 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `action_type` VARCHAR(255) NULL,
               `aid` VARCHAR(255) NULL,
               `commission_id` VARCHAR(255) NULL,
-              `country` VARCHAR(255) NULL,
+              `country` text NULL,
               `event_date` datetime NULL,
               `locking_date` datetime NULL,
               `order_id` VARCHAR(255) NULL,
               `original` VARCHAR(255) NULL,
               `original_action_id` VARCHAR(255) NULL,
               `posting_date` datetime NULL,
-              `website_id` int(10) NULL,
-              `action_tracker_id` int(10) NULL,
+              `website_id` VARCHAR(255) NULL,
+              `action_tracker_id` VARCHAR(255) NULL,
               `action_tracker_name` VARCHAR(255) NULL,
-              `cid` int(10) NULL,
+              `cid` VARCHAR(255) NULL,
               `advertiser_name` VARCHAR(255) NULL,
               `commission_amount` FLOAT NULL,
               `order_discount` FLOAT NULL,
-              `sid` INT NULL,
+              `sid` VARCHAR(255) NULL,
               `sale_amount` FLOAT NULL,
               `created_time` datetime NULL,
               PRIMARY KEY (`cj_actions_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
             DROP TABLE IF EXISTS {$this->getTable('manageapi/targetactions')};
             CREATE TABLE {$this->getTable('manageapi/targetactions')} (
               `target_actions_id` int(10) unsigned NOT NULL auto_increment,
@@ -358,7 +360,7 @@ DROP TABLE IF EXISTS {$this->getTable('manageapi/linkshare')};
               `referring_type` text NULL,
               `ip_address` text NULL,
               `geo_location` text NULL,
-              `subid1` INT NULL,
+              `subid1` VARCHAR(255) NULL,
               `subid2` text NULL,
               `subid3` text NULL,
               `sharedid` text NULL,

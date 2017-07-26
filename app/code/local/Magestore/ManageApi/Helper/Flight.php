@@ -7,7 +7,7 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
         return Mage::helper('manageapi');
     }
 
-    public function processAPI($url)
+    public function processAPI($url, $start_date)
     {
         $data = null;
         $is_xml = false;
@@ -40,20 +40,6 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
 
                 if (isset($data['results']['sales_data']) && sizeof($data['results']['sales_data']) > 0) {
                     if ($is_xml && isset($data['results']['sales_data']['sale']) && sizeof($data['results']['sales_data']['sale']) > 0) {
-                        foreach ($data['results']['sales_data']['sale'] as $sale) {
-                            $model = Mage::getModel('manageapi/flightactions');
-                            foreach ($sale as $k => $v) {
-                                if (is_array($v))
-                                    $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
-                                else
-                                    $_dt[$k] = $v;
-                            }
-                            $_dt['other'] = json_encode($other_data);
-                            $_dt['created_time'] = now();
-                            $model->setData($_dt);
-                            $transactionSave->addObject($model);
-                        }
-                    } else if (!$is_xml) {
                         foreach ($data['results']['sales_data'] as $sale) {
                             $model = Mage::getModel('manageapi/flightactions');
                             foreach ($sale as $k => $v) {
@@ -65,6 +51,55 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                             $_dt['other'] = json_encode($other_data);
                             $_dt['created_time'] = now();
                             $model->setData($_dt);
+
+                            $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
+                            if($customer != null && $customer->getId() && floor($_dt['revenue']) > 0){
+                                Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
+                                        'product_credit_title' => 0,
+                                        'product_credit' => 0,
+                                        'point_amount' => floor($_dt['revenue']),
+                                        'title' => Mage::helper('manageapi')->__('Points awarded for Priceline Booking: %s on %s', $_dt['dest_Airport_name'], $start_date),
+                                        'expiration_day' => 0,
+                                        'expiration_day_credit' => 0,
+                                        'is_on_hold' => 1,
+                                        'created_time' => date('Y-m-d H:i:s', strtotime($_dt['end_date_time'])),
+                                        'order_increment_id' => $_dt['air_offer_id']
+                                    ))
+                                );
+                            }
+
+                            $transactionSave->addObject($model);
+                        }
+                    } else if (!$is_xml) {
+
+                        foreach ($data['results']['sales_data'] as $sale) {
+                            $model = Mage::getModel('manageapi/flightactions');
+                            foreach ($sale as $k => $v) {
+                                if (is_array($v))
+                                    $_dt[$k] = sizeof($v) > 0 ? json_encode($v) : '';
+                                else
+                                    $_dt[$k] = $v;
+                            }
+                            $_dt['other'] = json_encode($other_data);
+                            $_dt['created_time'] = now();
+                            $model->setData($_dt);
+
+                            $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
+                            if($customer != null && $customer->getId() && floor($_dt['revenue']) > 0){
+                                Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
+                                        'product_credit_title' => 0,
+                                        'product_credit' => 0,
+                                        'point_amount' => floor($_dt['revenue']),
+                                        'title' => Mage::helper('manageapi')->__('Points awarded for Priceline Booking: %s on %s', $_dt['dest_Airport_name'], $start_date),
+                                        'expiration_day' => 0,
+                                        'expiration_day_credit' => 0,
+                                        'is_on_hold' => 1,
+                                        'created_time' => date('Y-m-d H:i:s', strtotime($_dt['end_date_time'])),
+                                        'order_increment_id' => $_dt['air_offer_id']
+                                    ))
+                                );
+                            }
+
                             $transactionSave->addObject($model);
                         }
                     }
@@ -112,7 +147,7 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                 $start_date = date('Y-m-d_00:00:00', strtotime('-'.$_days.' day', time()));
                 $end_data = date('Y-m-d_23:59:59', strtotime('-'.$_days.' day', time()));
                 $_url = str_replace(array('{{start_date}}', '{{end_date}}', '{{format}}'), array($start_date, $end_data, $format), $url);
-                $this->processAPI($_url);
+                $this->processAPI($_url, $start_date);
             }
         }
     }

@@ -45,6 +45,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
     const ACTION_TYPE_RECEIVE_FROM_PURCHASE_TRUWALLET_PRODUCT = 8;
     const ACTION_TYPE_RECEIVE_FROM_ECHECK_PAYMENT = 9;
     const ACTION_TYPE_RESET_POINTS_BY_ADMIN = 10;
+    const ACTION_TYPE_RECEIVE_POINTS_FROM_GLOBAL_BRANDS = 11;
     const XML_PATH_MAX_BALANCE = 'rewardpoints/earning/max_balance';
     const XML_PATH_EMAIL_ENABLE = 'rewardpoints/email/enable';
     const XML_PATH_EMAIL_SENDER = 'rewardpoints/email/sender';
@@ -152,7 +153,12 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
     public function createTransaction($data = array()) {
         $this->addData($data);
 
-        if (!$this->getPointAmount() && !$this->getAction() == 'admin') {
+        $on_hold_actions = array(
+            'admin',
+            'global_brand'
+        );
+
+        if (!$this->getPointAmount() && !in_array($this->getAction(), $on_hold_actions)) {
             // Don't create transaction without point amount
             return $this;
         }
@@ -244,10 +250,11 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
                 $this->_getResource()->updateRealPointHolding($this);
             }
 
-            if($this->getAction() == 'admin' && $this->getIsOnHold())
+            if(in_array($this->getAction(), $on_hold_actions) && $this->getIsOnHold())
             {
                 $this->setData('hold_point', $this->getPointAmount());
             }
+
             $rewardAccount->save();
             $this->save();
         }
@@ -485,7 +492,6 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
             );
 
         $translate->setTranslateInline(true);
-//        zend_debug::dump($sent);exit;
         return $this;
     }
 
