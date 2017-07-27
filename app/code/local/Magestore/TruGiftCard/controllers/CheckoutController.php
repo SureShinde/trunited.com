@@ -45,10 +45,7 @@ class Magestore_TruGiftCard_CheckoutController extends Mage_Core_Controller_Fron
 
         if ($request->isPost()) {
             if (($request->getParam('is_checked'))) {
-                if(Mage::helper('custompromotions')->truWalletInCart())
-                    $is_check = 0;
-                else
-                    $is_check = $request->getParam('is_checked');
+                $is_check = $request->getParam('is_checked');
 
                 $check = false;
                 if($is_check == 'true')

@@ -1,7 +1,8 @@
-<?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
-<?php $_code = 'truwallet';
+<?php
+$state = Mage::app()->getRequest()->getRequestedRouteName();
+$_code = 'truwallet';
 ?>
-<?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
+<?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart() && !Mage::helper('custompromotions')->truGiftCardInCart()): ?>
     <dl id="<?php echo $_code ?>_container">
         <?php if (Mage::helper('customer')->isLoggedIn()): ?>
             <dt class="<?php echo $_code ?>">
@@ -23,6 +24,7 @@
 
                     </div>
                 </form>-->
+
                 <input type="text" id="checkout_cc_inputtext" style="display: none;"
                        onchange="validateCheckOutCC(<?php echo $this->getCustomerCredit() ?>);"
                        class="input-text validate-number validate-zero-or-greater required-entry form-control"
@@ -50,13 +52,13 @@
             var ccPaymentForm = new VarienForm('truwallet-payment-form', true);
             $j = jQuery.noConflict();
             $j(document).ready(function () {
-                <?php if($this->getCurrentCreditAmount() == 0 && $this->isReloadAutomatically() && !Mage::helper('custompromotions')->truWalletInCart()){?>
+                <?php if($this->getCurrentCreditAmount() == 0 && $this->isReloadAutomatically() && !Mage::helper('custompromotions')->truWalletInCart() && !Mage::helper('custompromotions')->truGiftCardInCart()){?>
                 updateCustomerCredit(
                     '<?php echo $this->getUpdateUrl(); ?>',
-                    '<?php if(Mage::helper('custompromotions')->truWalletInCart()) echo '0'; else echo $this->getCustomerCredit() ?>',
+                    '<?php if(Mage::helper('custompromotions')->truWalletInCart() || Mage::helper('custompromotions')->truGiftCardInCart()) echo '0'; else echo $this->getCustomerCredit() ?>',
                     '<?php echo $state ?>'
                 );
-                <?php } else if(Mage::helper('custompromotions')->truWalletInCart() && $this->isReloadAutomatically()){?>
+                <?php } else if((Mage::helper('custompromotions')->truWalletInCart() || Mage::helper('custompromotions')->truGiftCardInCart()) && $this->isReloadAutomatically()){?>
                 updateCustomerCredit(
                     '<?php echo $this->getUpdateUrl(); ?>',
                     '0',

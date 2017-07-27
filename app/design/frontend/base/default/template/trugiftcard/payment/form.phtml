@@ -1,6 +1,6 @@
 <?php $state = Mage::app()->getRequest()->getRequestedRouteName(); ?>
 <?php $_code = 'trugiftcard'; ?>
-<?php if (Mage::helper('trugiftcard')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()): ?>
+<?php if (Mage::helper('trugiftcard')->isEnable()): ?>
     <dl id="<?php echo $_code ?>_container">
         <?php if (Mage::helper('customer')->isLoggedIn()): ?>
         <dt class="<?php echo $_code ?>">

@@ -211,6 +211,9 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         if ($account_truWallet->getTruwalletCredit() == 0)
             return false;
 
+        if(Mage::helper('custompromotions')->truGiftCardInCart())
+            return false;
+
         return true;
     }
 
@@ -228,14 +231,29 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         if(!isset($account))
             return false;
 
-//        if($session->getBaseTruwalletCreditAmount() >= (Mage::getModel('checkout/session')->getQuote()->getGrandTotal() + $wrapTotal))
-//        if(Mage::getModel('checkout/session')->getQuote()->getGrandTotal() <= 0)
-//            return false;
-
         if ($account->getTrugiftcardCredit() == 0)
             return false;
 
         return true;
+    }
+
+    public function isShowWarningTruWallet()
+    {
+        if(!Mage::getSingleton('customer/session')->isLoggedIn())
+            return false;
+
+        if(!Mage::helper('truwallet')->isEnable())
+            return false;
+
+        $account_truWallet = Mage::helper('truwallet/account')->loadByCustomerId(Mage::getSingleton('customer/session')->getCustomer()->getId());
+
+        if(!isset($account_truWallet))
+            return false;
+
+        if ($account_truWallet->getTruwalletCredit() == 0)
+            return false;
+        else
+            return true;
     }
 
 }
