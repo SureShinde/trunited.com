@@ -247,7 +247,12 @@
                                             break;
                                         case 'baseprice':
                                             ?>
-                                            <?php echo Mage::helper('core')->currency($row->getData($column['index'])) ?>
+                                            <?php if($row->getData('action_type') == Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING){
+                                                        echo Mage::helper('core')->currency(-$row->getData($column['index']));
+                                                    } else {
+                                                        echo Mage::helper('core')->currency($row->getData($column['index']));
+                                                    }
+                                                    ?>
                                             <?php
                                             break;
                                         default:
