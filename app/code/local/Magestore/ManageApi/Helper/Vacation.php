@@ -76,6 +76,7 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
 
                             $transactionSave->addObject($model);
                         }
+                        Mage::log('VACATION API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data['results']['sales_data']['sale']).' - URL: '.$url, null, 'run_api.log');
                     } else if (!$is_xml) {
                         foreach ($data['results']['sales_data'] as $sale) {
                             $model = Mage::getModel('manageapi/vacationactions');
@@ -106,6 +107,7 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
                             }
                             $transactionSave->addObject($model);
                         }
+                        Mage::log('VACATION API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data['results']['sales_data']).' - URL: '.$url, null, 'run_api.log');
                     }
 
                 } else {
@@ -116,6 +118,7 @@ class Magestore_ManageApi_Helper_Vacation extends Mage_Core_Helper_Abstract
                     );
                     $model->setData($_dt);
                     $transactionSave->addObject($model);
+                    Mage::log('VACATION API at '.date('Y-m-d H:i:s', time()).' - Result: 0 - URL: '.$url, null, 'run_api.log');
                 }
 
                 $transactionSave->save();

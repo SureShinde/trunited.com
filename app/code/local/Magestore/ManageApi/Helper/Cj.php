@@ -55,6 +55,7 @@ class Magestore_ManageApi_Helper_Cj extends Mage_Core_Helper_Abstract
                     }
                     $transactionSave->addObject($model);
                 }
+                Mage::log('CJ API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data['commissions']['commission']).' - URL: '.$url, null, 'run_api.log');
 
                 $transactionSave->save();
                 $connection->commit();
