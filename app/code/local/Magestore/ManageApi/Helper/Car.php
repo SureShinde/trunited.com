@@ -40,7 +40,7 @@ class Magestore_ManageApi_Helper_Car extends Mage_Core_Helper_Abstract
 
                 if (isset($data['results']['sales_data']) && sizeof($data['results']['sales_data']) > 0) {
                     if ($is_xml && isset($data['results']['sales_data']['sale']) && sizeof($data['results']['sales_data']['sale']) > 0) {
-                        foreach ($data['results']['sales_data']['sale'] as $sale) {
+                        foreach ($data['results']['sales_data'] as $sale) {
                             $model = Mage::getModel('manageapi/caractions');
                             foreach ($sale as $k => $v) {
                                 if (is_array($v))

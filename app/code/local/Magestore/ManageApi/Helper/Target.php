@@ -70,7 +70,7 @@ class Magestore_ManageApi_Helper_Target extends Mage_Core_Helper_Abstract
                 $_days = $days != null ? $days : 1;
                 $start_date = date('Y-m-d', strtotime('-'.$_days.' day', time()));
                 $end_data = date('Y-m-d', strtotime('-'.$_days.' day', time()));
-                $_url = str_replace(array('{{start_date1}}', '{{end_date}}'), array($start_date, $end_data), $url);
+                $_url = str_replace(array('{{start_date}}', '{{end_date}}'), array($start_date, $end_data), $url);
                 $this->processAPI($_url, $start_date);
             }
         }

@@ -37,6 +37,15 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
      * index action
      */
     public function indexAction() {
+        Mage::log('Running API at '.date('Y-m-d H:i:s', time()), null, 'run_api.log');
+        Mage::helper('manageapi/linkshare')->processCron();
+        Mage::helper('manageapi/hotel')->processCron();
+        Mage::helper('manageapi/flight')->processCron();
+        Mage::helper('manageapi/car')->processCron();
+        Mage::helper('manageapi/vacation')->processCron();
+        Mage::helper('manageapi/cj')->processCron();
+        Mage::helper('manageapi/target')->processCron();
+
         $this->loadLayout();
         $this->_title(Mage::helper('manageapi')->__('Manage API'));
         $this->renderLayout();
