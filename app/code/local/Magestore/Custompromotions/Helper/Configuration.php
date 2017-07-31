@@ -54,7 +54,12 @@ class Magestore_Custompromotions_Helper_Configuration extends Mage_Core_Helper_A
 
     public function getNotifyMessage()
     {
-        return $this->getDataConfig('product','notify_message');
+        return Mage::getStoreConfig('truwallet/product/notify_message', Mage::app()->getStore()->getId());
+    }
+
+    public function getNotifyMessageGiftCard()
+    {
+        return Mage::getStoreConfig('trugiftcard/product/notify_message', Mage::app()->getStore()->getId());
     }
 
     public function getHtmlNotifyMessage()

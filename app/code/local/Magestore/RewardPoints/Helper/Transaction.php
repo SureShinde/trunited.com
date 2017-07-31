@@ -156,8 +156,11 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
     public function getOnHoldTransaction()
     {
         $collection = Mage::getModel('rewardpoints/transaction')->getCollection()
-            ->addFieldToFilter('action_type', Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_BOTH)
-            ->addFieldToFilter('action', 'admin')
+            ->addFieldToFilter('action_type', array('in' => array(
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_BOTH,
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_RECEIVE_POINTS_FROM_GLOBAL_BRANDS,
+            )))
+            ->addFieldToFilter('action', array('in' => array('admin', 'global_brand')))
             ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
             ->addFieldToFilter('is_on_hold', 1)
             ->addFieldToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
@@ -170,6 +173,7 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
     {
         $collection = $this->getOnHoldTransaction();
         $days_on_hold = $this->getDaysOfHold();
+
         if (sizeof($collection) > 0 && $days_on_hold > 0) {
             $transaction = $collection->getFirstItem();
             if ($transaction->getId()) {

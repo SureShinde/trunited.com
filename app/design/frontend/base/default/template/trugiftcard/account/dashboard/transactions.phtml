@@ -35,14 +35,14 @@
         </div>
         <table class="data-table" id="recent-transactions-history">
             <colgroup>
-                <col class="title" />
-                <col class="type" />
-                <col width="10" class="current_credit" />
-                <col class="updated_on" />
-                <col class="expiration_on" />
-                <col class="order_id" />
-                <col class="receiver_email" />
-                <col width="10" class="status" />
+                <col class="title"/>
+                <col class="type"/>
+                <col class="amount"/>
+                <col class="updated_on"/>
+                <col class="expiration_date"/>
+                <col class="point_back"/>
+                <col class="receiver_email"/>
+                <col class="status"/>
             </colgroup>
             <thead>
                 <tr>
@@ -50,6 +50,8 @@
                     <th><?php echo $this->__('Type') ?></th>
                     <th><?php echo $this->__('Amount') ?></th>
                     <th><?php echo $this->__('Updated On') ?></th>
+                    <th><?php echo $this->__('Expiration AMT') ?></th>
+                    <th><?php echo $this->__('Expired Amount') ?></th>
                     <th><?php echo $this->__('Email') ?></th>
                     <th><?php echo $this->__('Status') ?></th>
                 </tr>
@@ -66,6 +68,13 @@
                             <td class="a-right"><h2><?php echo $types[$_transaction->getActionType()]; ?></h2></td>
                             <td class="a-right"><h2><?php echo Mage::helper('core')->currency($_transaction->getChangedCredit(), true, false); ?></h2></td>
                             <td><?php echo $this->formatTime($_transaction->getUpdatedTime(), 'medium', true) ?></td>
+                            <td><?php echo $this->formatTime($_transaction->getExpirationDate(), 'medium', true) ?></td>
+                            <td><?php if($_transaction->getActionType() == Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_FROM_SHARING){
+                                    echo Mage::helper('core')->currency(-$_transaction->getPointBack(), true, false);
+                                } else {
+                                    echo Mage::helper('core')->currency($_transaction->getPointBack(), true, false);
+                                }
+                                ?></td>
                             <td><a href="mailto:<?php echo $_transaction->getReceiverEmail();?>"><?php echo $_transaction->getReceiverEmail();?></a></td>
                             <td><?php echo $statuses[$_transaction->getStatus()]; ?></td>
                         </tr>

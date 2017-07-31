@@ -3,9 +3,6 @@
 class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_Action
 {
 	public function indexAction(){
-		$customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getCustomer()->getId());
-		if($customer->getId())
-			Mage::helper('trugiftcard/transaction')->checkCreditFromSharing($customer);
 
 		$this->loadLayout();
 		$this->_title(Mage::helper('trugiftcard')->__('My Trunited Gift Card'));
@@ -30,7 +27,7 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 			  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 			  CREATE TABLE {$setup->getTable('trugiftcard/transaction')} (
-				 `transaction_id` int(10) unsigned NOT NULL auto_increment,
+				`transaction_id` int(10) unsigned NOT NULL auto_increment,
 				`trugiftcard_id` int(10) unsigned NULL,
 				`customer_id` int(10) unsigned NULL,
 				`customer_email` varchar(255) NOT NULL,
@@ -46,6 +43,9 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 				`changed_credit` DECIMAL(10,2) NOT NULL default 0,
 				`receiver_email` varchar(255) NULL,
 				`receiver_customer_id` INT unsigned NULL,
+				`recipient_transaction_id` int(10) unsigned,
+				`point_back` FLOAT,
+				`order_filter_ids` text,
 				PRIMARY KEY (`transaction_id`)
 			  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
@@ -140,7 +140,9 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 
 	public function checkAction()
 	{
-		Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+		zend_debug::dump(date('m/d/Y h:i a', time()));
+		zend_debug::dump(date('m/d/Y h:ia', time()));
+//		Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
 	}
 
 

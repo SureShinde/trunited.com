@@ -70,27 +70,27 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     }
 
     public function saveItemsUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/saveItems';
+        return $this->getUrl('*/*/saveItems');
     }
 
     public function saveAddressUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/saveAddress';
+        return $this->getUrl('*/*/saveAddress');
     }
 
     public function savePaymentUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/savePayment';
+        return $this->getUrl('*/*/savePayment');
     }
 
     public function saveCouponCodeUrl() {
-        return Mage::getBaseUrl() . 'trubox/index/saveCouponCode';
+        return $this->getUrl('*/*/saveCouponCode');
     }
 
     public function deleteItemsUrl($id) {
-        return Mage::getBaseUrl() . 'trubox/index/deleteItems?id=' . $id;
+        return $this->getUrl('*/*/deleteItems', array('id' => $id));
     }
 
     public function getRegionHtml() {
-        return Mage::getBaseUrl() . 'trubox/index/getRegionHtml';
+        return $this->getUrl('*/*/getRegionHtml');
     }
 
     public function getCurrentCustomer()

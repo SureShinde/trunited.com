@@ -126,14 +126,15 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>200</order>
                 </action>
-                <!-- Changed by Adam (27/08/2016): show list lifetimecustomer in frontend -->
+                <!-- Removed by dporter 20170628
                 <action method="addLink" translate="label" module="affiliateplus">
                     <name>lifetimecustomer</name>
                     <path>affiliateplus/index/lifetimecustomer</path>
-                    <label>Connected Customers</label>
+                    <label>Frontline Connections</label>
                     <disabled helper="affiliateplus/account/notEnableLifetime" />
                     <order>183</order>
                 </action>
+                -->
                 <!--Added By Adam (27/08/2016): add menu sub store-->
                 <!--action method="addLink" translate="label" module="affiliateplus">
                     <name>referrers</name>
@@ -142,12 +143,34 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>185</order>
                 </action-->
+				
+				
 				<action method="addLink" translate="label" module="affiliateplus">
                     <name>connecction</name>
                     <path>affiliateplus/index/myconnections</path>
                     <label>My Connections</label>
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>186</order>
+                </action> 
+
+				
+						<action method="addLink" translate="label" module="affiliateplus">
+                    <name>myconnectionstreeview</name>
+                    <path>affiliateplus/index/myconnectionstreeview</path>
+                    <label>Connections Tree View</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>187</order>
+                </action>
+				
+				
+				
+				
+					<action method="addLink" translate="label" module="affiliateplus">
+                    <name>connecctiongrid</name>
+                    <path>affiliateplus/index/myconnectionsgrid</path>
+                    <label>Connections Grid View</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>188</order>
                 </action>
 
             </block>
@@ -224,13 +247,13 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>180</order>
                 </action-->
-                <action method="addLink" translate="label" module="affiliateplus">
+                <!--action method="addLink" translate="label" module="affiliateplus">
                     <name>edit</name>
                     <path>affiliateplus/account/edit</path>
                     <label>Settings</label>
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>190</order>
-                </action>
+                </action-->
                 <action method="addLink" translate="label" module="affiliateplus">
                     <name>logout</name>
                     <path>affiliateplus/account/logout</path>
@@ -238,14 +261,15 @@
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>200</order>
                 </action>
-                <!-- Changed by Adam (27/08/2016): show list lifetimecustomer in frontend -->
+                <!-- Removed by dporter 20170628
                 <action method="addLink" translate="label" module="affiliateplus">
                     <name>lifetimecustomer</name>
                     <path>affiliateplus/index/lifetimecustomer</path>
-                    <label>Connected Customers</label>
+                    <label>Frontline Connections</label>
                     <disabled helper="affiliateplus/account/notEnableLifetime" />
                     <order>183</order>
                 </action>
+                -->
                 <!--Added By Adam (27/08/2016): add menu sub store-->
                 <!--action method="addLink" translate="label" module="affiliateplus">
                     <name>referrers</name>
@@ -285,12 +309,34 @@
                     <order>185</order>
                 </action>-->
 				<!--Added By Aellon tech (17/12/2016): -->
-				<action method="addLink" translate="label" module="affiliateplus">
+				
+				
+					<action method="addLink" translate="label" module="affiliateplus">
                     <name>connecction</name>
                     <path>affiliateplus/index/myconnections</path>
                     <label>My Connections</label>
                     <disabled helper="affiliateplus/account/accountNotLogin" />
                     <order>186</order>
+                </action>
+
+						<action method="addLink" translate="label" module="affiliateplus">
+                    <name>myconnectionstreeview</name>
+                    <path>affiliateplus/index/myconnectionstreeview</path>
+                    <label>Connections - Tree View</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>187</order>
+                </action>
+				
+				
+			
+				
+				
+					<action method="addLink" translate="label" module="affiliateplus">
+                    <name>connecctiongrid</name>
+                    <path>affiliateplus/index/myconnectionsgrid</path>
+                    <label>Connections - Grid View</label>
+                    <disabled helper="affiliateplus/account/accountNotLogin" />
+                    <order>188</order>
                 </action>
             </block>
         </reference>
@@ -531,10 +577,28 @@
 	<affiliateplus_index_myconnections>
         <update handle="affiliateplus_default" />
         <reference name="content">
-            <block type="affiliateplus/account_edit" name="affiliateplus_myconnections" template="affiliateplus/account/substore.phtml" />
+            <block type="affiliateplus/account_edit" name="affiliateplus_myconnections" template="affiliateplus/account/myconnections.phtml" />
         </reference>
+		
     </affiliateplus_index_myconnections>
-
+	
+	
+		<affiliateplus_index_myconnectionstreeview>
+        <update handle="affiliateplus_default" />
+        <reference name="content">
+            <block type="affiliateplus/account_edit" name="affiliateplus_myconnectionstreeview" template="affiliateplus/account/substore.phtml" />
+        </reference>
+    </affiliateplus_index_myconnectionstreeview>
+	
+	
+	
+	
+	<affiliateplus_index_myconnectionsgrid>
+        <update handle="affiliateplus_default" />
+        <reference name="content">
+            <block type="affiliateplus/account_edit" name="affiliateplus_myconnectionsgrid" template="affiliateplus/account/substoregrid.phtml" />
+        </reference>
+    </affiliateplus_index_myconnectionsgrid>
 	
     <!-- Changed by Adam (27/08/2016): show list lifetimecustomer in frontend -->
     <affiliateplus_index_lifetimecustomer>

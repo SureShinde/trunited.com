@@ -16,7 +16,12 @@ class Magestore_TruGiftCard_Model_Observer
 
     public function checkExpiryDate()
     {
-        Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+		if(date('i', time()) == 00)
+		{
+			Mage::log('Running API at '.date('Y-m-d H:i:s', time()), null, 'check_trugiftcard.log');
+			Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+		}
+        
     }
 
     public function orderSaveAfter($observer)

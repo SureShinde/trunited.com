@@ -30,6 +30,12 @@ class Magestore_ManageApi_Block_Adminhtml_Linkshare_Grid extends Mage_Adminhtml_
 			'index'	 => 'member_id',
 		));
 
+		$this->addColumn('mid', array(
+			'header'	=> Mage::helper('manageapi')->__('MID'),
+			'align'	 =>'left',
+			'index'	 => 'mid',
+		));
+
 		$this->addColumn('advertiser_name', array(
 			'header'	=> Mage::helper('manageapi')->__('Advertiser Name'),
             'align'	 =>'left',
@@ -49,11 +55,23 @@ class Magestore_ManageApi_Block_Adminhtml_Linkshare_Grid extends Mage_Adminhtml_
             'type'		=> 'date'
         ));
 
+		$this->addColumn('sku', array(
+			'header'	=> Mage::helper('manageapi')->__('SKU'),
+			'align'	 =>'left',
+			'index'	 => 'sku',
+		));
+
         $this->addColumn('sales', array(
             'header'	=> Mage::helper('manageapi')->__('Sales'),
             'align'	 =>'left',
             'index'	 => 'sales',
         ));
+
+		$this->addColumn('items', array(
+			'header'	=> Mage::helper('manageapi')->__('# of Items'),
+			'align'	 =>'left',
+			'index'	 => 'items',
+		));
 
         $this->addColumn('total_commission', array(
             'header'	=> Mage::helper('manageapi')->__('Total Commission'),

@@ -200,9 +200,9 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $cart = Mage::getModel('checkout/session')->getQuote();
         $items = $cart->getAllItems();
+        $flag = false;
         if(sizeof($items) > 0){
             $sku_truWallet = $this->getConfigHelper()->getTruWalletSku();
-            $flag = false;
             foreach ($cart->getAllItems() as $item) {
                 $sku = $item->getProduct()->getSku();
                 if(strcasecmp($sku_truWallet, $sku) == 0){
@@ -210,11 +210,9 @@ class Magestore_Custompromotions_Helper_Data extends Mage_Core_Helper_Abstract
                     break;
                 }
             }
-
-            return $flag;
-        } else {
-            return false;
         }
+
+        return $flag;
     }
 
     public function truGiftCardInCart()

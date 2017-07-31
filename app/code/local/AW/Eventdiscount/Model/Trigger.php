@@ -84,12 +84,6 @@ class AW_Eventdiscount_Model_Trigger extends Mage_Core_Model_Abstract
         );
         $this->addData($data);
         $this->save();
-        Mage::helper('awcore/logger')->log(
-            $timerModel,
-            'Timer activated: ' . $timer->getTimerName(),
-            null,
-            'For customer with id: ' .  $event->getCustomer()->getId()
-        );
         return $this->getId();
     }
 

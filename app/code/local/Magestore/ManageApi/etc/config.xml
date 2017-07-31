@@ -127,21 +127,21 @@
     </global>
     <crontab>
         <jobs>
-            <manageapi_get_data_from_api>
+            <manageapi_get_data_from_apis>
                 <schedule>
-                    <cron_expr>0 1 * * *</cron_expr>
+                    <cron_expr>* * */1 * *</cron_expr>
                 </schedule>
                 <run>
                     <model>manageapi/observer::processCron</model>
                 </run>
-            </manageapi_get_data_from_api>
+            </manageapi_get_data_from_apis>
         </jobs>
     </crontab>
     <default>
         <manageapi>
             <link_share>
                 <enable>1</enable>
-                <link_share_api><![CDATA[https://ran-reporting.rakutenmarketing.com/en/reports/signature-orders-report---by-member-and-order-id/filters?start_date={{start_date}}&end_date={{end_date}}&include_summary=N&network=1&tz=GMT&date_type=process&token=ZW5jcnlwdGVkYToyOntzOjU6IlRva2VuIjtzOjY0OiIwNWQyODE1NWI4YzVkNGEzOWNlM2ViN2E5NTdhMzU1NjJhOGYxMzg1Njg1NGRkZDc2YjJlYjZlNWI0MDg2MGQ5IjtzOjg6IlVzZXJUeXBlIjtzOjk6IlB1Ymxpc2hlciI7fQ%3D%3D]]></link_share_api>
+                <link_share_api><![CDATA[https://ran-reporting.rakutenmarketing.com/en/reports/signature-orders-report/filters?start_date={{start_date}}&end_date={{end_date}}&include_summary=N&network=1&tz=GMT&date_type=process&token=ZW5jcnlwdGVkYToyOntzOjU6IlRva2VuIjtzOjY0OiIwNWQyODE1NWI4YzVkNGEzOWNlM2ViN2E5NTdhMzU1NjJhOGYxMzg1Njg1NGRkZDc2YjJlYjZlNWI0MDg2MGQ5IjtzOjg6IlVzZXJUeXBlIjtzOjk6IlB1Ymxpc2hlciI7fQ%3D%3D]]></link_share_api>
             </link_share>
             <price_line>
                 <enable_hotel>1</enable_hotel>

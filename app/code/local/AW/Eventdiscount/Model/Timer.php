@@ -139,4 +139,23 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
         $collection_trigger->deleteByTimerId($this->getId());
         return $this;
     }
+
+    public function cmsToArray()
+    {
+        $collection = Mage::getModel('cms/page')->getCollection()
+            ->addFieldToSelect('identifier')
+            ->addFieldToSelect('title')
+            ->setOrder('page_id','desc')
+        ;
+
+        $rs = array();
+        if(sizeof($collection) > 0){
+            foreach($collection as $cms)
+            {
+                $rs[$cms->getIdentifier()] = $cms->getTitle();
+            }
+        }
+
+        return $rs;
+    }
 }

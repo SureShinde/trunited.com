@@ -380,6 +380,9 @@
 
                 <!-- Trunited Discounts -->
                 <?php if(Mage::helper('trugiftcard')->isShowTrunitedDiscountSection()){?>
+                    <?php
+                    $_notifyMessage = Mage::helper('custompromotions/configuration')->getNotifyMessage();
+                    ?>
                 <div class="clear"></div>
                 <div id="order-trunited-discounts-section" class="order-trunited-discounts-section" style="width: 100% !important">
                     <ol>
@@ -394,6 +397,10 @@
                             <div id="onestepcheckout-trunited-discounts" class="onestepcheckout-trunited-discounts">
                                 <?php if(Mage::helper('trugiftcard')->isShowTruWallet()){?>
                                     <?php echo $this->getLayout()->createBlock('truwallet/payment_form')->renderView();?>
+                                <?php } else if(Mage::helper('trugiftcard')->isShowWarningTruWallet()){?>
+                                    <div id="notify_message_truwallet" class="notice-msg"
+                                         <?php if(false){?>style="display: none"<?php }?>
+                                        ><?php echo $_notifyMessage;?></div>
                                 <?php }?>
                                 <?php if(Mage::helper('trugiftcard')->isShowTruGiftCard()){?>
                                     <?php echo $this->getLayout()->createBlock('trugiftcard/payment_form')->renderView();?>

@@ -1,0 +1,309 @@
+<?php
+
+
+
+$session=Mage::getSingleton('customer/session', array('name'=>'frontend') );
+
+if ($session->isLoggedIn()) 
+{
+  
+$id = Mage::getSingleton('customer/session')->getId();
+
+$resource = Mage::getSingleton('core/resource');
+
+    $readConnection = $resource->getConnection('core_read');
+
+    $writeConnection = $resource->getConnection('core_write');
+
+
+    $readConnection = $resource->getConnection('core_read');
+
+    $query = "SELECT g.PersonID AS 'key',
+       cC.customer_name                                AS person_name,
+       pC.Title                                        AS person_title,
+       IFNULL(pC.Points, 0)                            AS person_points,
+       DATE_FORMAT(cC.StartDate, '%m-%d-%Y')           AS person_start_date,
+       g.Level                                         AS level_from_treerootid,
+       pC.DepthCredit                                  AS earned_depth_credit,
+       CASE
+          WHEN cC.parent_name LIKE 'SoComm%' THEN 'Trunited'
+          ELSE cC.parent_name
+       END
+          AS parent_name,
+       IFNULL(tb.trubox_points, 0)                     AS trubox_points,
+       top.Level - 1                                   AS PODS_Level,
+       m.ideal_points,
+       tw.truwallet_credit                             AS truwallet,
+       ps.unearned_points
+FROM tr_Genealogy    g
+     LEFT JOIN tr_People pP ON g.ParentId = pP.PersonID
+     JOIN tr_People pC ON g.PersonID = pC.PersonID
+     JOIN
+     (SELECT t.customer_id,
+             t.customer_email,
+             c.name           AS customer_name,
+             c.created_time   AS StartDate,
+             p.customer_id    AS parent_id,
+             p.name           AS parent_name,
+             p.email          AS parent_email
+      FROM traffiliateplus_tracking      t
+           JOIN traffiliateplus_account p ON t.account_id = p.account_id
+           JOIN traffiliateplus_account c
+              ON t.customer_id = c.customer_id) cC
+        ON pC.PersonID = cC.customer_id
+     JOIN tr_Titles tC ON pC.Title = tC.title
+     JOIN (SELECT PersonID, Level FROM tr_Genealogy WHERE TreeRootID = 2401) top ON pC.PersonID = top.PersonID
+     JOIN (
+        SELECT t.TreeRootID, 
+          MAX(CASE  WHEN t.pods_points_available > 0 AND t.Level = 1 THEN t.max_level_points
+                    WHEN t.PersonalPts = 0 AND t.Level = 1 THEN t.max_level_points
+                    WHEN t.Level > 0 AND t.Level <= d.DepthCredit THEN t.max_level_points 
+                    ELSE 0 END) as ideal_points
+        FROM tr_TreeSummary t
+        JOIN (SELECT TreeRootID, DepthCredit FROM tr_TreeSummary WHERE Level = 0) d ON t.TreeRootID = d.TreeRootID
+        GROUP BY t.TreeRootID
+     ) m ON pC.PersonID = m.TreeRootID
+     JOIN tr_PayoutSummary ps ON g.PersonID = ps.PersonID
+     LEFT JOIN
+     (SELECT t.customer_id,
+             SUM(FORMAT(i.qty * i.price, 2))   AS trubox_total,
+             SUM(i.qty * p.value)              AS trubox_points
+      FROM trtrubox      t
+           JOIN trtrubox_item i ON t.trubox_id = i.trubox_id
+           JOIN trcatalog_product_entity_int p
+              ON i.product_id = p.entity_id AND p.attribute_id = 166
+      GROUP BY t.customer_id) tb
+        ON pC.PersonID = tb.customer_id
+    LEFT JOIN trtruwallet_customer tw ON g.PersonID = tw.customer_id    
+WHERE g.TreeRootID = $id
+ORDER BY IF(g.TreeRootID = g.PersonID, 0, 1), g.Level;
+
+";
+
+    $results = $readConnection->fetchAll($query);
+
+    /* get the results */
+   // var_dump($results);
+
+
+?>
+
+<div class="aff-main-content col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+
+     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        jQuery.noConflict();
+        var $j = jQuery;
+		
+		
+		
+    </script>
+
+
+
+<script src="https://trunited.com/src/jsgrid.core.js"></script>
+    <script src="https://trunited.com/src/jsgrid.load-indicator.js"></script>
+    <script src="https://trunited.com/src/jsgrid.load-strategies.js"></script>
+    <script src="https://trunited.com/src/jsgrid.sort-strategies.js"></script>
+    <script src="https://trunited.com/src/jsgrid.field.js"></script>
+    <script src="https://trunited.com/src/fields/jsgrid.field.text.js"></script>
+    <script src="https://trunited.com/src/fields/jsgrid.field.number.js"></script>
+    <script src="https://trunited.com/src/fields/jsgrid.field.select.js"></script>
+    <script src="https://trunited.com/src/fields/jsgrid.field.checkbox.js"></script>
+    <script src="https://trunited.com/src/fields/jsgrid.field.control.js"></script>
+
+
+
+
+
+
+
+	<style>
+    .jsgrid-delete-button, .jsgrid-edit-button{
+		
+		display:none;
+		}
+    
+	.jsgrid-alt-row .bgcol, 	.jsgrid-row .bgcol{
+		background-color:lemonchiffon;
+		}
+    </style>
+    
+    <div class="aff-title">
+        <h1><?php echo $this->__('My Connections - Grid View') ?></h1>
+    </div>
+	
+	
+	 <div class="affiliate-get-link fieldset">
+
+
+
+
+
+
+
+
+<div id="jsGrid"></div>
+	
+<script>
+ var rowsToColor = [];
+ (function() {
+
+    var db = {
+
+        loadData: function(filter) {
+
+	
+	
+            return $j.grep(this.clients, function(client) {
+				
+				//alert(this.clients);(items.customername.toLowerCase().indexOf(filter.customername.toLowerCase()) > -1);&& (!filter.PODS_Level || client.PODS_Level.toLowerCase().indexOf(filter.PODS_Level.toLowerCase()) > -1)
+         
+                return (!filter.Name || client.Name.toLowerCase().indexOf(filter.Name.toLowerCase()) > -1)
+                   && (!filter.Referred_By || client.Referred_By.toLowerCase().indexOf(filter.Referred_By.toLowerCase()) > -1)
+					 
+                   && (!filter.Level || client.Level.indexOf(filter.Level) > -1)
+				   && (!filter.PODS_Level || client.PODS_Level.indexOf(filter.PODS_Level) > -1)
+
+                    && (!filter.Title || client.Title === filter.Title);
+            });
+        },
+
+
+        insertItem: function(insertingClient) {         },
+
+        updateItem: function(updatingClient) { 		},
+
+        deleteItem: function(deletingClient) {}
+
+    };
+
+    window.db = db;
+
+
+
+
+
+
+
+
+ db.clients = [  
+<?php 
+function clean($string) {
+   //$string = str_replace(' ', ' ', $string); // Replaces all spaces with hyphens.
+
+   return preg_replace('/[^A-Za-z0-9\-]/', ' ', $string); // Removes special chars.
+}
+
+
+$titl = "";
+foreach($results as $data){
+
+$name1 = clean($data['person_name']);
+$name2 = clean($data['parent_name']);
+$titl[] = $data['person_title'];
+
+ echo '{ "Name": "'.$name1.'", "Title": "'.$data['person_title'].'",  "Current Personal Points": "'.$data['person_points'].'", "Start Date": "'.$data['person_start_date'].'" , "Level": "'.$data['level_from_treerootid'].'", "TruBox Points": "'.$data['trubox_points'].'", "Referred_By": "'.$name2.'" ,"PODS_Level": "'.$data['PODS_Level'].'" ,"Unearned Connection Points": "'.$data['unearned_points'].'" ,"Maximize Connection Points": "'.$data['ideal_points'].'","Tru Wallet": "'.$data['truwallet'].'"  },';
+	
+	
+	
+	
+	} 
+?>
+];
+
+
+
+
+  db.title = [
+        { Name: "", Id: "" },
+        
+			<?PHP 
+	
+	$result = array_unique($titl);
+	
+	foreach($result as $key => $value){
+
+		
+		echo '{ Name: "'.$value.'", Id: "'.$value.'" },';
+
+		
+		}
+		   ?>
+		
+    ];
+
+
+
+}());  
+	   
+	   
+	   
+	   
+$j("#jsGrid").jsGrid({
+width: "100%",
+height: "800px",
+filtering: true,
+editing: false,
+inserting: false,
+sorting: true,
+paging: true,
+autoload: true,
+pageSize: 50,
+pageButtonCount: 5,
+      
+      
+
+      controller: db,
+
+
+fields: [
+            { name: "Name", type: "text",width: 80, align: "center",  cellRenderer : rowColorFormatter},
+            { name: "Title", type: "select", items: db.title, valueField: "Name", textField: "Name", width: 70, align: "center",  cellRenderer : rowColorFormatter},        
+            { name: "Current Personal Points", type: "number", width: 70, filtering: false, align: "center",  cellRenderer : rowColorFormatter },
+			{ name: "Unearned Connection Points",type: "number", width: 80 , filtering: false, align: "center",  cellRenderer : rowColorFormatter},
+			{ name: "Maximize Connection Points",type: "number", width: 70 , filtering: false, align: "center",  cellRenderer : rowColorFormatter},            
+			{ name: "Tru Wallet",type: "number", width: 50 , filtering: false, align: "center",  cellRenderer : rowColorFormatter},            
+            //{ name: "Start Date", type: "text",width: 90 , filtering: false, align: "center",  cellRenderer : rowColorFormatter},
+			{ name: "Level", type: "number", width: 50, align: "center",  cellRenderer : rowColorFormatter},
+			{ name: "TruBox Points",type: "number", width: 50 , filtering: false, align: "center",  cellRenderer : rowColorFormatter},
+			{ name: "PODS_Level",  type: "number", width: 80, align: "center",  cellRenderer : rowColorFormatter },
+            { name: "Referred_By", type: "text",width: 80, align: "center",  cellRenderer : rowColorFormatter},		
+			
+ { type: "control" }
+           
+        ]
+		
+		
+		
+		
+		
+		
+    });
+	
+	 function rowColorFormatter(cellValue, options, rowObject) {
+		 
+		 
+        if (options.PODS_Level == "15") // here you can change number  for condition and above you have the css for color
+		{		//console.log('test'); 
+			//console.log(options.PODS_level);
+			//console.log(rowObject)
+			var datee = '<td  class="bgcol">'+cellValue+'</td>';}else{
+		var datee = '<td  >'+cellValue+'</td>';
+		}
+            //rowsToColor[rowsToColor.length] = options.rowId;
+        return datee;
+    }
+
+</script>
+
+
+</div>
+</div>
+<?php
+
+} 
+?>

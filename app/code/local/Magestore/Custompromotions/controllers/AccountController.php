@@ -112,4 +112,44 @@ class Magestore_Custompromotions_AccountController extends Mage_Customer_Account
 
         $this->_redirect('*/*/edit');
     }
+
+    /**
+     * Add welcome message and send new account email.
+     * Returns success URL
+     *
+     * @param Mage_Customer_Model_Customer $customer
+     * @param bool $isJustConfirmed
+     * @return string
+     */
+    protected function _welcomeCustomer(Mage_Customer_Model_Customer $customer, $isJustConfirmed = false)
+    {
+        if ($this->_isVatValidationEnabled()) {
+            // Show corresponding VAT message to customer
+            $configAddressType =  $this->_getHelper('customer/address')->getTaxCalculationAddressType();
+            $userPrompt = '';
+            switch ($configAddressType) {
+                case Mage_Customer_Model_Address_Abstract::TYPE_SHIPPING:
+                    $userPrompt = $this->__('If you are a registered VAT customer, please click <a href="%s">here</a> to enter you shipping address for proper VAT calculation',
+                        $this->_getUrl('customer/address/edit'));
+                    break;
+                default:
+                    $userPrompt = $this->__('If you are a registered VAT customer, please click <a href="%s">here</a> to enter you billing address for proper VAT calculation',
+                        $this->_getUrl('customer/address/edit'));
+            }
+            $this->_getSession()->addSuccess($userPrompt);
+        }
+
+        $customer->sendNewAccountEmail(
+            $isJustConfirmed ? 'confirmed' : 'registered',
+            '',
+            Mage::app()->getStore()->getId(),
+            $this->getRequest()->getPost('password')
+        );
+
+        $successUrl = $this->_getUrl('*/*/index', array('_secure' => true));
+        if ($this->_getSession()->getBeforeAuthUrl()) {
+            $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
+        }
+        return $successUrl;
+    }
 }

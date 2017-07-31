@@ -66,6 +66,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
 
         if (!count($items))
             return $this;
+
         if (Mage::getStoreConfig('truwallet/spend/tax', $quote->getStoreId()) == '0') {
             return $this;
         }
@@ -73,6 +74,11 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             return $this;
         }
         if ($quote->isVirtual() && $address->getAddressType() == 'shipping') {
+            return $this;
+        }
+
+        if(Mage::helper('custompromotions')->truGiftCardInCart()){
+            $session->setBaseTruwalletCreditAmount(null);
             return $this;
         }
 

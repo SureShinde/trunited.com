@@ -1,3 +1,6 @@
+<?php
+$_notifyMessage = Mage::helper('custompromotions/configuration')->getNotifyMessage();
+?>
 <ol>
     <li class="trunited-discounts">
         <h3 style="float:left" id="trunited_discounts_step_header" class="step_5">
@@ -9,6 +12,10 @@
         <div id="onestepcheckout-trunited-discounts" class="onestepcheckout-trunited-discounts">
             <?php if(Mage::helper('trugiftcard')->isShowTruWallet()){?>
                 <?php echo $this->getLayout()->createBlock('truwallet/payment_form')->renderView();?>
+            <?php } else if(Mage::helper('trugiftcard')->isShowWarningTruWallet()){?>
+                <div id="notify_message_truwallet" class="notice-msg"
+                     <?php if(false){?>style="display: none"<?php }?>
+                    ><?php echo $_notifyMessage;?></div>
             <?php }?>
             <?php if(Mage::helper('trugiftcard')->isShowTruGiftCard()){?>
                 <?php echo $this->getLayout()->createBlock('trugiftcard/payment_form')->renderView();?>

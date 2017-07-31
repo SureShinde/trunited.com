@@ -62,7 +62,10 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
      */
     public function addTransaction($actionCode, $customer, $object = null, $extraContent = array())
     {
-
+        $on_hold_actions = array(
+            'admin',
+            'global_brand'
+        );
         Varien_Profiler::start('REWARDPOINTS_HELPER_ACTION::addTransaction');
         if (!$customer->getId()) {
             throw new Exception($this->__('Customer must be existed.'));
@@ -87,7 +90,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
         if($object->getStatus() !== null && $object->getStatus() > 0)
             $transaction->setData('status', (int)$object->getStatus());
 
-        if($actionCode == 'admin')
+        if(in_array($actionCode, $on_hold_actions))
         {
             $transaction->setData('is_on_hold', $object->getIsOnHold() != null ? $object->getIsOnHold() : 0);
         }
@@ -109,7 +112,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
             ));
         } else {
             if ($actionModel->getPointAmount() >= 0) {
-                if($actionCode == 'admin' && $object->getIsOnHold() == 1)
+                if(in_array($actionCode, $on_hold_actions) && $object->getIsOnHold() == 1)
                 {
                     $transaction->createTransaction(array(
                         'customer_id'   => $customer->getId(),
@@ -121,7 +124,8 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
                         'created_time'  => now(),
                         'updated_time'  => now(),
                         'is_on_hold'    => $object->getIsOnHold(),
-                        'status'        => Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD
+                        'status'        => Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD,
+                        'order_increment_id'  => $object->getOrderIncrementId() !== null ? $object->getOrderIncrementId() : '',
                     ));
                 } else {
                     $transaction->createTransaction(array(

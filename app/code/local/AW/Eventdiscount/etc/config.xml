@@ -41,6 +41,15 @@
                     </aweventdiscount_customer_save_after>
                 </observers>
             </customer_save_after>
+            <customer_login>
+                <observers>
+                    <aweventdiscount_event_customer_login>
+                        <type>singleton</type>
+                        <class>aweventdiscount/event_login</class>
+                        <method>redirectToCMS</method>
+                    </aweventdiscount_event_customer_login>
+                </observers>
+            </customer_login>
             <customer_register_success>
                 <observers>
                     <aweventdiscount_customer_register_success>

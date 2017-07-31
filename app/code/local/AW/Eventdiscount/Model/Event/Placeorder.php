@@ -65,6 +65,8 @@ class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Eve
             /* Check if trigger type is promotion */
             if(strcasecmp($trigger->getData('trigger_event'), AW_Eventdiscount_Model_Event::PROMOTION) == 0) {
                 Mage::helper('eventdiscount')->checkFinishPromotion($trigger, $order);
+            } else if (strcasecmp($trigger->getData('trigger_event'), AW_Eventdiscount_Model_Event::LOGIN) == 0) {
+                Mage::helper('eventdiscount')->checkFinishPromotion($trigger, $order, true);
             }
             /* END Check if trigger type is promotion */
         }

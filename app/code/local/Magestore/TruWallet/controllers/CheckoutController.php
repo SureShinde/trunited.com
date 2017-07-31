@@ -45,7 +45,7 @@ class Magestore_TruWallet_CheckoutController extends Mage_Core_Controller_Front_
 
         if ($request->isPost()) {
             if (is_numeric($request->getParam('credit_amount'))) {
-                if(Mage::helper('custompromotions')->truWalletInCart())
+                if(Mage::helper('custompromotions')->truWalletInCart() || Mage::helper('custompromotions')->truGiftCardInCart())
                     $amount = 0;
                 else 
                     $amount = $request->getParam('credit_amount');

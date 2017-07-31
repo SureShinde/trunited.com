@@ -45,14 +45,30 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
                 $('rule_conditions_fieldset').up().show();
                 $('rule_giftcard_fieldset').previous().hide();
                 $('rule_giftcard_fieldset').hide();
+                $('rule_cms_page').up().up().hide();
+                $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
             } else if(ruleEventValue == '" . AW_Eventdiscount_Model_Event::PROMOTION . "'){
                 $('rule_conditions_fieldset').up().hide();
                 $('rule_giftcard_fieldset').previous().show();
                 $('rule_giftcard_fieldset').show();
+                $('rule_cms_page').up().up().hide();
+                $('rule_english_cms_page').up().up().show();
+                    $('rule_spanish_cms_page').up().up().show();
+            } else if(ruleEventValue == '" . AW_Eventdiscount_Model_Event::LOGIN . "'){
+                $('rule_conditions_fieldset').up().hide();
+                $('rule_giftcard_fieldset').previous().show();
+                $('rule_giftcard_fieldset').show();
+                $('rule_cms_page').up().up().show();
+                $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
             } else {
                 $('rule_conditions_fieldset').up().hide();
                 $('rule_giftcard_fieldset').previous().hide();
                 $('rule_giftcard_fieldset').hide();
+                $('rule_cms_page').up().up().hide();
+                $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
             }
 
             new Control.ColorPicker('rule_color', {
@@ -78,23 +94,39 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
                     $('rule_conditions_fieldset').up().show();
                     $('rule_giftcard_fieldset').previous().hide();
                     $('rule_giftcard_fieldset').hide();
+                    $('rule_cms_page').up().up().hide();
+                    $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
                 } else if(elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::PROMOTION . "'){
                     $('rule_conditions_fieldset').up().hide();
                     $('rule_giftcard_fieldset').previous().show();
                     $('rule_giftcard_fieldset').show();
+                    $('rule_cms_page').up().up().hide();
+                    $('rule_english_cms_page').up().up().show();
+                    $('rule_spanish_cms_page').up().up().show();
+                } else if(elem.options[elem.selectedIndex].value == '" . AW_Eventdiscount_Model_Event::LOGIN . "'){
+                    $('rule_conditions_fieldset').up().hide();
+                    $('rule_giftcard_fieldset').previous().show();
+                    $('rule_giftcard_fieldset').show();
+                    $('rule_cms_page').up().up().show();
+                    $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
                 } else {
                     $('rule_conditions_fieldset').up().hide();
                     $('rule_giftcard_fieldset').previous().hide();
                     $('rule_giftcard_fieldset').hide();
+                    $('rule_cms_page').up().up().hide();
+                    $('rule_english_cms_page').up().up().hide();
+                    $('rule_spanish_cms_page').up().up().hide();
                 }
             }
 
             function switchFonts(input) {
-            if(input.checked){
-            $$('.aw_eventdiscount_timer')[0].style.color='#'+$('rule_color').value;
-            }else {
-            $$('.aw_eventdiscount_timer')[0].style.color='';
-            }
+                if(input.checked){
+                    $$('.aw_eventdiscount_timer')[0].style.color='#'+$('rule_color').value;
+                }else {
+                    $$('.aw_eventdiscount_timer')[0].style.color='';
+                }
             }
         ";
     }
