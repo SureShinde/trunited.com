@@ -50,7 +50,13 @@ var AwEbd = Class.create({
         aftermins_separator = tmp[0];
         tmp = timer_container.getElementsByClassName('aw_eventdiscount_seconds_container');
         secs_container = tmp[0];
-        days_container.down(2).update(this.addZero(days));
+	
+		if(days > 0){
+			days_container.show();
+			days_container.down(2).update(this.addZero(days));
+		} else {
+			days_container.hide();
+		}
         if (this.format.indexOf('H') != -1) {
             hours_container.down(2).update(this.addZero(hours));
         } else {

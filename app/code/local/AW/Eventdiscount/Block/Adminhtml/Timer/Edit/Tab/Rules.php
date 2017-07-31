@@ -79,6 +79,27 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminht
             'name' => 'point_amount',
         ));
 
+        $_fieldset->addField('cms_page', 'select', array(
+            'name' => 'cms_page',
+            'label' => $this->__('Redirecting to CMS Page'),
+            'title' => $this->__('Redirecting to CMS Page'),
+            'values' => Mage::getModel('aweventdiscount/timer')->cmsToArray(),
+        ));
+
+        $_fieldset->addField('english_cms_page', 'select', array(
+            'name' => 'english_cms_page',
+            'label' => $this->__('Redirecting to English CMS Page'),
+            'title' => $this->__('Redirecting to English CMS Page'),
+            'values' => Mage::getModel('aweventdiscount/timer')->cmsToArray(),
+        ));
+
+        $_fieldset->addField('spanish_cms_page', 'select', array(
+            'name' => 'spanish_cms_page',
+            'label' => $this->__('Redirecting to Spanish CMS Page'),
+            'title' => $this->__('Redirecting to Spanish CMS Page'),
+            'values' => Mage::getModel('aweventdiscount/timer')->cmsToArray(),
+        ));
+
         $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')
             ->setTemplate('promo/fieldset.phtml')
             ->setNewChildUrl($this->getUrl('*/aweventdiscount_timer/newConditionHtml/form/rule_conditions_fieldset'));

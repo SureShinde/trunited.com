@@ -181,15 +181,7 @@
                     </trugiftcard_controller_action_predispatch_checkout_cart_add>
                 </observers>
             </controller_action_predispatch_checkout_cart_add>
-            <payment_method_is_active>
-                <observers>
-                    <trugiftcard_payment_method_is_active>
-                        <type>singleton</type>
-                        <class>trugiftcard/observer</class>
-                        <method>paymentMethodIsActive</method>
-                    </trugiftcard_payment_method_is_active>
-                </observers>
-            </payment_method_is_active>
+
             <order_cancel_after>
                 <observers>
                     <trugiftcard_order_save_after>
@@ -235,16 +227,6 @@
                     </trugiftcard_sales_order_place_after>
                 </observers>
             </sales_order_place_after>
-            <sales_order_save_after>
-                <observers>
-                    <trugiftcard_order_save_after>
-                        <type>singleton</type>
-                        <class>trugiftcard/observer</class>
-                        <method>orderSaveAfter</method>
-                    </trugiftcard_order_save_after>
-                </observers>
-            </sales_order_save_after>
-
             <controller_action_predispatch>
                 <observers>
                     <trugiftcard_controller_action_predispatch>

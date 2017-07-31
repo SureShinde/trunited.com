@@ -53,6 +53,9 @@ CREATE TABLE IF NOT EXISTS `{$this->getTable('aweventdiscount/timer')}` (
   `point_type` TINYINT,
   `point_amount` FLOAT,
   `limit_per_customer` int(11) NOT NULL DEFAULT  '0',
+  `cms_page` VARCHAR(255),
+  `english_cms_page` VARCHAR(255),
+  `spanish_cms_page` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 

@@ -104,13 +104,6 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
             if (($item->getCreatedAtTimestamp() + $item->getDuration()) < gmdate('U')) {
                 $item->setData('trigger_status', AW_Eventdiscount_Model_Source_Trigger_Status::MISSED);
                 $item->save();
-                $timerModel = Mage::getModel('aweventdiscount/timer')->load($item->getTimerId());
-                Mage::helper('awcore/logger')->log(
-                    $timerModel,
-                    'Timer missed: ' . $timerModel->getTimerName(),
-                    null,
-                    'Customer id: ' .  $event->getCustomer()->getId()
-                );
                 continue;
             }
             $inProgress[] = $item->getTimerId();
@@ -123,12 +116,6 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
                 ->addStoreIdFilter($item->getId())->getSize()
             ;
             if ((intval($item->getLimit()) > 0) && (intval($item->getLimit()) <= intval($_collectionSize))) {
-                Mage::helper('awcore/logger')->log(
-                    $triggerModel,
-                    'Limit record: ' . $item->getLimit(),
-                    null,
-                    'Total record(s): ' . $triggerModel->getCollection()->getSize()
-                );
                 continue;
             }
 
@@ -138,13 +125,6 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
                 ->addCustomerIdFilter($event->getCustomer()->getId())
                 ->getSize()))
             ) {
-                Mage::helper('awcore/logger')->log(
-                    $triggerModel,
-                    'Limit per customer' . $item->getLimitPerCustomer(),
-                    null,
-                    'Total Customer record(s): ' . $triggerModel->getCollection()
-                        ->addCustomerIdFilter($event->customer->getEntityId())->getSize()
-                );
                 continue;
             }
 
@@ -153,13 +133,6 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
                 ->getSize()
             ;
             if ($_collectionSize > 0) {
-                Mage::helper('awcore/logger')->log(
-                    $triggerModel,
-                    'Duplicate trigger',
-                    null,
-                    'Event: Register Customer, Timer Id: ' . $item->getId() . ', Customer Id: '
-                    . $event->customer->getEntityId()
-                );
                 continue;
             }
             $filtered[] = $item;
@@ -197,7 +170,22 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
     {
         $activated = array();
         foreach ($this->timersCollection as $item) {
+
+            $collection = Mage::getModel('aweventdiscount/trigger')->getCollection()
+                ->addFieldToFilter('customer_id', $event->getCustomer()->getId())
+                ->addFieldToFilter('timer_id', $item->getId());
+
             if (!is_null($event->getData('quote_hash'))) {
+                $collection ->addFieldToFilter('quote_hash', array('eq' => $event->getData('quote_hash')));
+            }
+
+            if ($collection->getSize() > 0){
+                continue;
+            }
+
+            array_push($activated, Mage::getModel('aweventdiscount/trigger')->activate($item, $event));
+
+            /*if (!is_null($event->getData('quote_hash'))) {
                 $collection = Mage::getModel('aweventdiscount/trigger')->getCollection()
                     ->addFieldToFilter('quote_hash', array('eq' => $event->getData('quote_hash')))
                     ->addFieldToFilter('customer_id', $event->getCustomer()->getId())
@@ -205,7 +193,8 @@ class AW_Eventdiscount_Model_Event extends Mage_Core_Model_Abstract
                 if ($collection->getSize() > 0)
                     break;
             }
-            array_push($activated, Mage::getModel('aweventdiscount/trigger')->activate($item, $event));
+
+            array_push($activated, Mage::getModel('aweventdiscount/trigger')->activate($item, $event));*/
         }
         return $activated;
     }

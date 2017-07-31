@@ -168,34 +168,68 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function checkPromotionCookieAfterRegistering($customer)
     {
+        $cms = Mage::helper('eventdiscount')->getCMSPage();
+        $url = Mage::getUrl($cms);
+
         $cookie = Mage::getSingleton('core/cookie');
+        $promotion_collection = Mage::getModel('aweventdiscount/timer')->getCollection()
+            ->addFieldToFilter('event', AW_Eventdiscount_Model_Event::PROMOTION)
+            ->addFieldToFilter('status', 1)
+            ->addFieldToFilter('active_from', array('lteq' => now()))
+            ->addFieldToFilter('active_to', array('gteq' => now()))
+            ->getFirstItem();
 
-        $this->runTrigger($customer);
+        if ($promotion_collection->getId() != null && $cookie->get('promotion_code') && $cookie->get('account_code') && $cookie->get('customer_id') == -1) {
 
-        $customer_id = $customer->getId();
+            $this->runTrigger($customer);
 
-        $collection = Mage::getModel('aweventdiscount/trigger')->getCollection()
-            ->addFieldToFilter('customer_id', $customer_id)
-            ->addFieldToFilter('trigger_status', AW_Eventdiscount_Model_Source_Trigger_Status::IN_PROGGRESS)
-            ->addFieldToFilter('trigger_event', AW_Eventdiscount_Model_Event::PROMOTION)
-            ->setOrder('id', 'desc');
+            $customer_id = $customer->getId();
 
-        if (sizeof($collection) > 0 && $cookie->get('promotion_code') && $cookie->get('account_code') && $cookie->get('customer_id') == -1) {
-            $cookie->set("customer_id", $customer_id);
-            $affiliate = Mage::getModel('affiliateplus/account')->loadByIdentifyCode($cookie->get('account_code'));
-            if (isset($affiliate) && $affiliate->getId()) {
-                try {
-                    $transactionSave = Mage::getModel('core/resource_transaction');
-                    foreach ($collection as $trigger) {
-                        $trigger->setData('cookie', 1);
-                        $trigger->setData('updated_at', now());
-                        $trigger->setData('referrer_id', $affiliate->getCustomerId());
-                        $transactionSave->addObject($trigger);
+            $collection = Mage::getModel('aweventdiscount/trigger')->getCollection()
+                ->addFieldToFilter('customer_id', $customer_id)
+                ->addFieldToFilter('trigger_status', AW_Eventdiscount_Model_Source_Trigger_Status::IN_PROGGRESS)
+                ->addFieldToFilter('trigger_event', AW_Eventdiscount_Model_Event::PROMOTION)
+                ->setOrder('id', 'desc');
+
+            if(sizeof($collection) > 0)
+            {
+                $cookie->set("customer_id", $customer_id);
+                $affiliate = Mage::getModel('affiliateplus/account')->loadByIdentifyCode($cookie->get('account_code'));
+                if (isset($affiliate) && $affiliate->getId()) {
+                    $timer_id = null;
+                    try {
+                        $flag = 0;
+                        $transactionSave = Mage::getModel('core/resource_transaction');
+                        foreach ($collection as $trigger) {
+                            $trigger->setData('cookie', 1);
+                            $trigger->setData('updated_at', now());
+                            $trigger->setData('referrer_id', $affiliate->getCustomerId());
+                            $transactionSave->addObject($trigger);
+
+                            if($flag == 0)
+                                $timer_id = $trigger->getTimerId();
+
+                            $flag++;
+                        }
+                        $transactionSave->save();
+                    } catch (Exception $ex) {}
+                    if($timer_id != null)
+                    {
+                        $timer = Mage::getModel('aweventdiscount/timer')->load($timer_id);
+                        if($timer->getId())
+                        {
+                            if($customer->getData('preferred_language') == 62 && $timer->getData('english_cms_page') != null)
+                                Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('english_cms_page')));
+                            else if ($customer->getData('preferred_language') == 63 && $timer->getData('spanish_cms_page') != null)
+                                Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('spanish_cms_page')));
+                        }
                     }
-                    $transactionSave->save();
-                } catch (Exception $ex) {
                 }
+            } else {
+                Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
             }
+        } else {
+            Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
         }
     }
 
@@ -228,7 +262,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
             return false;
     }
 
-    public function checkFinishPromotion($trigger, $order)
+    public function checkFinishPromotion($trigger, $order, $is_login_event = false)
     {
         $gift_card_rewards = Mage::getModel('aweventdiscount/giftcard')->getCollection()
             ->addFieldToSelect('*')
@@ -238,61 +272,70 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
             return;
 
         $customer = Mage::getModel('customer/customer')->load($trigger->getCustomerId());
-        if(!$customer->getId())
+        if (!$customer->getId())
             return;
 
         $product_timers = Mage::getModel('aweventdiscount/product')->getCollection()
-            ->addFieldToFilter('timer_id', $trigger->getTimerId())
-            ;
+            ->addFieldToFilter('timer_id', $trigger->getTimerId());
 
-        if(sizeof($product_timers) == 0)
+        if (sizeof($product_timers) == 0)
             return;
 
         $products = $product_timers->getColumnValues('product_id');
 
         $items = $order->getAllItems();
         $total = 0;
+
         foreach ($items as $item) {
             $product = Mage::getModel('catalog/product')->load($item->getProductId());
-            if(!Mage::helper('trubox')->isInExclusionList($product) && in_array($product->getId(), $products))
-            {
+
+            // if(!Mage::helper('trubox')->isInExclusionList($product) && in_array($product->getId(), $products))
+            if (in_array($product->getId(), $products)) {
                 $total += $item->getPrice() * $item->getQtyOrdered();
             }
         }
 
-        $gift_card_rewards->getSelect()->where('amount_from >= '.$total.' or amount_to < '.$total.' or (amount_from <= '.$total.' and amount_to >= '.$total.')');
+        $gift_card_rewards->getSelect()->where('amount_from <= ' . $total . ' and amount_to >= ' . $total);
         $gift_card_rewards->getSelect()->order('amount_to', 'desc');
         $gift_card_rewards->getSelect()->limit(1);
+        Mage::log('Promotion Total: ' . $total, null, 'promotion.log');
+        Mage::log('Promotion Query: ' . sizeof($gift_card_rewards) . ' - ' . $gift_card_rewards->getSelect(), null, 'promotion.log');
 
-        if(sizeof($gift_card_rewards) > 0)
-        {
+        if (sizeof($gift_card_rewards->getData()) > 0 && $total > 0) {
             $obj = $gift_card_rewards->getData();
 
             $data = array(
                 'title' => Mage::helper('trugiftcard')->__('Received the rewards from order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
                 'order_id' => $order->getEntityId(),
-                'credit'   => $obj[0]['reward_new_customer']
-            );
-            $truGiftCardAccount = Mage::helper('trugiftcard/account')->updateCredit($trigger->getCustomerId(), $obj[0]['reward_new_customer']);
-            Mage::helper('trugiftcard/transaction')->createTransaction(
-                $truGiftCardAccount,
-                $data,
-                Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_PROMOTION,
-                Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
+                'credit' => $obj[0]['reward_new_customer']
             );
 
+            if ($obj[0]['reward_new_customer'] > 0) {
+                $truGiftCardAccount = Mage::helper('trugiftcard/account')->updateCredit($trigger->getCustomerId(), $obj[0]['reward_new_customer']);
+                Mage::helper('trugiftcard/transaction')->createTransaction(
+                    $truGiftCardAccount,
+                    $data,
+                    !$is_login_event ? Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_PROMOTION : Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_LOGIN_EVENT,
+                    Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
+                );
+            }
+
+
             $_data = array(
-                'title' => Mage::helper('trugiftcard')->__('Received the rewards when referred the customer ('.$customer->getEmail().') with order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
+                'title' => Mage::helper('trugiftcard')->__('Reward for connecting customer (' . $customer->getEmail() . ') with order #<a href="' . Mage::getUrl('sales/order/view', array('order_id' => $order->getId())) . '">' . $order->getIncrementId() . '</a>'),
                 'order_id' => $order->getEntityId(),
-                'credit'   => $obj[0]['reward_referrer']
+                'credit' => $obj[0]['reward_referrer']
             );
-            $truGiftCardAccountReferrer = Mage::helper('trugiftcard/account')->updateCredit($trigger->getReferrerId(), $obj[0]['reward_referrer']);
-            Mage::helper('trugiftcard/transaction')->createTransaction(
-                $truGiftCardAccountReferrer,
-                $_data,
-                Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_REFERRED_PROMOTION,
-                Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
-            );
+
+            if ($obj[0]['reward_referrer'] > 0) {
+                $truGiftCardAccountReferrer = Mage::helper('trugiftcard/account')->updateCredit($trigger->getReferrerId(), $obj[0]['reward_referrer']);
+                Mage::helper('trugiftcard/transaction')->createTransaction(
+                    $truGiftCardAccountReferrer,
+                    $_data,
+                    !$is_login_event ? Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_REFERRED_PROMOTION : Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_RECEIVE_REWARD_FROM_REFERRED_LOGIN_EVENT,
+                    Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
+                );
+            }
 
             $this->sendSMS(
                 $trigger->getCustomerId(),
@@ -307,8 +350,7 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
     public function sendSMS($new_customer_id, $referrer_id, $order_id, $new_amount, $referrer_amount)
     {
         $config = Mage::helper('affiliateplus/config');
-        if($config->getGeneralConfig('enable_send_sms_promotion'))
-        {
+        if ($config->getGeneralConfig('enable_send_sms_promotion')) {
             $verify_helper = Mage::helper('custompromotions/verify');
             $sid = $verify_helper->getAccountSID();
             $token = $verify_helper->getAuthToken();
@@ -319,47 +361,52 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
             $referrer_content = $config->getGeneralConfig('content_sms_to_referrer');
 
             $new_customer = Mage::getModel('customer/customer')->load($new_customer_id);
-            if(isset($new_customer) && $new_customer->getId() && $new_customer->getPhoneNumber() != null && $new_customer_content != null)
-            {
+            if (isset($new_customer) && $new_customer->getId() && $new_customer->getPhoneNumber() != null && $new_customer_content != null) {
                 $phone = $verify_helper->getPhoneNumberFormat($mobile_prefix, $new_customer->getPhoneNumber());
                 $content = str_replace(
-                    array('{{reward_amount}}','{{order_id}}'),
-                    array(Mage::helper('core')->currency($new_amount,true,false), $order_id),
+                    array('{{reward_amount}}', '{{order_id}}'),
+                    array(Mage::helper('core')->currency($new_amount, true, false), $order_id),
                     $new_customer_content
                 );
                 $message = $content . " \n\n Text STOP to quit ";
                 try {
-                    $client = new Client($sid, $token);
-                    $client->messages->create(
-                        $phone,
-                        array(
-                            'from' => $from,
-                            'body' => $message
-                        )
-                    );
-                } catch (Exception $e) {}
+                    if ($new_amount > 0) {
+                        $client = new Client($sid, $token);
+                        $client->messages->create(
+                            $phone,
+                            array(
+                                'from' => $from,
+                                'body' => $message
+                            )
+                        );
+                    }
+
+                } catch (Exception $e) {
+                }
             }
 
             $referrer = Mage::getModel('customer/customer')->load($referrer_id);
-            if(isset($referrer) && $referrer->getId() && $referrer->getPhoneNumber() != null && $referrer_content != null)
-            {
+            if (isset($referrer) && $referrer->getId() && $referrer->getPhoneNumber() != null && $referrer_content != null) {
                 $phone_referrer = $verify_helper->getPhoneNumberFormat($mobile_prefix, $referrer->getPhoneNumber());
                 $content_referrer = str_replace(
-                    array('{{reward_amount}}','{{order_id}}','{{first_name}}','{{email}}'),
-                    array(Mage::helper('core')->currency($referrer_amount,true,false), $order_id, $new_customer->getFirstname(), $new_customer->getEmail()),
+                    array('{{reward_amount}}', '{{order_id}}', '{{first_name}}', '{{email}}'),
+                    array(Mage::helper('core')->currency($referrer_amount, true, false), $order_id, $new_customer->getFirstname(), $new_customer->getEmail()),
                     $referrer_content
                 );
                 $message_referrer = $content_referrer . " \n\n Text STOP to quit ";
                 try {
-                    $client = new Client($sid, $token);
-                    $client->messages->create(
-                        $phone_referrer,
-                        array(
-                            'from' => $from,
-                            'body' => $message_referrer
-                        )
-                    );
-                } catch (Exception $e) {}
+                    if ($referrer_amount > 0) {
+                        $client = new Client($sid, $token);
+                        $client->messages->create(
+                            $phone_referrer,
+                            array(
+                                'from' => $from,
+                                'body' => $message_referrer
+                            )
+                        );
+                    }
+                } catch (Exception $e) {
+                }
             }
 
         }

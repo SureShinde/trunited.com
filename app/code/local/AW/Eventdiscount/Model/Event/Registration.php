@@ -28,15 +28,66 @@ class AW_Eventdiscount_Model_Event_Registration extends AW_Eventdiscount_Model_E
 {
     public function processEvent($event)
     {
-        $newEvent= new Varien_Object();
-        $newEvent->setData('customer', $event->getCustomer());
-        $newEvent->setData('store_id', Mage::app()->getStore()->getId());
-        $newEvent->setData('event_type', AW_Eventdiscount_Model_Event::REGISTRATION);
-        $newEvent->setQuote(new Varien_Object());
-        $this->collectTimersByEvent($newEvent);
-        $this->filterByTrigger($newEvent);
-        Mage::dispatchEvent('aweventdiscount_event_registration', $newEvent->toArray());
-        $this->activateTriggers($newEvent);
+        $is_promotion = false;
+        $promotion_collection = Mage::getModel('aweventdiscount/timer')->getCollection()
+            ->addFieldToFilter('event', AW_Eventdiscount_Model_Event::PROMOTION)
+            ->addFieldToFilter('status', 1)
+            ->addFieldToFilter('active_from', array('lteq' => now()))
+            ->addFieldToFilter('active_to', array('gteq' => now()))
+            ->getFirstItem()
+        ;
+
+        if($promotion_collection->getId() != null)
+        {
+            $collection = Mage::getModel('aweventdiscount/trigger')->getCollection()
+                ->addFieldToSelect('id')
+                ->addFieldToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
+                ->addFieldToFilter('trigger_event', AW_Eventdiscount_Model_Event::PROMOTION)
+                ->getFirstItem()
+            ;
+
+            if(isset($collection) && $collection->getId())
+            {
+
+            } else {
+                if($event->getCustomer()->getId() > 0)
+                {
+//                    $newEvent= new Varien_Object();
+//                    $newEvent->setData('customer', $event->getCustomer());
+//                    $newEvent->setData('store_id', Mage::app()->getStore()->getId());
+//                    $newEvent->setData('event_type', AW_Eventdiscount_Model_Event::PROMOTION);
+//                    $newEvent->setData('quote', new Varien_Object());
+//                    $this->collectTimersByEvent($newEvent);
+//                    $this->filterByTrigger($newEvent);
+//                    Mage::dispatchEvent('aweventdiscount_event_promotion', $newEvent->toArray());
+//                    $this->activateTriggers($newEvent);
+                    $is_promotion = true;
+                }
+            }
+        }
+
+        if(!$is_promotion) {
+            $registration_collection = Mage::getModel('aweventdiscount/timer')->getCollection()
+                ->addFieldToFilter('event', AW_Eventdiscount_Model_Event::REGISTRATION)
+                ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('active_from', array('lteq' => now()))
+                ->addFieldToFilter('active_to', array('gteq' => now()))
+                ->getFirstItem()
+            ;
+
+            if($registration_collection->getId() != null)
+            {
+                $newEvent= new Varien_Object();
+                $newEvent->setData('customer', $event->getCustomer());
+                $newEvent->setData('store_id', Mage::app()->getStore()->getId());
+                $newEvent->setData('event_type', AW_Eventdiscount_Model_Event::REGISTRATION);
+                $newEvent->setQuote(new Varien_Object());
+                $this->collectTimersByEvent($newEvent);
+                $this->filterByTrigger($newEvent);
+                Mage::dispatchEvent('aweventdiscount_event_registration', $newEvent->toArray());
+                $this->activateTriggers($newEvent);
+            }
+        }
     }
 
     public function customerSaveAfter($observer)
@@ -57,10 +108,6 @@ class AW_Eventdiscount_Model_Event_Registration extends AW_Eventdiscount_Model_E
 
     public function redirectToCMS($observer)
     {
-        $cms = Mage::helper('eventdiscount')->getCMSPage();
-        $url = Mage::getUrl($cms);
-        Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
-
         $customer = $observer->getCustomer();
         Mage::helper('eventdiscount')->checkPromotionCookieAfterRegistering($customer);
         return;
