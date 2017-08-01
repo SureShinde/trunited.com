@@ -77,7 +77,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             return $this;
         }
 
-        if(Mage::helper('custompromotions')->truGiftCardInCart()){
+        if(Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet')){
             $session->setBaseTruwalletCreditAmount(null);
             return $this;
         }

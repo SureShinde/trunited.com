@@ -90,7 +90,8 @@ class Magestore_TruGiftCard_Model_Total_Quote_Discount extends Mage_Sales_Model_
             $account_truWallet = Mage::helper('truwallet/account')->getCurrentAccount();
         }
 
-        if($account_truWallet != null && $account_truWallet->getId() && !Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('custompromotions')->truWalletInCart())
+        if($account_truWallet != null && $account_truWallet->getId() && !Mage::helper('custompromotions')->truWalletInCart() &&
+            (!Mage::helper('custompromotions')->truGiftCardInCart() && Mage::helper('trugiftcard')->getSpendConfig('use_truwallet')))
             $truWallet_discount = $session->getBaseTruwalletCreditAmount() == 0 ? $account_truWallet->getTruwalletCredit() : $session->getBaseTruwalletCreditAmount();
         else
             $truWallet_discount = 0;

@@ -211,7 +211,7 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         if ($account_truWallet->getTruwalletCredit() == 0)
             return false;
 
-        if(Mage::helper('custompromotions')->truGiftCardInCart())
+        if(Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))
             return false;
 
         return true;

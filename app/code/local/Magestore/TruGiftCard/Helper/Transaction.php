@@ -266,11 +266,11 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
         $collection = Mage::getModel('trugiftcard/transaction')->getCollection()
             ->addFieldToFilter('action_type', Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING)
             ->addFieldToFilter('status', Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING)
+            ->addFieldToFilter('expiration_date', array('notnull' => true))
             ->setOrder('transaction_id', 'desc')
         ;
 
         Mage::log('Check Expiry Date - ' . date('d-m-Y H:i:s', time()) . ' - Quantity: ' . sizeof($collection), null, 'truGiftCardExpirationDate.log');
-        zend_debug::dump($collection->getData());
         if (sizeof($collection) > 0) {
             foreach ($collection as $transaction) {
                 $expiration_date = strtotime($transaction->getExpirationDate());
@@ -331,7 +331,6 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
                     }
                 }
             }
-            exit;
         }
     }
 

@@ -62,20 +62,23 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
             return;
         }
 
-        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT)) {
+        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT) && $day_of_expiration != 0) {
             Mage::getSingleton('core/session')->addError(
                 Mage::helper('trugiftcard')->__($day_of_expiration . ' is not a valid Integer number')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
-        } else if ($day_of_expiration < 1 || $day_of_expiration > 31) {
+        } else if ($day_of_expiration < 0 || $day_of_expiration > 31) {
             Mage::getSingleton('core/session')->addError(
                 Mage::helper('trugiftcard')->__('The # days of expiration is not smaller than 0 and greater than 31 ')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
         }
-        $expiration_date = Mage::helper('trugiftcard/transaction')->addDaysToDate(now(), $day_of_expiration);
+        if($day_of_expiration == 0)
+            $expiration_date = null;
+        else
+            $expiration_date = Mage::helper('trugiftcard/transaction')->addDaysToDate(now(), $day_of_expiration);
 
         $account = Mage::getModel('trugiftcard/customer')->load($customer->getId(), 'customer_id');
         if ($account->getTrugiftcardCredit() < 0 || $amount > $account->getTrugiftcardCredit()) {

@@ -434,6 +434,7 @@
                 <current_label>Trunited Gift Card balance</current_label>
                 <applied_label>Enter amount to apply on this order</applied_label>
                 <discount_label>Gift Card Discount</discount_label>
+                <use_truwallet>1</use_truwallet>
             </spending>
             <email>
                 <enable>1</enable>

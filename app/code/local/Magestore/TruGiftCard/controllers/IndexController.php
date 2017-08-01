@@ -4,6 +4,7 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 {
 	public function indexAction(){
 
+
 		$this->loadLayout();
 		$this->_title(Mage::helper('trugiftcard')->__('My Trunited Gift Card'));
 		$this->renderLayout();
