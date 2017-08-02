@@ -48,7 +48,7 @@ class Magestore_ManageApi_Helper_Target extends Mage_Core_Helper_Abstract
 
                     $transactionSave->addObject($model);
                 }
-                Mage::log('TARGET API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data['Records']['Record']).' - URL: '.$url, null, 'run_api.log');
+                Mage::log('TARGET API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data['Records']['Record']).' - URL: '.$url, null, 'check_manage_api.log');
                 $transactionSave->save();
                 $connection->commit();
             } catch (Exception $e) {

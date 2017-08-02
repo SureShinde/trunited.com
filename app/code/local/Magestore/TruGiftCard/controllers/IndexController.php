@@ -141,9 +141,77 @@ class Magestore_TruGiftCard_IndexController extends Mage_Core_Controller_Front_A
 
 	public function checkAction()
 	{
-		zend_debug::dump(date('m/d/Y h:i a', time()));
-		zend_debug::dump(date('m/d/Y h:ia', time()));
-//		Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+		$helper = Mage::helper('trugiftcard/transaction');
+		$collection = Mage::getModel('trugiftcard/transaction')->getCollection()
+			->addFieldToFilter('action_type', Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING)
+			->addFieldToFilter('status', Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING)
+			->addFieldToFilter('expiration_date', array('notnull' => true))
+			->setOrder('transaction_id', 'desc')
+		;
+
+		zend_debug::dump(sizeof($collection));
+		zend_debug::dump($collection->getData());
+
+		if (sizeof($collection) > 0) {
+			foreach ($collection as $transaction) {
+				$expiration_date = strtotime($transaction->getExpirationDate());
+				$compare_time = $helper->compareExpireDate($expiration_date, strtotime('04-08-2017 4:59:00'));
+
+				if ($compare_time) {
+					/* user still dont register an new account */
+					if ($transaction->getReceiverCustomerId() == 0) {
+						$helper->updateTransaction(
+							$transaction,
+							Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED,
+							abs($transaction->getChangedCredit())
+						);
+
+						$rewardAccount = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getCustomerId());
+						$rewardAccount->setTrugiftcardCredit($rewardAccount->getTrugiftcardCredit() + abs($transaction->getChangedCredit()));
+						$rewardAccount->save();
+					} /* User created an new account and check the amount of truGiftCard in order to return back */
+					else {
+						$orders = $helper->getCollectionOrderByCustomer(
+							$transaction->getReceiverCustomerId(),
+							strtotime($transaction->getCreatedTime()),
+							$transaction
+						);
+						$truGiftCard_used = 0;
+						$order_filter_ids = array();
+						if ($orders != null && sizeof($orders) > 0) {
+							foreach ($orders as $order) {
+								$truGiftCard_used += $order->getTrugiftcardDiscount();
+								$order_filter_ids[] = $order->getEntityId();
+							}
+						}
+
+						if ($truGiftCard_used >= abs($transaction->getChangedCredit())) {
+							$helper->updateTransaction(
+								$transaction,
+								Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED,
+								$order_filter_ids
+							);
+						} else {
+							$return_points = abs($transaction->getChangedCredit()) - $truGiftCard_used;
+							$rewardAccount = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getCustomerId());
+							$rewardAccount->setTrugiftcardCredit($rewardAccount->getTrugiftcardCredit() + abs($return_points));
+							$rewardAccount->save();
+
+							$receiveAccount = Mage::helper('trugiftcard/account')->loadByCustomerId($transaction->getReceiverCustomerId());
+							$receiveAccount->setTrugiftcardCredit($receiveAccount->getTrugiftcardCredit() - abs($return_points));
+							$receiveAccount->save();
+
+							$helper->updateTransaction(
+								$transaction,
+								Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED,
+								$order_filter_ids,
+								$return_points
+							);
+						}
+					}
+				}
+			}
+		}
 	}
 
 

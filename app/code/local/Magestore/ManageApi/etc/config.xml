@@ -125,7 +125,7 @@
             </manageapi>
         </helpers>
     </global>
-    <crontab>
+    <!--<crontab>
         <jobs>
             <manageapi_get_data_from_apis>
                 <schedule>
@@ -136,7 +136,7 @@
                 </run>
             </manageapi_get_data_from_apis>
         </jobs>
-    </crontab>
+    </crontab>-->
     <default>
         <manageapi>
             <link_share>

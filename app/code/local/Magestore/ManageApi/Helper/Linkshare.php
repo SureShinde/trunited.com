@@ -47,7 +47,7 @@ class Magestore_ManageApi_Helper_Linkshare extends Mage_Core_Helper_Abstract
                         }
                         $flag++;
                     }
-                    Mage::log('LINKSHARE API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data).' - URL: '.$url, null, 'run_api.log');
+                    Mage::log('LINKSHARE API at '.date('Y-m-d H:i:s', time()).' - Result:'.sizeof($data).' - URL: '.$url, null, 'check_manage_api.log');
                 } else {
                     Mage::getSingleton('adminhtml/session')->addError('LINK SHARE API: Something was wrong with this response. Please click <a href="'.$url.'" target="_blank">here</a> view more detailed information.');
                 }

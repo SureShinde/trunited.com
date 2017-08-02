@@ -93,7 +93,7 @@ class Magestore_TruGiftCard_Block_Account_ShareTruGiftCard extends Mage_Core_Blo
         ));
 
         $grid->addColumn('expiration_date', array(
-            'header' => Mage::helper('trugiftcard')->__('Expiration AMT'),
+            'header' => Mage::helper('trugiftcard')->__('Expiration Date'),
             'index' => 'expiration_date',
             'type' => 'date',
             'format' => 'medium',

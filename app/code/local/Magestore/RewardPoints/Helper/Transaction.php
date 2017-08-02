@@ -424,4 +424,40 @@ class Magestore_RewardPoints_Helper_Transaction extends Mage_Core_Helper_Abstrac
             return null;
         }
     }
+
+    public function checkExpiryDateOnHoldTransaction()
+    {
+        $collection = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToFilter('action_type', array('in' => array(
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_BOTH,
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_RECEIVE_POINTS_FROM_GLOBAL_BRANDS,
+            )))
+            ->addFieldToFilter('action', array('in' => array('admin', 'global_brand')))
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+            ->addFieldToFilter('is_on_hold', 1)
+            ->setOrder('transaction_id', 'desc');
+
+        if(sizeof($collection) > 0)
+        {
+            $t = time();
+            foreach ($collection as $transaction) {
+                $date = $this->addDaysToDate(
+                    $transaction->getCreatedTime(),
+                    $this->getDaysOfHold()
+                );
+
+                if(date('Y',strtotime($date)) == date('Y', $t) &&
+                    date('m',strtotime($date)) == date('m', $t))
+                {
+                    try {
+                        $transaction->completeTransaction();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+
+            }
+
+        }
+    }
 }

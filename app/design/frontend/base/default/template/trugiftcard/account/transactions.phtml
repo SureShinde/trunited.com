@@ -49,7 +49,7 @@
         <th><?php echo $this->__('Type') ?></th>
         <th><?php echo $this->__('Amount') ?></th>
         <th><?php echo $this->__('Updated On') ?></th>
-        <th><?php echo $this->__('Expiration AMT') ?></th>
+        <th><?php echo $this->__('Expiration Date') ?></th>
         <th><?php echo $this->__('Expired Amount') ?></th>
         <th><?php echo $this->__('Email') ?></th>
         <th><?php echo $this->__('Status') ?></th>
@@ -58,8 +58,8 @@
     <tbody>
     <?php if (count($_collection)): ?>
         <?php
-        $types = Magestore_TruGiftCard_Model_Type::getOptionArray();
-        $statuses = Magestore_TruGiftCard_Model_Status::getTransactionOptionArray();
+            $types = Magestore_TruGiftCard_Model_Type::getOptionArray();
+            $statuses = Magestore_TruGiftCard_Model_Status::getTransactionOptionArray();
         ?>
         <?php foreach ($_collection as $_transaction): ?>
             <tr>
