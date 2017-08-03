@@ -74,7 +74,6 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 									continue;
 								}
 
-
 								$collection = Mage::getModel('trubox/item')->getCollection()
 									->addFieldToFilter('trubox_id', $truBox->getId())
 								;

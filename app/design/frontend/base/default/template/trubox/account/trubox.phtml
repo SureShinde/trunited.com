@@ -29,7 +29,10 @@
 $collection = $this->getTruBox();
 $logo = $this->getLogo();
 $orders = $this->getCollection();
-
+$truBox = Mage::helper('trubox')->getCurrentTruBox();
+$is_applied_tgc = false;
+if($truBox != null)
+    $is_applied_tgc = $truBox->getData('use_trugiftcard') == 1 ? true : false;
 ?>
 <div class="trubox-page">
     <?php echo $this->getChildHtml('global_messages'); ?>
@@ -680,7 +683,16 @@ $orders = $this->getCollection();
             <form class="items" id="trubox-payment-information" action="<?php echo $this->savePaymentUrl() ?>"
                   method="POST">
                 <ul class="form-list" id="payment_form_ccsave">
+                    <?php if($payment->getCardNumber() != null){?>
                     <li>
+                        <label for="current_credit_card"><?php echo $this->__('Credit Card')?></label>
+                        <select id="current_credit_card" name="current_credit_card">
+                            <option value="0"><?php echo $payment->getNameOnCard();?>, <?php echo $paymentList[$payment->getCardType()]?>, <?php echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber()));?></option>
+                            <option value="1"><?php echo $this->__('Add new the Credit Card')?></option>
+                        </select>
+                    </li>
+                    <?php }?>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?>
                         </label>
 
@@ -688,10 +700,10 @@ $orders = $this->getCollection();
                             <input type="text" title="Name on Card" class="input-text required-entry"
                                    id="ccsave_cc_owner"
                                    name="name_on_card"
-                                   value="<?php if ($payment->getNameOnCard()) echo $payment->getNameOnCard() ?>">
+                                   value="">
                         </div>
                     </li>
-                    <li>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_type"
                                class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
 
@@ -703,25 +715,24 @@ $orders = $this->getCollection();
                                 foreach ($paymentList as $k => $v) {
                                     ?>
                                     <option
-                                            value="<?php echo $k ?>" <?php if ($k == $payment->getCardType()) echo "selected" ?>><?php echo $v ?></option>
+                                            value="<?php echo $k ?>"><?php echo $v ?></option>
                                     <?php
                                 }
                                 ?>
                             </select>
                         </div>
                     </li>
-                    <li>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_number"
                                class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
 
                         <div class="input-box">
                             <input type="text" id="ccsave_cc_number" name="card_number" title="Credit Card Number"
                                    class="input-text validate-cc-number validate-cc-type"
-                                   value="<?php if ($payment->getCardNumber())
-                                       echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?>">
+                                   value="">
                         </div>
                     </li>
-                    <li class="fields">
+                    <li class="fields ccc_content">
                         <div class="field">
                             <label for="ccsave_expiration"
                                    class="required"><em>*</em><?php echo $this->__('Expiration Date'); ?></label>
@@ -735,7 +746,7 @@ $orders = $this->getCollection();
                                         foreach ($monthList as $k => $v) {
                                             ?>
                                             <option
-                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                    value="<?php echo $k ?>"><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
@@ -748,7 +759,7 @@ $orders = $this->getCollection();
                                         foreach ($yearList as $k => $v) {
                                             ?>
                                             <option
-                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                    value="<?php echo $k ?>"><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
@@ -766,10 +777,20 @@ $orders = $this->getCollection();
                                     <input type="text" title="Card Verification Number"
                                            class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid"
                                            name="cvv"
-                                           value="<?php if ($payment->getCvv()) echo $payment->getCvv() ?>">
+                                           value="">
                                     <a href="#" class="cvv-what-is-this">What is this?</a>
                                 </div>
                             </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-box apply_trugiftcard">
+                            <input type="checkbox" id="use_trugiftcard" name="use_trugiftcard" title="<?php echo $this->__('Use Trunited Gift Card') ?>"
+                                   <?php if($is_applied_tgc){?>checked="checked"<?php }?>
+                                />
+
+                            <label for="use_trugiftcard"><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></label>
+                            <img src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png');?>" title="<?php echo $this->__('Trunited Gift Card balance');?>" />
                         </div>
                     </li>
                 </ul>
@@ -784,6 +805,54 @@ $orders = $this->getCollection();
     </div>
     <?php echo $this->getChildHtml('other') ?>
 </div>
+<?php if($payment->getCardNumber() != null){?>
+    <style type="text/css">
+        .ccc_content{display: none;}
+    </style>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j('#current_credit_card').change(function() {
+            if($j(this).val() == 1){
+                $j('.ccc_content').css({'display':'block'});
+                $j('#ccsave_cc_owner').addClass(' required-entry');
+                $j('#ccsave_cc_type').addClass(' required-entry');
+                $j('#ccsave_cc_type').addClass(' validate-cc-type-select');
+                $j('#ccsave_cc_number').addClass(' validate-cc-type');
+                $j('#ccsave_cc_number').addClass(' validate-cc-number');
+                $j('#ccsave_expiration').addClass(' validate-cc-exp');
+                $j('#ccsave_expiration').addClass(' required-entry');
+                $j('#ccsave_expiration_yr').addClass(' required-entry');
+                $j('#ccsave_cc_cid').addClass(' required-entry');
+                $j('#ccsave_cc_cid').addClass(' validate-cc-cvn');
+            } else {
+                $j('.ccc_content').css({'display':'none'});
+                $j('#ccsave_cc_owner').removeClass('required-entry');
+                $j('#ccsave_cc_type').removeClass('required-entry');
+                $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
+                $j('#ccsave_cc_number').removeClass('validate-cc-type');
+                $j('#ccsave_cc_number').removeClass('validate-cc-number');
+                $j('#ccsave_expiration').removeClass('validate-cc-exp');
+                $j('#ccsave_expiration').removeClass('required-entry');
+                $j('#ccsave_expiration_yr').removeClass('required-entry');
+                $j('#ccsave_cc_cid').removeClass('required-entry');
+                $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
+            }
+        });
+        $j(document).ready(function(){
+            $j('.ccc_content').css({'display':'none'});
+            $j('#ccsave_cc_owner').removeClass('required-entry');
+            $j('#ccsave_cc_type').removeClass('required-entry');
+            $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
+            $j('#ccsave_cc_number').removeClass('validate-cc-type');
+            $j('#ccsave_cc_number').removeClass('validate-cc-number');
+            $j('#ccsave_expiration').removeClass('validate-cc-exp');
+            $j('#ccsave_expiration').removeClass('required-entry');
+            $j('#ccsave_expiration_yr').removeClass('required-entry');
+            $j('#ccsave_cc_cid').removeClass('required-entry');
+            $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
+        });
+    </script>
+<?php }?>
 <div class="tool-tip" id="payment-tool-tip" style="display: none">
     <div class="btn-close"><a href="#" id="payment-tool-tip-close" title="Close">Close</a></div>
     <div class="tool-tip-content"><img src="https://trunited.com/skin/frontend/base/default/images/cvv.gif"

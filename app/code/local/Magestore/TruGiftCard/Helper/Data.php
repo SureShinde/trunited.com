@@ -256,4 +256,30 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
             return true;
     }
 
+    public function isAppliedTGCToOrder($customer_id = null)
+    {
+        if($customer_id != null)
+            $customerId = $customer_id;
+        else {
+            $admin_session = Mage::getSingleton('adminhtml/session');
+            $customerId = $admin_session->getOrderCustomerId();
+        }
+
+        if (isset($customerId) && $customerId > 0) {
+
+            $truBox = Mage::getModel('trubox/trubox')->getCollection()
+                ->addFieldToFilter('status', 'open')
+                ->addFieldToFilter('customer_id', $customerId)
+                ->getFirstItem();
+
+            if ($truBox->getId()) {
+                return $truBox->getData('use_trugiftcard');
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

@@ -188,6 +188,16 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return $this->__('My TruBox');
     }
 
+    public function getCurrentTruBox()
+    {
+        $truBox_id = $this->getCurrentTruBoxId();
+        $truBox = Mage::getModel('trubox/trubox')->load($truBox_id);
+        if($truBox != null && $truBox->getId())
+            return $truBox;
+        else
+            return null;
+    }
+
     public function getCurrentTruBoxId($customer_id = null)
     {
         if ($customer_id == null)

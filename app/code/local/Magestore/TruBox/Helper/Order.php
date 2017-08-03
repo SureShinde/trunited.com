@@ -551,7 +551,14 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
         if($account->getId())
         {
-            if(floatval($account->getTruwalletCredit()) >= floatval($grandTotal))
+            $total_discount = floatval($account->getTruwalletCredit());
+            if(Mage::helper('trugiftcard')->isAppliedTGCToOrder($customer->getId()))
+            {
+                $account = Mage::helper('trugiftcard/account')->loadByCustomerId($customer->getId());
+                $total_discount += $account->getTrugiftcardCredit();
+            }
+
+            if($total_discount >= floatval($grandTotal))
                 return true;
             else
                 return false;

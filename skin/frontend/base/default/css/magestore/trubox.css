@@ -407,3 +407,14 @@ ul.ui-widget-content.ui-autocomplete
 {
     display: -webkit-inline-box;
 }
+
+.apply_trugiftcard #use_trugiftcard, .apply_trugiftcard label
+{
+    display: inline-block !important;
+}
+
+.apply_trugiftcard label{
+    vertical-align: sub;
+    margin-left: 5px;
+    width: auto !important;
+}

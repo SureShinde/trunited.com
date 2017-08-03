@@ -227,7 +227,6 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         }
 
         if (!$this->_getAccountHelper()->isEnoughBalance()) {
-
             $this->_getCoreSession()->addNotice($this->__('The minimum balance required to transfer dollars is %s'
                 , $baseCurrency->format($this->_getConfigHelper()->getPaymentConfig('payment_release'), array(), false)));
             return $this->_redirect('affiliateplus/index/payments');
@@ -296,7 +295,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 );
                 $params = array(
                     'credit' => $new_amount,
-                    'title' => Mage::helper('trugiftcard')->__('Transfer dollars from balance to Trunited Gift Card'),
+                    'title' => Mage::helper('trugiftcard')->__('Transfer dollars from Affiliate cash to Trunited Gift Card'),
                     'receiver_email' => '',
                     'receiver_customer_id' => '',
                 );
@@ -326,10 +325,10 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
 
             if ($object_transfer == 1)
-                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
+                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Affiliate cash to truWallet successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
             else if ($object_transfer == 2)
-                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to Trunited Gift Card successfully'
+                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Affiliate cash to Trunited Gift Card successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
         } catch (Exception $ex) {
             $this->_getCoreSession()->addError($ex->getMessage());
