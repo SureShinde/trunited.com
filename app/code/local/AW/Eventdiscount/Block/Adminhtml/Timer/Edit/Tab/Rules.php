@@ -79,6 +79,13 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_Rules extends Mage_Adminht
             'name' => 'point_amount',
         ));
 
+        $_fieldset->addField('amount_text', 'textarea', array(
+            'label' => $this->__('Discount Text'),
+            'name' => 'amount_text',
+            'required' => true,
+            'note'     => $this->__('The text will be displayed on both cart and checkout pages')
+        ));
+
         $_fieldset->addField('cms_page', 'select', array(
             'name' => 'cms_page',
             'label' => $this->__('Redirecting to CMS Page'),
