@@ -31,6 +31,17 @@
                 </Magestore_Other>
             </modules>
         </translate>
+        <events>
+            <customer_login>
+                <observers>
+                    <other_customer_login>
+                        <type>model</type>
+                        <class>other/observer</class>
+                        <method>customerLogin</method>
+                    </other_customer_login>
+                </observers>
+            </customer_login>
+        </events>
     </frontend>
     <admin>
         <routers>
@@ -60,6 +71,17 @@
                 </Magestore_Other>
             </modules>
         </translate>
+        <events>
+            <adminhtml_customer_prepare_save>
+                <observers>
+                    <other_adminhtml_customer_prepare_save>
+                        <type>singleton</type>
+                        <class>other/admin_observer</class>
+                        <method>prepareCustomerSave</method>
+                    </other_adminhtml_customer_prepare_save>
+                </observers>
+            </adminhtml_customer_prepare_save>
+        </events>
     </adminhtml>   
     <global>
         <models>
@@ -132,6 +154,10 @@
                 <font_size>13</font_size>
                 <text_color>FFFFFF</text_color>
             </rewardpoint_header>
+            <customer_active>
+                <prefix>inactive-</prefix>
+                <error_message_login>Your account has been disabled.</error_message_login>
+            </customer_active>
         </other>
     </default>
 </config>

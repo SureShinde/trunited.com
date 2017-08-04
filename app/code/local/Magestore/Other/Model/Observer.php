@@ -18,4 +18,22 @@ class Magestore_Other_Model_Observer
         }
     }
 
+    public function customerLogin($observer)
+    {
+        $customer = $observer->getEvent()->getCustomer();
+        $session = Mage::getSingleton('customer/session');
+
+        if($customer->getData('is_active') == Magestore_Other_Model_Status::STATUS_CUSTOMER_INACTIVE){
+            Mage::getSingleton('core/session')->addError(
+                Mage::helper('other')->getErrorMessageCustomer()
+            );
+            $session->setId(null)
+                ->getCookie()->delete('customer');
+            $session->logout();
+            Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('customer/account/login'));
+            Mage::app()->getResponse()->sendResponse();
+            return;
+        }
+    }
+
 }
