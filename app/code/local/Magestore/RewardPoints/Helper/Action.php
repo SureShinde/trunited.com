@@ -86,6 +86,7 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
         $transaction->setData('point_amount', $actionModel->getPointAmount());
         $transaction->setData('product_credit', $actionModel->getProductCredit());
         $transaction->setData('product_credit_title', (int)$actionModel->getProductCreditTitle());
+        $transaction->setData('trugiftcard_transaction_id', $object->getTrugiftcardTransactionId() != null ? $object->getTrugiftcardTransactionId() : '');
 
         if($object->getStatus() !== null && $object->getStatus() > 0)
             $transaction->setData('status', (int)$object->getStatus());

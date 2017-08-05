@@ -138,6 +138,15 @@
                     </other_controller_action_predispatch_checkout_cart_add>
                 </observers>
             </controller_action_predispatch_checkout_cart_add>
+            <controller_action_predispatch_customer_account_loginPost>
+                <observers>
+                    <other_controller_action_predispatch_customer_account_loginPost>
+                        <type>singleton</type>
+                        <class>other/observer</class>
+                        <method>preDispatchLoginPost</method>
+                    </other_controller_action_predispatch_customer_account_loginPost>
+                </observers>
+            </controller_action_predispatch_customer_account_loginPost>
         </events>
     </global>
     <default>

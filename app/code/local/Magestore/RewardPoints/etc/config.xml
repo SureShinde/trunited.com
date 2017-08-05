@@ -458,6 +458,7 @@
 
                 <!-- Receive Points From Global Brands -->
                 <global_brand>rewardpoints/action_globalbrand</global_brand>
+                <share_gift_card>rewardpoints/action_share_giftcard</share_gift_card>
             </actions>
         </rewardpoints>
         <template>

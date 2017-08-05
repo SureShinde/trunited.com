@@ -325,4 +325,15 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
 
         }
     }
+
+    public function updateDb4Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `trugiftcard_transaction_id` INT unsigned NULL;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
 }
