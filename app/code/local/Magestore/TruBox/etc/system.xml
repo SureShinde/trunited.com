@@ -110,6 +110,15 @@
 							<show_in_store>1</show_in_store>
 							<comment>Enable / Disable list orders in TruBox page</comment>
 						</enable_orders_section>
+						<delay_second translate="label">
+							<label>The # delay seconds</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment></comment>
+						</delay_second>
 
 						<products_separator translate="label comment">
 							<label>Products</label>
@@ -232,6 +241,7 @@
 							<show_in_store>0</show_in_store>
 							<comment></comment>
 						</coupon_code_amount>
+
 					</fields>				
 				</general>
 				<shipping>

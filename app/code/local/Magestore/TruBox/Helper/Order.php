@@ -78,7 +78,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                         if(sizeof($rs) > 0)
                             $flag[] = $rs;
 
-                        sleep(1);
+                        sleep(Mage::helper('trubox')->getDelaySecond());
                     } else {
 
                     }

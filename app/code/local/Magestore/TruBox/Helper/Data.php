@@ -105,6 +105,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/general/coupon_code_amount');
     }
 
+    public function getDelaySecond()
+    {
+        return Mage::getStoreConfig('trubox/general/delay_second') != null ? Mage::getStoreConfig('trubox/general/delay_second') : 1;
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
