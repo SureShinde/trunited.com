@@ -72,6 +72,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
             'index' => 'created_at',
             'type' => 'datetime',
             'width' => '100px',
+            'filter_index' => 'main_table.created_at',
         ));
 
         $this->addColumn('billing_name', array(
@@ -143,7 +144,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
         $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
         $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
 
-        return parent::_prepareColumns();
+        return Mage_Adminhtml_Block_Widget_Grid::_prepareColumns();
     }
 
     protected function _prepareMassaction()

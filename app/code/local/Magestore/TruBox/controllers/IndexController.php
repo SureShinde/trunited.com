@@ -780,4 +780,17 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         echo "success";
     }
 
+    public function testAction()
+    {
+        $collection = Mage::getModel('sales/order')->getCollection();
+        $collection->addFieldToFilter('created_at', array('from' => '2017-08-06', 'to' => '2017-08-08'));
+        $collection->addFieldToFilter('created_by', Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES);
+        echo $collection->getSelect();
+        foreach ($collection as $order) {
+            zend_debug::dump($order->debug());
+            exit;
+        }
+
+    }
+
 }

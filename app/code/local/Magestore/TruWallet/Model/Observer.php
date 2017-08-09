@@ -33,6 +33,7 @@ class Magestore_TruWallet_Model_Observer
             Mage::helper('manageapi/vacation')->processCron();
             Mage::helper('manageapi/cj')->processCron();
             Mage::helper('manageapi/target')->processCron();
+            Mage::helper('manageapi/shareasale')->processCron();
         }
 
         /* CRON JOB for checking the expiration of Trunited Gift Card transactions every hour */

@@ -46,9 +46,14 @@
 					<sort_order>3</sort_order>
 					<action>manageapiadmin/adminhtml_targetactions</action>
 				</target>
-				<manageapi module="manageapi" translate="title">
-					<title>Check API</title>
+				<shareasale module="manageapi" translate="title">
+					<title>Shareasale API</title>
 					<sort_order>4</sort_order>
+					<action>manageapiadmin/adminhtml_shareasale</action>
+				</shareasale>
+				<manageapi module="manageapi" translate="title">
+					<title>API FORM</title>
+					<sort_order>5</sort_order>
 					<action>manageapiadmin/adminhtml_manageapi/new</action>
 				</manageapi>
 				<settings module="manageapi" translate="title">
@@ -123,9 +128,14 @@
 								<sort_order>3</sort_order>
 								<action>manageapiadmin/adminhtml_targetactions</action>
 							</target>
-							<manageapi module="manageapi" translate="title">
-								<title>Check API</title>
+							<shareasale module="manageapi" translate="title">
+								<title>Shareasale API</title>
 								<sort_order>4</sort_order>
+								<action>manageapiadmin/adminhtml_shareasale</action>
+							</shareasale>
+							<manageapi module="manageapi" translate="title">
+								<title>API FORM</title>
+								<sort_order>5</sort_order>
 								<action>manageapiadmin/adminhtml_manageapi/new</action>
 							</manageapi>
 							<settings module="manageapi" translate="title">

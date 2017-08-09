@@ -37,13 +37,13 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
      * index action
      */
     public function indexAction() {
-        Mage::helper('manageapi/linkshare')->processCron();
-        Mage::helper('manageapi/hotel')->processCron();
-        Mage::helper('manageapi/flight')->processCron();
-        Mage::helper('manageapi/car')->processCron();
-        Mage::helper('manageapi/vacation')->processCron();
-        Mage::helper('manageapi/cj')->processCron();
-        Mage::helper('manageapi/target')->processCron();
+//        Mage::helper('manageapi/linkshare')->processCron();
+//        Mage::helper('manageapi/hotel')->processCron();
+//        Mage::helper('manageapi/flight')->processCron();
+//        Mage::helper('manageapi/car')->processCron();
+//        Mage::helper('manageapi/vacation')->processCron();
+//        Mage::helper('manageapi/cj')->processCron();
+//        Mage::helper('manageapi/target')->processCron();
 
         $this->loadLayout();
         $this->_title(Mage::helper('manageapi')->__('Manage API'));
@@ -456,6 +456,48 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
 		");
         $installer->endSetup();
         echo "success";
+    }
+
+    public function updateDb3Action()
+    {
+      $setup = new Mage_Core_Model_Resource_Setup();
+      $installer = $setup;
+      $installer->startSetup();
+      $installer->run("
+              DROP TABLE IF EXISTS {$setup->getTable('manageapi/shareasale')};
+              CREATE TABLE {$setup->getTable('manageapi/shareasale')} (
+                `shareasale_id` int(11) unsigned NOT NULL auto_increment,
+                `transid` VARCHAR(255) NOT NULL,
+                `userid` VARCHAR(255) NOT NULL,
+                `merchantid` varchar(255) NOT NULL,
+                `transdate` datetime NULL,
+                `transamount` VARCHAR(255) NULL,
+                `commission` VARCHAR(255) NULL,
+                `comment` VARCHAR(255) NULL,
+                `voided` VARCHAR(255) NULL,
+                `pendingdate` VARCHAR(255) NULL,
+                `locked` VARCHAR(255) NULL,
+                `affcomment` VARCHAR(255) NULL,
+                `bannerpage` VARCHAR(255) NULL,
+                `reversaldate` VARCHAR(255) NULL,
+                `clickdate` VARCHAR(255) NULL,
+                `clicktime` VARCHAR(255) NULL,
+                `bannerid` VARCHAR(255) NULL,
+                `skulist` VARCHAR(255) NULL,
+                `quantitylist` VARCHAR(255) NULL,
+                `lockdate` datetime NULL,
+                `paiddate` datetime NULL,
+                `merchantorganization` VARCHAR(255) NULL,
+                `merchantwebsite` VARCHAR(255) NULL,
+                `transtype` VARCHAR(255) NULL,
+                `merchantdefinedtype` VARCHAR(255) NULL,
+                `created_time` datetime NULL,
+                PRIMARY KEY (`shareasale_id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+          ");
+      $installer->endSetup();
+      echo "success";
     }
 
 

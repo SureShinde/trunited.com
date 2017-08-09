@@ -98,7 +98,7 @@ class Magestore_TruWallet_Block_Adminhtml_Totals_Creditmemo_Rewards extends Mage
         if (!$this->hasData('truWallet_refund')) {
             $this->getMaxTruWalletRefund();
         }
-        return (int)$this->getData('current_truWallet');
+        return $this->getData('current_truWallet');
     }
 
     public function getAllCreditMemoByOrder($order_id)
