@@ -34,15 +34,36 @@
                 }
             },
             switchAction: function(obj){
+                var current_number = obj.id.replace('action_type-','');
+                var current_label_subtotal_from = 'label_subtotal_from_'+current_number;
+                var current_subtotal_from = 'subtotal_from_'+current_number;
+                var current_label_subtotal_to = 'label_subtotal_to_'+current_number;
+                var current_subtotal_to = 'subtotal_to_'+current_number;
+                var current_amount = 'action_'+current_number;
+                var current_select_amount = 'action-'+current_number;
                 if(obj.options[obj.selectedIndex].value == '<?php echo AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP;?>'){
-                    obj.up().down('select.groups').hidden = false;
-                    obj.up().down('input').hidden = true;
-                    obj.up().down('input').removeClassName('required-entry');
+                    $(current_select_amount).hidden = false;
+                    $(current_label_subtotal_from).hidden = true;
+                    $(current_subtotal_from).hidden = true;
+                    $(current_subtotal_from).removeClassName('required-entry');
+                    $(current_label_subtotal_to).hidden = true;
+                    $(current_subtotal_to).hidden = true;
+                    $(current_subtotal_to).removeClassName('required-entry');
+                    $(current_amount).hidden = true;
+                    $(current_amount).removeClassName('required-entry');
                 }else {
-                    obj.up().down('select.groups').hidden = true;
-                    obj.up().down('input').hidden = false;
-                    obj.up().down('input').addClassName('required-entry');
-                    obj.up().down('input').value='';
+                    $(current_select_amount).hidden = true;
+                    $(current_label_subtotal_from).hidden = false;
+                    $(current_subtotal_from).hidden = false;
+                    $(current_subtotal_from).addClassName('required-entry');
+                    $(current_subtotal_from).value = 0;
+                    $(current_label_subtotal_to).hidden = false;
+                    $(current_subtotal_to).hidden = false;
+                    $(current_subtotal_to).addClassName('required-entry');
+                    $(current_subtotal_to).value = 0;
+                    $(current_amount).hidden = false;
+                    $(current_amount).addClassName('required-entry');
+                    $(current_amount).value = 0;
                 }
             },
             add : function(obj) {
@@ -56,17 +77,21 @@
             },
             getTemplate : function() {
                 var id = this.getId();
-         return '<label for="action_type_'+id+'"><?php echo $this->__('Action type:');?></label> '+
-                    '<select style="margin-left: 10px; min-width: 180px;" id="action_type_'+id+'" name="actions['+id+'][type]" title="Action type" class=" select" onchange="actions.switchAction(this); return false;">'+
+         return '<label for="action_type-'+id+'"><?php echo $this->__('Action type:');?></label> '+
+                    '<select style="margin-left: 10px; min-width: 180px;" id="action_type-'+id+'" name="actions['+id+'][type]" title="Action type" class=" select" onchange="actions.switchAction(this); return false;">'+
             <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
                 '<option value="<?php echo $key;?>"><?php echo $val;?></option>'+
                 <?php endforeach;?>
                 '</select> '+
-                '<label style="margin-left: 30px;" for="action_'+id+'"><?php echo $this->__('Action:');?></label> '+
-                    '<select style="margin-left: 10px; min-width: 166px;" id="action_'+id+'" name="actions['+id+'][group]" title="Action" class="select groups " hidden>'+
-            <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
-            '<option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>'+
-                <?php endforeach;?>
+                '<label style="margin-left: 30px;" for="subtotal_from_'+id+'" id="label_subtotal_from_'+id+'"><?php echo $this->__('Subtotal From:');?></label> '+
+                '<input style="margin-left: 10px; min-width: 160px;" id="subtotal_from_'+id+'" name="actions['+id+'][subtotal_from]" value="0" title="Subtotal From" type="text" class=" input-text required-entry"> '+
+                 '<label style="margin-left: 30px;" for="subtotal_to_'+id+'" id="label_subtotal_to_'+id+'"><?php echo $this->__('Subtotal To:');?></label> '+
+                 '<input style="margin-left: 10px; min-width: 160px;" id="subtotal_to_'+id+'" name="actions['+id+'][subtotal_to]" value="0" title="Subtotal To" type="text" class=" input-text required-entry"> '+
+                 '<label style="margin-left: 30px;" for="action_'+id+'"><?php echo $this->__('Action:');?></label> '+
+                '<select style="margin-left: 10px; min-width: 166px;" id="action-'+id+'" name="actions['+id+'][group]" title="Action" class="select groups " hidden>'+
+                    <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
+                    '<option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>'+
+                        <?php endforeach;?>
                 '</select>'+
                 '<input style="margin-left: 10px; min-width: 160px;" id="action_'+id+'" name="actions['+id+'][amount]" value="0" title="Action" type="text" class=" input-text required-entry"> '+
              '<button style="margin-left: 10px;" class="delete" id="remove_'+id+'" onclick="actions.del(this); return false;"><span><?php echo $this->__('Remove')?></span></button>'
@@ -88,13 +113,19 @@
 <div id="action_fildsets">
 <?php if($actions):?>
    <?php foreach($actions as $action):?>
-        <div class="fieldset" id="action-<?php echo $i;?>">
+        <div class="fieldset" id="action-div-<?php echo $i;?>">
     <label for="action_type-<?php echo $i;?>"><?php echo $this->__('Action type:');?></label>
         <select style="margin-left: 10px; min-width: 180px;" id="action_type-<?php echo $i;?>" name="actions[<?php echo $i;?>][type]" title="Action type" class="select" onchange="actions.switchAction(this); return false;">
             <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
             <option value="<?php echo $key;?>" <?php if($key==$action['type']){ echo 'selected="selected"';}?>><?php echo $val;?></option>
             <?php endforeach;?>
         </select>
+            <label style="margin-left: 30px;" for="subtotal_from_<?php echo $i;?>" id="label_subtotal_from_<?php echo $i;?>"><?php echo $this->__('Subtotal From:');?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="subtotal_from_<?php echo $i;?>" name="actions[<?php echo $i;?>][subtotal_from]" value="<?php echo $action['subtotal_from'];?>"
+                   title="<?php echo $this->__('Subtotal From');?>" type="text" class=" input-text required-entry">
+            <label style="margin-left: 30px;" for="subtotal_to_<?php echo $i;?>" id="label_subtotal_to_<?php echo $i;?>"><?php echo $this->__('Subtotal To:');?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="subtotal_to_<?php echo $i;?>" name="actions[<?php echo $i;?>][subtotal_to]" value="<?php echo $action['subtotal_to'];?>"
+                   title="<?php echo $this->__('Subtotal To');?>" type="text" class=" input-text required-entry">
    <label style="margin-left: 30px;" for="action-<?php echo $i;?>"><?php echo $this->__('Action:');?></label>
         <?php if($action['type'] === AW_Eventdiscount_Model_Source_Action::CHANGE_GROUP):?>
             <?php $group = ''; $amount = 'hidden';?>
@@ -106,7 +137,8 @@
                 <option value="<?php echo $key['value'];?>" <?php if($key['value']===$action['action']){echo 'selected="selected"';}?>><?php echo $key['label'];?></option>
                 <?php endforeach;?>
             </select>
-            <input <?php echo $amount;?> style="margin-left: 10px; min-width: 160px;" id="action-<?php echo $i;?>" name="actions[<?php echo $i;?>][amount]" value="<?php echo $action['action'];?>" title="Action" type="text" class=" input-text ">
+            <input <?php echo $amount;?> style="margin-left: 10px; min-width: 160px;" id="action_<?php echo $i;?>" name="actions[<?php echo $i;?>][amount]" value="<?php echo $action['action'];?>"
+                                         title="<?php echo $this->__('Action');?>" type="text" class=" input-text ">
             <?php if($i>0):?>
             <button style="margin-left: 10px;" class="delete" id="remove_<?php echo $i;?>" onclick="actions.del(this); return false;"><span><?php echo $this->__("Remove");?></span></button>
             <?php endif;?>
@@ -114,15 +146,20 @@
             <?php $i++;?>
      <?php endforeach;?>
                 <?php else:?>
-        <div class="fieldset" id="action-0">
+        <div class="fieldset" id="action-div-0">
     <label for="action_type-0"><?php echo $this->__('Action type:');?></label>
         <select style="margin-left: 10px; min-width: 180px;" id="action_type-0" name="actions[0][type]" title="Action type" class=" select" id="action_type-0" onchange="actions.switchAction(this); return false;">
             <?php foreach(AW_Eventdiscount_Model_Source_Action::toOptionArray() as $key => $val):?>
                         <option value="<?php echo $key;?>"><?php echo $val;?></option>
             <?php endforeach;?>
         </select>
-
-<label style="margin-left: 30px;" for="action-0"><?php echo $this->__('Action:');?></label>
+            <label style="margin-left: 30px;" for="subtotal_from_0" id="label_subtotal_from_0"><?php echo $this->__('Subtotal From:');?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="subtotal_from_0" name="actions[0][subtotal_from]" value="0"
+                   title="<?php echo $this->__('Subtotal From');?>" type="text" class=" input-text required-entry">
+            <label style="margin-left: 30px;" for="subtotal_to_0" id="label_subtotal_to_0"><?php echo $this->__('Subtotal To:');?></label>
+            <input style="margin-left: 10px; min-width: 160px;" id="subtotal_to_0" name="actions[0][subtotal_to]" value="0"
+                   title="<?php echo $this->__('Subtotal To');?>" type="text" class=" input-text required-entry">
+            <label style="margin-left: 30px;" for="action_0"><?php echo $this->__('Action:');?></label>
            <select style="margin-left: 10px; min-width: 166px;" id="action-0" name="actions[0][group]" title="Action" class="select groups" id="action_g-1" hidden>
                 <?php foreach(AW_Eventdiscount_Helper_Data::customerGroupsToArray() as $key):?>
                         <option value="<?php echo $key['value'];?>"><?php echo $key['label'];?></option>

@@ -29,7 +29,10 @@
 $collection = $this->getTruBox();
 $logo = $this->getLogo();
 $orders = $this->getCollection();
-
+$truBox = Mage::helper('trubox')->getCurrentTruBox();
+$is_applied_tgc = false;
+if ($truBox != null)
+    $is_applied_tgc = $truBox->getData('use_trugiftcard') == 1 ? true : false;
 ?>
 <div class="trubox-page">
     <?php echo $this->getChildHtml('global_messages'); ?>
@@ -52,7 +55,7 @@ $orders = $this->getCollection();
     <div class="info-summary">
         <?php if ($logo != null) { ?>
             <img
-                    src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
+                src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
         <?php } else { ?>
             <img src="<?php echo Mage::getBaseUrl('media') . 'trubox/no_image.png'; ?>">
         <?php } ?>
@@ -64,40 +67,44 @@ $orders = $this->getCollection();
         ?>
     </div>
     <br style="clear: both"/>
-    <?php if($this->isEnableCouponCode()){?>
-    <hr class="share_separate"/>
-    <div class="trubox-coupon-code">
-        <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
-        <?php $code = $this->hasCouponCode();?>
-        <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
-            <?php if($code == null){?>
-            <div class="fieldsets">
-                <ul class="form-list">
-                    <li class="fields">
-                        <div class="wide">
-                            <label for="telephone" class="required"><em>*</em>
-                                <?php echo $this->__('Enter promotion code') ?>
-                            </label>
-                            <div class="input-box">
-                                <input type="text" name="coupon_code" value="" title="<?php echo $this->__('The promotion code') ?>" class="input-text required-entry"
-                                       id="coupon_code" placeholder="<?php echo $this->__('Enter the promotion code') ?>">
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="buttons-set">
-                <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
-                <button class="button btn-cart" type="submit">
-                    <span><span><?php echo $this->__('Save Promotion Code') ?></span></span>
-                </button>
-            </div>
-            <?php } else {?>
-                <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode()));?></p>
-            <?php }?>
-        </form>
-    </div>
-    <?php }?>
+    <?php if ($this->isEnableCouponCode()) { ?>
+        <hr class="share_separate"/>
+        <div class="trubox-coupon-code">
+            <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
+            <?php $code = $this->hasCouponCode(); ?>
+            <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
+                <?php if ($code == null) { ?>
+                    <div class="fieldsets">
+                        <ul class="form-list">
+                            <li class="fields">
+                                <div class="wide">
+                                    <label for="telephone" class="required"><em>*</em>
+                                        <?php echo $this->__('Enter promotion code') ?>
+                                    </label>
+
+                                    <div class="input-box">
+                                        <input type="text" name="coupon_code" value=""
+                                               title="<?php echo $this->__('The promotion code') ?>"
+                                               class="input-text required-entry"
+                                               id="coupon_code"
+                                               placeholder="<?php echo $this->__('Enter the promotion code') ?>">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="buttons-set">
+                        <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
+                        <button class="button btn-cart" type="submit">
+                            <span><span><?php echo $this->__('Save Promotion Code') ?></span></span>
+                        </button>
+                    </div>
+                <?php } else { ?>
+                    <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode())); ?></p>
+                <?php } ?>
+            </form>
+        </div>
+    <?php } ?>
     <hr class="share_separate"/>
     <div class="box-account box-info box-trubox-summary">
         <div class="trubox-items">
@@ -107,31 +114,31 @@ $orders = $this->getCollection();
                     <div class="table-responsive">
                         <table id="shopping-cart-table" class="table table-condensed">
                             <thead>
-                                <tr>
-                                    <th><span class="nobr"><?php echo $this->__('') ?></span></th>
-                                    <th><span class="nobr"><?php echo $this->__('Name') ?></span></th>
-                                    <th>
-                                        <?php echo $this->__('Qty') ?>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><?php echo $this->__('Points') ?></span></span>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><?php echo $this->__('Price') ?></span></span>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><?php echo $this->__('Total Price') ?></span></span>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><?php echo $this->__('Tax Amount') ?></span></span>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><?php echo $this->__('Status') ?></span></span>
-                                    </th>
-                                    <th>
-                                        <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th><span class="nobr"><?php echo $this->__('') ?></span></th>
+                                <th><span class="nobr"><?php echo $this->__('Name') ?></span></th>
+                                <th>
+                                    <?php echo $this->__('Qty') ?>
+                                </th>
+                                <th>
+                                    <span class="nobr"><?php echo $this->__('Points') ?></span></span>
+                                </th>
+                                <th>
+                                    <span class="nobr"><?php echo $this->__('Price') ?></span></span>
+                                </th>
+                                <th>
+                                    <span class="nobr"><?php echo $this->__('Total Price') ?></span></span>
+                                </th>
+                                <th>
+                                    <span class="nobr"><?php echo $this->__('Tax Amount') ?></span></span>
+                                </th>
+                                <th>
+                                    <span class="nobr"><?php echo $this->__('Status') ?></span></span>
+                                </th>
+                                <th>
+                                    <span class="nobr"><span><?php echo $this->__('Action') ?></span></span>
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
                             <?php
@@ -169,7 +176,8 @@ $orders = $this->getCollection();
                                 ?>
                                 <tr>
                                     <td><a href="<?php echo $product->getProductUrl(true); ?>" class="product-image">
-                                            <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(100); ?>"/></a>
+                                            <img
+                                                src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(100); ?>"/></a>
                                     </td>
                                     <td>
                                         <a href="<?php echo $product->getProductUrl(true); ?>" class="">
@@ -274,10 +282,10 @@ $orders = $this->getCollection();
                                                                 value="<?php echo $item->getQty() ?>"></td>
                                     <td class="a-center"><?php echo $pointEarn * $item->getQty(); ?></td>
                                     <td class="a-center"><p
-                                                class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p>
+                                            class="product-price"><?php echo Mage::helper('core')->currency($product->getFinalPrice() + $price_options, true, false); ?></p>
                                     </td>
                                     <td class="a-center"><p
-                                                class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p>
+                                            class="total-price"><?php echo Mage::helper('core')->currency($itemPrice, true, false); ?></p>
                                     </td>
                                     <td class="a-center">
                                         <?php
@@ -344,8 +352,11 @@ $orders = $this->getCollection();
                     </div>
                     <div class="total-trubox">
                         <p><?php echo $this->__('Subtotal <span>%s</span>', Mage::helper('core')->currency($totalPrice, true, false)) ?></p>
+
                         <p><?php echo $this->__('Total Profit Points <span>%s</span>', Mage::helper('rewardpoints/point')->format($totalPointEarn)) ?></p>
+
                         <p><?php echo $this->__('Tax <span>%s</span>', Mage::helper('core')->currency($tax, true, false)) ?></p>
+
                         <p><?php echo $this->__('Grand Total <span>%s</span>', Mage::helper('core')->currency($totalPrice + $tax, true, false)) ?></p>
                     </div>
                     <div class="buttons-set">
@@ -364,7 +375,7 @@ $orders = $this->getCollection();
             <?php } ?>
         </div>
     </div>
-    <hr class="share_separate" />
+    <hr class="share_separate"/>
     <?php if (Mage::helper('trubox')->isEnableOrdersSection()) { ?>
         <div class="box-account box-info box-trubox-summary">
             <div class="trubox-orders">
@@ -605,7 +616,7 @@ $orders = $this->getCollection();
                             <div class="input-box">
                                 <input type="text" name="shipping[zipcode]"
                                        value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getZipcode()) echo $shipping_address->getZipcode(); ?>"
-                                       title="Zip/Postal Code" id="zip"
+                                       title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip"
                                        class="input-text validate-zip-international  required-entry">
                             </div>
                         </div>
@@ -624,7 +635,7 @@ $orders = $this->getCollection();
                             <div class="input-box">
                                 <input type="text" name="shipping[city]"
                                        value="<?php if ($shipping_address != null && $shipping_address->getId() && $shipping_address->getCity()) echo $shipping_address->getCity(); ?>"
-                                       title="City" class="input-text  required-entry" id="city">
+                                       title="<?php echo $this->__('City') ?>" class="input-text  required-entry" id="city">
                             </div>
                         </div>
                         <div class="field">
@@ -680,7 +691,18 @@ $orders = $this->getCollection();
             <form class="items" id="trubox-payment-information" action="<?php echo $this->savePaymentUrl() ?>"
                   method="POST">
                 <ul class="form-list" id="payment_form_ccsave">
-                    <li>
+                    <?php if ($payment->getCardNumber() != null) { ?>
+                        <li>
+                            <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
+                            <select id="current_credit_card" name="current_credit_card">
+                                <option value="0"><?php echo $payment->getNameOnCard(); ?>
+                                    , <?php echo $paymentList[$payment->getCardType()] ?>
+                                    , <?php echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?></option>
+                                <option value="1"><?php echo $this->__('Add/Update Credit Card') ?></option>
+                            </select>
+                        </li>
+                    <?php } ?>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?>
                         </label>
 
@@ -688,40 +710,38 @@ $orders = $this->getCollection();
                             <input type="text" title="Name on Card" class="input-text required-entry"
                                    id="ccsave_cc_owner"
                                    name="name_on_card"
-                                   value="<?php if ($payment->getNameOnCard()) echo $payment->getNameOnCard() ?>">
+                                   value="">
                         </div>
                     </li>
-                    <li>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_type"
                                class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
 
                         <div class="input-box">
-                            <select id="ccsave_cc_type" name="card_type" title="Credit Card Type"
+                            <select id="ccsave_cc_type" name="card_type" title="<?php echo $this->__('Credit Card Type') ?>"
                                     class="required-entry validate-cc-type-select">
                                 <option value=""><?php echo $this->__('--Please Select--'); ?></option>
                                 <?php
                                 foreach ($paymentList as $k => $v) {
                                     ?>
-                                    <option
-                                            value="<?php echo $k ?>" <?php if ($k == $payment->getCardType()) echo "selected" ?>><?php echo $v ?></option>
+                                    <option value="<?php echo $k ?>"><?php echo $v ?></option>
                                     <?php
                                 }
                                 ?>
                             </select>
                         </div>
                     </li>
-                    <li>
+                    <li class="ccc_content">
                         <label for="ccsave_cc_number"
                                class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
 
                         <div class="input-box">
-                            <input type="text" id="ccsave_cc_number" name="card_number" title="Credit Card Number"
+                            <input type="text" id="ccsave_cc_number" name="card_number" title="<?php echo $this->__('Credit Card Number') ?>"
                                    class="input-text validate-cc-number validate-cc-type"
-                                   value="<?php if ($payment->getCardNumber())
-                                       echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?>">
+                                   value="">
                         </div>
                     </li>
-                    <li class="fields">
+                    <li class="fields ccc_content">
                         <div class="field">
                             <label for="ccsave_expiration"
                                    class="required"><em>*</em><?php echo $this->__('Expiration Date'); ?></label>
@@ -735,7 +755,7 @@ $orders = $this->getCollection();
                                         foreach ($monthList as $k => $v) {
                                             ?>
                                             <option
-                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getMonthExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                value="<?php echo $k ?>"><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
@@ -748,7 +768,7 @@ $orders = $this->getCollection();
                                         foreach ($yearList as $k => $v) {
                                             ?>
                                             <option
-                                                    value="<?php echo $k ?>" <?php if ($k == $payment->getYearExpire()) echo "selected" ?>><?php echo $v ?></option>
+                                                value="<?php echo $k ?>"><?php echo $v ?></option>
                                             <?php
                                         }
                                         ?>
@@ -763,13 +783,27 @@ $orders = $this->getCollection();
 
                             <div class="input-box">
                                 <div class="v-fix">
-                                    <input type="text" title="Card Verification Number"
+                                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>"
                                            class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid"
                                            name="cvv"
-                                           value="<?php if ($payment->getCvv()) echo $payment->getCvv() ?>">
-                                    <a href="#" class="cvv-what-is-this">What is this?</a>
+                                           value="">
+                                    <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
                                 </div>
                             </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-box apply_trugiftcard">
+                            <input type="checkbox" id="use_trugiftcard" name="use_trugiftcard"
+                                   title="<?php echo $this->__('Use Trunited Gift Card') ?>"
+                                   <?php if ($is_applied_tgc){ ?>checked="checked"<?php } ?>
+                                />
+
+                            <label
+                                for="use_trugiftcard"><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></label>
+                            <img
+                                src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
+                                title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
                         </div>
                     </li>
                 </ul>
@@ -784,11 +818,61 @@ $orders = $this->getCollection();
     </div>
     <?php echo $this->getChildHtml('other') ?>
 </div>
+<?php if ($payment->getCardNumber() != null) { ?>
+    <style type="text/css">
+        .ccc_content {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j('#current_credit_card').change(function () {
+            if ($j(this).val() == 1) {
+                $j('.ccc_content').css({'display': 'block'});
+                $j('#ccsave_cc_owner').addClass(' required-entry');
+                $j('#ccsave_cc_type').addClass(' required-entry');
+                $j('#ccsave_cc_type').addClass(' validate-cc-type-select');
+                $j('#ccsave_cc_number').addClass(' validate-cc-type');
+                $j('#ccsave_cc_number').addClass(' validate-cc-number');
+                $j('#ccsave_expiration').addClass(' validate-cc-exp');
+                $j('#ccsave_expiration').addClass(' required-entry');
+                $j('#ccsave_expiration_yr').addClass(' required-entry');
+                $j('#ccsave_cc_cid').addClass(' required-entry');
+                $j('#ccsave_cc_cid').addClass(' validate-cc-cvn');
+            } else {
+                $j('.ccc_content').css({'display': 'none'});
+                $j('#ccsave_cc_owner').removeClass('required-entry');
+                $j('#ccsave_cc_type').removeClass('required-entry');
+                $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
+                $j('#ccsave_cc_number').removeClass('validate-cc-type');
+                $j('#ccsave_cc_number').removeClass('validate-cc-number');
+                $j('#ccsave_expiration').removeClass('validate-cc-exp');
+                $j('#ccsave_expiration').removeClass('required-entry');
+                $j('#ccsave_expiration_yr').removeClass('required-entry');
+                $j('#ccsave_cc_cid').removeClass('required-entry');
+                $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
+            }
+        });
+        $j(document).ready(function () {
+            $j('.ccc_content').css({'display': 'none'});
+            $j('#ccsave_cc_owner').removeClass('required-entry');
+            $j('#ccsave_cc_type').removeClass('required-entry');
+            $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
+            $j('#ccsave_cc_number').removeClass('validate-cc-type');
+            $j('#ccsave_cc_number').removeClass('validate-cc-number');
+            $j('#ccsave_expiration').removeClass('validate-cc-exp');
+            $j('#ccsave_expiration').removeClass('required-entry');
+            $j('#ccsave_expiration_yr').removeClass('required-entry');
+            $j('#ccsave_cc_cid').removeClass('required-entry');
+            $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
+        });
+    </script>
+<?php } ?>
 <div class="tool-tip" id="payment-tool-tip" style="display: none">
     <div class="btn-close"><a href="#" id="payment-tool-tip-close" title="Close">Close</a></div>
-    <div class="tool-tip-content"><img src="https://trunited.com/skin/frontend/base/default/images/cvv.gif"
-                                       alt="Card Verification Number Visual Reference"
-                                       title="Card Verification Number Visual Reference"></div>
+    <div class="tool-tip-content"><img src="<?php echo $this->getSkinUrl('images/cvv.gif');?>"
+                                       alt="<?php echo $this->__('Card Verification Number Visual Reference');?>"
+                                       title="<?php echo $this->__('Card Verification Number Visual Reference');?>"></div>
 </div>
 <script type="text/javascript">
     var trubox_items = new VarienForm('trubox-items', true);

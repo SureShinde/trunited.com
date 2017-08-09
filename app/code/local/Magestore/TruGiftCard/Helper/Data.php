@@ -211,7 +211,7 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
         if ($account_truWallet->getTruwalletCredit() == 0)
             return false;
 
-        if(Mage::helper('custompromotions')->truGiftCardInCart())
+        if(Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))
             return false;
 
         return true;
@@ -254,6 +254,32 @@ class Magestore_TruGiftCard_Helper_Data extends Mage_Core_Helper_Abstract
             return false;
         else
             return true;
+    }
+
+    public function isAppliedTGCToOrder($customer_id = null)
+    {
+        if($customer_id != null)
+            $customerId = $customer_id;
+        else {
+            $admin_session = Mage::getSingleton('adminhtml/session');
+            $customerId = $admin_session->getOrderCustomerId();
+        }
+
+        if (isset($customerId) && $customerId > 0) {
+
+            $truBox = Mage::getModel('trubox/trubox')->getCollection()
+                ->addFieldToFilter('status', 'open')
+                ->addFieldToFilter('customer_id', $customerId)
+                ->getFirstItem();
+
+            if ($truBox->getId()) {
+                return $truBox->getData('use_trugiftcard');
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 }

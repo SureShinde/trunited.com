@@ -150,6 +150,10 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $address = $this->getRequest()->getPost();
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
         $address['trubox_id'] = $truBoxId;
+        $current_credit_card = $this->getRequest()->getParam('current_credit_card');
+
+        $use_trugiftcard = $this->getRequest()->getParam('use_trugiftcard');
+        $truBox = Mage::helper('trubox')->getCurrentTruBox();
 
         try {
             $payment = Mage::getModel('trubox/payment')->getCollection()
@@ -164,8 +168,17 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
             $address['updated_at'] = now();
 
-            $payment->addData($address);
-            $payment->save();
+            if($current_credit_card == null || $current_credit_card == 1)
+            {
+                $payment->addData($address);
+                $payment->save();
+            }
+
+            if($truBox != null && $truBox->getId())
+            {
+                $truBox->setData('use_trugiftcard', $use_trugiftcard != null && strcasecmp($use_trugiftcard, 'on') == 0 ? 1 : 0);
+                $truBox->save();
+            }
 
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::helper('trubox')->__('You have updated Payment Information successfully!')
@@ -753,6 +766,31 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         }
 
         $this->_redirectUrl(Mage::getUrl('*/*/'));
+    }
+
+    public function updateDb8Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('trubox/trubox')} ADD `use_trugiftcard` tinyint(4) NULL DEFAULT 1;
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function testAction()
+    {
+        $collection = Mage::getModel('sales/order')->getCollection();
+        $collection->addFieldToFilter('created_at', array('from' => '2017-08-06', 'to' => '2017-08-08'));
+        $collection->addFieldToFilter('created_by', Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES);
+        echo $collection->getSelect();
+        foreach ($collection as $order) {
+            zend_debug::dump($order->debug());
+            exit;
+        }
+
     }
 
 }

@@ -170,7 +170,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_General extends Mage_Admin
             'name'    => 'text_promotion',
             'label'   => $this->__('The text promotion'),
             'title'   => $this->__('The text promotion'),
-            'required' => true,
+            'required' => false,
             'note'     => $this->__('The text will be displayed on both cart and checkout pages')
         ));
         $form->setValues($_data->getData());

@@ -222,6 +222,8 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
                                 Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('english_cms_page')));
                             else if ($customer->getData('preferred_language') == 63 && $timer->getData('spanish_cms_page') != null)
                                 Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('spanish_cms_page')));
+                            else
+                                Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('english_cms_page')));
                         }
                     }
                 }

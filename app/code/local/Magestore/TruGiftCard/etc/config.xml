@@ -394,18 +394,18 @@
             </sales_convert_order_address>
         </fieldsets>
     </global>
-    <crontab>
+    <!--<crontab>
         <jobs>
             <trugiftcard_check_expiry_date_sharing_truGiftCard>
                 <schedule>
-                    <cron_expr>0 */1 * * *</cron_expr>
+                    <cron_expr>* * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>trugiftcard/observer::checkExpiryDate</model>
                 </run>
             </trugiftcard_check_expiry_date_sharing_truGiftCard>
         </jobs>
-    </crontab>
+    </crontab>-->
     <default>
         <trugiftcard>
             <general>
@@ -434,6 +434,7 @@
                 <current_label>Trunited Gift Card balance</current_label>
                 <applied_label>Enter amount to apply on this order</applied_label>
                 <discount_label>Gift Card Discount</discount_label>
+                <use_truwallet>1</use_truwallet>
             </spending>
             <email>
                 <enable>1</enable>

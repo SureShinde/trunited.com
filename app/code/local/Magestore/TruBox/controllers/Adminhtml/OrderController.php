@@ -51,6 +51,7 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 			try {
 				$customer_params = explode(',',$params['customers']);
 				$customer_params = array_filter($customer_params);
+
 				if(sizeof($customer_params) > 0)
 				{
 					$truBox_table = Mage::getSingleton('core/resource')->getTableName('trubox/item');
@@ -74,12 +75,12 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 									continue;
 								}
 
-
 								$collection = Mage::getModel('trubox/item')->getCollection()
 									->addFieldToFilter('trubox_id', $truBox->getId())
 								;
 
 								$data = array();
+
 								foreach ($collection as $item) {
 									if(!array_key_exists($item->getTruboxId(), $data)){
 										$data[$item->getTruboxId()] = array(
@@ -96,9 +97,9 @@ class Magestore_TruBox_Adminhtml_OrderController extends Mage_Adminhtml_Controll
 
 									if(sizeof($re) > 0)
 										$rs[] = $re;
+								} else {
+									Mage::getSingleton('adminhtml/session')->addError(Mage::helper('trubox')->__('Empty customers'));
 								}
-
-
 							}
 						} else if(!filter_var($customer_id, FILTER_VALIDATE_EMAIL) === false) {
 							$customer = Mage::getModel('customer/customer')->getCollection()

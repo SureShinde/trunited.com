@@ -268,8 +268,6 @@ class Magestore_TruWallet_Helper_Transaction extends Mage_Core_Helper_Abstract
             ->addFieldToFilter('status', Magestore_TruWallet_Model_Status::STATUS_TRANSACTION_PENDING)
             ->setOrder('transaction_id', 'desc');
 
-        Mage::log('Check Expiry Date - ' . date('d-m-Y H:i:s', time()) . ' - Quantity: ' . sizeof($collection), null, 'expiryDate.log');
-
         if (sizeof($collection) > 0) {
 
             if (sizeof($collection) > 0) {

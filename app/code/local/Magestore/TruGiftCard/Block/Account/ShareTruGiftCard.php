@@ -93,7 +93,7 @@ class Magestore_TruGiftCard_Block_Account_ShareTruGiftCard extends Mage_Core_Blo
         ));
 
         $grid->addColumn('expiration_date', array(
-            'header' => Mage::helper('trugiftcard')->__('Expiration AMT'),
+            'header' => Mage::helper('trugiftcard')->__('Expiration Date'),
             'index' => 'expiration_date',
             'type' => 'date',
             'format' => 'medium',
@@ -124,11 +124,11 @@ class Magestore_TruGiftCard_Block_Account_ShareTruGiftCard extends Mage_Core_Blo
             'align' => 'left',
             'type' => 'action',
             'action' => array(
-                            'label' => 'Cancel',
-                            'url' 	=> 'trugiftcard/transaction/cancelTransaction',
-                            'name'	=> 'id',
-                            'field'	=> 'transaction_id',
-      					),
+                'label' => 'Cancel',
+                'url' 	=> 'trugiftcard/transaction/cancelTransaction',
+                'name'	=> 'id',
+                'field'	=> 'transaction_id',
+            ),
         ));
 
         $this->setChild('share_grid', $grid);

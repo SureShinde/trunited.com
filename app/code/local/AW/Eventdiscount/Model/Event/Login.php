@@ -62,18 +62,16 @@ class AW_Eventdiscount_Model_Event_Login extends AW_Eventdiscount_Model_Event
             ->getFirstItem()
         ;
 
-        zend_debug::dump($collection != null && sizeof($collection->getData()) > 0);
         if($collection != null && sizeof($collection->getData()) > 0)
         {
             $timer = Mage::getModel('aweventdiscount/timer')->load($collection->getTimerId());
-            zend_debug::dump($timer->debug());
+
             if($timer->getId())
             {
                 Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl($timer->getData('cms_page')));
             }
             return;
         }
-        zend_debug::dump(Mage::getSingleton('customer/session')->getBeforeAuthUrl());
-        exit;
+
     }
 }

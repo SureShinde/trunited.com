@@ -232,12 +232,16 @@
                                             break;
                                         case 'date':
                                             ?>
-                                            <?php echo $this->formatDate($row->getData($column['index']), $column['format'], false) ?>
+                                            <?php
+                                                if($row->getData($column['index']) != null)
+                                                    echo $this->formatDate($row->getData($column['index']), $column['format'], false) ?>
                                             <?php
                                             break;
                                         case 'datetime':
                                             ?>
-                                            <?php echo $this->formatDate($row->getData($column['index']), $column['format'], true) ?>
+                                            <?php
+                                                if($row->getData($column['index']) != null)
+                                                    echo $this->formatDate($row->getData($column['index']), $column['format'], true) ?>
                                             <?php
                                             break;
                                         case 'price':

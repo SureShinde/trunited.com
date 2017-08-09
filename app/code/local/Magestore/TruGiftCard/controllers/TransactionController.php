@@ -62,20 +62,23 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
             return;
         }
 
-        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT)) {
+        if (!filter_var($day_of_expiration, FILTER_VALIDATE_INT) && $day_of_expiration != 0) {
             Mage::getSingleton('core/session')->addError(
                 Mage::helper('trugiftcard')->__($day_of_expiration . ' is not a valid Integer number')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
-        } else if ($day_of_expiration < 1 || $day_of_expiration > 31) {
+        } else if ($day_of_expiration < 0 || $day_of_expiration > 31) {
             Mage::getSingleton('core/session')->addError(
                 Mage::helper('trugiftcard')->__('The # days of expiration is not smaller than 0 and greater than 31 ')
             );
             $this->_redirectUrl(Mage::getUrl('*/index/shareTruGiftCard'));
             return;
         }
-        $expiration_date = Mage::helper('trugiftcard/transaction')->addDaysToDate(now(), $day_of_expiration);
+        if($day_of_expiration == 0)
+            $expiration_date = null;
+        else
+            $expiration_date = Mage::helper('trugiftcard/transaction')->addDaysToDate(now(), $day_of_expiration);
 
         $account = Mage::getModel('trugiftcard/customer')->load($customer->getId(), 'customer_id');
         if ($account->getTrugiftcardCredit() < 0 || $amount > $account->getTrugiftcardCredit()) {
@@ -224,19 +227,28 @@ class Magestore_TruGiftCard_TransactionController extends Mage_Core_Controller_F
 
             $transaction->setUpdatedTime(now());
             $transaction->setStatus(Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED);
+            $transaction->setPointBack(abs($transaction->getChangedCredit()));
             $transaction->save();
 
             $truGiftCardAccountAccount = Mage::getModel('trugiftcard/customer')->load($transaction->getTrugiftcardId());
             if ($truGiftCardAccountAccount->getId()) {
                 $current_credit = $truGiftCardAccountAccount->getTrugiftcardCredit();
                 $_new_credit = $current_credit + abs($transaction->getChangedCredit());
-                $truGiftCardAccountAccount->setTrugiftcardCredit($_new_credit);
+                $truGiftCardAccountAccount->setTrugiftcardCredit($_new_credit > 0 ? $_new_credit : 0);
                 $truGiftCardAccountAccount->save();
 
                 $receiver_transaction = Mage::getModel('trugiftcard/transaction')->load($transaction->getRecipientTransactionId());
                 if($receiver_transaction != null && $receiver_transaction->getId())
                 {
+					$receiver_transaction->setPointBack(- abs($receiver_transaction->getChangedCredit()));
                     $receiver_transaction->setStatus(Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_CANCELLED)->save();
+					$recipientAccount = Mage::getModel('trugiftcard/customer')->load($receiver_transaction->getTrugiftcardId());
+					if ($recipientAccount->getId()) {
+						$_current_credit = $recipientAccount->getTrugiftcardCredit();
+						$_new_recipient_credit = $_current_credit - abs($receiver_transaction->getChangedCredit());
+                        $recipientAccount->setTrugiftcardCredit($_new_recipient_credit > 0 ? $_new_recipient_credit : 0);
+                        $recipientAccount->save();
+					}
                 }
             }
 

@@ -16,7 +16,36 @@ class Magestore_TruWallet_Model_Observer
 
     public function checkExpiryDate()
     {
-        Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();
+        /* CRON JOB for checking the On Hold RewardPoints Transactions at 1:00 AM every month */
+		if(date('j', time()) == 1 && date('H', time()) == 1) {
+			Mage::log('Checking ON HOLD Transactions at '.date('Y-m-d H:i:s', time()), null, 'check_on_hold_transaction.log');
+			Mage::helper('rewardpoints/transaction')->checkExpiryDateOnHoldTransaction();
+		}
+
+        /* CRON JOB for checking the Manage APIs at 1:00 AM every day */
+        if(date('H', time()) == 1 && date('i', time()) == 00)
+        {
+            Mage::log('Checking API at '.date('Y-m-d H:i:s', time()), null, 'check_manage_api.log');
+            Mage::helper('manageapi/linkshare')->processCron();
+            Mage::helper('manageapi/hotel')->processCron();
+            Mage::helper('manageapi/flight')->processCron();
+            Mage::helper('manageapi/car')->processCron();
+            Mage::helper('manageapi/vacation')->processCron();
+            Mage::helper('manageapi/cj')->processCron();
+            Mage::helper('manageapi/target')->processCron();
+            Mage::helper('manageapi/shareasale')->processCron();
+        }
+
+        /* CRON JOB for checking the expiration of Trunited Gift Card transactions every hour */
+        if(date('i', time()) == 00)
+        {
+            Mage::log('Checking TGC at '.date('Y-m-d H:i:s', time()), null, 'check_expired_tgc.log');
+            Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+        }
+			
+		/* CRON JOB for checking the expiration of truWallet transactions */
+        Mage::log('Check TruWallet - ' . date('d-m-Y H:i:s', time()), null, 'check_expired_truWallet.log');
+        /*Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();*/
     }
 
     public function paypal_prepare_line_items($observer)

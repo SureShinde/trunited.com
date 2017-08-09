@@ -285,28 +285,55 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
     {
         $helper = Mage::helper('rewardpoints/transaction');
         $collection = $helper->getOnHoldTransaction();
+        $collection = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToFilter('action_type', array('in' => array(
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_BOTH,
+                Magestore_RewardPoints_Model_Transaction::ACTION_TYPE_RECEIVE_POINTS_FROM_GLOBAL_BRANDS,
+            )))
+            ->addFieldToFilter('action', array('in' => array('admin', 'global_brand')))
+            ->addFieldToFilter('status', Magestore_RewardPoints_Model_Transaction::STATUS_ON_HOLD)
+            ->addFieldToFilter('is_on_hold', 1)
+            ->setOrder('transaction_id', 'desc')
+			;
+		echo $_SERVER['REMOTE_ADDR'];
+		
         if(sizeof($collection) > 0)
         {
-            $t = strtotime('2017-07-04');
+            $t = time();
+			$count = 0;
+		
             foreach ($collection as $transaction) {
                 $date = $helper->addDaysToDate(
                     $transaction->getCreatedTime(),
                     $helper->getDaysOfHold()
                 );
-
+					
                 if(date('Y',strtotime($date)) == date('Y', $t) &&
-                    date('m',strtotime($date)) == date('m', $t) &&
-                    date('d',strtotime($date)) == date('d', $t))
+                    date('m',strtotime($date)) == date('m', $t))
                 {
-                    try {
+					try {
                         $transaction->completeTransaction();
+						$count++;
                     } catch (Exception $e) {
-                        Mage::logException($e);
+						zend_debug::dump($e->getMessage());
+						exit; 
                     }
                 }
-
             }
+			zend_debug::dump($count);
+			exit;
 
         }
+    }
+
+    public function updateDb4Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('rewardpoints/transaction')} ADD `trugiftcard_transaction_id` INT unsigned NULL;
+        ");
+        $installer->endSetup();
+        echo "success";
     }
 }

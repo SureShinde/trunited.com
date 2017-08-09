@@ -105,6 +105,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/general/coupon_code_amount');
     }
 
+    public function getDelaySecond()
+    {
+        return Mage::getStoreConfig('trubox/general/delay_second') != null ? Mage::getStoreConfig('trubox/general/delay_second') : 1;
+    }
+
     public function getExclusionList()
     {
         $list = $this->getProductExclusionList();
@@ -186,6 +191,16 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
     public function getTruboxLabel()
     {
         return $this->__('My TruBox');
+    }
+
+    public function getCurrentTruBox()
+    {
+        $truBox_id = $this->getCurrentTruBoxId();
+        $truBox = Mage::getModel('trubox/trubox')->load($truBox_id);
+        if($truBox != null && $truBox->getId())
+            return $truBox;
+        else
+            return null;
     }
 
     public function getCurrentTruBoxId($customer_id = null)

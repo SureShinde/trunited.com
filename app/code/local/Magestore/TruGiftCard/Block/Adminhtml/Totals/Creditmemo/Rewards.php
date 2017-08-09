@@ -84,6 +84,7 @@ class Magestore_TruGiftCard_Block_Adminhtml_Totals_Creditmemo_Rewards extends Ma
 
             $this->setData('current_truGiftCard', $maxPointRefund);
         }
+
         $this->setData('truGiftCard_refund', $maxPointRefund);
         return $this->getData('truGiftCard_refund');
     }
@@ -98,7 +99,7 @@ class Magestore_TruGiftCard_Block_Adminhtml_Totals_Creditmemo_Rewards extends Ma
         if (!$this->hasData('truGiftCard_refund')) {
             $this->getMaxTruGiftCardRefund();
         }
-        return (int)$this->getData('current_truGiftCard');
+        return $this->getData('current_truGiftCard');
     }
 
     public function getAllCreditMemoByOrder($order_id)

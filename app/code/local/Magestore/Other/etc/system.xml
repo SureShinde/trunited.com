@@ -66,45 +66,36 @@
 						</sku>
 					</fields>
 				</drop_ship>
-				<!--<rewardpoint_header translate="label">
-					<label>RewardPoints in the Header Configuration</label>
+
+				<customer_active translate="label">
+					<label>Active/Deactive Customer Configuration</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>3</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
 					<fields>
-						<enable translate="label">
-							<label>Enable</label>
-							<frontend_type>select</frontend_type>
+						<prefix translate="label">
+							<label>Prefix to email</label>
+							<frontend_type>text</frontend_type>
 							<sort_order>1</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</enable>
-						<font_size translate="label">
-							<label>Font size of text</label>
-							<frontend_type>text</frontend_type>
+							<comment>The customer's email will be added the prefix if they are changed to Inactive status.</comment>
+						</prefix>
+						<error_message_login>
+							<label>Error message when the customer logs in</label>
+							<frontend_type>textarea</frontend_type>
 							<sort_order>2</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</font_size>
-						<text_color>
-							<label>Text Color</label>
-							<frontend_type>text</frontend_type>
-							<validate>color</validate>
-							<sort_order>3</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment>Specify the color of text on the header. Default: white: #ffffff</comment>
-						</text_color>
+							<comment>The error message will be displayed if the customer logs in when their account has been disabled.</comment>
+						</error_message_login>
 					</fields>
-				</rewardpoint_header>-->
+				</customer_active>
+
 			</groups>
 		</other>
 	</sections>

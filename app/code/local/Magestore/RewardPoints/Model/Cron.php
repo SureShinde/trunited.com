@@ -230,28 +230,6 @@ class Magestore_RewardPoints_Model_Cron
     public function checkExpiryDateOnHoldTransaction()
     {
         $helper = Mage::helper('rewardpoints/transaction');
-        $collection = $helper->getOnHoldTransaction();
-        if(sizeof($collection) > 0)
-        {
-            $t = time();
-            foreach ($collection as $transaction) {
-                $date = $helper->addDaysToDate(
-                    $transaction->getCreatedTime(),
-                    $helper->getDaysOfHold()
-                );
-
-                if(date('Y',strtotime($date)) == date('Y', $t) &&
-                    date('m',strtotime($date)) == date('m', $t))
-                {
-                    try {
-                        $transaction->completeTransaction();
-                    } catch (Exception $e) {
-                        Mage::logException($e);
-                    }
-                }
-
-            }
-
-        }
+        $helper->checkExpiryDateOnHoldTransaction();
     }
 }

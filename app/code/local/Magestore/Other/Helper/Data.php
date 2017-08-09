@@ -32,6 +32,16 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('other/rewardpoint_header/text_color', Mage::app()->getStore());
     }
 
+    public function getPrefixCustomer()
+    {
+        return Mage::getStoreConfig('other/customer_active/prefix', Mage::app()->getStore());
+    }
+
+    public function getErrorMessageCustomer()
+    {
+        return Mage::getStoreConfig('other/customer_active/error_message_login', Mage::app()->getStore());
+    }
+
     public function getListDropShipSku()
     {
         $list = $this->skuDropShip();

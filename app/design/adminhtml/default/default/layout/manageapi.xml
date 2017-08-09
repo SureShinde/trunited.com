@@ -47,4 +47,10 @@
 			<block type="manageapi/adminhtml_targetactions" name="manageapi.target.targetactions" />
 		</reference>
 	</manageapiadmin_adminhtml_targetactions_index>
+
+	<manageapiadmin_adminhtml_shareasale_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_shareasale" name="manageapi.shareasale" />
+		</reference>
+	</manageapiadmin_adminhtml_shareasale_index>
 </layout>

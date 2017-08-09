@@ -66,7 +66,7 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                 continue;
             }
 
-            $baseDiscount = $this->calculateDiscount($action['timer_id'], $action['type'], $action['action'], $quote);
+            $baseDiscount = $this->calculateDiscount($action, $quote);
             $awardPoint = $this->calculatePoint($action['timer_id'], $quote);
 
             if ($baseDiscount == 0) {
@@ -75,11 +75,13 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
 
             $action['action'] = $baseDiscount;
             $discount = Mage::app()->getStore()->convertPrice($baseDiscount);
-            $formattedPrice = Mage::helper('core')->currency($baseDiscount, true, false);
-            $discountDescription = Mage::helper('eventdiscount')->__('Discount Event')
-                . (count($actions) > 1 ? '&nbsp;#' . $numberPromo++ : '')
-                . '&nbsp;-&nbsp;' . $formattedPrice
-            ;
+
+            /*$formattedPrice = Mage::helper('core')->currency($baseDiscount, true, false);
+            if($baseDiscount > 0)
+                $discountDescription = Mage::helper('eventdiscount')->__('Discount Event')
+                    . (count($actions) > 1 ? '&nbsp;#' . $numberPromo++ : '')
+                    . '&nbsp;-&nbsp;' . $formattedPrice
+                ;*/
 
             $result = $quote->getBaseSubtotalWithDiscount() - $baseDiscount;
             if ($result < 0) {
@@ -120,8 +122,10 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                         ->setBaseGrandTotal((float)$quote->getBaseGrandTotal())
                         ->setDiscountAmount($address->getDiscountAmount() - $discount)
                     ;
-                    if ($address->getDiscountDescription()) {
-                        $discountDescription = $address->getDiscountDescription() . ', ' . $discountDescription;
+
+                    if ($address->getDiscountDescription() == null) {
+//                        $discountDescription = $address->getDiscountDescription() . ', ' . $discountDescription;
+                        $discountDescription = $timer->getData('amount_text');
                     }
 
                     if($awardPoint['point'] > 0)
@@ -133,7 +137,6 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
                         ));
                         $address->setRewardpointsEarn($awardPoint['point']);
                     }
-
 
                     $address
                         ->setDiscountDescription($discountDescription)
@@ -162,22 +165,32 @@ class AW_Eventdiscount_Model_Trigger_Discount extends AW_Eventdiscount_Model_Tri
     }
 
 
-    public function calculateDiscount($timer_id, $type, $amount, $quote)
+    public function calculateDiscount($action, $quote)
     {
         $discount = 0;
-        $product_collection = Mage::helper('eventdiscount')->getTimerProductCollection($timer_id);
+        $product_collection = Mage::helper('eventdiscount')->getTimerProductCollection($action['timer_id']);
 
         if(sizeof($product_collection) > 0)
         {
             $product_ids = $product_collection->getColumnValues('product_id');
-
+            $total_applied = 0;
             foreach ($quote->getAllItems() as $item) {
                 if(in_array($item->getProduct()->getId(), $product_ids))
                 {
-                    if($type === AW_Eventdiscount_Model_Source_Action::FIXED)
-                        $discount += $amount * $item->getQty();
-                    else
-                        $discount += ($amount / 100) * $item->getQty() * $item->getPrice();
+                    $itemDiscount = $item->getBaseRowTotal() + $item->getBaseTaxAmount() - $item->getBaseDiscountAmount() - $item->getMagestoreBaseDiscount();
+                    $total_applied += $itemDiscount;
+                }
+            }
+
+            if($total_applied > 0){
+                if($total_applied < $action['subtotal_from'] || $total_applied > $action['subtotal_to']) {
+
+                } else {
+                    if($action['type'] === AW_Eventdiscount_Model_Source_Action::FIXED){
+                        $discount += $action['action'] <= $total_applied ? $action['action'] : $total_applied;
+                    } else {
+                        $discount += ($action['action'] / 100) * $total_applied;
+                    }
                 }
             }
         }

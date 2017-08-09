@@ -227,7 +227,6 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         }
 
         if (!$this->_getAccountHelper()->isEnoughBalance()) {
-
             $this->_getCoreSession()->addNotice($this->__('The minimum balance required to transfer dollars is %s'
                 , $baseCurrency->format($this->_getConfigHelper()->getPaymentConfig('payment_release'), array(), false)));
             return $this->_redirect('affiliateplus/index/payments');
@@ -256,6 +255,7 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 );*/
 
             $object_transfer = Mage::helper('affiliateplus/config')->getTransferConfig();
+            $new_amount = null;
             if ($object_transfer == 1) {
                 $enable_bonus = Mage::helper('truwallet')->getEnableTransferBonus();
                 if ($enable_bonus) {
@@ -284,29 +284,44 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
                 }
             } else if ($object_transfer == 2) {
                 $enable_bonus = Mage::helper('trugiftcard')->getEnableTransferBonus();
-                if ($enable_bonus) {
-                    $percent = Mage::helper('trugiftcard')->getTransferBonus();
-                    $new_amount = $transfer_amount + ($transfer_amount * $percent) / 100;
-                } else {
-                    $new_amount = $transfer_amount;
-                }
-                $truWalletAccount = Mage::helper('trugiftcard/account')->updateCredit(
+                $new_amount = $transfer_amount;
+                $truGiftCardAccount = Mage::helper('trugiftcard/account')->updateCredit(
                     $customer->getId(),
                     $new_amount
                 );
                 $params = array(
                     'credit' => $new_amount,
-                    'title' => Mage::helper('trugiftcard')->__('Transfer dollars from balance to Trunited Gift Card'),
+                    'title' => Mage::helper('trugiftcard')->__('Transfer dollars from Affiliate cash to Trunited Gift Card'),
                     'receiver_email' => '',
                     'receiver_customer_id' => '',
                 );
-                if ($truWalletAccount != null) {
-                    Mage::helper('trugiftcard/transaction')->createTransaction(
-                        $truWalletAccount,
+                if ($truGiftCardAccount != null) {
+                    $result = Mage::helper('trugiftcard/transaction')->createTransaction(
+                        $truGiftCardAccount,
                         $params,
-                        Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_TRANSFER,  // type
+                        Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_TRANSFER,
                         Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_COMPLETED
                     );
+
+                    if($result != null)
+                    {
+                        zend_debug::dump($result->getId());
+                        if ($enable_bonus) {
+                            $percent = Mage::helper('trugiftcard')->getTransferBonus();
+                            $bonus_amount = ($transfer_amount * $percent) / 100;
+                            Mage::helper('rewardpoints/action')->addTransaction('share_gift_card', $customer, new Varien_Object(array(
+                                    'product_credit_title' => 0,
+                                    'product_credit' => 0,
+                                    'point_amount' => $bonus_amount,
+                                    'title' => Mage::helper('trugiftcard')->__('Bonus points for transferring affiliate cash to Trunited Gift Card'),
+                                    'expiration_day' => 0,
+                                    'expiration_day_credit' => 0,
+                                    'created_time' => now(),
+                                    'trugiftcard_transaction_id' => $result->getId(),
+                                ))
+                            );
+                        }
+                    }
                 }
             }
 
@@ -326,10 +341,10 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
             Mage::helper('affiliateplus')->addTransaction($affiliateAccount->getId(), $affiliateAccount->getName(), $affiliateAccount->getEmail(), -$transfer_amount, $storeId);
 
             if ($object_transfer == 1)
-                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to truWallet successfully'
+                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Affiliate cash to truWallet successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
             else if ($object_transfer == 2)
-                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Balance to Trunited Gift Card successfully'
+                $this->_getCoreSession()->addSuccess($this->__('Transfer %s dollars from Affiliate cash to Trunited Gift Card successfully'
                     , $baseCurrency->format($new_amount, array(), false)));
         } catch (Exception $ex) {
             $this->_getCoreSession()->addError($ex->getMessage());

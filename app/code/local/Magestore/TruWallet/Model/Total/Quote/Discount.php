@@ -52,6 +52,32 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             return false;
     }
 
+    public function isAppliedTGCToOrder($customer_id = null)
+    {
+        if($customer_id != null)
+            $customerId = $customer_id;
+        else {
+            $admin_session = Mage::getSingleton('adminhtml/session');
+            $customerId = $admin_session->getOrderCustomerId();
+        }
+
+        if (isset($customerId) && $customerId > 0) {
+
+            $truBox = Mage::getModel('trubox/trubox')->getCollection()
+                ->addFieldToFilter('status', 'open')
+                ->addFieldToFilter('customer_id', $customerId)
+                ->getFirstItem();
+
+            if ($truBox->getId()) {
+                return $truBox->getData('use_trugiftcard');
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @param Mage_Sales_Model_Quote_Address $address
      * @return $this
@@ -77,22 +103,41 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             return $this;
         }
 
-        if(Mage::helper('custompromotions')->truGiftCardInCart()){
+        $no_truWallet = false;
+        if(Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet')){
             $session->setBaseTruwalletCreditAmount(null);
-            return $this;
+            $no_truWallet = true;
         }
 
         $helper = Mage::helper('truwallet');
 
         if ($this->checkIsAdmin()) {
             $account = Mage::helper('truwallet/account')->loadByCustomerId($admin_session->getOrderCustomerId());
+            $account_giftCard = Mage::helper('trugiftcard/account')->loadByCustomerId($admin_session->getOrderCustomerId());
             $creditAmountEntered = $account->getTruwalletCredit();
+            $creditAmountEntered_giftCard = $account_giftCard->getTrugiftcardCredit();
         } else {
             $creditAmountEntered = $session->getBaseTruwalletCreditAmount();
+            $creditAmountEntered_giftCard = $session->getBaseTrugiftcardCreditAmount();
             $account = Mage::helper('truwallet/account')->getCurrentAccount();
+            $account_giftCard = Mage::helper('trugiftcard/account')->getCurrentAccount();
         }
 
-        if (!$creditAmountEntered)
+        if($account != null && $account->getId() && !Mage::helper('custompromotions')->truWalletInCart() &&
+            (!Mage::helper('custompromotions')->truGiftCardInCart() || (Mage::helper('custompromotions')->truGiftCardInCart() && Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))
+                || $this->checkIsAdmin())
+
+        ){
+
+        } else {
+            $session->setBaseTruwalletCreditAmount(null);
+            $no_truWallet = true;
+        }
+		
+		if($account->getTruwalletCredit() == 0 && $account_giftCard->getTrugiftcardCredit() == 0)
+			return $this;
+		
+        if (!$creditAmountEntered && !$creditAmountEntered_giftCard)
             return $this;
 
         $baseDiscountTotal = 0;
@@ -124,7 +169,8 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $baseDiscountTotal += $shippingDiscount;
         }
 
-        $truwalletBalance = $account->getTruwalletCredit();
+        $truwalletBalance = $no_truWallet ? 0 : $account->getTruwalletCredit();
+        $trugiftcardBalance = $account_giftCard->getTrugiftcardCredit();
 
         /* Fix bug conflict with giftwrap of OSC */
         $wrapTotal = 0;
@@ -140,7 +186,8 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         }
         $baseDiscountTotal += $wrapTotal;
         /* END Fix bug conflict with giftwrap of OSC */
-
+        $baseTruGiftCardDiscount = 0;
+        $baseTruWalletDiscount = 0;
         if($baseDiscountTotal < floatval($truwalletBalance))
         {
             if(Mage::helper('truwallet')->getEnableChangeBalance()){
@@ -161,32 +208,99 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                 $baseTruWalletDiscount = $creditAmountEntered;
         }
 
+        if($this->checkIsAdmin()){
+            if($this->isAppliedTGCToOrder($admin_session->getOrderCustomerId())){
+                $baseDiscountTotalExclusionTruWallet = $baseDiscountTotal - $baseTruWalletDiscount;
+                if($baseDiscountTotalExclusionTruWallet > 0){
+                    if($baseDiscountTotalExclusionTruWallet < floatval($trugiftcardBalance))
+                    {
+                        if($creditAmountEntered_giftCard > $baseDiscountTotalExclusionTruWallet)
+                            $baseTruGiftCardDiscount = $baseDiscountTotalExclusionTruWallet;
+                        else
+                            $baseTruGiftCardDiscount = $creditAmountEntered_giftCard;
+                    } else {
+                        if(floatval($trugiftcardBalance) < $creditAmountEntered_giftCard)
+                            $baseTruGiftCardDiscount = floatval($trugiftcardBalance);
+                        else
+                            $baseTruGiftCardDiscount = $creditAmountEntered_giftCard;
+                    }
+                }
+            }
+        } else {
+            $baseDiscountTotalExclusionTruWallet = $baseDiscountTotal - $baseTruWalletDiscount;
+            if($baseDiscountTotalExclusionTruWallet > 0){
+                if($baseDiscountTotalExclusionTruWallet < floatval($trugiftcardBalance))
+                {
+                    if($creditAmountEntered_giftCard > $baseDiscountTotalExclusionTruWallet)
+                        $baseTruGiftCardDiscount = $baseDiscountTotalExclusionTruWallet;
+                    else
+                        $baseTruGiftCardDiscount = $creditAmountEntered_giftCard;
+                } else {
+                    if(floatval($trugiftcardBalance) < $creditAmountEntered_giftCard)
+                        $baseTruGiftCardDiscount = floatval($trugiftcardBalance);
+                    else
+                        $baseTruGiftCardDiscount = $creditAmountEntered_giftCard;
+                }
+            }
+        }
+
+
+        $baseDiscount = $baseTruWalletDiscount + $baseTruGiftCardDiscount;
+
         if ($this->checkIsAdmin() && strcasecmp(Mage::helper('trubox')->getShippingMethod(), 'flatrate_flatrate') == 0) {
-            $baseTruWalletDiscount += Mage::helper('trubox')->getShippingAmount();
+            $baseDiscount += Mage::helper('trubox')->getShippingAmount();
         }
 
         $truwalletDiscount = Mage::getModel('truwallet/customer')
-            ->getConvertedFromBaseTruwalletCredit($baseTruWalletDiscount);
+            ->getConvertedFromBaseTruwalletCredit($baseDiscount);
 
-        if ($baseTruWalletDiscount < $baseItemsPrice)
-            $rate = $baseTruWalletDiscount / $baseItemsPrice;
+        if ($baseDiscount < $baseItemsPrice)
+            $rate = $baseDiscount / $baseItemsPrice;
         else {
             $rate = 1;
-            $baseTruWalletForShipping = $baseTruWalletDiscount - $baseItemsPrice;
+            $baseTruWalletForShipping = $baseDiscount - $baseItemsPrice;
         }
-        //update session
-        $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
 
-        //update address
-//        if($baseTruWalletDiscount == $baseDiscountTotal)
-//            $session->setBaseTrugiftcardCreditAmount(null);
+        //update session
+
+
 
         $address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
         $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount + $wrapTotal);
-        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseTruWalletDiscount + $wrapTotal);
+        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseDiscount + $wrapTotal);
 
-        $address->setTruwalletDiscount($truwalletDiscount);
-        $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
+        if ($this->checkIsAdmin() && strcasecmp(Mage::helper('trubox')->getShippingMethod(), 'flatrate_flatrate') == 0) {
+            $shipping_amount = Mage::helper('trubox')->getShippingAmount();
+            $remaining_fee = 0;
+
+            if($baseTruWalletDiscount < $shipping_amount) {
+                $address->setTruwalletDiscount($baseTruWalletDiscount);
+                $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
+                $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
+                $remaining_fee += $shipping_amount;
+            } else if($baseTruWalletDiscount >= $shipping_amount) {
+                if(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance){
+                    $remaining_fee += ($baseTruWalletDiscount + $shipping_amount) - $truwalletBalance;
+                }
+                $address->setTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+                $address->setBaseTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+                $session->setBaseTruwalletCreditAmount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+            }
+
+            if($this->isAppliedTGCToOrder($admin_session->getOrderCustomerId())){
+                $session->setBaseTrugiftcardCreditAmount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+                $address->setTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+                $address->setBaseTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+            }
+        } else {
+            $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
+            $address->setTruwalletDiscount($baseTruWalletDiscount);
+            $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
+
+            $session->setBaseTrugiftcardCreditAmount($baseTruGiftCardDiscount);
+            $address->setTrugiftcardDiscount($baseTruGiftCardDiscount);
+            $address->setBaseTrugiftcardDiscount($baseTruGiftCardDiscount);
+        }
 
         //distribute discount
         $this->_prepareDiscountCreditForAmount($address, $rate, $baseTruWalletForShipping);
@@ -212,7 +326,18 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         if ($customer_credit_discount > 0) {
             $address->addTotal(array(
                 'code' => $this->getCode(),
-                'title' => Mage::helper('truwallet')->getSpendConfig('discount_label'),
+                'title' => Mage::helper('truwallet')->getSpendConfig('discount_label').'2',
+                'value' => -Mage::helper('core')->currency($customer_credit_discount, false, false)
+            ));
+        }
+
+        $customer_credit_discount = $address->getTruGiftCardDiscount();
+        if ($session->getBaseTrugiftcardCreditAmount())
+            $customer_credit_discount = $session->getBaseTrugiftcardCreditAmount();
+        if ($customer_credit_discount > 0) {
+            $address->addTotal(array(
+                'code' => $this->getCode(),
+                'title' => Mage::helper('trugiftcard')->getSpendConfig('discount_label'),
                 'value' => -Mage::helper('core')->currency($customer_credit_discount, false, false)
             ));
         }
@@ -241,7 +366,9 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                         $itemDiscount = Mage::app()->getStore()->convertPrice($itemBaseDiscount);
                         $child->setMagestoreBaseDiscount($child->getMagestoreBaseDiscount() + $itemBaseDiscount);
                         $child->setBaseTruwalletDiscount($itemBaseDiscount)
-                            ->setTruwalletDiscount($itemDiscount);
+                            ->setTruwalletDiscount($itemDiscount)
+                            ->setBaseTrugiftcardDiscount($itemBaseDiscount)
+                            ->setTrugiftcardDiscount($itemDiscount);
                     }
                 }
             } else if ($item->getProduct()) {
@@ -251,7 +378,9 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                     $itemDiscount = Mage::app()->getStore()->convertPrice($itemBaseDiscount);
                     $item->setMagestoreBaseDiscount($item->getMagestoreBaseDiscount() + $itemBaseDiscount);
                     $item->setBaseTruwalletDiscount($itemBaseDiscount)
-                        ->setTruwalletDiscount($itemDiscount);
+                        ->setTruwalletDiscount($itemDiscount)
+                        ->setBaseTrugiftcardDiscount($itemBaseDiscount)
+                        ->setTrugiftcardDiscount($itemDiscount);
                 }
             }
         }
@@ -262,6 +391,8 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $address->setMagestoreBaseDiscountForShipping($address->getMagestoreBaseDiscountForShipping() + $baseShippingDiscount);
             $address->setBaseTruwalletDiscountForShipping($baseShippingDiscount);
             $address->setTruwalletDiscountForShipping($shippingDiscount);
+            $address->setBaseTrugiftcardDiscountForShipping($baseShippingDiscount);
+            $address->setTrugiftcardDiscountForShipping($shippingDiscount);
         }
         return $this;
     }

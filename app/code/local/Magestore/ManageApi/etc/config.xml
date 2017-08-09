@@ -91,6 +91,9 @@
                     <targetactions>
                         <table>target_actions</table>
                     </targetactions>
+                    <shareasale>
+                        <table>shareasale_actions</table>
+                    </shareasale>
                 </entities>
             </manageapi_mysql4>
         </models>
@@ -125,7 +128,7 @@
             </manageapi>
         </helpers>
     </global>
-    <crontab>
+    <!--<crontab>
         <jobs>
             <manageapi_get_data_from_apis>
                 <schedule>
@@ -136,7 +139,7 @@
                 </run>
             </manageapi_get_data_from_apis>
         </jobs>
-    </crontab>
+    </crontab>-->
     <default>
         <manageapi>
             <link_share>
@@ -175,6 +178,13 @@
                 <target_api><![CDATA[https://IRzgwVMgNkX6355610dS23zjUzeVRQiYQ1:zuEQBCXBuXArZq%7ExxszdHS%7EBKMGmU8X4@api.impactradius.com/Mediapartners/IRzgwVMgNkX6355610dS23zjUzeVRQiYQ1/Reports/mp_action_listing_sku?compareEnabled=false&timeRange=CUSTOM&START_DATE={{start_date}}&END_DATE={{end_date}}&SUPERSTATUS_MS=APPROVED&SUPERSTATUS_MS=NA&SUPERSTATUS_MS=PENDING&PUB_CAMPAIGN=0&MODIFIED_Y_N=0&PUB_ACTION_TRACKER=0&MP_ACTION_TYPE=0&REFERRAL_TYPE=0]]></target_api>
                 <target_days>1</target_days>
             </target>
+            <share_a_sale>
+                <enable>1</enable>
+                <affiliate_id>1422980</affiliate_id>
+                <token>d9gT98GAxuT1GRQu</token>
+                <secret_key>BQw8fi5v3HDkth3gZGc3tr7k0CRonr4c</secret_key>
+                <shareasale_api><![CDATA[https://api.shareasale.com/x.cfm?action=activity&affiliateId={{affiliate_id}}&token={{token}}&dateStart={{start_date}}&dateEnd={{end_date}}&sortCol=commission&sortDir=desc&version=2.2&format=xml]]></shareasale_api>
+            </share_a_sale>
         </manageapi>
     </default>
 </config>

@@ -2,7 +2,8 @@
 $state = Mage::app()->getRequest()->getRequestedRouteName();
 $_code = 'truwallet';
 ?>
-<?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart() && !Mage::helper('custompromotions')->truGiftCardInCart()): ?>
+<?php if (Mage::helper('truwallet')->isEnable() && !Mage::helper('custompromotions')->truWalletInCart()
+    && ((!Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet')) || Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))): ?>
     <dl id="<?php echo $_code ?>_container">
         <?php if (Mage::helper('customer')->isLoggedIn()): ?>
             <dt class="<?php echo $_code ?>">
@@ -52,13 +53,14 @@ $_code = 'truwallet';
             var ccPaymentForm = new VarienForm('truwallet-payment-form', true);
             $j = jQuery.noConflict();
             $j(document).ready(function () {
-                <?php if($this->getCurrentCreditAmount() == 0 && $this->isReloadAutomatically() && !Mage::helper('custompromotions')->truWalletInCart() && !Mage::helper('custompromotions')->truGiftCardInCart()){?>
+                <?php if($this->getCurrentCreditAmount() == 0 && $this->isReloadAutomatically() && !Mage::helper('custompromotions')->truWalletInCart()
+                && ((!Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet')) || Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))){?>
                 updateCustomerCredit(
                     '<?php echo $this->getUpdateUrl(); ?>',
-                    '<?php if(Mage::helper('custompromotions')->truWalletInCart() || Mage::helper('custompromotions')->truGiftCardInCart()) echo '0'; else echo $this->getCustomerCredit() ?>',
+                    '<?php if(Mage::helper('custompromotions')->truWalletInCart() || (Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))) echo '0'; else echo $this->getCustomerCredit() ?>',
                     '<?php echo $state ?>'
                 );
-                <?php } else if((Mage::helper('custompromotions')->truWalletInCart() || Mage::helper('custompromotions')->truGiftCardInCart()) && $this->isReloadAutomatically()){?>
+                <?php } else if((Mage::helper('custompromotions')->truWalletInCart() || (Mage::helper('custompromotions')->truGiftCardInCart() && !Mage::helper('trugiftcard')->getSpendConfig('use_truwallet'))) && $this->isReloadAutomatically()){?>
                 updateCustomerCredit(
                     '<?php echo $this->getUpdateUrl(); ?>',
                     '0',

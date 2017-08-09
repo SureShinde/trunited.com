@@ -46,6 +46,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
     const ACTION_TYPE_RECEIVE_FROM_ECHECK_PAYMENT = 9;
     const ACTION_TYPE_RESET_POINTS_BY_ADMIN = 10;
     const ACTION_TYPE_RECEIVE_POINTS_FROM_GLOBAL_BRANDS = 11;
+    const ACTION_TYPE_RECEIVE_POINTS_FROM_SHARING_GIFT_CARD = 12;
     const XML_PATH_MAX_BALANCE = 'rewardpoints/earning/max_balance';
     const XML_PATH_EMAIL_ENABLE = 'rewardpoints/email/enable';
     const XML_PATH_EMAIL_SENDER = 'rewardpoints/email/sender';
@@ -500,12 +501,14 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
      * @throws Exception
      */
     public function completeTransaction() {
-        if (!$this->getId() || !$this->getCustomerId() || !$this->getRewardId() || $this->getPointAmount() <= 0 || !in_array($this->getStatus(), array(self::STATUS_PENDING, self::STATUS_ON_HOLD))
+		
+        if (!$this->getId() || !$this->getCustomerId() || !$this->getRewardId() || $this->getPointAmount() < 0 || !in_array($this->getStatus(), array(self::STATUS_PENDING, self::STATUS_ON_HOLD))
         ) {
             throw new Exception(Mage::helper('rewardpoints')->__('Invalid transaction data to complete.'));
         }
         $rewardAccount = $this->getRewardAccount();
         if ($this->getData('status') == self::STATUS_ON_HOLD) {
+			$this->setData('created_time', now());
             $rewardAccount->setHoldingBalance($rewardAccount->getHoldingBalance() - $this->getRealPoint());
         }
 
@@ -513,7 +516,7 @@ class Magestore_RewardPoints_Model_Transaction extends Mage_Core_Model_Abstract 
         Mage::dispatchEvent($this->_eventPrefix . '_complete_' . $this->getData('action'), $this->_getEventData());
 
         $this->setStatus(self::STATUS_COMPLETED);
-
+		
         $maxBalance = (int) Mage::getStoreConfig(self::XML_PATH_MAX_BALANCE, $this->getStoreId());
         if ($maxBalance > 0 && $this->getRealPoint() > 0 && $rewardAccount->getPointBalance() + $this->getRealPoint() > $maxBalance
         ) {

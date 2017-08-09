@@ -69,6 +69,7 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
 
         $collection_giftCard = Mage::getModel('aweventdiscount/giftcard')->getCollection()->loadByTimerId($this->getId());
         $this->setData('giftcard_values', $collection_giftCard->getData());
+
         return $this;
     }
 
@@ -88,6 +89,8 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
                             $item['amount'] = 0;
                         }
                         $model->setData('action', $item['amount']);
+                        $model->setData('subtotal_from', $item['subtotal_from']);
+                        $model->setData('subtotal_to', $item['subtotal_to']);
                     }
                     $model->setData('type', $item['type']);
                     $model->setData('timer_id', $this->getId());
@@ -110,6 +113,7 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
                     $model_giftCard->setData('id', null);
                 }
             }
+
         }
         return $this;
     }
@@ -137,6 +141,7 @@ class AW_Eventdiscount_Model_Timer extends AW_Eventdiscount_Model_Timer_Abstract
 
         $collection_trigger = Mage::getModel('aweventdiscount/trigger')->getCollection();
         $collection_trigger->deleteByTimerId($this->getId());
+
         return $this;
     }
 

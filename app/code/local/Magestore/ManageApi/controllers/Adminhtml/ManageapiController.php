@@ -158,6 +158,22 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                                 Mage::helper('manageapi/target')->processAPI($_url, $start_date);
                             }
                         }
+                    } else if($api_name == 8) {
+                        $enable = $this->getHelperData()->getDataConfig('enable', 'share_a_sale');
+                        if($enable)
+                        {
+                            $url = $this->getHelperData()->getDataConfig('shareasale_api', 'share_a_sale');
+                            if($url != null)
+                            {
+                                $affiliateId = $this->getHelperData()->getDataConfig('affiliate_id', 'share_a_sale');
+                                $token = $this->getHelperData()->getDataConfig('token', 'share_a_sale');
+                                $start_date = date('m-d-Y', strtotime($start_date));
+                                $end_date = date('m-d-Y', strtotime($end_date));
+                                $_url = str_replace(array('{{affiliate_id}}', '{{token}}', '{{start_date}}', '{{end_date}}'), array($affiliateId, $token, $start_date, $end_date), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">Shareasale API</a> ';
+                                Mage::helper('manageapi/shareasale')->processAPI($_url, $start_date);
+                            }
+                        }
                     }
                 }
 

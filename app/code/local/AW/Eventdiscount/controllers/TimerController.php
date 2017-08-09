@@ -228,4 +228,18 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
         $installer->endSetup();
         echo "success";
     }
+
+    public function updateDb8Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE `{$setup->getTable('aweventdiscount/action')}` ADD COLUMN `subtotal_from` FLOAT unsigned NOT NULL;
+            ALTER TABLE `{$setup->getTable('aweventdiscount/action')}` ADD COLUMN `subtotal_to` FLOAT unsigned NOT NULL;
+            ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `amount_text` VARCHAR(255);
+		");
+        $installer->endSetup();
+        echo "success";
+    }
 }

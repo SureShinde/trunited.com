@@ -266,11 +266,10 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
         $collection = Mage::getModel('trugiftcard/transaction')->getCollection()
             ->addFieldToFilter('action_type', Magestore_TruGiftCard_Model_Type::TYPE_TRANSACTION_SHARING)
             ->addFieldToFilter('status', Magestore_TruGiftCard_Model_Status::STATUS_TRANSACTION_PENDING)
+            ->addFieldToFilter('expiration_date', array('notnull' => true))
             ->setOrder('transaction_id', 'desc')
         ;
 
-        Mage::log('Check Expiry Date - ' . date('d-m-Y H:i:s', time()) . ' - Quantity: ' . sizeof($collection), null, 'truGiftCardExpirationDate.log');
-        zend_debug::dump($collection->getData());
         if (sizeof($collection) > 0) {
             foreach ($collection as $transaction) {
                 $expiration_date = strtotime($transaction->getExpirationDate());
@@ -292,7 +291,7 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
                     else {
                         $orders = $this->getCollectionOrderByCustomer(
                             $transaction->getReceiverCustomerId(),
-                            $expiration_date,
+                            strtotime($transaction->getCreatedTime()),
                             $transaction
                         );
 
@@ -331,7 +330,6 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
                     }
                 }
             }
-            exit;
         }
     }
 
@@ -360,7 +358,7 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
             ->addFieldToFilter('state', array('in' => Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates()))
             ->addFieldToFilter('status', array('in' => array(
                 Mage_Sales_Model_Order::STATE_COMPLETE,
-                Mage_Sales_Model_Order::STATE_PROCESSING
+                Mage_Sales_Model_Order::STATE_PROCESSING,
             )))
             ->addFieldToFilter('created_at', array('from' => date('Y-m-d 00:00:00', $expiration_date), 'to' => date('Y-m-d 23:59:59', strtotime(now()))))
             ->setOrder('created_at', 'desc');
@@ -398,7 +396,6 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
     public function compareExpireDate($start_time, $end_time)
     {
         $sub = $end_time - $start_time;
-
         if ($sub < 0)
             return false;
 
