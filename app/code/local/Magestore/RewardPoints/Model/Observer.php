@@ -317,13 +317,7 @@ class Magestore_RewardPoints_Model_Observer
             if ($maxEarnedRefund > $order->getRewardpointsEarn()) {
                 $maxEarnedRefund = $order->getRewardpointsEarn();
             }
-            $maxEarnedRefund += (int)Mage::getResourceModel('rewardpoints/transaction_collection')
-                ->addFieldToFilter('action', 'earning_creditmemo')
-                ->addFieldToFilter('order_id', $order->getId())
-                ->getFieldTotal();
-            if ($maxEarnedRefund > $order->getRewardpointsEarn()) {
-                $maxEarnedRefund = $order->getRewardpointsEarn();
-            }
+
             $refundPoints = min($refundPoints, $maxEarnedRefund);
             $creditmemo->setRefundEarnedPoints(max($refundPoints, 0));
             $creditmemo->setRewardpointsEarn($creditmemo->getRefundEarnedPoints());//Hai.Tran
@@ -360,10 +354,12 @@ class Magestore_RewardPoints_Model_Observer
         }
         
         // Deduce earned points
+
         if ($creditmemo->getRefundEarnedPoints() > 0) {
             if (empty($customer)) {
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
             }
+
             if ($customer->getId()) {
                 Mage::helper('rewardpoints/action')->addTransaction(
                     'earning_creditmemo', $customer, $creditmemo

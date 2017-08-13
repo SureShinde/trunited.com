@@ -336,4 +336,19 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         $installer->endSetup();
         echo "success";
     }
+
+    public function updateDb5Action(){
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("");
+
+        $installer->getConnection()->addColumn($setup->getTable('sales/order'), 'rewardpoints_pickup', 'decimal(12,4) NULL default 0');
+        $installer->getConnection()->addColumn($setup->getTable('sales/order_item'), 'rewardpoints_pickup', 'decimal(12,4) NULL default 0');
+        $installer->getConnection()->addColumn($setup->getTable('sales/invoice'), 'rewardpoints_pickup', 'decimal(12,4) NULL default 0');
+        $installer->getConnection()->addColumn($setup->getTable('sales/creditmemo'), 'rewardpoints_pickup', 'decimal(12,4) NULL default 0');
+
+        $installer->endSetup();
+        echo "success";
+    }
 }

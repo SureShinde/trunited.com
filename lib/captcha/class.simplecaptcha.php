@@ -240,5 +240,3 @@ function colorDecode( $hex ){
 
 
 }
-
-?>

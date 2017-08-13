@@ -24,51 +24,520 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php 
+<?php
 
 $smcode = Mage::getSingleton('checkout/session')->getQuote()->getShippingAddress()->getShippingMethod();
 if (!($_shippingRateGroups = $this->getShippingRates())): ?>
     <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else: ?>
-    <?php $i=0;?>
+    <?php $i = 0; ?>
     <dl class="sp-methods">
-        <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-            <?php $i++;?>
+        <?php $_sole = count($_shippingRateGroups) == 1;
+        foreach ($_shippingRateGroups as $code => $_rates): ?>
+            <?php $i++; ?>
             <dt><?php echo $this->getCarrierName($code) ?></dt>
             <dd>
                 <ul>
-                    <?php $j=0;?>
-                    <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
-                    <?php $j++;?>
-                    <li>
-                        <?php if ($_rate->getErrorMessage()): ?>
-                            <ul class="messages"><li class="error-msg"><ul><li><?php echo $_rate->getErrorMessage() ?></li></ul></li></ul>
-                        <?php else: ?>
-                            <?php if ($_sole) : ?>
-                                <span class="no-display"><input class="validate-one-required-by-name" name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" checked="checked" onclick="save_shipping_method(shipping_method_url, update_shipping_payment, update_shipping_review);" /></span>
+                    <?php $j = 0; ?>
+                    <?php $_sole = $_sole && count($_rates) == 1;
+                    foreach ($_rates as $_rate): ?>
+                        <?php $j++; ?>
+                        <li>
+                            <?php if ($_rate->getErrorMessage()): ?>
+                                <ul class="messages">
+                                    <li class="error-msg">
+                                        <ul>
+                                            <li><?php echo $_rate->getErrorMessage() ?></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             <?php else: ?>
-                                <?php if($i!=count($_shippingRateGroups) ||$j!=count($_rates)):?>
-                                    <style type="text/css">
-                                        #advice-validate-one-required-by-name-s_method_<?php echo$_rate->getCode()?>{
-                                            display: none !important;
-                                        }
-                                    </style>
-                                <?php endif;?>                                   
-                                <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if(($smcode == null && $j==1 && $code===Mage::getStoreConfig('onestepcheckout/general/default_shipping',Mage::app()->getStore()->getStoreId()))|| ($smcode !=null && $_rate->getCode() == $smcode)) echo ' checked="checked"';  ?> class="radio validate-one-required-by-name" onclick="save_shipping_method(shipping_method_url, update_shipping_payment, update_shipping_review);" />
-                            <?php endif; ?>
-                            <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
-                            <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
-                            <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
-                            <?php echo $_excl; ?>
-                            <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                            <?php endif; ?>
-                            </label>
-                       <?php endif ?>
-                    </li>
-                <?php endforeach; ?>
+                                <?php if ($_sole) : ?>
+                                    <span class="no-display"><input class="validate-one-required-by-name"
+                                                                    name="shipping_method" type="radio"
+                                                                    value="<?php echo $_rate->getCode() ?>"
+                                                                    id="s_method_<?php echo $_rate->getCode() ?>"
+                                                                    checked="checked"
+                                                                    onclick="save_shipping_method(shipping_method_url, update_shipping_payment, update_shipping_review);"/></span>
+                                <?php else: ?>
+                                    <?php if ($i != count($_shippingRateGroups) || $j != count($_rates)): ?>
+                                        <style type="text/css">
+                                            #advice-validate-one-required-by-name-s_method_<?php echo$_rate->getCode()?> {
+                                                display: none !important;
+                                            }
+                                        </style>
+                                    <?php endif; ?>
+                                    <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>"
+                                           id="s_method_<?php echo $_rate->getCode() ?>"<?php if (($smcode == null && $j == 1 && $code === Mage::getStoreConfig('onestepcheckout/general/default_shipping', Mage::app()->getStore()->getStoreId())) || ($smcode != null && $_rate->getCode() == $smcode)) echo ' checked="checked"'; ?>
+                                           class="radio validate-one-required-by-name"
+                                           onclick="save_shipping_method(shipping_method_url, update_shipping_payment, update_shipping_review);"/>
+                                <?php endif; ?>
+                                <label
+                                    for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $_rate->getMethodTitle() ?>
+                                    <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                                    <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                                    <?php echo $_excl; ?>
+                                    <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                        (<?php echo $this->__('Incl. Tax'); ?><?php echo $_incl; ?>)
+                                    <?php endif; ?>
+                                </label>
+                            <?php endif ?>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </dd>
         <?php endforeach; ?>
     </dl>
+    <?php $listStore = Mage::helper('storepickup')->echoAllStoreCheckoutToJson(Mage::app()->getStore()->getStoreId()); ?>
+    <script type="text/javascript">
+        <?php echo $listStore; ?>
+
+        if (typeof listStoreJson === "undefined" || listStoreJson === null) {
+            listStoreJson = [];
+        }
+
+        var mapOptions = {
+            zoom: 5,
+            center: {
+                latitude: 54.8,
+                longitude: 15.6
+            }
+        };
+        //Options for render store html
+        var storeOptions = {
+            imageMarkerIcon: '<?php echo Mage::getBaseUrl("media") . "storepickup/images/icon/{id}/resize/{icon}"; ?>',
+            storeTemplateId: 'storeBoxTemplate',
+            listStoreBoxId: 'storepickup-list-store-box',
+            storeIdItem: 'store-item',
+            storeClassItem: 'store-item'
+        };
+
+        var options = {
+            /* Edited by Vick - fix github #2 */
+            markerImages: JSON.parse('<?php echo Mage::helper('storepickup')->getMarkerImages(); ?>'),
+            /* End - Edited by Vick - fix github #2 */
+            googleKey: '<?php echo Mage::getModel("storepickup/shipping_storepickup")->getConfigData("gkey"); ?>',
+            mapOptions: mapOptions,
+            imageFullScreenMapSrc: '<?php echo $this->getSkinUrl("images/arrows-outside-1-128.png"); ?>',
+            radiusBarId: 'storepickup-slider-range',
+            radiusLabelId: 'storepickup-slider-amount',
+            maxRadius: '<?php echo $radiusMaxValue ?>',
+            storeOptions: storeOptions,
+            listStoreJson: listStoreJson,
+            unitSelectId: 'select_unit',
+            currentUnit: '<?php echo $currentUnit ?>',
+            allowRenderListStoreBox: true,
+            searchByDistanceInputId: 'input_search_by_distance',
+            searchByDistanceButtonId: 'btn_search_by_distance',
+            resetSearchByDistanceButtonId: 'btn_reset_distance',
+            searchByAreaInputId: 'input_search_by_area',
+            searchByAreaButtonId: 'btn_search_by_area',
+            searchOptionBoxId: 'dropdown-search-option',
+            searchMultiSelectOptionId: 'mutliSelect',
+            resetSearchByAreaButtonId: 'btn_reset_area',
+            geoYourLocationBtnId: 'widget-mylocation-button',
+            resetSearchByDateBtnId: 'btn_reset_date',
+            searchByDateInputId: 'input_search_by_date',
+            searchByDateButtonId: 'btn_search_by_date',
+            isCheckoutPage: true
+        };
+
+        if ($('select_store_pickup'))
+            $('select_store_pickup').remove();
+
+        var _storepickupElement1 = null;
+        var _storepickupElement2 = null;
+        var _storepickupTransport = null;
+        var _storepickupShippingtime = null;
+        if ($('store_map')) {
+            _googleMap = new magestore.storepickup.GoogleMapManager('store_map', options);
+            google.maps.event.trigger(_googleMap,'resize');
+            if (!$('select_store_pickup') && _googleMap.listStore.length) {
+                if ($('s_method_storepickup_storepickup')) {
+                    if (_storepickupElement1) {
+                        if ($('s_method_storepickup_storepickup').up('li')) {
+                            $('s_method_storepickup_storepickup').up('li').insert({
+                                bottom: _storepickupElement1
+                            });
+                            $('s_method_storepickup_storepickup').up('li').insert({
+                                bottom: _storepickupElement2
+                            });
+                            setupCalendar(_storepickupTransport);
+                            if ($('shipping_time'))
+                                $('shipping_time').observe('change', updateShippingTime);
+                            if (_storepickupShippingtime)
+                                $('shipping_time').value = _storepickupShippingtime;
+                            if (_googleMap.currentSystemValues.store)
+                                $('select_box_store_pickup').value = _googleMap.currentSystemValues.store.store_id;
+                        } else {
+                            $('s_method_storepickup_storepickup').up('dt').insert({
+                                bottom: _storepickupElement1
+                            });
+                            $('s_method_storepickup_storepickup').up('dt').insert({
+                                bottom: _storepickupElement2
+                            });
+                            setupCalendar(_storepickupTransport);
+                            if ($('shipping_time'))
+                                $('shipping_time').observe('change', updateShippingTime);
+                            if (_storepickupShippingtime)
+                                $('shipping_time').value = _storepickupShippingtime;
+                            if (_googleMap.currentSystemValues.store)
+                                $('select_box_store_pickup').value = _googleMap.currentSystemValues.store.store_id;
+                        }
+                        if (_googleMap.currentSystemValues.store)
+                            $('select_box_store_pickup').value = _googleMap.currentSystemValues.store.store_id;
+                    }
+
+                    if ($('selected_st_select_box')) {
+                        $('selected_st_select_box').innerHtml = '';
+                        $('selected_st_select_box').remove();
+                    }
+
+
+                    if ($('s_method_storepickup_storepickup').up('li')) {
+                        $('s_method_storepickup_storepickup').up('li').insert({
+                            bottom: new Element('div', {
+                                id: 'selected_st_select_box'
+                            })
+                        });
+                    } else {
+                        $('s_method_storepickup_storepickup').up('dt').insert({
+                            bottom: new Element('div', {
+                                id: 'selected_st_select_box'
+                            })
+                        });
+                    }
+                    addStoreSelectBoxNew($('selected_st_select_box'));
+                    addStoreOpenPopupButtonNew($('selected_st_select_box'));
+
+                    if ($('selected_st_info')) {
+                        $('selected_st_info').innerHtml = '';
+                        $('selected_st_info').remove();
+                        console.log('a');
+                    }
+
+                    if ($('s_method_storepickup_storepickup').up('li')) {
+                        $('s_method_storepickup_storepickup').up('li').insert({
+                            bottom: new Element('div', {
+                                id: 'selected_st_info'
+                            })
+                        });
+                    } else {
+                        $('s_method_storepickup_storepickup').up('dt').insert({
+                            bottom: new Element('div', {
+                                id: 'selected_st_info'
+                            })
+                        });
+                    }
+                    _googleMap.listStore.each(function (el) {
+                        if (el.store_id == storeDefault) {
+                            _googleMap.currentSystemValues.store = el;
+                            throw $break;
+                        }
+                    });
+                    applyStoreToCheckoutNew();
+                }
+            } else {
+                if ($('s_method_storepickup_storepickup')) {
+                    if ($('s_method_storepickup_storepickup').checked) {
+                        if ($('select_store_pickup'))
+                            $('select_store_pickup').show();
+                        if ($('select_box_store_pickup'))
+                            $('select_box_store_pickup').show();
+                        if ($('select_box_label'))
+                            $('select_box_label').show();
+                        if ($('selected_st_info'))
+                            $('selected_st_info').show();
+                        if ($$('.delivery').length)
+                            $$('.delivery').first().hide();
+                    } else {
+                        if ($$('.delivery').length)
+                            $$('.delivery').first().show();
+                        if ($('select_store_pickup'))
+                            $('select_store_pickup').hide();
+                        if ($('select_box_store_pickup'))
+                            $('select_box_store_pickup').hide();
+                        if ($('select_box_label'))
+                            $('select_box_label').hide();
+                        if ($('selected_st_info'))
+                            $('selected_st_info').hide();
+                    }
+                }
+            }
+        }
+
+        document.observe("dom:loaded", function() {
+            $('apply_store').observe('click', applyStoreToCheckoutNew);
+            $('cancel_store').observe('click', applyStoreToCheckoutNew);
+            $('apply_store1').observe('click', applyStoreToCheckoutNew);
+            $('cancel_store1').observe('click', applyStoreToCheckoutNew);
+        });
+
+        function addStoreSelectBoxNew(el) {
+            if ($('select_box_store_pickup'))
+                $('select_box_store_pickup').remove();
+
+            el.insert({
+                bottom: new Element('label', {
+                    id: 'select_box_label',
+                    class: 'required'
+                }).update(translateJson.Select_store)
+            });
+            el.insert({
+                bottom: new Element('select', {
+                    id: 'select_box_store_pickup',
+                    onchange: 'changeStoreSelectNew(this);',
+                    class: 'required-entry validate-select validation-passed'
+                })
+            });
+            $('select_box_store_pickup').insert({
+                bottom: new Element('option', {
+                    value: ''
+                }).update(translateJson.Select_a_store_to_pickup)
+            });
+            console.log(_googleMap.listStore);
+            _googleMap.listStore.each(function (el) {
+                $('select_box_store_pickup').insert({
+                    bottom: new Element('option', {
+                        value: el.store_id
+                    }).update(el.store_name)
+                });
+            });
+            if (_googleMap.currentSystemValues.store)
+                $('select_box_store_pickup').value = _googleMap.currentSystemValues.store.store_id;
+        }
+
+
+        function changeStoreSelectNew(element) {
+            if (!element.value) {
+                _googleMap.currentSystemValues.store = null;
+            } else {
+                console.log(_googleMap.listStore);
+                _googleMap.listStore.each(function (el) {
+                    if (el.store_id == element.value) {
+                        _googleMap.refreshAllMaker();
+                        _googleMap.currentSystemValues.store = el;
+                        throw $break;
+                    }
+                });
+            }
+
+            applyStoreToCheckoutNew();
+        }
+
+        function applyStoreToCheckoutNew() {
+            if ($('selected_st_info'))
+                $('selected_st_info').innerHTML = '';
+            if ($('popup_outer'))
+                $('popup_outer').hide();
+
+            if (_googleMap.currentSystemValues.store) {
+                new Ajax.Request(changeStoreUrl, {
+                    method: 'post',
+                    parameters: {
+                        store_id: _googleMap.currentSystemValues.store.store_id
+                    },
+                    onComplete: function (xhr) {
+                        if (xhr.responseText.isJSON()) {
+                            var price = xhr.responseText.evalJSON().shippingPrice;
+                            updateStoreShippingPriceNew(price);
+                        }
+                    }
+                });
+                storeDefault = _googleMap.currentSystemValues.store.store_id;
+                $('select_box_store_pickup').value = _googleMap.currentSystemValues.store.store_id;
+                $('selected_st_info').insert({
+                    bottom: '<div class="title store-address">' + '<h3>' + _googleMap.currentSystemValues.store.store_name + '</h3><span class="store-address-info">' + _googleMap.currentSystemValues.store.address + ', &nbsp' + _googleMap.currentSystemValues.store.city + ', &nbsp' + _googleMap.currentSystemValues.store.country_name + '</span>' + '</div>'
+                });
+                $('selected_st_info').insert({
+                    bottom: new Element('div', {
+                        id: 'store_date_time_box'
+                    })
+                });
+                if (pickupDateTime) {
+                    $('store_date_time_box').insert({
+                        bottom: shipping_date_div
+                    });
+                    $('store_date_time_box').insert({
+                        bottom: time_box
+                    });
+
+                    if ($('shipping_time')) {
+                        $('shipping_time').observe('change', updateShippingTimeNew);
+                    }
+
+                    if ($$('#shipping_date_div .ajax-loading-wait').first()) {
+                        $$('#shipping_date_div .ajax-loading-wait').first().show();
+                    } else {
+                        $('shipping_date').insert({
+                            after: ajax_loading_wait
+                        });
+                    }
+
+                    $('shipping_date').disabled = true;
+
+                    new Ajax.Request(disableDateUrl, {
+                        method: 'post',
+                        parameters: {
+                            store_id: _googleMap.currentSystemValues.store.store_id
+                        },
+                        onSuccess: setupCalendarNew
+                    });
+                }
+                return;
+            }
+            new Ajax.Request(changeStoreUrl, {
+                method: 'post',
+                parameters: {
+                    store_id: 0
+                },
+                onComplete: function (xhr) {
+                    updateStoreShippingPriceNew('');
+                }
+            });
+            $('select_box_store_pickup').value = '';
+        }
+
+        function updateStoreShippingPriceNew(price) {
+            var s_method = 's_method_storepickup_storepickup';
+            if ($(s_method) && $(s_method).up('li') && $(s_method).up('li').down('.price')) {
+                $(s_method).up('li').down('.price').update(price);
+            }
+        }
+
+        function setupCalendarNew(transport) {
+            _storepickupTransport = transport;
+            $$('#shipping_date_div .ajax-loading-wait').invoke('hide');
+            $('shipping_date').disabled = false;
+            var response = JSON.parse(transport.responseText);
+
+            if ($('shipping_date')) {
+                Calendar.setup({
+                    inputField: "shipping_date",
+                    ifFormat: calendarDateFormat,
+                    showsTime: false,
+                    electric: false,
+                    button: "shipping_date",
+                    singleClick: true,
+                    disableFunc: function (date) {
+                        var today = new Date();
+
+                        if (date.getFullYear() < today.getFullYear()) {
+                            return true;
+                        } else if (date.getMonth() < today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                            return true;
+                        } else if (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                            return true;
+                        }
+
+                        if (response.specialdate != null)
+                            if (response.specialdate.indexOf(parseFloat(date.print("%Y%m%d"))) !== -1) {
+                                return false;
+                            }
+                        if (response.holidaydate != null)
+                            if (response.holidaydate.indexOf(parseFloat(date.print("%Y%m%d"))) !== -1) {
+                                return 'holiday';
+                            }
+
+
+                        if (today.getDate() == date.getDate()) {
+                            return false;
+                        }
+                        for (i = 0; i < parseFloat(response.closed.length); i++) {
+                            if (response.closed[i] == date.getDay()) {
+                                return true;
+                            }
+                        }
+                    },
+                    onUpdate: function () {
+                        if ('time-box')
+                            $('time-box').show();
+
+                        if ($$('#time-box .ajax-loading-wait').first()) {
+                            $$('#time-box .ajax-loading-wait').first().show();
+                        } else {
+                            $('shipping_time').insert({
+                                after: ajax_loading_wait
+                            });
+                        }
+
+                        $('shipping_time').disabled = true;
+                        new Ajax.Request(selectTimeUrl, {
+                            method: 'post',
+                            parameters: {
+                                shipping_date: $F('shipping_date'),
+                                store_id: _googleMap.currentSystemValues.store.store_id
+                            },
+                            onSuccess: setupTimeBoxNew
+                        });
+                    }
+                });
+            }
+            if ($('shipping_date'))
+                $('shipping_date').show();
+            if ($('date-please-wait'))
+                $('date-please-wait').hide();
+            _storepickupElement1 = $('selected_st_select_box').clone(true);
+            _storepickupElement2 = $('selected_st_info').clone(true);
+        }
+
+        function updateShippingTimeNew() {
+            new Ajax.Request(changeTimeUrl, {
+                method: 'post',
+                parameters: {
+                    shipping_time: $F('shipping_time')
+                },
+                onSuccess: function () {
+                    if ($('s_method_storepickup_storepickup'))$('s_method_storepickup_storepickup').click();
+                    _storepickupElement2 = $('selected_st_info').clone(true);
+                    _storepickupShippingtime = $F('shipping_time');
+                }
+            });
+        }
+
+        function setupTimeBoxNew(transport) {
+            try {
+                $$('#time-box .ajax-loading-wait').invoke('hide');
+                $('shipping_time').disabled = false;
+                alert(JSON.parse(transport.responseText).message);
+                $('shipping_date').value = '';
+                $('time-box').hide();
+                _storepickupElement2 = $('selected_st_info').clone(true);
+                return;
+            } catch (e) {
+                $('shipping_time').innerHTML = transport.responseText;
+                if ('time-box')
+                    $('time-box').show();
+            }
+        }
+
+        function addStoreOpenPopupButtonNew(el) {
+            el.insert({
+                bottom: new Element('a', {
+                    id: 'select_store_pickup',
+                    href: 'javascript:openStorepickupMapNew();'
+                }).update(translateJson.Select_store_by_map)
+            });
+        }
+
+        function openStorepickupMapNew() {
+            if ($('popup_outer'))
+                $('popup_outer').show();
+            if ($('popup'))
+                $('popup').show();
+            if ($('black_background'))
+                $('black_background').show();
+            if ($('selected_store'))
+                $('selected_store').hide();
+            _googleMap.mapTriggerResize();
+            _googleMap.selectStoreCheckout();
+            _googleMap.map.fitBounds(_googleMap.bounds);
+            if (_googleMap.getCurrentStore()) {
+                _googleMap.map.setZoom(_googleMap.getCurrentStore().getZoomLevel());
+                _googleMap.map.panTo(_googleMap.getCurrentStore().getMarker().getPosition());
+                google.maps.event.trigger(_googleMap.getCurrentStore().getMarker(), 'click');
+            }
+        }
+
+    </script>
 <?php endif; ?>

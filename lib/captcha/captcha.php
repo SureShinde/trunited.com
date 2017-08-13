@@ -49,7 +49,4 @@ $config['Transparency']=50;
 $captcha = new SimpleCaptcha($config);
 
 //Save the code as a session dependent string
-$_SESSION['string'] = $captcha->Code;
-
-
-?>
+//$_SESSION['string'] = $captcha->Code;

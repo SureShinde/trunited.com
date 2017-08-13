@@ -370,6 +370,9 @@
         </pdf>
         <fieldsets>
             <sales_convert_quote_address>
+                <rewardpoints_pickup>
+                    <to_order>*</to_order>
+                </rewardpoints_pickup>
                 <rewardpoints_earn>
                     <to_order>*</to_order>
                 </rewardpoints_earn>
@@ -405,6 +408,9 @@
                 </rewardpoints_shipping_hidden_tax_amount-->
             </sales_convert_quote_address>
             <sales_convert_quote_item>
+                <!--<rewardpoints_pickup_bonus>-->
+                    <!--<to_order_item>*</to_order_item>-->
+                <!--</rewardpoints_pickup_bonus>-->
                 <rewardpoints_earn>
                     <to_order_item>*</to_order_item>
                 </rewardpoints_earn>
@@ -424,6 +430,11 @@
                     <to_order>*</to_order>
                 </rewardpoints_hidden_tax_amount-->
             </sales_convert_quote_item>
+            <!--<sales_convert_order_address>-->
+                <!--<rewardpoints_pickup_bonus>-->
+                    <!--<to_quote_address>*</to_quote_address>-->
+                <!--</rewardpoints_pickup_bonus>-->
+            <!--</sales_convert_order_address>-->
         </fieldsets>
         
         <!-- Reward Points Action Config -->

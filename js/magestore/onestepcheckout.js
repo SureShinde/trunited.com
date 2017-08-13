@@ -272,6 +272,7 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
     var form = $('one-step-checkout-form');
     var shipping_method = $RF(form, 'shipping_method');
     var payment_method = $RF(form, 'payment[method]');
+    var delivery_container = $('delivery-type-container');
 
     //reload payment only if this feature is enabled in admin - show image loading
     if (update_shipping_payment == 1) {
@@ -288,6 +289,8 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
     {
         trunitedDiscountLoad();
     }
+
+
 
     var parameters = {
         shipping_method: shipping_method,
@@ -332,6 +335,14 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     }
                 }
 
+                if(delivery_container){
+                    if(response.hide_trubox){
+                        delivery_container.hide();
+                    } else {
+                        delivery_container.show();
+                    }
+                }
+
                 if($('order-trunited-discounts-section') != null)
                 {
                     trunitedDiscountShow();
@@ -360,6 +371,37 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                 {
                     $('onestepcheckout-button-place-order-text').update(response.text_button_payment);
                 }
+
+                if(shipping_method != 'storepickup_storepickup'){
+                    if($('shipping_date')){
+                        $('shipping_date').removeClassName('required-entry');
+                        $('shipping_date').removeClassName('validation-failed');
+                    }
+
+                    if($('shipping_time')){
+                        $('shipping_time').removeClassName('required-entry');
+                        $('shipping_time').removeClassName('validation-failed');
+                    }
+
+                    if($('select_box_store_pickup')) {
+                        $('select_box_store_pickup').removeClassName('required-entry');
+                        $('select_box_store_pickup').removeClassName('validate-select');
+                        $('select_box_store_pickup').removeClassName('validation-failed');
+                    }
+                } else {
+                    if($('shipping_date')){
+                        $('shipping_date').addClassName('required-entry');
+                    }
+
+                    if($('shipping_time')){
+                        $('shipping_time').addClassName('required-entry');
+                    }
+
+                    if($('select_box_store_pickup')){
+                        $('select_box_store_pickup').addClassName('required-entry');
+                        $('select_box_store_pickup').addClassName('validate-select');
+                    }
+                }
             }
         }
     });
@@ -383,7 +425,6 @@ function checkvalidEmail() {
     $('onestepcheckout-button-place-order').disabled = false;
     $('onestepcheckout-button-place-order').addClassName('onestepcheckout-btn-checkout');
     $('onestepcheckout-button-place-order').removeClassName('place-order-loader');
-
 }
 function updateSection(transport) {
     var response = getResponseText(transport);

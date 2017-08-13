@@ -32,6 +32,7 @@
     $_spendingPoint = $this->getSpendingPoint();
     $_earningPoints = $this->getEarningPoint();
     $_bonusPoints = $this->getBonusPoint();
+    $_bonusPointsPickup = $this->getBonusPickup();
     $_earningPointsByCoupon = Mage::helper('rewardpoints/calculation_earning')->getEarningPointByCoupon();
     $session = Mage::getSingleton('customer/session');
     $_dt = $session->getData('event_discount');
@@ -77,11 +78,23 @@
                 <tr>
                     <td class="a-right" colspan="<?php echo $this->getColspan() ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
                         <strong style="font-size: 13px;">
-                            <?php echo $this->__('Bonus:'); ?>
+                            <?php echo $this->__('Bonus'); ?>
 						</strong>
                     </td>
                     <td class="a-right" style="min-width: 70px;<?php echo $this->getTotal()->getStyle() ?>">
                         <?php echo $_pointHelper->format($_bonusPoints) ?>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <?php if ($_bonusPointsPickup): ?>
+                <tr>
+                    <td class="a-right" colspan="<?php echo $this->getColspan() ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
+                        <strong style="font-size: 13px;">
+                            <?php echo Mage::helper('storepickup')->getDataConfig('bonus_label'); ?>
+                        </strong>
+                    </td>
+                    <td class="a-right" style="min-width: 70px;<?php echo $this->getTotal()->getStyle() ?>">
+                        <?php echo $_pointHelper->format($_bonusPointsPickup) ?>
                     </td>
                 </tr>
             <?php endif ?>

@@ -76,6 +76,11 @@ class Magestore_Other_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $cart = Mage::getModel('checkout/session')->getQuote();
         $dropShips = $this->getListDropShipSku();
+
+        $shipping_method = $cart->getShippingAddress()->getShippingMethod();
+        if(Mage::helper('storepickup')->echoAllStoreCheckoutToJson(Mage::app()->getStore()->getId()) && strcasecmp($shipping_method, 'storepickup_storepickup') == 0)
+            return true;
+
         if($dropShips == null)
             return false;
 

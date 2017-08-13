@@ -13,11 +13,9 @@
             </action>
         </reference>
     </default>	
-    <!--        Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2-->
-    <adminhtml_magenotification_feedback_index>
+    <adminhtml_notification_feedback_index>
         <reference name="content">
             <block type="magenotification/adminhtml_feedback" name="extension_feedback" />
         </reference>
-    </adminhtml_magenotification_feedback_index>
-
+    </adminhtml_notification_feedback_index>
 </layout>

@@ -55,6 +55,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
             'width' => '80px',
             'type'  => 'text',
             'index' => 'increment_id',
+			'filter_index' => 'main_table.increment_id',
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
@@ -78,11 +79,13 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
         $this->addColumn('billing_name', array(
             'header' => Mage::helper('sales')->__('Bill to Name'),
             'index' => 'billing_name',
+			'filter_index' => 'main_table.billing_name',
         ));
 
         $this->addColumn('shipping_name', array(
             'header' => Mage::helper('sales')->__('Ship to Name'),
             'index' => 'shipping_name',
+			'filter_index' => 'main_table.shipping_name',
         ));
 
         $this->addColumn('base_grand_total', array(
@@ -90,6 +93,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
             'index' => 'base_grand_total',
             'type'  => 'currency',
             'currency' => 'base_currency_code',
+			'filter_index' => 'main_table.base_grand_total',
         ));
 
         $this->addColumn('grand_total', array(
@@ -97,6 +101,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
             'index' => 'grand_total',
             'type'  => 'currency',
             'currency' => 'order_currency_code',
+			'filter_index' => 'main_table.grand_total',
         ));
 
         $this->addColumn('created_by', array(
@@ -115,6 +120,7 @@ class Magestore_TruBox_Block_Adminhtml_Sales_Order_Override_Grid extends Mage_Ad
             'index' => 'status',
             'type'  => 'options',
             'width' => '70px',
+			'filter_index' => 'main_table.status',
             'options' => Mage::getSingleton('sales/order_config')->getStatuses(),
         ));
 
