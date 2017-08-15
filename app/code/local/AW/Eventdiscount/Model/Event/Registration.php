@@ -52,15 +52,6 @@ class AW_Eventdiscount_Model_Event_Registration extends AW_Eventdiscount_Model_E
             } else {
                 if($event->getCustomer()->getId() > 0)
                 {
-//                    $newEvent= new Varien_Object();
-//                    $newEvent->setData('customer', $event->getCustomer());
-//                    $newEvent->setData('store_id', Mage::app()->getStore()->getId());
-//                    $newEvent->setData('event_type', AW_Eventdiscount_Model_Event::PROMOTION);
-//                    $newEvent->setData('quote', new Varien_Object());
-//                    $this->collectTimersByEvent($newEvent);
-//                    $this->filterByTrigger($newEvent);
-//                    Mage::dispatchEvent('aweventdiscount_event_promotion', $newEvent->toArray());
-//                    $this->activateTriggers($newEvent);
                     $is_promotion = true;
                 }
             }

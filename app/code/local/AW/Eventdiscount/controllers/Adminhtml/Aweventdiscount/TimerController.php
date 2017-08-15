@@ -189,7 +189,17 @@ class AW_Eventdiscount_Adminhtml_Aweventdiscount_TimerController extends Mage_Ad
     public function saveAction()
     {
         if ($data = $this->getRequest()->getPost()) {
-            $data['duration'] = $data['duration'][0] * 3600 + $data['duration'][1] * 60 + $data['duration'][2];
+            if(strcasecmp($data['event'], AW_Eventdiscount_Model_Event::REGISTRATION) == 0 && $data['is_end_month']){
+                $last_day_month = date('Y-m-d 23:59:59',strtotime(date("Y-m-t", time())));
+                $seconds = Mage::helper('eventdiscount')->calculateDuration(time(), strtotime($last_day_month));
+                if(!$seconds){
+                    throw new Exception($this->__('Something was wrong with this action'));
+                }
+                $data['duration'] = $seconds;
+            } else {
+                $data['duration'] = $data['duration'][0] * 3600 + $data['duration'][1] * 60 + $data['duration'][2];
+            }
+
             try {
                 if ($data['duration'] == 0) {
                     throw new Exception($this->__('Duration should be greater than 1 second.'));

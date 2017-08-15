@@ -413,4 +413,27 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
 
         }
     }
+
+    public function calculateDuration($start_time, $end_time)
+    {
+        $sub = $end_time - $start_time;
+
+        if ($sub < 0)
+            return false;
+
+        $diff = abs($sub);
+
+        $years = floor($diff / (365 * 60 * 60 * 24));
+        $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+        $days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+        $hours = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24) / (60 * 60));
+        $minutes = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60) / 60);
+        $seconds = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60 - $minutes * 60));
+
+        if ($years > 0 || $months > 0) {
+            return false;
+        } else {
+            return $days * 24 * 60 * 60 + $hours * 60 * 60 + $minutes * 60 + $seconds;
+        }
+    }
 }
