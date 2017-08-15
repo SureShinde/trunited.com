@@ -2,18 +2,18 @@
 
 /**
  * Magestore
- * 
+ *
  * NOTICE OF LICENSE
- * 
+ *
  * This source file is subject to the Magestore.com license that is
  * available through the world-wide-web at this URL:
  * http://www.magestore.com/license-agreement.html
- * 
+ *
  * DISCLAIMER
- * 
+ *
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPoints
  * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
@@ -22,7 +22,7 @@
 
 /**
  * Rewardpoints Spend for Order by Point Model
- * 
+ *
  * @category    Magestore
  * @package     Magestore_RewardPoints
  * @author      Magestore Developer
@@ -32,7 +32,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
 
     /**
      * Change collect total to Event to ensure earning is last runned total
-     * 
+     *
      * @param type $observer
      */
     public function salesQuoteCollectTotalsAfter($observer) {
@@ -44,7 +44,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             if ($quote->isVirtual() && $address->getAddressType() == 'shipping') {
                 continue;
             }
-            $this->collect($address, $quote); 
+            $this->collect($address, $quote);
         }
     }
 
@@ -55,7 +55,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
 
     /**
      * collect reward points that customer earned (per each item and address) total
-     * 
+     *
      * @param Mage_Sales_Model_Quote_Address $address
      * @param Mage_Sales_Model_Quote $quote
      * @return Magestore_RewardPoints_Model_Total_Quote_Point
@@ -80,7 +80,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
         } else {
             $address = $quote->getShippingAddress();
         }
-        
+
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_before', array(
             'address' => $address,
         ));
@@ -97,7 +97,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             }
             $baseGrandTotal = max(0, $baseGrandTotal);
             $earningPoints = Mage::helper('rewardpoints/calculation_earning')->getRateEarningPoints(
-                    $baseGrandTotal, $quote->getStoreId()
+                $baseGrandTotal, $quote->getStoreId()
             );
             if ($earningPoints > 0) {
                 $address->setRewardpointsEarn($earningPoints);
@@ -107,46 +107,65 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             $this->_updateEarningPoints($address);
         }
 
+//        zend_debug::dump('BEFORE: '.$address->getRewardpointsEarn());
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));
+//        zend_debug::dump('AFTER: '.$address->getRewardpointsEarn());
 
         //Shopping Cart Earning Rule Points
         $shoppingCartRulePoints = Mage::helper('rewardpointsrule/calculation_earning')
             ->getShoppingCartPoints($quote);
-		
-		//TruBox Bonus Points
-		$bonusPoints = 0;
 
-		$earningPoints = $address->getRewardpointsEarn();
+        //TruBox Bonus Points
+        $bonusPoints = 0;
+        $bonusPickup = 0;
+
+        $earningPoints = $address->getRewardpointsEarn();
         $customer_id = $admin_session->getOrderCustomerId();
 
-		if(Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId())){
-			if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())
-            || ($this->checkIsAdmin() && isset($customer_id) && $customer_id > 0)){
-				$bonusPoints = ceil(0.1*($earningPoints-$shoppingCartRulePoints));
-			}
-		}
-		
-        //Coupon Bonus Points
-		$checkCouponCode = Mage::getModel('salesrule/rule')->load(11)->getCouponCode();
-		if($quote->getCouponCode() == $checkCouponCode){
-			$bonusPoints += 5;
-		}
+        if(Mage::getStoreConfig('onestepcheckout/giftwrap/enable_bonuspoints', Mage::app()->getStore()->getId())){
+            if((Mage::getSingleton('checkout/session')->getData('delivery_type') == 1) && (!$quote->isVirtual())
+                || ($this->checkIsAdmin() && isset($customer_id) && $customer_id > 0)){
+                $bonusPoints = ceil(0.1*($earningPoints-$shoppingCartRulePoints));
+            }
+        }
 
-      /*  zend_debug::dump($earningPoints - $shoppingCartRulePoints);
-        zend_debug::dump($bonusPoints);
-        zend_debug::dump($shoppingCartRulePoints);
-        exit;*/
-		$address->setRewardpointsBonus($bonusPoints + $shoppingCartRulePoints);
-		$address->setRewardpointsEarn($earningPoints + $bonusPoints);
-        
+        //Coupon Bonus Points
+        $checkCouponCode = Mage::getModel('salesrule/rule')->load(11)->getCouponCode();
+        if($quote->getCouponCode() == $checkCouponCode){
+            $bonusPoints += 5;
+        }
+
+        if(Mage::helper('storepickup')->getDataConfig('bonus_enable')){
+            $bonus_type = Mage::helper('storepickup')->getDataConfig('bonus_type');
+            $bonus_amount = Mage::helper('storepickup')->getDataConfig('bonus_amount');
+            if($bonus_type == Magestore_Storepickup_Model_Source_Bonus::BONUS_TYPE_FIXED)
+                $bonusPickup += $bonus_amount;
+            else if($bonus_type == Magestore_Storepickup_Model_Source_Bonus::BONUS_TYPE_PERCENT) {
+                $bonusPickup += ceil(($bonus_amount * ($earningPoints-$shoppingCartRulePoints)) / 100);
+            }
+        }
+
+        $shipping_method = $quote->getShippingAddress()->getShippingMethod();
+        if(strcasecmp($shipping_method, 'storepickup_storepickup') == 0 && Mage::helper('storepickup')->echoAllStoreCheckoutToJson()){
+            $bonusPoints = 0;
+            $address->setRewardpointsBonus(0);
+            $address->setRewardpointsPickup($bonusPickup);
+        } else {
+            $address->setRewardpointsBonus($bonusPoints + $shoppingCartRulePoints);
+            $address->setRewardpointsPickup(0);
+            $bonusPickup = 0;
+        }
+
+        $address->setRewardpointsEarn($earningPoints + $bonusPoints + $bonusPickup);
+        Mage::log('BONUS ' . $address->getRewardpointsBonus().' - PICKUP: '.$address->getRewardpointsPickup().' - EARN: '.$address->getRewardpointsEarn(), null, 'bonus.log');
         return $this;
     }
 
     /**
      * update earning points for address items
-     * 
+     *
      * @param Mage_Sales_Model_Quote_Address $address
      * @return Magestore_RewardPoints_Model_Total_Quote_Earning
      */
@@ -175,7 +194,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             }
         }
         $earnpointsForShipping = Mage::getStoreConfig(
-                        Magestore_RewardPoints_Helper_Calculation_Earning::XML_PATH_EARNING_BY_SHIPPING, $address->getQuote()->getStoreId()
+            Magestore_RewardPoints_Helper_Calculation_Earning::XML_PATH_EARNING_BY_SHIPPING, $address->getQuote()->getStoreId()
         );
         if ($earnpointsForShipping) {
             $baseItemsPrice += $address->getBaseShippingAmount() + $address->getBaseShippingTaxAmount() - $address->getMagestoreBaseDiscountForShipping();
@@ -214,7 +233,7 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
                 $item->setRewardpointsEarn($itemEarning);
             }
         }
-        
+
         return $this;
     }
 

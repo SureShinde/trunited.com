@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+<!--
+  ~ Magestore
+  ~
+  ~ NOTICE OF LICENSE
+  ~
+  ~ This source file is subject to the Magestore.com license that is
+  ~ available through the world-wide-web at this URL:
+  ~ http://www.magestore.com/license-agreement.html
+  ~
+  ~ DISCLAIMER
+  ~
+  ~ Do not edit or add to this file if you wish to upgrade this extension to newer
+  ~ version in the future.
+  ~
+  ~ @category    Magestore
+  ~ @package     Magestore_Storepickup
+  ~ @module      Storepickup
+  ~ @author      Magestore Developer
+  ~
+  ~ @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
+  ~ @license     http://www.magestore.com/license-agreement.html
+  ~
+  -->
+
+<config>
+    <sections>
+        <carriers>
+            <groups>
+                <storepickup translate="label" module="storepickup">
+                    <label>Store Pickup</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>storepickup/adminhtml_system_config_form_fieldset</frontend_model>
+                    <sort_order>12</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <general_configuration_separator translate="label comment">
+                            <label>General</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>storepickup/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </general_configuration_separator>
+                        <active translate="label">
+                            <label>Enable Store Pickup</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <display_allstores translate="label">
+                            <label>Store List link shown in frontend</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_displaystores</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </display_allstores>
+                        <gkey translate="label">
+                            <label>Google Map key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                <model>storepickup/adminhtml_comment</model>
+                            </comment>
+                        </gkey>
+                        <store_list_configuration_separator translate="label comment">
+                            <label>Store List</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>storepickup/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </store_list_configuration_separator>
+
+                        <description translate="label">
+                            <label>Description</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description>
+                        <search_tabs translate="label">
+                            <label>Search Tab</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>storepickup/source_listsearchtabs</source_model>
+                            <sort_order>37</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </search_tabs>
+                        <searchby translate="label">
+                            <label>Store Search</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>40</sort_order>
+                            <source_model>storepickup/source_searchby</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </searchby>
+                        <maxradius translate="label">
+                            <label>Maximum Radius</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>42</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number validate-greater-than-zero</validate>
+                        </maxradius>
+                        <systemunit translate="label">
+                            <label>Unit of distance</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>43</sort_order>
+                            <source_model>storepickup/source_systemunit</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Unit to measure distance between store and customer</comment>
+                        </systemunit>
+
+
+                        <checkout_configuration_separator translate="label comment">
+                            <label>Checkout</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>storepickup/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </checkout_configuration_separator>
+                        <title translate="label">
+                            <label>Carrier Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>51</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Carrier title is shown in Shipping Method stage at checkout</comment>
+                        </title>
+                        <shipping_method_title translate="label">
+                            <label>Method Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Method title is shown in Shipping Method stage at checkout</comment>
+                        </shipping_method_title>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                        <storedefault translate="label">
+                            <label>Default store at checkout</label>
+                            <sort_order>53</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_defaultstore</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </storedefault>
+                        <display_timedate translate="label">
+                            <label>Display pickup time/date</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Allow customers to select pickup date and time at checkout</comment>
+                        </display_timedate>
+                        <time_format translate="label">
+                            <label>Time format</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_timeformat</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Set format of shipping time and store’s working time</comment>
+                            <depends>
+                                <display_timedate>1</display_timedate>
+                            </depends>
+                        </time_format>
+
+                        <sallowspecific_payment translate="label">
+                            <label>Applicable payment method(s)</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>70</sort_order>
+                            <source_model>storepickup/source_selectorpayment</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select payment methods applied to Store Pickup</comment>
+                        </sallowspecific_payment>
+                        <specificpayment translate="label">
+                            <label>Select applicable payment methods</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>75</sort_order>
+                            <source_model>storepickup/source_payment</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <sallowspecific_payment>1</sallowspecific_payment>
+                            </depends>
+                        </specificpayment>
+                        <filter_radius translate="label">
+                            <label>Filtering By Radius</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>76</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </filter_radius>
+                        <filter_measure translate="label">
+                            <label>Filtering Measure</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>77</sort_order>
+                            <source_model>storepickup/source_measure</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </filter_measure>
+                        <bonus_enable translate="label">
+                            <label>Enable Bonus Pickup</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>78</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </bonus_enable>
+                        <bonus_amount translate="label">
+                            <label>Bonus Amount</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>79</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bonus_amount>
+                        <bonus_type translate="label">
+                            <label>Bonus Type</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>80</sort_order>
+                            <source_model>storepickup/source_bonus</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bonus_type>
+                        <bonus_label>
+                            <label>Bonus Label</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>81</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </bonus_label>
+
+                        <email_configuration_separator translate="label comment">
+                            <label>Email Template</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>storepickup/adminhtml_system_config_form_field_separator</frontend_model>
+                            <margin_top>10px</margin_top>
+                            <sort_order>190</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </email_configuration_separator>
+                        <!-- Edit by Tien -->
+                        <storeowner_email_template translate="label">
+                            <label>To store owner when pickup order is created</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_emailtemplate</source_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </storeowner_email_template>
+                        <shopadmin_email_template translate="label">
+                            <label>To admin when pickup order is created</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_emailtemplate</source_model>
+                            <sort_order>210</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shopadmin_email_template>
+                        <storeowner_email_customer translate="label">
+                            <label>To store-owner and web-shop admin when customers contact</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_emailtemplate</source_model>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <!--                                <comment>used for customers to contact your store</comment>-->
+                        </storeowner_email_customer>
+                        <storeowner_email_change_status translate="label">
+                            <label>To store owner when pickup order status is changed</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>storepickup/source_emailtemplate</source_model>
+                            <sort_order>230</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <!--                                <comment>Email template sent to store-owner when order status is changed</comment>-->
+                        </storeowner_email_change_status>
+                        <!-- End by Tien -->
+                    </fields>
+                </storepickup>
+            </groups>
+        </carriers>
+    </sections>
+</config>

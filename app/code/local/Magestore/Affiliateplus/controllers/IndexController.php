@@ -220,6 +220,14 @@ class Magestore_Affiliateplus_IndexController extends Mage_Core_Controller_Front
         if ($this->_getAccountHelper()->accountNotLogin())
             return $this->_redirect('affiliateplus/account/login');
 
+        if(Mage::getStoreConfig('trugiftcard/transfer/enable_term')){
+            $agree = $this->getRequest()->getParam('transfer_term');
+            if($agree == null || $agree != 'on'){
+                $this->_getCoreSession()->addNotice($this->__('You have to agree the terms and conditions.'));
+                return $this->_redirect('affiliateplus/index/payments');
+            }
+        }
+
         $transfer_amount = $this->getRequest()->getParam('transfer_amount');
         if ($transfer_amount < 0 || !is_numeric($transfer_amount)) {
             $this->_getCoreSession()->addNotice($this->__('Please enter a number greater than 0 to transfer.'));

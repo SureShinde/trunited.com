@@ -121,6 +121,23 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit extends Mage_Adminhtml_Block_W
                 }
             }
 
+            function checkIsEndMonth(element){
+                var select_elements = document.getElementsByName('duration[]');
+                if(select_elements.length > 0){
+                    if(element.options[element.selectedIndex].value == 1) {
+                        select_elements.forEach(function(item, index){
+                            item.classList.remove('required-entry');
+                            item.disabled = true;
+                        });
+                    } else {
+                        select_elements.forEach(function(item, index){
+                            item.classList.add('required-entry');
+                            item.disabled = false;
+                        });
+                    }
+                }
+            }
+
             function switchFonts(input) {
                 if(input.checked){
                     $$('.aw_eventdiscount_timer')[0].style.color='#'+$('rule_color').value;

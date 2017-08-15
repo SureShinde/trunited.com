@@ -37,14 +37,18 @@ class Magestore_RewardPoints_Block_Adminhtml_Totals_Order_Label extends Mage_Adm
         $totalsBlock = $this->getParentBlock();
         $order = $totalsBlock->getOrder();
 		$bonusPoints = $order->getRewardpointsBonus();
+		$bonusPickupPoints = $order->getRewardpointsPickup();
 		if(!$bonusPoints)
 			$bonusPoints = 0;
-		
+
+        if(!$bonusPickupPoints)
+            $bonusPickupPoints = 0;
+
         if ($order->getRewardpointsEarn()) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'rewardpoints_earn_label',
                 'label' => $this->__('Earned Points'),
-                'value' => $order->getRewardpointsEarn() - $bonusPoints,
+                'value' => $order->getRewardpointsEarn() - $bonusPoints - $bonusPickupPoints,
                 'strong'        => true,
                 'is_formated'   => true,
             )), 'subtotal');
@@ -54,6 +58,16 @@ class Magestore_RewardPoints_Block_Adminhtml_Totals_Order_Label extends Mage_Adm
                 'code'  => 'rewardpoints_bonus_label',
                 'label' => $this->__('Bonus'),
                 'value' => $bonusPoints,
+                'strong'        => true,
+                'is_formated'   => true,
+            )), 'subtotal');
+        }
+
+        if ($bonusPickupPoints) {
+            $totalsBlock->addTotal(new Varien_Object(array(
+                'code'  => 'rewardpoints_pickup_label',
+                'label' => Mage::helper('storepickup')->getDataConfig('bonus_label'),
+                'value' => number_format($bonusPickupPoints),
                 'strong'        => true,
                 'is_formated'   => true,
             )), 'subtotal');

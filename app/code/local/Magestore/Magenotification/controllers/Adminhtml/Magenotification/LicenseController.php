@@ -1,7 +1,5 @@
 <?php
-/**
- * Changed By Adam 29/10/2015: Fix issue of SUPEE 6788 - in Magento 1.9.2.2
- */
+
 class Magestore_Magenotification_Adminhtml_Magenotification_LicenseController extends Mage_Adminhtml_Controller_Action
 {
 	public function upgradeAction()

@@ -206,7 +206,8 @@
             <block type="onestepcheckout/onestepcheckout" name="onestepcheckout" template="onestepcheckout/flatnew/3columns.phtml">
                 <block type="onestepcheckout/onestepcheckout" name="onestepcheckout_billing" as="onestepcheckout.billing" template="onestepcheckout/flatnew/onestepcheckout/billing.phtml" />
                 <block type="onestepcheckout/onestepcheckout" name="onestepcheckout_shipping" as="onestepcheckout.shipping" template="onestepcheckout/flatnew/onestepcheckout/shipping.phtml" />
-                <block type="checkout/onepage_shipping_method_available" name="onestepcheckout_shipping_method" as="onestepcheckout.shipping_method" template="onestepcheckout/flatnew/onestepcheckout/shipping_method.phtml"/>
+                <block type="checkout/onepage_shipping_method_available" name="onestepcheckout_shipping_method" as="onestepcheckout.shipping_method"
+                       template="onestepcheckout/flatnew/onestepcheckout/shipping_method.phtml" />
                 <block type="checkout/onepage_payment_methods" name="onestepcheckout_payment_method" as="onestepcheckout.payment_method" template="onestepcheckout/flatnew/onestepcheckout/payment_method.phtml">
                     <action method="setMethodFormTemplate">
                         <method>purchaseorder</method>
@@ -243,6 +244,13 @@
         </reference>
         <reference name="before_body_end">
             <block type="core/template" template="onestepcheckout/flatnew/login_popup.phtml" name="login-popup" />
+            <block type="storepickup/allstores" name="checkout_map" template="storepickup/checkoutmap.phtml">
+                <block type="storepickup/allstores" name="store_view" template="storepickup/store_view.phtml" />
+                <block type="core/template" name="searchbox2" template="storepickup/googlemap/searchbox2.phtml"  />
+                <block type="core/template" name="liststorebox" template="storepickup/googlemap/liststorebox.phtml"  />
+                <block type="core/template" name="gmap_template" template="storepickup/googlemap/gmap_template.phtml"  />
+                <block type="core/template" name="translateJs" template="storepickup/translateJs.phtml"  />
+            </block>
         </reference>
     </onestepcheckout_index_index_flat_30columns>
 	

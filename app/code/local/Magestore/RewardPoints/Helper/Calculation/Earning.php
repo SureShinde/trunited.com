@@ -197,11 +197,28 @@ class Magestore_RewardPoints_Helper_Calculation_Earning extends Magestore_Reward
         } else {
             $address = $quote->getShippingAddress();
         }
-        
+
         if($address->getRewardpointsBonus())
 			return $address->getRewardpointsBonus();
-		else
+        else
 			return 0;
 	}
+
+    public function getTotalPointsBonusPickup($quote = null)
+    {
+        if (is_null($quote)) {
+            $quote = $this->getQuote();
+        }
+        if ($quote->isVirtual()) {
+            $address = $quote->getBillingAddress();
+        } else {
+            $address = $quote->getShippingAddress();
+        }
+        $shipping_method = $quote->getShippingAddress()->getShippingMethod();
+        if($address->getRewardpointsPickup() && strcasecmp($shipping_method, 'storepickup_storepickup') == 0)
+            return $address->getRewardpointsPickup();
+        else
+            return 0;
+    }
 
 }

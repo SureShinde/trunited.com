@@ -63,6 +63,10 @@ class Magestore_RewardPoints_Model_Total_Invoice_Point extends Mage_Sales_Model_
 		$bonusPoints = $order->getRewardpointsBonus();
 		if($bonusPoints)
 			$invoice->setRewardpointsBonus($bonusPoints);
+
+        $bonusPickupPoints = $order->getRewardpointsPickup();
+        if($bonusPickupPoints)
+            $invoice->setRewardpointsPickup($bonusPickupPoints);
         /** End earningn point **/
         
         /** Spending point **/

@@ -140,6 +140,17 @@ class Magestore_RewardPoints_Helper_Action extends Mage_Core_Helper_Abstract
                         'updated_time'  => now(),
                     ));
                 }
+            } else {
+                $transaction->createTransaction(array(
+                    'customer_id'   => $customer->getId(),
+                    'customer'      => $customer,
+                    'customer_email'=> $customer->getEmail(),
+                    'title'         => $actionModel->getTitle(),
+                    'action'        => $actionCode,
+                    'action_type'   => $actionModel->getActionType(),
+                    'created_time'  => now(),
+                    'updated_time'  => now(),
+                ));
             }
         }
 

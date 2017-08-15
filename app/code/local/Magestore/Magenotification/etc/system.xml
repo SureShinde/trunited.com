@@ -28,7 +28,7 @@
                 </extension_keys>					
 			</groups>
         </magenotificationcerts>
-        <magenotificationsecure translate="label" module="magenotification">
+        <!--magenotificationsecure translate="label" module="magenotification">
             <class>separator-top</class>
             <label>License Key Management</label>
             <tab>magestore</tab>
@@ -48,7 +48,7 @@
                     <show_in_store>1</show_in_store>
                 </extension_keys>					
 			</groups>
-		</magenotificationsecure>
+		</magenotificationsecure-->
         <!--
         <magestore_extension_feedback translate="label" module="magenotification">
             <class>separator-top</class>

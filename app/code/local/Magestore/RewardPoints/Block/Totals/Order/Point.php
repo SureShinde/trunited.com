@@ -41,15 +41,19 @@ class Magestore_RewardPoints_Block_Totals_Order_Point extends Magestore_RewardPo
         $totalsBlock = $this->getParentBlock();
         $order = $totalsBlock->getOrder();
 		$bonusPoints = $order->getRewardpointsBonus();
-		if(!$bonusPoints)
-			$bonusPoints = 0;
+        $bonusPickupPoints = $order->getRewardpointsPickup();
+        if(!$bonusPoints)
+            $bonusPoints = 0;
+
+        if(!$bonusPickupPoints)
+            $bonusPickupPoints = 0;
 		
         if ($order->getRewardpointsEarn()) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code' => 'rewardpoints_earn_label',
                 'label' => $this->__('Earn Points'),
-                'value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints),
-                'base_value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints),
+                'value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints - $bonusPickupPoints),
+                'base_value' => Mage::helper('rewardpoints/point')->format($order->getRewardpointsEarn() - $bonusPoints - $bonusPickupPoints),
                 'is_formated' => true,
                     )), 'subtotal');
         }
@@ -62,6 +66,17 @@ class Magestore_RewardPoints_Block_Totals_Order_Point extends Magestore_RewardPo
                 'is_formated' => true,
                     )), 'subtotal');
         }
+
+        if ($bonusPickupPoints) {
+            $totalsBlock->addTotal(new Varien_Object(array(
+                'code'  => 'rewardpoints_bonus_label',
+                'label' => Mage::helper('storepickup')->getDataConfig('bonus_label'),
+                'value' => Mage::helper('rewardpoints/point')->format($bonusPickupPoints),
+                'base_value' => Mage::helper('rewardpoints/point')->format($bonusPickupPoints),
+                'is_formated'   => true,
+            )), 'subtotal');
+        }
+
         if ($order->getRewardpointsDiscount()>=0.0001) {
             $totalsBlock->addTotal(new Varien_Object(array(
                 'code'  => 'rewardpoints',

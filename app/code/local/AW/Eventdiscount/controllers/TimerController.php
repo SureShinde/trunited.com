@@ -54,6 +54,8 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
             $quote = Mage::getSingleton('checkout/session')->getQuote();
             $items = $quote->getAllItems();
 
+//            echo $triggerCollection->getSelect();
+
             if (!$triggerCollection->getSize()) throw new Exception($this->__('Trigger not found for this customer'));
 
             foreach ($triggerCollection as $item) {
@@ -238,6 +240,18 @@ class AW_Eventdiscount_TimerController extends Mage_Core_Controller_Front_Action
             ALTER TABLE `{$setup->getTable('aweventdiscount/action')}` ADD COLUMN `subtotal_from` FLOAT unsigned NOT NULL;
             ALTER TABLE `{$setup->getTable('aweventdiscount/action')}` ADD COLUMN `subtotal_to` FLOAT unsigned NOT NULL;
             ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `amount_text` VARCHAR(255);
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updateDb9Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE `{$setup->getTable('aweventdiscount/timer')}` ADD COLUMN `is_end_month` smallint(5) NULL DEFAULT 0;
 		");
         $installer->endSetup();
         echo "success";

@@ -88,4 +88,9 @@ class Magestore_RewardPoints_Block_Checkout_Cart_Label extends Mage_Checkout_Blo
         }
         return Mage::helper('rewardpoints/calculation_earning')->getTotalPointsBonus();
     }
+
+    public function getBonusPickup()
+    {
+        return Mage::helper('rewardpoints/calculation_earning')->getTotalPointsBonusPickup();
+    }
 }
