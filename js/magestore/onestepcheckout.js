@@ -387,6 +387,9 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                         $('select_box_store_pickup').removeClassName('required-entry');
                         $('select_box_store_pickup').removeClassName('validate-select');
                         $('select_box_store_pickup').removeClassName('validation-failed');
+                        $('select_box_store_pickup').setValue('');
+                        if($('selected_st_info'))
+                            $('selected_st_info').update();
                     }
                 } else {
                     if($('shipping_date')){
@@ -400,6 +403,9 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     if($('select_box_store_pickup')){
                         $('select_box_store_pickup').addClassName('required-entry');
                         $('select_box_store_pickup').addClassName('validate-select');
+                        $('select_box_store_pickup').setValue('');
+                        if($('selected_st_info'))
+                            $('selected_st_info').update();
                     }
                 }
             }
