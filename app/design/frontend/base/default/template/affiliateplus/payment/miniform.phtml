@@ -40,12 +40,16 @@ $object_transfer = Mage::helper('affiliateplus/config')->getTransferConfig();
         <div class="input_fields_form form-inline request-amount-money col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6 col-sm-12 col-xs-12 ">
             <div class="<?php if($object_transfer == 1){?>col-lg-7 col-md-7 col-sm-7 col-xs-7<?php } else if($object_transfer == 2) {?>col-lg-5 col-md-5 col-sm-5 col-xs-5 <?php }?> input-blance">
                 <input id="transfer_amount" name="transfer_amount" value="<?php echo $this->__('Transfer Amount') ?>"
-                       class="input-text required-entry form-control input-text required-entry validate-greater-than-zero"
+                       class="input-text required-entry form-control validate-greater-than-zero"
                        type="text" onchange="checkAmountBalance(this);" onfocus="if (this.value == this.defaultValue)
                                     this.value = '';" onblur="if (this.value == '') this.value = this.defaultValue;"
                        placeholder="<?php echo $this->__('Transfer Amount'); ?>"
                 />
                 <input type="hidden" id="from_request_page" name="from_request_page" value="1"/>
+                <?php if($this->isEnableTerm()){?>
+                <input type="checkbox" id="transfer_term" name="transfer_term" class="input-text required-entry" />
+                <label for="transfer_term" style="margin-top: 3px;"><?php echo $this->getContentTerm();?></label>
+                <?php }?>
             </div>
 
             <?php if($object_transfer == 1){?>

@@ -159,6 +159,25 @@
 							<show_in_store>1</show_in_store>
 							<comment>The message will be displayed when the affiliate transfers money to truGiftCard</comment>
 						</message>
+						<enable_term>
+							<label>Enable Terms and Condition</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>9</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable_term>
+						<content_term>
+							<label>Terms and Condition</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</content_term>
 					</fields>
 				</transfer>
 				<spending>

@@ -425,6 +425,8 @@
                 <enable>1</enable>
                 <bonus>6</bonus>
                 <message>You will be received 6% bonus when transfers money to truGiftCard</message>
+                <enable_term>1</enable_term>
+                <content_term>I agree ...</content_term>
             </transfer>
             <spending>
                 <tax>1</tax>

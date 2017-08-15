@@ -79,4 +79,14 @@ class Magestore_Affiliateplus_Block_Payment_Miniform extends Mage_Core_Block_Tem
         $maxAmount = $balance * 100 / (100 + $taxRate);
         return round($maxAmount, 2);
     }
+
+    public function isEnableTerm()
+    {
+        return Mage::getStoreConfig('trugiftcard/transfer/enable_term');
+    }
+
+    public function getContentTerm()
+    {
+        return Mage::getStoreConfig('trugiftcard/transfer/content_term');
+    }
 }
