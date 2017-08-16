@@ -15,7 +15,7 @@ class Magestore_Custompromotions_AccountController extends Mage_Customer_Account
         if ($this->getRequest()->isPost()) {
             /** @var $customer Mage_Customer_Model_Customer */
             $customer = $this->_getSession()->getCustomer();
-
+            $old_phone_number = $customer->getData('phone_number');
             /** @var $customerForm Mage_Customer_Model_Form */
             $customerForm = $this->_getModel('customer/form');
             $customerForm->setFormCode('customer_account_edit')
@@ -44,6 +44,7 @@ class Magestore_Custompromotions_AccountController extends Mage_Customer_Account
                     $this->_redirect('*/*/edit');
                     return;
                 }
+
 
                 $customerForm->compactData($customerData);
                 $errors = array();
@@ -93,9 +94,23 @@ class Magestore_Custompromotions_AccountController extends Mage_Customer_Account
                 return $this;
             }
 
+
             try {
                 $customer->cleanPasswordsValidationData();
                 $customer->save();
+
+                if(strcasecmp($old_phone_number, $customerData['phone_number']) != 0){
+                    $verify_mobile = Mage::getModel('custompromotions/verifymobile')->getCollection()
+                        ->addFieldToFilter('customer_id', $customer->getId())
+                        ->getFirstItem()
+                        ;
+
+                    if($verify_mobile != null && $verify_mobile->getId()){
+                        $verify_mobile->setData('phone', $customer->getPhoneNumber());
+                        $verify_mobile->setData('updated_time', now());
+                        $verify_mobile->save();
+                    }
+                }
                 $this->_getSession()->setCustomer($customer)
                     ->addSuccess($this->__('The account information has been saved.'));
 

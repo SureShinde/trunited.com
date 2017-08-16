@@ -67,7 +67,7 @@ $is_edit = Mage::helper('custompromotions/verify')->getAllowEdit();
             <li><?php $attribute = Mage::getModel('eav/config')->getAttribute('customer','alternate_number'); ?>
                 <label for="alternate_number"><?=$this->__('Alternate Mobile') ?></label>
                 <div class="input-box">
-                    <input type="text" name="alternate_number" id="alternate_number" class="input-text <?php if($is_edit){?>required-entry<?php }?>"
+                    <input type="text" name="alternate_number" id="alternate_number" class="input-text"
                            <?php if(!$is_edit){?>disabled="disabled"<?php }?>
                            value="<?php echo $this->getCustomer()->getAlternateNumber(); ?>" />
                 </div>
