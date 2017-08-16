@@ -165,6 +165,15 @@
                     </custompromotions_adminhtml_customer_prepare_save>
                 </observers>
             </adminhtml_customer_prepare_save>
+            <adminhtml_customer_save_after>
+                <observers>
+                    <custompromotions_adminhtml_customer_save_after>
+                        <type>singleton</type>
+                        <class>custompromotions/observer</class>
+                        <method>customerSaveAfter</method>
+                    </custompromotions_adminhtml_customer_save_after>
+                </observers>
+            </adminhtml_customer_save_after>
         </events>
     </global>
 

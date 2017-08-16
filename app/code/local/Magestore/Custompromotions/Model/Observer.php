@@ -223,16 +223,47 @@ class Magestore_Custompromotions_Model_Observer
         if($data['account']['alternate_number'] != '')
             $data['account']['alternate_number'] = Mage::helper('custompromotions/verify')->formatPhoneToDatabase($data['account']['alternate_number']);
 
-        $customer->setData('phone_number', $data['account']['phone_number']);
-        $customer->setData('alternate_number', $data['account']['alternate_number']);
-
         if($data['account']['phone_number'][0] == 1 || $data['account']['alternate_number'][0] == 1 ||
             sizeof($data['account']['phone_number']) > 10 ||  sizeof($data['account']['alternate_number']) > 10)
         {
-           Mage::throwException(
+            Mage::throwException(
                 Mage::helper('custompromotions')->__('The mobile number only has 10 digits and don\'t allow begin with 1')
             );
             return;
+        }
+
+        $_customer = Mage::getModel('customer/customer')->load($customer->getId());
+        $old_phone_number = $_customer->getPhoneNumber();
+
+        if(strcasecmp($data['account']['phone_number'], $old_phone_number) != 0){
+            Mage::getSingleton('adminhtml/session')->setIsUpdatePhone(1);
+        }
+
+        $customer->setData('phone_number', $data['account']['phone_number']);
+        $customer->setData('alternate_number', $data['account']['alternate_number']);
+
+    }
+
+    public function customerSaveAfter($observer)
+    {
+        $is_update = Mage::getSingleton('adminhtml/session')->getIsUpdatePhone();
+        $customer = $observer->getCustomer();
+        if($is_update != null){
+            $verify_mobile = Mage::getModel('custompromotions/verifymobile')->getCollection()
+                ->addFieldToFilter('customer_id', $customer->getId())
+                ->getFirstItem()
+            ;
+
+            if($verify_mobile != null && $verify_mobile->getId()){
+                $verify_mobile->setData('phone', $customer->getPhoneNumber());
+                $verify_mobile->setData('updated_time', now());
+                try{
+                    $verify_mobile->save();
+                } catch (Exception $ex) {
+
+                }
+                Mage::getSingleton('core/session')->unsIsUpdatePhone();
+            }
         }
     }
 
