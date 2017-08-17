@@ -5,7 +5,7 @@ class Magestore_TruGiftCard_Helper_Account extends Mage_Core_Helper_Abstract
     public function updateCredit($customer_id, $credit)
     {
         $account = $this->loadByCustomerId($customer_id);
-        if($account->getId())
+        if($account != null && $account->getId())
         {
             $_current_credit = $account->getTrugiftcardCredit();
             $new_credit = $_current_credit + $credit;

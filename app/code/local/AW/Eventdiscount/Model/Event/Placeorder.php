@@ -85,12 +85,13 @@ class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Eve
             $register = true;
         }
 
+        $event = $observer->getEvent();
+        $order = $event->getOrder();
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+        $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+
         if ($register || Mage::getSingleton('customer/session')->isLoggedIn()) {
-            $event = $observer->getEvent();
-            $order = $event->getOrder();
-            $quote = Mage::getSingleton('checkout/session')->getQuote();
             $newEvent = new Varien_Object();
-            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
             $newEvent->addData(
                 array(
                     'customer'   => $customer,
@@ -106,7 +107,11 @@ class AW_Eventdiscount_Model_Event_Placeorder extends AW_Eventdiscount_Model_Eve
             if ($this->checkQuote($newEvent)) {
                $ignoredIds = $this->activateTriggers($newEvent);
             }
-            $this->finishTriggers($ignoredIds, $observer->getEvent()->getOrder());
+
+            if(Mage::helper('eventdiscount')->isMetOrder($order)){
+                $this->finishTriggers($ignoredIds, $observer->getEvent()->getOrder());
+            }
+
         }
         if ($register) {
             Mage::dispatchEvent('customer_register_success',

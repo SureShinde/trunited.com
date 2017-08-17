@@ -436,4 +436,30 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
             return $days * 24 * 60 * 60 + $hours * 60 * 60 + $minutes * 60 + $seconds;
         }
     }
+
+    public function isMetOrder($order)
+    {
+        $items = $order->getAllVisibleItems();
+        $flag = false;
+        if(sizeof($items) > 0)
+        {
+            $triggers = Mage::getModel('aweventdiscount/trigger')->getActiveTriggers();
+            if(sizeof($triggers) > 0){
+                $product_promotions = array();
+                foreach ($triggers as $trigger) {
+                    $timer_id = $trigger->getTimerId();
+                    $product_promotions = array_merge($product_promotions, $this->getProductByTimerId($timer_id));
+                }
+                if(sizeof($product_promotions) > 0){
+                    foreach ($items as $item) {
+                        if(in_array($item->getProduct()->getId(), $product_promotions)){
+                            $flag = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $flag;
+    }
 }
