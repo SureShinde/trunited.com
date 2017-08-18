@@ -59,7 +59,6 @@ abstract class ParadoxLabs_TokenBase_Block_Form extends Mage_Payment_Block_Form_
 	public function haveStoredCards()
 	{
 		$cards = $this->getStoredCards();
-		
 		return ( count( $cards ) > 0 ? true : false );
 	}
 	

@@ -156,22 +156,31 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $truBox = Mage::helper('trubox')->getCurrentTruBox();
 
         try {
-            $payment = Mage::getModel('trubox/payment')->getCollection()
-                ->addFieldToFilter('trubox_id', $truBoxId)
-                ->getFirstItem()
-            ;
-
-            if($payment == null){
-                $payment = Mage::getModel('trubox/payment');
-                $address['created_at'] = now();
-            }
-
-            $address['updated_at'] = now();
-
-            if($current_credit_card == null || $current_credit_card == 1)
+            if($current_credit_card > 0)
             {
-                $payment->addData($address);
-                $payment->save();
+                $cards = Mage::getModel('tokenbase/card')->getCollection()
+                    ->addFieldToFilter( 'active', 1 )
+                    ->addFieldToFilter( 'customer_id', $current_credit_card)
+                    ->addFieldToFilter( 'method', 'authnetcim')
+                ;
+
+                if(sizeof($cards) > 0)
+                {
+                    foreach ($cards as $_card) {
+                        $_card->setData('use_in_trubox', 0);
+                        $_card->setData('updated_at', now());
+                        $_card->save();
+                    }
+
+                }
+
+                $card = Mage::getModel('tokenbase/card')->load($current_credit_card);
+                if($card != null && $card->getId())
+                {
+                    $card->setData('use_in_trubox', 1);
+                    $card->setData('updated_at', now());
+                    $card->save();
+                }
             }
 
             if($truBox != null && $truBox->getId())
@@ -791,6 +800,33 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             exit;
         }
 
+    }
+
+    public function synchCIMAction()
+    {
+//        $cards = Mage::getModel('tokenbase/card')->getCollection()
+//            ->addFieldToFilter( 'active', 1 )
+//            ->addFieldToFilter( 'customer_id', 18790)
+//            ->addFieldToFilter( 'method', 'authnetcim')
+//        ;
+//
+//        zend_debug::dump($cards->getData());
+//        zend_debug::dump($cards->getFirstItem()->getLabel());
+//        exit;
+
+        Mage::helper('trubox')->synchronizeCIM();
+    }
+
+    public function updateDb9Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('tokenbase/card')} ADD `use_in_trubox` tinyint(4) NULL DEFAULT 0;
+		");
+        $installer->endSetup();
+        echo "success";
     }
 
 }

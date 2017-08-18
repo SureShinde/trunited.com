@@ -128,10 +128,20 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     }
 
     public function getPaymentTruBox() {
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $truBoxFilter = Mage::getModel('trubox/payment')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)->getFirstItem();
-        return $truBoxFilter;
+        $cards = Mage::getModel('tokenbase/card')->getCollection()
+            ->addFieldToFilter( 'active', 1 )
+            ->addFieldToFilter( 'customer_id', $this->getCurrentCustomer()->getId())
+            ->addFieldToFilter( 'method', 'authnetcim')
+            ->setOrder('use_in_trubox', 'desc')
+            ->setOrder('id', 'desc')
+        ;
+
+        return $cards;
+    }
+
+    public function getCardUrl()
+    {
+        return $this->getUrl('customer/paymentinfo/');
     }
 
     public function getRate($product)

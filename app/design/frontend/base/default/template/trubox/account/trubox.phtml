@@ -674,16 +674,7 @@ if ($truBox != null)
     <hr class="share_separate">
     <div class="trubox-payment">
         <?php
-        $payment = $this->getPaymentTruBox();
-        $paymentList = array('AE' => 'American Express', 'VI' => 'Visa', 'MC' => 'MasterCard', 'DI' => 'Discover');
-        $monthList = array('1' => '01 - January', '2' => '02 - February', '3' => '03 - March', '4' => '04 - April',
-            '5' => '05 - May', '6' => '06 - June', '7' => '07 - July', '8' => '08 - August', '9' => '09 - September',
-            '10' => '10 - October', '11' => '11 - November', '12' => '12 - December',);
-        $yearList = array();
-        $yearNow = date("Y");
-        for ($i = 0; $i < 10; $i++) {
-            $yearList[$yearNow + $i] = $yearNow + $i;
-        }
+        $cards = $this->getPaymentTruBox();
         ?>
         <h2 class="trubox-header"><?php echo $this->__('Trubox Payment') ?></h2>
 
@@ -691,106 +682,22 @@ if ($truBox != null)
             <form class="items" id="trubox-payment-information" action="<?php echo $this->savePaymentUrl() ?>"
                   method="POST">
                 <ul class="form-list" id="payment_form_ccsave">
-                    <?php if ($payment->getCardNumber() != null) { ?>
+                    <?php if (sizeof($cards) > 0) { ?>
                         <li>
                             <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
                             <select id="current_credit_card" name="current_credit_card">
-                                <option value="0"><?php echo $payment->getNameOnCard(); ?>
-                                    , <?php echo $paymentList[$payment->getCardType()] ?>
-                                    , <?php echo '************' . substr($payment->getCardNumber(), 12, strlen($payment->getCardNumber())); ?></option>
-                                <option value="1"><?php echo $this->__('Add/Update Credit Card') ?></option>
+                                <?php foreach ($cards as $card) {?>
+                                <option value="<?php echo $card->getId();?>"><?php echo $card->getLabel(); ?></option>
+                                <?php }?>
                             </select>
                         </li>
-                    <?php } ?>
-                    <li class="ccc_content">
-                        <label for="ccsave_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?>
-                        </label>
-
-                        <div class="input-box">
-                            <input type="text" title="Name on Card" class="input-text required-entry"
-                                   id="ccsave_cc_owner"
-                                   name="name_on_card"
-                                   value="">
-                        </div>
-                    </li>
-                    <li class="ccc_content">
-                        <label for="ccsave_cc_type"
-                               class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
-
-                        <div class="input-box">
-                            <select id="ccsave_cc_type" name="card_type" title="<?php echo $this->__('Credit Card Type') ?>"
-                                    class="required-entry validate-cc-type-select">
-                                <option value=""><?php echo $this->__('--Please Select--'); ?></option>
-                                <?php
-                                foreach ($paymentList as $k => $v) {
-                                    ?>
-                                    <option value="<?php echo $k ?>"><?php echo $v ?></option>
-                                    <?php
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="ccc_content">
-                        <label for="ccsave_cc_number"
-                               class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
-
-                        <div class="input-box">
-                            <input type="text" id="ccsave_cc_number" name="card_number" title="<?php echo $this->__('Credit Card Number') ?>"
-                                   class="input-text validate-cc-number validate-cc-type"
-                                   value="">
-                        </div>
-                    </li>
-                    <li class="fields ccc_content">
-                        <div class="field">
-                            <label for="ccsave_expiration"
-                                   class="required"><em>*</em><?php echo $this->__('Expiration Date'); ?></label>
-
-                            <div class="input-box">
-                                <div class="v-fix">
-                                    <select id="ccsave_expiration" name="month_expire"
-                                            class="month validate-cc-exp required-entry">
-                                        <option value="" selected="selected"><?php echo $this->__('Month') ?></option>
-                                        <?php
-                                        foreach ($monthList as $k => $v) {
-                                            ?>
-                                            <option
-                                                value="<?php echo $k ?>"><?php echo $v ?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="v-fix">
-                                    <select id="ccsave_expiration_yr" name="year_expire" class="year required-entry">
-                                        <option value=""><?php echo $this->__('Year') ?></option>
-                                        <?php
-                                        foreach ($yearList as $k => $v) {
-                                            ?>
-                                            <option
-                                                value="<?php echo $k ?>"><?php echo $v ?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label for="ccsave_cc_cid"
-                                   class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?>
-                            </label>
-
-                            <div class="input-box">
-                                <div class="v-fix">
-                                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>"
-                                           class="input-text cvv required-entry validate-cc-cvn" id="ccsave_cc_cid"
-                                           name="cvv"
-                                           value="">
-                                    <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
-                                </div>
-                            </div>
-                        </div>
+                    <?php } else { ?>
+                        <input type="hidden" id="current_credit_card" name="current_credit_card" value="" />
+                    <?php }?>
+                    <li>
+                        <a href="<?php echo $this->getCardUrl();?>" title="<?php echo $this->__('Create, update or use a different card')?>">
+                            <?php echo $this->__('Create, update or use a different card')?>
+                        </a>
                     </li>
                     <li>
                         <div class="input-box apply_trugiftcard">
@@ -813,67 +720,12 @@ if ($truBox != null)
                         <span><span><?php echo $this->__('Save Payment') ?></span></span>
                     </button>
                 </div>
-                <form>
+            </form>
         </div>
     </div>
     <?php echo $this->getChildHtml('other') ?>
 </div>
-<?php if ($payment->getCardNumber() != null) { ?>
-    <style type="text/css">
-        .ccc_content {
-            display: none;
-        }
-    </style>
-    <script type="text/javascript">
-        $j = jQuery.noConflict();
-        $j('#current_credit_card').change(function () {
-            if ($j(this).val() == 1) {
-                $j('.ccc_content').css({'display': 'block'});
-                $j('#ccsave_cc_owner').addClass(' required-entry');
-                $j('#ccsave_cc_type').addClass(' required-entry');
-                $j('#ccsave_cc_type').addClass(' validate-cc-type-select');
-                $j('#ccsave_cc_number').addClass(' validate-cc-type');
-                $j('#ccsave_cc_number').addClass(' validate-cc-number');
-                $j('#ccsave_expiration').addClass(' validate-cc-exp');
-                $j('#ccsave_expiration').addClass(' required-entry');
-                $j('#ccsave_expiration_yr').addClass(' required-entry');
-                $j('#ccsave_cc_cid').addClass(' required-entry');
-                $j('#ccsave_cc_cid').addClass(' validate-cc-cvn');
-            } else {
-                $j('.ccc_content').css({'display': 'none'});
-                $j('#ccsave_cc_owner').removeClass('required-entry');
-                $j('#ccsave_cc_type').removeClass('required-entry');
-                $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
-                $j('#ccsave_cc_number').removeClass('validate-cc-type');
-                $j('#ccsave_cc_number').removeClass('validate-cc-number');
-                $j('#ccsave_expiration').removeClass('validate-cc-exp');
-                $j('#ccsave_expiration').removeClass('required-entry');
-                $j('#ccsave_expiration_yr').removeClass('required-entry');
-                $j('#ccsave_cc_cid').removeClass('required-entry');
-                $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
-            }
-        });
-        $j(document).ready(function () {
-            $j('.ccc_content').css({'display': 'none'});
-            $j('#ccsave_cc_owner').removeClass('required-entry');
-            $j('#ccsave_cc_type').removeClass('required-entry');
-            $j('#ccsave_cc_type').removeClass('validate-cc-type-select');
-            $j('#ccsave_cc_number').removeClass('validate-cc-type');
-            $j('#ccsave_cc_number').removeClass('validate-cc-number');
-            $j('#ccsave_expiration').removeClass('validate-cc-exp');
-            $j('#ccsave_expiration').removeClass('required-entry');
-            $j('#ccsave_expiration_yr').removeClass('required-entry');
-            $j('#ccsave_cc_cid').removeClass('required-entry');
-            $j('#ccsave_cc_cid').removeClass('validate-cc-cvn');
-        });
-    </script>
-<?php } ?>
-<div class="tool-tip" id="payment-tool-tip" style="display: none">
-    <div class="btn-close"><a href="#" id="payment-tool-tip-close" title="Close">Close</a></div>
-    <div class="tool-tip-content"><img src="<?php echo $this->getSkinUrl('images/cvv.gif');?>"
-                                       alt="<?php echo $this->__('Card Verification Number Visual Reference');?>"
-                                       title="<?php echo $this->__('Card Verification Number Visual Reference');?>"></div>
-</div>
+
 <script type="text/javascript">
     var trubox_items = new VarienForm('trubox-items', true);
     var trubox_shipping_address = new VarienForm('trubox-shipping-address', true);
@@ -907,21 +759,6 @@ if ($truBox != null)
         var opt = $j(this).find('option:selected');
         $j('#shipping_region_id').val(opt.attr('title'));
     });
-
-    function toggleToolTip(event) {
-        if ($('payment-tool-tip')) {
-            $('payment-tool-tip').setStyle({
-//                top: '200px'//,
-                top: (Event.pointerY(event) - 560) + 'px'//,
-                //left: (Event.pointerX(event)+100)+'px'
-            })
-            $('payment-tool-tip').toggle();
-        }
-        Event.stop(event);
-    }
-    if ($('payment-tool-tip-close')) {
-        Event.observe($('payment-tool-tip-close'), 'click', toggleToolTip);
-    }
 
     $$('.cvv-what-is-this').each(function (element) {
         Event.observe(element, 'click', toggleToolTip);

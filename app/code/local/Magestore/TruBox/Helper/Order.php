@@ -37,7 +37,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
     const XML_PATH_EMAIL_SENDER = 'trubox/email/sender';
 
     protected $_shippingMethod = 'freeshipping_freeshipping';
-    protected $_paymentMethod = 'authorizenet';
+    protected $_paymentMethod = 'authnetcim';
     protected $_freePaymentMethod = 'free';
 
     protected $_customer;
@@ -333,17 +333,21 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 Mage::helper('trubox')->__('TruBox does not exits !')
             );
 
-        $payment = Mage::getModel('trubox/payment')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBox_id)
+        $card = Mage::getModel('tokenbase/card')->getCollection()
+            ->addFieldToFilter( 'active', 1 )
+            ->addFieldToFilter( 'customer_id', $customer_id)
+            ->addFieldToFilter( 'method', 'authnetcim')
+            ->addFieldToFilter('use_in_trubox', 1)
+            ->setOrder('id', 'desc')
             ->getFirstItem()
         ;
 
-        if(!$payment->getId() && !$is_no_need_payment)
+        if(!$card->getId() && !$is_no_need_payment)
             throw new Exception(
                 Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
             );
 
-        return $payment;
+        return $card;
     }
 
     public function createOrder($customer_id, $data_items)
@@ -466,15 +470,14 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             $paymentData = array(
                 'truwallet' => 'on',
                 'method' => $this->_paymentMethod,
-                'cc_type' => $payment_information->getCardType(),
-                /*'cc_owner' => $payment_information->getNameOnCard(),
-                'cc_number_enc' => Mage::getSingleton('payment/info')->encrypt($payment_information->getCardNumber()),*/
-                'cc_number' => $payment_information->getCardNumber(),
-                'cc_exp_month' => $payment_information->getMonthExpire(),
-                'cc_exp_year' => $payment_information->getYearExpire(),
-                'cc_cid' => $payment_information->getCvv(),
+                'card_id' => $payment_information->getHash(),
+                'cc_type' => '',
+                'cc_number' => '',
+                'cc_exp_month' => '',
+                'cc_exp_year' => '',
+                'cc_cid' => '',
+                'save' => 0,
             );
-
 
             if($is_no_need_payment)
             {
