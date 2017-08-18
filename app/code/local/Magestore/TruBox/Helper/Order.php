@@ -333,20 +333,40 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 Mage::helper('trubox')->__('TruBox does not exits !')
             );
 
-        $card = Mage::getModel('tokenbase/card')->getCollection()
+        $card_collection = Mage::getModel('tokenbase/card')->getCollection()
             ->addFieldToFilter( 'active', 1 )
             ->addFieldToFilter( 'customer_id', $customer_id)
             ->addFieldToFilter( 'method', 'authnetcim')
             ->addFieldToFilter('use_in_trubox', 1)
             ->setOrder('id', 'desc')
-            ->getFirstItem()
         ;
 
-        if(!$card->getId() && !$is_no_need_payment)
+        if(sizeof($card_collection) == 0)
+        {
+            $card_collection = Mage::getModel('tokenbase/card')->getCollection()
+                ->addFieldToFilter( 'active', 1 )
+                ->addFieldToFilter( 'customer_id', $customer_id)
+                ->addFieldToFilter( 'method', 'authnetcim')
+                ->setOrder('id', 'desc')
+            ;
+        }
+
+        if(sizeof($card_collection) > 0)
+            $card = $card_collection->getFirstItem();
+        else
+            $card = null;
+
+        if(($card == null || !$card->getId()) && !$is_no_need_payment)
             throw new Exception(
                 Mage::helper('trubox')->__('%s don\'t have payment information !', $customer->getName())
             );
 
+        if($card != null && $card->getId() && $card->getData('use_in_trubox') == 0 )
+        {
+            $card->setData('use_in_trubox', 1);
+            $card->setData('updated_at', now());
+            $card->save();
+        }
         return $card;
     }
 
