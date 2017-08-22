@@ -393,6 +393,108 @@
 						</shareasale_api>
 					</fields>
 				</share_a_sale>
+
+				<link_share_advertisers translate="label">
+					<label>LinkShare Advertiser API Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>6</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enable translate="label">
+							<label>Enable</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable>
+						<consumer_key>
+							<label>Consumer Key</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</consumer_key>
+						<consumer_secret>
+							<label>Consumer Secret</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</consumer_secret>
+						<token_request_authorization>
+							<label>API Request Authorization</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</token_request_authorization>
+						<site_id>
+							<label>Site ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</site_id>
+						<link_share_advertiser_api>
+							<label>LinkShare Advertiser API</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Please don't remove {{start_date}}, {{end_date}} variables in link</comment>
+						</link_share_advertiser_api>
+						<token_request>
+							<label>Token Request Authorization</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</token_request>
+						<username>
+							<label>Username</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</username>
+						<password>
+							<label>Password</label>
+							<frontend_type>password</frontend_type>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</password>
+						<url_request_token>
+							<label>Url For Requesting Token</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</url_request_token>
+					</fields>
+				</link_share_advertisers>
 			</groups>
 		</manageapi>
 	</sections>

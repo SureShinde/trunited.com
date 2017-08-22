@@ -57,8 +57,8 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
     public function saveAction()
     {
         if ($data = $this->getRequest()->getPost()) {
-            $start_date = date('Y-m-d', strtotime($data['start_date']));
-            $end_date = date('Y-m-d', strtotime($data['end_date']));
+            $start_date = date('Y-m-d H:i:s', strtotime($data['start_date']));
+            $end_date = date('Y-m-d H:i:s', strtotime($data['end_date']));
             $select_apis = $data['select_api'];
 
             if (is_array($select_apis) && sizeof($select_apis) > 0) {
@@ -167,11 +167,25 @@ class Magestore_ManageApi_Adminhtml_ManageapiController extends Mage_Adminhtml_C
                             {
                                 $affiliateId = $this->getHelperData()->getDataConfig('affiliate_id', 'share_a_sale');
                                 $token = $this->getHelperData()->getDataConfig('token', 'share_a_sale');
-                                $start_date = date('m-d-Y', strtotime($start_date));
-                                $end_date = date('m-d-Y', strtotime($end_date));
-                                $_url = str_replace(array('{{affiliate_id}}', '{{token}}', '{{start_date}}', '{{end_date}}'), array($affiliateId, $token, $start_date, $end_date), $url);
+                                $start_date_a_sale = date('m-d-Y', strtotime($start_date));
+                                $end_date_a_sale = date('m-d-Y', strtotime($end_date));
+                                $_url = str_replace(array('{{affiliate_id}}', '{{token}}', '{{start_date}}', '{{end_date}}'), array($affiliateId, $token, $start_date_a_sale, $end_date_a_sale), $url);
                                 $api_called[$_url] = '<a href="'.$_url.'" target="_blank">Shareasale API</a> ';
                                 Mage::helper('manageapi/shareasale')->processAPI($_url, $start_date);
+                            }
+                        }
+                    } else if($api_name == 9) {
+                        $enable = $this->getHelperData()->getDataConfig('enable', 'link_share_advertisers');
+                        if($enable)
+                        {
+                            $url = $this->getHelperData()->getDataConfig('link_share_advertiser_api', 'link_share_advertisers');
+                            if($url != null)
+                            {
+                                $start_date_advertisers = urlencode(date('Y-m-d H:i:s', strtotime($start_date)));
+                                $end_date_advertisers = urlencode(date('Y-m-d H:i:s', strtotime($end_date)));
+                                $_url = str_replace(array('{{start_date}}', '{{end_date}}'), array($start_date_advertisers, $end_date_advertisers), $url);
+                                $api_called[$_url] = '<a href="'.$_url.'" target="_blank">LinkShare Advertisers API</a> ';
+                                Mage::helper('manageapi/linkshareadvertisers')->processAPI($_url, $start_date);
                             }
                         }
                     }

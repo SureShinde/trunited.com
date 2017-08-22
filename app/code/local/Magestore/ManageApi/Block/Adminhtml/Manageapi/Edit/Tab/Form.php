@@ -48,8 +48,9 @@ class Magestore_Manageapi_Block_Adminhtml_Manageapi_Edit_Tab_Form extends Mage_A
                 array('value'=>6,'label'=>Mage::helper('manageapi')->__('Cj')),
                 array('value'=>7,'label'=>Mage::helper('manageapi')->__('Target')),
                 array('value'=>8,'label'=>Mage::helper('manageapi')->__('Shareasale')),
+                array('value'=>9,'label'=>Mage::helper('manageapi')->__('LinkShare Advertisers')),
             ),
-            'checked'  => array(1,2,3,4,5,6,7,8),
+            'checked'  => array(1,2,3,4,5,6,7,8,9),
             'required' => true,
             'after_element_html' => '<small></small>',
         ));

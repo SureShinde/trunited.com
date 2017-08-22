@@ -17,7 +17,7 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
         );
     }
 
-    public function getContentByCurl($url, $param_header = array())
+    public function getContentByCurl($url, $param_header = array(), $is_post = false, $param_fields = array())
     {
         if(sizeof($param_header) > 0)
         {
@@ -32,7 +32,13 @@ class Magestore_ManageApi_Helper_Data extends Mage_Core_Helper_Abstract
         if(sizeof($param_header) > 0)
             curl_setopt($ch, CURLOPT_HTTPHEADER, $param_header);
 
-        curl_setopt($ch, CURLOPT_POST, 0);
+        if($is_post && sizeof($param_fields) > 0){
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS , http_build_query($param_fields));
+        } else {
+            curl_setopt($ch, CURLOPT_POST, 0);
+        }
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);

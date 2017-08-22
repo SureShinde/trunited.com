@@ -53,4 +53,10 @@
 			<block type="manageapi/adminhtml_shareasale" name="manageapi.shareasale" />
 		</reference>
 	</manageapiadmin_adminhtml_shareasale_index>
+
+	<manageapiadmin_adminhtml_linkshareadvertisers_index>
+		<reference name="content">
+			<block type="manageapi/adminhtml_linkshareadvertisers" name="manageapi.linkshareadvertisers" />
+		</reference>
+	</manageapiadmin_adminhtml_linkshareadvertisers_index>
 </layout>

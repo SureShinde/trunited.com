@@ -94,6 +94,9 @@
                     <shareasale>
                         <table>shareasale_actions</table>
                     </shareasale>
+                    <linkshareadvertisers>
+                        <table>linkshare_advertisers</table>
+                    </linkshareadvertisers>
                 </entities>
             </manageapi_mysql4>
         </models>
@@ -185,6 +188,16 @@
                 <secret_key>BQw8fi5v3HDkth3gZGc3tr7k0CRonr4c</secret_key>
                 <shareasale_api><![CDATA[https://api.shareasale.com/x.cfm?action=activity&affiliateId={{affiliate_id}}&token={{token}}&dateStart={{start_date}}&dateEnd={{end_date}}&sortCol=commission&sortDir=desc&version=2.2&format=xml]]></shareasale_api>
             </share_a_sale>
+            <link_share_advertisers>
+                <enable>1</enable>
+                <consumer_key>ofXdO6zIjbFSJM1LyPEfiqrKZWYa</consumer_key>
+                <consumer_secret>ym9RR9eSlMroJfomtkv330mZKAga</consumer_secret>
+                <token_request_authorization>Bearer 83fe1f716de7b651b17f5aa0a3461</token_request_authorization>
+                <site_id>3369934</site_id>
+                <link_share_advertiser_api><![CDATA[https://api.rakutenmarketing.com/events/1.0/transactions?process_date_start={{start_date}}&process_date_end={{end_date}}]]></link_share_advertiser_api>
+                <token_request><![CDATA[Basic WnlFNXJvUEhsQkRmWjRwN1diMUV2NEh4VUkwYTpfR3RBMkZRVEExWDQwbE82UzdrWkpQaGdSSmNh]]></token_request>
+                <url_request_token><![CDATA[https://api.rakutenmarketing.com/token]]></url_request_token>
+            </link_share_advertisers>
         </manageapi>
     </default>
 </config>

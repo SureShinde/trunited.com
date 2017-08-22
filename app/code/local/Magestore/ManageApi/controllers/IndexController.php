@@ -518,9 +518,9 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
                 } else {
                     if (isset($data[$rwd->getCustomerId()]) && $data[$rwd->getCustomerId()] != null && $data[$rwd->getCustomerId()] == $rwd->getOrderIncrementId()) {
                         $duplicates[] = array(
-                          'transaction_id' => $rwd->getId(),
-                          'customer_id' => $rwd->getCustomerId(),
-                          'order_increment_id' => $rwd->getOrderIncrementId(),
+                            'transaction_id' => $rwd->getId(),
+                            'customer_id' => $rwd->getCustomerId(),
+                            'order_increment_id' => $rwd->getOrderIncrementId(),
                         );
                     } else {
                         $data[$rwd->getCustomerId()] = $rwd->getOrderIncrementId();
@@ -533,5 +533,39 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
         }
 
         echo 'success';
+    }
+
+    public function updateDb4Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+              DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshareadvertisers')};
+              CREATE TABLE {$setup->getTable('manageapi/linkshareadvertisers')} (
+                `linkshare_advertisers_id` int(11) unsigned NOT NULL auto_increment,
+                `etransaction_id` VARCHAR(255) NOT NULL,
+                `advertiser_id` VARCHAR(255) NOT NULL,
+                `sid` varchar(255) NOT NULL,
+                `order_id` varchar(255) NULL,
+                `offer_id` VARCHAR(255) NULL,
+                `sku_number` VARCHAR(255) NULL,
+                `sale_amount` VARCHAR(255) NULL,
+                `quantity` VARCHAR(255) NULL,
+                `commissions` VARCHAR(255) NULL,
+                `process_date` datetime NULL,
+                `transaction_date` datetime NULL,
+                `transaction_type` VARCHAR(255) NULL,
+                `product_name` VARCHAR(255) NULL,
+                `u1` VARCHAR(255) NULL,
+                `currency` VARCHAR(255) NULL,
+                `is_event` VARCHAR(255) NULL,
+                `created_time` datetime NULL,
+                PRIMARY KEY (`linkshare_advertisers_id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+          ");
+        $installer->endSetup();
+        echo "success";
     }
 }
