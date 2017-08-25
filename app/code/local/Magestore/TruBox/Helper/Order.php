@@ -168,15 +168,25 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
         $data = array();
         $items = Mage::getModel('trubox/item')->getCollection()
-            -> addFieldToFilter('trubox_id', $truBox_id)
+            ->addFieldToFilter('trubox_id', $truBox_id)
             ->addFieldToFilter('item_id', array('in' => $data_items))
             ;
 
-
+        $start_month = Mage::getStoreConfig('trubox/general/start_month');
         if(sizeof($items) > 0)
         {
             foreach ($items as $item)
             {
+                if($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                    if($item->getOnetimeMonth() == null || date('Y', strtotime($item->getOnetimeMonth())) != date('Y', time()) ||
+                        (date('Y', strtotime($item->getOnetimeMonth())) == date('Y', time()) && date('m', strtotime($item->getOnetimeMonth())) != date('m', time()))
+                    )
+                        continue;
+                } else if($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS){
+                    $is_odd = $start_month % 2 == 0 ? true : false;
+                    if(($is_odd && date('m', time()) % 2 != 0) || (!$is_odd && date('m', time()) % 2 == 0))
+                        continue;
+                }
                 $product = Mage::getModel('catalog/product')->load($item->getProductId());
 
                 if ($product->getIsInStock() && $product->isSaleable() === true) {
@@ -401,6 +411,7 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
 
             $prepare_data = $this->getProductParams($customer_id, $data_items);
             $products = $prepare_data['product'];
+
             if (sizeof($products) == 0)
                 throw new Exception(
                     Mage::helper('trubox')->__('%s - No Items found!', $customer->getName())
@@ -518,23 +529,69 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
             /* END Fix bug remove items in carts after creating orders */
 
             $increment_id = $service->getOrder()->getIncrementId();
-
             Mage::app()->getStore()->setConfig(Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "1");
-
 
             $order_mail = new Mage_Sales_Model_Order();
             $order_mail->loadByIncrementId($increment_id);
             $order_mail->setCreatedBy(Magestore_TruBox_Model_Status::ORDER_CREATED_BY_ADMIN_YES)->save();
             $order_mail->sendNewOrderEmail();
 
-            /* update table trubox order */
+            /** update table trubox order & history **/
             $truBox_order = Mage::getModel('trubox/order');
             $truBox_order->setData('trubox_id', $truBox_id);
             $truBox_order->setData('order_id', $increment_id);
             $truBox_order->setData('created_time', now());
             $truBox_order->setData('updated_time', now());
             $truBox_order->save();
-            /* END update table trubox order */
+
+            $product_save = array();
+            foreach ($products as $item_id => $p) {
+                $item = Mage::getModel('trubox/item')->load($item_id);
+                if($item != null && $item->getId()){
+                    foreach ($p as $product_id => $_dt) {
+                        $product = Mage::getModel('catalog/product')->load($product_id);
+                        if($product != null && $product->getId()){
+                            $product_save[] = array(
+                                'product_id' => $product->getId(),
+                                'product_name'  => $product->getName(),
+                                'qty'   => $_dt['qty'],
+                                'price'   => Mage::helper('core')->currency($product->getPrice(),true,false),
+                                'type'   => $item->getTypeItem(),
+                                'onetime_month'   => $item->getOnetimeMonth(),
+                            );
+                        }
+                    }
+                }
+            }
+
+            $truBox_history = Mage::getModel('trubox/history');
+            $history_data = array(
+                'customer_id' => $customer_id,
+                'customer_name' => $customer->getName(),
+                'customer_email' => $customer->getEmail(),
+                'order_id'  => $order_mail->getEntityId(),
+                'order_increment_id'  => $increment_id,
+                'updated_time'  => now(),
+                'created_time'  => now(),
+                'points'    => $order_mail->getRewardpointsEarn(),
+                'cost'  => $order_mail->getGrandTotal(),
+                'products'  => json_encode($product_save),
+            );
+            $truBox_history->setData($history_data);
+            $truBox_history->save();
+            /** END update table trubox order **/
+
+            /** REMOVE ITEMS WITH ONE TIME TYPE **/
+            $item_onetime = Mage::getModel('trubox/item')->getCollection()
+                ->addFieldToFilter('trubox_id', $truBox_id)
+                ->addFieldToFilter('type_item', Magestore_TruBox_Model_Type::TYPE_ONE_TIME)
+                ;
+            if(sizeof($item_onetime) > 0) {
+                foreach ($item_onetime as $onetime) {
+                    $onetime->delete();
+                }
+            }
+            /** END REMOVE ITEMS WITH ONE TIME TYPE **/
 
             $admin_session->unsIsOrderBackend();
             $admin_session->unsOrderCustomerId();

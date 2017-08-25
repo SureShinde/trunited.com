@@ -31,6 +31,47 @@
         </reference>
     </default>
     <!-- Customer account -->
+    <trubox_default>
+        <update handle="page_two_columns_left"/>
+        <reference name="left">
+            <block type="trubox/navigation" before="-" name="trubox.navigation"
+                   template="trubox/navigation.phtml">
+                <action method="addLink" translate="label" module="trugiftcard">
+                    <name>account_dashboard</name>
+                    <path>customer/account</path>
+                    <label>ACCOUNT DASHBOARD</label>
+                    <enable>true</enable>
+                </action>
+                <action method="addLink" translate="label" module="trubox">
+                    <name>trubox_index</name>
+                    <path>mytrubox</path>
+                    <label>MANAGE TRUBOX</label>
+                    <enable>true</enable>
+                </action>
+                <action method="addLink" translate="label" module="trubox">
+                    <name>trubox_items</name>
+                    <path>mytrubox/index/items</path>
+                    <label>VIEW MY ITEMS</label>
+                    <enable>true</enable>
+                    <order>10</order>
+                </action>
+                <action method="addLink" translate="label" module="trubox">
+                    <name>trubox_address</name>
+                    <path>mytrubox/index/address</path>
+                    <label>ADDRESS</label>
+                    <enable>1</enable>
+                    <order>20</order>
+                </action>
+                <action method="addLink" translate="label" module="trubox">
+                    <name>trubox_payment</name>
+                    <path>mytrubox/index/payment</path>
+                    <label>PAYMENT</label>
+                    <enable>true</enable>
+                    <order>30</order>
+                </action>
+            </block>
+        </reference>
+    </trubox_default>
     <customer_account>
         <reference name="customer_account_navigation">
             <action method="addLink" translate="label" module="trubox">
@@ -46,7 +87,7 @@
         </reference>
     </customer_account>
     <trubox_index_index>
-        <update handle="customer_account"/>
+        <update handle="trubox_default"/>
         <reference name="content">
             <block type="trubox/items" name="trubox.items" template="trubox/account/trubox.phtml">
                 <block type="rewardpoints/template" name="rewardpoints.dashboard.earn" as="dashboard_earn" template="rewardpoints/account/dashboard/list.phtml">
@@ -54,8 +95,36 @@
                 </block>
                 <block type="page/html_pager" name="trubox_pager"/>
             </block>
-
         </reference>
     </trubox_index_index>
+    <trubox_index_items>
+        <update handle="trubox_default"/>
+        <reference name="content">
+            <block type="trubox/items" name="trubox.items" template="trubox/account/items.phtml">
+                <block type="rewardpoints/template" name="rewardpoints.dashboard.earn" as="dashboard_earn" template="rewardpoints/account/dashboard/list.phtml">
+                    <block type="rewardpoints/account_dashboard_earn" name="dashboard.earn" template="rewardpoints/account/dashboard/earn.phtml" />
+                </block>
+                <block type="page/html_pager" name="trubox_pager"/>
+            </block>
+        </reference>
+    </trubox_index_items>
+    <trubox_index_address>
+        <update handle="trubox_default"/>
+        <reference name="content">
+            <block type="trubox/address" name="trubox.address" template="trubox/account/address.phtml" />
+        </reference>
+    </trubox_index_address>
+    <trubox_index_payment>
+        <update handle="trubox_default"/>
+        <reference name="content">
+            <block type="trubox/payment" name="trubox.payment" template="trubox/account/payment.phtml" />
+        </reference>
+    </trubox_index_payment>
+    <trubox_index_category>
+        <update handle="trubox_default"/>
+        <reference name="content">
+            <block type="trubox/category" name="trubox.category" template="trubox/category.phtml" />
+        </reference>
+    </trubox_index_category>
 
 </layout>

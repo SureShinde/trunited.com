@@ -114,6 +114,9 @@
                     <coupon>
                         <table>trubox_coupon_code</table>
                     </coupon>
+                    <history>
+                        <table>trubox_history</table>
+                    </history>
                 </entities>
             </trubox_mysql4>
         </models>
@@ -173,6 +176,8 @@
                 <type_code>1</type_code>
                 <coupon_code_amount>20</coupon_code_amount>
                 <delay_second>1</delay_second>
+                <current_date>6</current_date>
+                <start_month>1</start_month>
             </general>
             <shipping>
                 <shipping_method>freeshipping_freeshipping</shipping_method>

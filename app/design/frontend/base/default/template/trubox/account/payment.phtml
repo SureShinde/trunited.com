@@ -1,0 +1,102 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints Account Dashboard
+ *
+ * @see Magestore_RewardPoints_Block_Account_Dashboard
+ */
+?>
+<div class="trubox-page">
+    <?php echo $this->getChildHtml('global_messages'); ?>
+
+    <div class="page-title" tabindex="1">
+        <h1><?php echo $this->__('My TruBox') ?></h1>
+    </div>
+
+    <br style="clear: both"/>
+    <div class="trubox-payment">
+        <?php
+        $cards = $this->getPaymentTruBox();
+        ?>
+        <h2 class="trubox-header"><?php echo $this->__('Trubox Payment') ?></h2>
+
+        <div class="fieldsets">
+            <form class="items" id="trubox-payment-information" action="<?php echo $this->savePaymentUrl() ?>"
+                  method="POST">
+                <ul class="form-list" id="payment_form_ccsave">
+                    <?php if (sizeof($cards) > 0) { ?>
+                        <li>
+                            <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
+                            <select id="current_credit_card" name="current_credit_card">
+                                <?php foreach ($cards as $card) { ?>
+                                    <option
+                                        value="<?php echo $card->getId(); ?>"><?php echo $card->getLabel(); ?></option>
+                                <?php } ?>
+                            </select>
+                        </li>
+                    <?php } else { ?>
+                        <input type="hidden" id="current_credit_card" name="current_credit_card" value=""/>
+                    <?php } ?>
+                    <li>
+                        <a href="<?php echo $this->getCardUrl(); ?>"
+                           title="<?php echo $this->__('Create, update or use a different card') ?>">
+                            <?php echo $this->__('Create, update or use a different card') ?>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="input-box apply_trugiftcard">
+                            <input type="checkbox" id="use_trugiftcard" name="use_trugiftcard"
+                                   title="<?php echo $this->__('Use Trunited Gift Card') ?>"
+                                   <?php if ($is_applied_tgc){ ?>checked="checked"<?php } ?>
+                                />
+
+                            <label
+                                for="use_trugiftcard"><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></label>
+                            <img
+                                src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
+                                title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
+                        </div>
+                    </li>
+                </ul>
+                <div class="buttons-set">
+                    <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
+                    <button class="button btn-cart" type="submit">
+                        <span><span><?php echo $this->__('Save Payment') ?></span></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <?php echo $this->getChildHtml('other') ?>
+</div>
+
+<script type="text/javascript">
+    var trubox_payment_information = new VarienForm('trubox-payment-information', true);
+
+    $j = jQuery.noConflict();
+    $j('.page-title').focus();
+
+    $$('.cvv-what-is-this').each(function (element) {
+        Event.observe(element, 'click', toggleToolTip);
+    });
+</script>
+

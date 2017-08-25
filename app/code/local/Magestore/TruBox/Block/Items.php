@@ -298,4 +298,18 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         return Mage::helper('trubox')->hasSaveCode(Mage::getSingleton('customer/session')->getCustomer()->getId());
     }
 
+    public function isShowCurrentMonth()
+    {
+        return Mage::helper('trubox')->isShowCurrentMonth();
+    }
+
+    public function getDataCurrentMonth()
+    {
+        return Mage::helper('trubox')->getDataCurrentMonth();
+    }
+
+    public function getDataNextMonth($month)
+    {
+        return Mage::helper('trubox')->getDataNextMonth($month);
+    }
 }

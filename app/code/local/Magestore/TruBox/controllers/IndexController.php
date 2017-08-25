@@ -31,12 +31,14 @@
  * @package     Magestore_TruBox
  * @author      Magestore Developer
  */
-class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action {
+class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
+{
 
     /**
      * check customer is logged in
      */
-    public function preDispatch() {
+    public function preDispatch()
+    {
         parent::preDispatch();
         if (!$this->getRequest()->isDispatched()) {
             return;
@@ -65,7 +67,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         /* Check default address when trubox address is null */
         Mage::helper('trubox')->firstCheckAddress();
         /* End check default address when trubox address is null */
@@ -74,7 +77,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $this->renderLayout();
     }
 
-    public function saveAddressAction() {
+    public function saveAddressAction()
+    {
         $billing = $this->getRequest()->getParam('billing');
         $shipping = $this->getRequest()->getParam('shipping');
 
@@ -89,13 +93,13 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         try {
             /* Check Region ID of billing and shipping address first */
             $billing['region_id'] = Mage::helper('trubox/order')->checkRegionId($billing['country'], $billing['region'], $billing['region_id']);
-            if($billing['region_id'] == null)
+            if ($billing['region_id'] == null)
                 throw new Exception(
                     Mage::helper('trubox')->__('Please enter the State in Billing Address.')
                 );
 
             $shipping['region_id'] = Mage::helper('trubox/order')->checkRegionId($shipping['country'], $shipping['region'], $shipping['region_id']);
-            if($shipping['region_id'] == null)
+            if ($shipping['region_id'] == null)
                 throw new Exception(
                     Mage::helper('trubox')->__('Please enter the State in Shipping Address.')
                 );
@@ -143,10 +147,11 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/'));
+        $this->_redirectUrl(Mage::getUrl('*/*/address'));
     }
 
-    public function savePaymentAction() {
+    public function savePaymentAction()
+    {
         $address = $this->getRequest()->getPost();
         $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
         $address['trubox_id'] = $truBoxId;
@@ -156,16 +161,13 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $truBox = Mage::helper('trubox')->getCurrentTruBox();
 
         try {
-            if($current_credit_card > 0)
-            {
+            if ($current_credit_card > 0) {
                 $cards = Mage::getModel('tokenbase/card')->getCollection()
-                    ->addFieldToFilter( 'active', 1 )
-                    ->addFieldToFilter( 'customer_id', $current_credit_card)
-                    ->addFieldToFilter( 'method', 'authnetcim')
-                ;
+                    ->addFieldToFilter('active', 1)
+                    ->addFieldToFilter('customer_id', $current_credit_card)
+                    ->addFieldToFilter('method', 'authnetcim');
 
-                if(sizeof($cards) > 0)
-                {
+                if (sizeof($cards) > 0) {
                     foreach ($cards as $_card) {
                         $_card->setData('use_in_trubox', 0);
                         $_card->setData('updated_at', now());
@@ -175,16 +177,14 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 }
 
                 $card = Mage::getModel('tokenbase/card')->load($current_credit_card);
-                if($card != null && $card->getId())
-                {
+                if ($card != null && $card->getId()) {
                     $card->setData('use_in_trubox', 1);
                     $card->setData('updated_at', now());
                     $card->save();
                 }
             }
 
-            if($truBox != null && $truBox->getId())
-            {
+            if ($truBox != null && $truBox->getId()) {
                 $truBox->setData('use_trugiftcard', $use_trugiftcard != null && strcasecmp($use_trugiftcard, 'on') == 0 ? 1 : 0);
                 $truBox->save();
             }
@@ -198,15 +198,16 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/'));
+        $this->_redirectUrl(Mage::getUrl('*/*/payment'));
     }
 
-    public function deleteItemsAction() {
+    public function deleteItemsAction()
+    {
         $item_id = $this->getRequest()->getParam('id');
 
-        try{
+        try {
             $item = Mage::getModel('trubox/item')->load($item_id);
-            if(!$item->getId())
+            if (!$item->getId())
                 throw new Exception(
                     Mage::helper('trubox')->__('Item does not exist !')
                 );
@@ -222,15 +223,14 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/index'));
+        $this->_redirectUrl(Mage::getUrl('*/*/items'));
     }
 
     public function clearItemsAction()
     {
-        try{
+        try {
             $items = Mage::helper('trubox')->getCurrentTruBoxCollection();
-            if(sizeof($items) > 0)
-            {
+            if (sizeof($items) > 0) {
                 foreach ($items as $item)
                     $item->delete();
             }
@@ -244,25 +244,58 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/index'));
+        $this->_redirectUrl(Mage::getUrl('*/*/items'));
     }
 
-    public function saveItemsAction() {
+    public function saveItemsAction()
+    {
         $data = $this->getRequest()->getParams();
-        try{
+        try {
             $transactionSave = Mage::getModel('core/resource_transaction');
-            foreach ($data as $id=>$qty) {
-                $item = Mage::getModel('trubox/item')->load($id);
-                if($item->getId()){
-                    if($qty == 0)
-                        $item->delete();
-                    else{
-                        $item->setQty($qty);
-                        $item->setUpdatedAt(now());
-                        $transactionSave->addObject($item);
+            $delete_items = array();
+            $day_on_time = Mage::getStoreConfig('trubox/general/current_date');
+            $current_day = date('d', time());
+            foreach ($data as $id => $qty) {
+                if (strpos($id, 'ype_') > 0) {
+                    $_id = str_replace('type_', '', $id);
+                    $item = Mage::getModel('trubox/item')->load($_id);
+                    if ($item->getId()) {
+                        if ($data[$_id] == 0)
+                            $item->delete();
+                        else {
+                            $item->setQty($data[$_id]);
+                            $item->setUpdatedAt(now());
+                            $item->setTypeItem((int)$qty);
+                            if ($qty == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                                if ($current_day < $day_on_time) {
+                                    $item->setOnetimeMonth(now());
+                                    $item->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', time())));
+                                } else {
+                                    $item->setOnetimeMonth(date('Y-m-d H:i:s', strtotime('first day of next month')));
+                                    $item->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month'))));
+                                }
+                            } else {
+                                $item->setOnetimeMonth(null);
+                                $item->setOnetimeMonthText(null);
+                            }
+                            $transactionSave->addObject($item);
+                        }
                     }
+                } else {
+                    $delete_items[] = $id;
                 }
             }
+
+            if (sizeof($delete_items) > 0) {
+                foreach ($delete_items as $del) {
+                    $item = Mage::getModel('trubox/item')->load($del);
+                    if ($item->getId() && (!isset($data['type_' . $del]) || $data['type_' . $del] == null)) {
+                        $item->delete();
+                    }
+                }
+
+            }
+
             $transactionSave->save();
 
             Mage::getSingleton('core/session')->addSuccess(
@@ -274,10 +307,11 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             );
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/'));
+        $this->_redirectUrl(Mage::getUrl('*/*/items'));
     }
 
-    public function getRegionHtmlAction() {
+    public function getRegionHtmlAction()
+    {
         $countryCode = $this->getRequest()->getPost('code');
         $select = $this->getLayout()->createBlock('core/html_select')
             ->setName('state')
@@ -303,7 +337,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         return $regionCollection;
     }
 
-    public function addTruBoxAction() {
+    public function addTruBoxAction()
+    {
         $productId = $this->getRequest()->getParam('id');
         $product = Mage::getModel('catalog/product')->load($productId);
 
@@ -317,24 +352,21 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
         try {
 
-            if (!$product->getId())
-            {
+            if (!$product->getId()) {
                 throw new Exception(
                     Mage::helper('trubox')->__('Product does not exist')
                 );
             }
 
-            if(Mage::helper('trubox')->isInExclusionList($product))
-            {
+            if (Mage::helper('trubox')->isInExclusionList($product)) {
                 throw new Exception(
-                    Mage::helper('trubox')->__('You cannot add this product to TruBox')
+                    Mage::helper('trubox')->__('You cannot add the <b>%s</b> to TruBox', $product->getName())
                 );
             }
 
             $flag = false;
 
-            if ($str_encode == "null" && $product->getTypeId() == 'configurable')
-            {
+            if ($str_encode == "null" && $product->getTypeId() == 'configurable') {
                 $options = Mage::helper('trubox')->getConfigurableOptionProduct($product);
 
                 foreach ($options as $_option) {
@@ -375,20 +407,16 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 }
             }
 
-            if(isset($super_group) && sizeof($super_group) > 0)
-            {
+            if (isset($super_group) && sizeof($super_group) > 0) {
                 $check = false;
-                foreach ($super_group as $id=>$qty)
-                {
-                    if($qty > 0)
-                    {
+                foreach ($super_group as $id => $qty) {
+                    if ($qty > 0) {
                         $check = true;
                         break;
                     }
                 }
 
-                if(!$check)
-                {
+                if (!$check) {
                     Mage::getSingleton('core/session')->addError(
                         Mage::helper('trubox')->__('Please specify the quantity of product(s).')
                     );
@@ -407,20 +435,16 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
             }
 
-            if(isset($super_group) && sizeof($super_group) > 0)
-            {
+            if (isset($super_group) && sizeof($super_group) > 0) {
                 $transactionSave = Mage::getModel('core/resource_transaction');
-                foreach ($super_group as $pid => $pqty)
-                {
-                    if($pqty > 0){
+                foreach ($super_group as $pid => $pqty) {
+                    if ($pqty > 0) {
                         $truBoxItems = Mage::getModel('trubox/item');
                         $checkItem = $truBoxItems->getCollection()
                             ->addFieldToFilter('trubox_id', $truBoxId)
                             ->addFieldToFilter('product_id', $pid)
-                            ->getFirstItem()
-                        ;
-                        if (!$checkItem->getItemId())
-                        {
+                            ->getFirstItem();
+                        if (!$checkItem->getItemId()) {
                             $_p = Mage::getModel('catalog/product')->load($pid);
                             $itemData = array(
                                 'trubox_id' => $truBoxId,
@@ -429,7 +453,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                                 'origin_params' => '',
                                 'option_params' => '',
                                 'order_id' => '',
-                                'price' => $_p->getPirce()
+                                'price' => $_p->getPirce(),
+                                'type_item' => Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH,
 
                             );
                             $checkItem = Mage::getModel('trubox/item');
@@ -447,45 +472,26 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 $checkItem = $truBoxItems->getCollection()
                     ->addFieldToFilter('trubox_id', $truBoxId)
                     ->addFieldToFilter('product_id', $productId)
-                    ->addFieldToFilter('option_params', $str_encode != "null" ? $str_encode : $str_option)
-                    ->getFirstItem()
-                ;
+                    ->getFirstItem();
 
                 $truBox_obj = null;
-                if (!$checkItem->getItemId()) {
+                if ($checkItem != null && $checkItem->getId()) {
+                    $checkItem->setQty($checkItem->getQty() + 1);
+                    $checkItem->save();
+                    $truBox_obj = $checkItem;
+                } else {
+                    $truBoxItems = Mage::getModel('trubox/item');
                     $itemData = array(
                         'trubox_id' => $truBoxId,
                         'product_id' => $productId,
                         'qty' => 1,
                         'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
-                        'option_params' => $str_encode != "null" ? $str_encode : $str_option
+                        'option_params' => $str_encode != "null" ? $str_encode : $str_option,
+                        'type_item' => Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH,
 
                     );
                     $truBoxItems->setData($itemData)->save();
                     $truBox_obj = $truBoxItems;
-                } else {
-
-                    if ((strcasecmp($checkItem->getOptionParams(), $str_encode) == 0 && $str_encode != "null")
-                        || (strcasecmp($checkItem->getOptionParams(), $str_option) == 0 && $str_option != "null")
-                    ) {
-                        $qtyCheckItem = $checkItem->getQty();
-                        $checkItem->setQty($qtyCheckItem + 1);
-                        $checkItem->save();
-                        $truBox_obj = $checkItem;
-                    } else {
-                        $truBoxItems = Mage::getModel('trubox/item');
-                        $itemData = array(
-                            'trubox_id' => $truBoxId,
-                            'product_id' => $productId,
-                            'qty' => 1,
-                            'origin_params' => $str_encode != "null" ? $str_encode : $str_option,
-                            'option_params' => $str_encode != "null" ? $str_encode : $str_option,
-
-                        );
-
-                        $truBoxItems->setData($itemData)->save();
-                        $truBox_obj = $truBoxItems;
-                    }
                 }
 
                 $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
@@ -494,7 +500,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             }
 
             Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper('trubox')->__('%s was added to your TruBox.',$product->getName())
+                Mage::helper('trubox')->__('%s was added to your TruBox.', $product->getName())
             );
         } catch (Exception $ex) {
             Mage::getSingleton('core/session')->addError(
@@ -504,7 +510,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
             return;
         }
 
-        $this->_redirectUrl(Mage::getUrl('*/*/'));
+        $this->_redirectUrl(Mage::getUrl('*/*/items'));
     }
 
     public function updateDbAction()
@@ -641,7 +647,8 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     }
 
     //ALTER TABLE tablename MODIFY columnname INTEGER;
-    public function cvvAction(){
+    public function cvvAction()
+    {
         $setup = new Mage_Core_Model_Resource_Setup();
         $installer = $setup;
         $installer->startSetup();
@@ -690,16 +697,12 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     {
         var_dump($_SERVER);
         $collection = Mage::getModel('trubox/address')->getCollection()
-            ->addFieldToFilter('region_id',0)
-        ;
+            ->addFieldToFilter('region_id', 0);
 
-        if(sizeof($collection) > 0)
-        {
-            foreach($collection as $col)
-            {
+        if (sizeof($collection) > 0) {
+            foreach ($collection as $col) {
                 $region_id = Mage::helper('trubox/order')->checkRegionId($col->getCountry(), $col->getRegion());
-                if($region_id != null)
-                {
+                if ($region_id != null) {
                     $col->setRegionId($region_id)->save();
                 }
             }
@@ -717,49 +720,49 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         $start_date = $helper->getStartCouponCode();
         $end_date = $helper->getEndCouponCode();
 
-        try{
-            if(!$enable)
+        try {
+            if (!$enable)
                 throw new Exception(
                     $helper->__('The promotion code has been disabled.')
                 );
 
-            if(strtotime($start_date) > time() || strtotime($end_date) < time() || $start_date == null || $end_date == null)
+            if (strtotime($start_date) > time() || strtotime($end_date) < time() || $start_date == null || $end_date == null)
                 throw new Exception(
                     $helper->__('The promotion code has not yet started.')
                 );
 
-            if($default_code == null)
+            if ($default_code == null)
                 throw new Exception(
                     $helper->__('The promotion code has not been configured.')
                 );
 
-            if(!isset($coupon_code) || $coupon_code == null){
-               throw new Exception(
-                   $helper->__('The promotion code is not valid. Please enter a new promotion code and try again.')
+            if (!isset($coupon_code) || $coupon_code == null) {
+                throw new Exception(
+                    $helper->__('The promotion code is not valid. Please enter a new promotion code and try again.')
                 );
             }
 
-            if(strcasecmp($coupon_code, $default_code) != 0)
+            if (strcasecmp($coupon_code, $default_code) != 0)
                 throw new Exception(
                     $helper->__('The promotion code is not valid. Please enter a new promotion code and try again.')
                 );
 
             $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
             $check_order = $helper->checkOrderFromTruBox($customer_id);
-            if($check_order)
+            if ($check_order)
                 throw new Exception(
                     $helper->__('The promotion code entered is for new TruBox customers only. Please enter a different code and try again.')
                 );
 
             $coupon_model = Mage::getModel('trubox/coupon');
             $data = array(
-                'customer_id'   => $customer_id,
-                'coupon_code'   => $coupon_code,
-                'type_code'   => $helper->getTypeCouponCode(),
-                'amount'   => $helper->getAmountCouponCode(),
-                'status'   => Magestore_TruBox_Model_Status::COUPON_CODE_STATUS_PENDING,
-                'updated_time'   => now(),
-                'created_time'   => now(),
+                'customer_id' => $customer_id,
+                'coupon_code' => $coupon_code,
+                'type_code' => $helper->getTypeCouponCode(),
+                'amount' => $helper->getAmountCouponCode(),
+                'status' => Magestore_TruBox_Model_Status::COUPON_CODE_STATUS_PENDING,
+                'updated_time' => now(),
+                'created_time' => now(),
             );
             $coupon_model->setData($data);
             $coupon_model->save();
@@ -827,6 +830,233 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 		");
         $installer->endSetup();
         echo "success";
+    }
+
+    public function updateDb10Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `type_item` INT DEFAULT 2;
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `onetime_month` datetime NULL;
+            ALTER TABLE {$setup->getTable('trubox/item')} ADD `onetime_month_text` VARCHAR (255) NULL;
+
+            DROP TABLE IF EXISTS {$setup->getTable('trubox/history')};
+            CREATE TABLE {$setup->getTable('trubox/history')} (
+              `history_id` int(10) unsigned NOT NULL auto_increment,
+              `customer_id` int(10) NOT NULL,
+              `customer_name` VARCHAR (255) NOT NULL,
+              `customer_email` VARCHAR (255) NOT NULL,
+              `order_id` int(10) NULL,
+              `order_increment_id` int(10) NULL,
+              `products` text NULL,
+              `points` FLOAT NULL,
+              `cost` FLOAT NULL,
+              `updated_time` datetime NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`history_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		");
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function updatePointCostAction()
+    {
+        $data = json_decode($this->getRequest()->getParam('data'), true);
+
+        $result = Mage::helper('trubox')->calculatePointsCost($data);
+
+        echo json_encode($result);
+    }
+
+    public function itemsAction()
+    {
+        $this->loadLayout();
+        $this->_title(Mage::helper('trubox')->__('My TruBox Items'));
+        $this->renderLayout();
+    }
+
+    public function addressAction()
+    {
+        /* Check default address when trubox address is null */
+        Mage::helper('trubox')->firstCheckAddress();
+        /* End check default address when trubox address is null */
+        $this->loadLayout();
+        $this->_title(Mage::helper('trubox')->__('My TruBox Address'));
+        $this->renderLayout();
+    }
+
+    public function paymentAction()
+    {
+        $this->loadLayout();
+        $this->_title(Mage::helper('trubox')->__('My TruBox Payment'));
+        $this->renderLayout();
+    }
+
+    public function categoryAction()
+    {
+        $this->loadLayout();
+        $this->_title(Mage::helper('trubox')->__('My TruBox Category'));
+        $this->renderLayout();
+    }
+
+    public function updateDb11Action()
+    {
+        $setup = new Mage_Eav_Model_Entity_Setup ();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+
+		");
+        $setup->addAttribute('catalog_category', 'display_trubox', array(
+            'group'             => 'TruBox',
+            'type'              => 'int',
+            'backend'           => '',
+            'frontend_input'    => '',
+            'frontend'          => '',
+            'label'             => 'Display TruBox',
+            'input'             => 'select',
+            'default'           => array(0),
+            'class'             => '',
+            'source'            => 'eav/entity_attribute_source_boolean',
+            'global'             => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
+            'visible'           => true,
+            'frontend_class'     => '',
+            'required'          => false,
+            'user_defined'      => true,
+            'position'            => 100,
+        ));
+
+        $setup->addAttribute('catalog_category', 'order_trubox', array(
+            'group'             => 'TruBox',
+            'type'              => 'int',
+            'backend'           => '',
+            'frontend_input'    => '',
+            'frontend'          => '',
+            'label'             => 'Order In TruBox',
+            'input'             => 'text',
+            'default'           => 1,
+            'class'             => '',
+            'source'            => '',
+            'global'             => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
+            'visible'           => true,
+            'frontend_class'     => '',
+            'required'          => false,
+            'user_defined'      => true,
+            'position'            => 102,
+        ));
+        $installer->endSetup();
+        echo "success";
+    }
+
+    public function addProductsAction()
+    {
+        $data = $this->getRequest()->getParams();
+        $count = 0;
+        if(sizeof($data) > 0) {
+
+            $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
+            $truBox = Mage::getModel('trubox/trubox');
+            $customer = Mage::getSingleton('customer/session')->getCustomer();
+            $customerId = $customer->getId();
+            $truBoxData = array('customer_id' => $customerId, 'status' => 'open');
+            if (!$truBoxId) {
+                $truBoxId = $truBox->setData($truBoxData)->save()->getTruboxId();
+            }
+
+            $day_on_time = Mage::getStoreConfig('trubox/general/current_date');
+            $current_day = date('d', time());
+            foreach ($data as $key => $val) {
+                if (strpos($key, 'ype_') > 0) {
+                    $productId = str_replace('type_', '', $key);
+                    $product = Mage::getModel('catalog/product')->load($productId);
+
+                    try {
+                        if (!$product->getId()) {
+                            continue;
+                        }
+
+                        if (Mage::helper('trubox')->isInExclusionList($product)) {
+                            throw new Exception(
+                                Mage::helper('trubox')->__('You cannot add the <b><a href="%s">%s</a></b> to TruBox', $product->getProductUrl(), $product->getName())
+                            );
+                        }
+
+                        $truBoxItems = Mage::getModel('trubox/item');
+                        $checkItem = $truBoxItems->getCollection()
+                            ->addFieldToFilter('trubox_id', $truBoxId)
+                            ->addFieldToFilter('product_id', $productId)
+                            ->getFirstItem();
+
+                        $truBox_obj = null;
+                        if ($checkItem != null && $checkItem->getId()) {
+                            $checkItem->setData('qty', $checkItem->getQty()+ $data[$productId]);
+                            $checkItem->setData('type_item', $val);
+                            $checkItem->setData('updated_at', now());
+                            if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                                if ($current_day < $day_on_time) {
+                                    $checkItem->setOnetimeMonth(now());
+                                    $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', time())));
+                                } else {
+                                    $checkItem->setOnetimeMonth(date('Y-m-d H:i:s', strtotime('first day of next month')));
+                                    $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month'))));
+                                }
+                            } else {
+                                $checkItem->setOnetimeMonth(null);
+                                $checkItem->setOnetimeMonthText(null);
+                            }
+                            $checkItem->save();
+                            $truBox_obj = $truBoxItems;
+                        } else {
+                            $truBoxItems = Mage::getModel('trubox/item');
+                            $itemData = array(
+                                'trubox_id' => $truBoxId,
+                                'product_id' => $productId,
+                                'qty' => $data[$productId],
+                                'origin_params' => '',
+                                'option_params' => '',
+                                'updated_at' => now(),
+                                'type_item' => $val,
+                            );
+
+                            if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                                if ($current_day < $day_on_time) {
+                                    $itemData['onetime_month'] = now();
+                                    $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', time()));
+                                } else {
+                                    $itemData['onetime_month'] = date('Y-m-d H:i:s', strtotime('first day of next month'));
+                                    $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month')));
+                                }
+                            } else {
+                                $itemData['onetime_month'] = '';
+                                $itemData['onetime_month_text'] = '';
+                            }
+
+                            $truBoxItems->setData($itemData)->save();
+                            $truBox_obj = $truBoxItems;
+                        }
+
+                        $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
+                        $truBox_obj->setPrice($price);
+                        $truBox_obj->save();
+                        $count++;
+                    } catch (Exception $ex) {
+                        Mage::getSingleton('core/session')->addError(
+                            $ex->getMessage()
+                        );
+
+                    }
+                }
+            }
+        }
+
+        if($count > 0)
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper('trubox')->__('%s were added to your TruBox.', $count)
+            );
+        $this->_redirectUrl(Mage::getUrl('*/*/items'));
     }
 
 }

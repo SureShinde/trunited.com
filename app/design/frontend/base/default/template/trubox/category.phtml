@@ -1,0 +1,129 @@
+<?php
+$category = $this->getCategory();
+$product_collection = $this->getProductCollection();
+?>
+<div class="block block-account">
+    <div class="block-title">
+        <strong><span><?php if ($category != null) {
+                    echo $category->getName();
+                } else {
+                    echo $this->__('Category is not existed');
+                } ?></span></strong>
+    </div>
+
+    <div class="box-account box-info box-trubox-summary">
+        <div class="category-items">
+            <?php if (sizeof($product_collection) > 0) { ?>
+            <form class="items" action="<?php echo $this->addItemsToTruBox() ?>" method="POST" id="category-items">
+                <div class="table-responsive">
+                    <table id="shopping-cart-table" class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th><span class="nobr"><?php echo $this->__('') ?></span></th>
+                            <th><span class="nobr"><?php echo $this->__('Name') ?></span></th>
+                            <th>
+                                <?php echo $this->__('Qty') ?>
+                            </th>
+                            <th>
+                                <span class="nobr"><?php echo $this->__('Price') ?></span></span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($product_collection as $product) { ?>
+                            <?php $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product); ?>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                           id="one_time_<?php echo $product->getId(); ?>"
+                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_ONE_TIME ?>"
+                                           class="item_<?php echo $product->getId(); ?>"
+                                           title="<?php echo Mage::helper('trubox')->__('One Time Shipment') ?>"
+                                           onchange="selectType(this, this.checked)"
+                                        />
+                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                           id="every_month_<?php echo $product->getId(); ?>"
+                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH ?>"
+                                           class="item_<?php echo $product->getId(); ?>"
+                                           title="<?php echo Mage::helper('trubox')->__('Every Month') ?>"
+                                           onchange="selectType(this, this.checked)"
+                                        />
+                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                           id="every_two_months_<?php echo $product->getId(); ?>"
+                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS ?>"
+                                           class="item_<?php echo $product->getId(); ?>"
+                                           title="<?php echo Mage::helper('trubox')->__('Every Two Months') ?>"
+                                           onchange="selectType(this, this.checked)"
+                                        />
+                                </td>
+                                <td>
+                                    <a href="<?php echo $product->getProductUrl(true); ?>" class="">
+                                        <strong><?php echo $product->getName() ?></strong></a>
+                                </td>
+                                <td class="a-center">
+                                    <input class="product-qty" id="item_<?php echo $product->getId(); ?>"
+                                           name="<?php echo $product->getId(); ?>"
+                                           value="1"/>
+                                    <input type="button" id="minus" value="-"
+                                           onClick="minusQty(item_<?php echo $product->getId(); ?>)">
+                                    <input type="button" value="+"
+                                           onClick="plusQty(item_<?php echo $product->getId(); ?>)"/>
+                                </td>
+                                <td class="a-center"><p
+                                        class="total-price"><?php echo Mage::helper('core')->currency($product->getPrice(), true, false); ?></p>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="buttons-set">
+                    <button class="button btn-cart" type="submit">
+                        <span><span><?php echo $this->__('SAVE TRUBOX') ?></span></span>
+                    </button>
+                </div>
+                <?php } else { ?>
+                    <p><?php echo $this->__('No products found'); ?></p>
+                <?php } ?>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var category_items = new VarienForm('category-items', true);
+    var update_quantity_url = '<?php echo $this->getUrl('*/*/updatePointCost');?>';
+
+    $j = jQuery.noConflict();
+    $j('.page-title').focus();
+
+    $j('#clear-trubox-items').click(function () {
+        var rs = confirm('<?php echo $this->__('Are you sure?');?>');
+        if (!rs)
+            return false;
+        else
+            window.location.href = '<?php echo $this->getUrl('trubox/index/clearItems');?>';
+    });
+
+    function minusQty(item) {
+        if (typeof item != 'undefined' && item != null) {
+            item.value = (item.value - 1) <= 0 ? 0 : (item.value - 1);
+        }
+    }
+
+    function plusQty(item) {
+        if (typeof item != 'undefined' && item != null) {
+            item.value = (+item.value + 1);
+        }
+    }
+
+    function selectType(e, v) {
+        var _class = '.' + $j(e).attr('class');
+        var name = $j(e).attr('name');
+        $j(_class).prop('checked', false);
+        $j(e).prop('checked', v);
+    }
+</script>
