@@ -73,4 +73,26 @@ class Magestore_TruBox_Block_Category extends Mage_Core_Block_Template {
     {
         return $this->getUrl('*/*/addProducts');
     }
+
+    public function getTruBoxCollection()
+    {
+        return Mage::helper('trubox')->getCurrentTruBoxCollection();
+    }
+
+    public function getProductsFromTruBox()
+    {
+        $collection = $this->getTruBoxCollection();
+        $rs = array();
+
+        if(sizeof($collection) > 0) {
+            foreach ($collection as $trubox) {
+                $rs[$trubox->getProductId()] = array(
+                    'qty' => $trubox->getQty(),
+                    'type_item' => $trubox->getTypeItem()
+                );
+            }
+        }
+
+        return $rs;
+    }
 }

@@ -968,6 +968,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
             $day_on_time = Mage::getStoreConfig('trubox/general/current_date');
             $current_day = date('d', time());
+
             foreach ($data as $key => $val) {
                 if (strpos($key, 'ype_') > 0) {
                     $productId = str_replace('type_', '', $key);
@@ -992,61 +993,80 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
 
                         $truBox_obj = null;
                         if ($checkItem != null && $checkItem->getId()) {
-                            $checkItem->setData('qty', $checkItem->getQty()+ $data[$productId]);
-                            $checkItem->setData('type_item', $val);
-                            $checkItem->setData('updated_at', now());
-                            if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
-                                if ($current_day < $day_on_time) {
-                                    $checkItem->setOnetimeMonth(now());
-                                    $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', time())));
-                                } else {
-                                    $checkItem->setOnetimeMonth(date('Y-m-d H:i:s', strtotime('first day of next month')));
-                                    $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month'))));
-                                }
+                            if($data[$productId] == 0){
+                                $checkItem->delete();
                             } else {
-                                $checkItem->setOnetimeMonth(null);
-                                $checkItem->setOnetimeMonthText(null);
+                                $checkItem->setData('qty', $data[$productId]);
+                                $checkItem->setData('type_item', $val);
+                                $checkItem->setData('updated_at', now());
+                                if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                                    if ($current_day < $day_on_time) {
+                                        $checkItem->setOnetimeMonth(now());
+                                        $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', time())));
+                                    } else {
+                                        $checkItem->setOnetimeMonth(date('Y-m-d H:i:s', strtotime('first day of next month')));
+                                        $checkItem->setOnetimeMonthText(Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month'))));
+                                    }
+                                } else {
+                                    $checkItem->setOnetimeMonth(null);
+                                    $checkItem->setOnetimeMonthText(null);
+                                }
+                                $checkItem->save();
+                                $truBox_obj = $truBoxItems;
                             }
-                            $checkItem->save();
-                            $truBox_obj = $truBoxItems;
                         } else {
-                            $truBoxItems = Mage::getModel('trubox/item');
-                            $itemData = array(
-                                'trubox_id' => $truBoxId,
-                                'product_id' => $productId,
-                                'qty' => $data[$productId],
-                                'origin_params' => '',
-                                'option_params' => '',
-                                'updated_at' => now(),
-                                'type_item' => $val,
-                            );
+                            if($data[$productId] > 0){
+                                $truBoxItems = Mage::getModel('trubox/item');
+                                $itemData = array(
+                                    'trubox_id' => $truBoxId,
+                                    'product_id' => $productId,
+                                    'qty' => $data[$productId],
+                                    'origin_params' => '',
+                                    'option_params' => '',
+                                    'updated_at' => now(),
+                                    'type_item' => $val,
+                                );
 
-                            if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
-                                if ($current_day < $day_on_time) {
-                                    $itemData['onetime_month'] = now();
-                                    $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', time()));
+                                if ($key == Magestore_TruBox_Model_Type::TYPE_ONE_TIME) {
+                                    if ($current_day < $day_on_time) {
+                                        $itemData['onetime_month'] = now();
+                                        $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', time()));
+                                    } else {
+                                        $itemData['onetime_month'] = date('Y-m-d H:i:s', strtotime('first day of next month'));
+                                        $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month')));
+                                    }
                                 } else {
-                                    $itemData['onetime_month'] = date('Y-m-d H:i:s', strtotime('first day of next month'));
-                                    $itemData['onetime_month_text'] = Mage::helper('trubox')->__('One Time (%s)', date('F', strtotime('first day of next month')));
+                                    $itemData['onetime_month'] = '';
+                                    $itemData['onetime_month_text'] = '';
                                 }
-                            } else {
-                                $itemData['onetime_month'] = '';
-                                $itemData['onetime_month_text'] = '';
-                            }
 
-                            $truBoxItems->setData($itemData)->save();
-                            $truBox_obj = $truBoxItems;
+                                $truBoxItems->setData($itemData)->save();
+                                $truBox_obj = $truBoxItems;
+                            }
                         }
 
-                        $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
-                        $truBox_obj->setPrice($price);
-                        $truBox_obj->save();
-                        $count++;
+                        if($truBox_obj != null){
+                            $price = Mage::helper('trubox/item')->getItemPrice($truBox_obj);
+                            $truBox_obj->setPrice($price);
+                            $truBox_obj->save();
+                            $count++;
+                        }
                     } catch (Exception $ex) {
                         Mage::getSingleton('core/session')->addError(
                             $ex->getMessage()
                         );
 
+                    }
+                } else {
+                    if(!isset($data['type_'.$key])){
+                        $remove_item = Mage::getModel('trubox/item')
+                            ->getCollection()
+                            ->addFieldToFilter('trubox_id', $truBoxId)
+                            ->addFieldToFilter('product_id', $key)
+                            ->getFirstItem();
+
+                        if($remove_item != null && $remove_item->getId())
+                            $remove_item->delete();
                     }
                 }
             }
