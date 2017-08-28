@@ -6432,7 +6432,7 @@ button.close {
   }
   .carousel-control .glyphicon-chevron-right,
   .carousel-control .icon-next {
-    margin-right: -10px;
+    margin-right: -125px;
   }
   .carousel-caption {
     right: 20%;

@@ -51,8 +51,10 @@ Default layout, loads most of the pages
 
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
 
-                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+<!--                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>-->
                 <action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>gt IE 7</if></action>
+<!--                <action method="addItem"><type>skin_css</type><name>../../smartwave/porto_trunited/css/styleCs.css</name><params/></action>-->
+                <action method="addItem"><type>skin_css</type><name>../../smartwave/porto_trunited/css/style2.css</name><params/></action>
                 <action method="addCss"><stylesheet>css/widgets.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
 
@@ -123,6 +125,7 @@ Default layout, loads most of the pages
         <block type="page/html" name="root" output="toHtml" template="page/print.phtml">
 
             <block type="page/html_head" name="head" as="head">
+               <action method="addItem"><type>skin_css</type><name>../../smartwave/porto_trunited/css/styleCs.css</name><params/></action>
                 <action method="addJs"><script>prototype/prototype.js</script></action>
                 <action method="addJs"><script>mage/translate.js</script></action>
                 <action method="addJs"><script>lib/ccard.js</script></action>

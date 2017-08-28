@@ -1,0 +1,147 @@
+<!--Check if user is already logged in-->
+<?php 
+    if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+        //not logged in
+    }else{
+        // logged in
+      header('Location: customer/account');
+      /*header('Location: thank-you');*/
+    }
+?>
+ <!--login modal-->
+<div id="wrapper">
+<div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog floating-box">
+  <div class="modal-content">
+<div class="inner-box">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <!--h1 class="text-center">Login</h1-->
+          <img class="img-responsive" src="<?php echo $this->getSkinUrl('images/logo2.png') ?>" alt="TRUNITED!">
+          <h2>Join The Trunited Nation!</h2>
+          <img class="img-responsive" src="<?php echo $this->getSkinUrl('images/shop.png') ?>" alt="Divided we fall, Trunited we stand">
+          <p class="small-text">By linking your account to Facebook <br/>you agree to our <a href="#">term of service</a>.</p>
+          <?php echo $this->getLayout()->createBlock("fblogin/fblogin")->setTemplate("fblogin/bt_fblogin.phtml")->toHtml(); ?> 
+          <br/>
+          <div class="divider">
+            <span>or use email</span>
+          </div>
+      </div>
+      <div class="modal-body">
+          <!--form class="form col-md-12 center-block">
+            <div class="form-group float-label-control">
+              <input type="text" class="form-control empty" placeholder="Email">
+              <label for="">Email</label>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control input-lg" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-lg btn-block">Sign In</button>
+              <span class="pull-right"><a href="#">Register</a></span><span><a href="#">Need help?</a></span>
+            </div>
+          </form-->
+          <form action="<?php echo Mage::helper('customer')->getLoginPostUrl() ?>" method="post" id="login-form" role="form">
+          <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />   
+                  <!--This is the login -->
+                  <div id="login">
+                    <div class="form-group float-label-control">
+                        <input type="" class="form-control" placeholder="UserName" name="login[username]"/>
+                        <label for="">User Name</label>
+                    </div>
+                    <div class="form-group float-label-control">
+                        <input type="password" class="form-control" placeholder="Password" name="login[password]"/>
+                        <label for="">Password</label>
+                    </div>
+                    <input type="submit" class="btn btn-orange" value="Submit for sign in!"></input>
+                  </div>
+          </form>
+
+          <!--form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate"-->
+          <!--form action="<?php echo Mage::helper('customer')->getRegisterPostUrl() ?>" method="post" id="form-validate"-->
+            <form action="/customer/account/create/" method="post" id="form-validate">
+            <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />     
+
+                <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
+                <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
+                <div id="signUp">
+                  <div class="row">
+                    <div class="form-group float-label-control col-md-8">
+                        <input type="text" class="form-control input-text" placeholder="First Name" name="login[firstname]"/>
+                        <label for="">First Name</label>
+                    </div>
+                    <div class="form-group float-label-control col-md-4">
+                        <input type="text" class="form-control input-text" placeholder="Last Name" name="login[lastname]"/>
+                        <label for="">Last Name</label>
+                    </div>
+                  </div>
+                    <div class="form-group float-label-control">
+                        <input type="email" class="form-control input-text required-entry validate-email" placeholder="Email Address" name="login[username]"/>
+                        <label for="">E-mail</label>
+                    </div>
+                    <!-- this is what we must implement to let users register
+                    <div class="form-group float-label-control">
+                        <label>Email Address:</label>
+                     <input type="text" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+                    </div>
+                    <div class="form-group float-label-control">
+                      <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" />
+                      <label for="">Password</label>
+                    </div>
+                    <div class="form-group float-label-control">
+                      <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" />
+                      <label for="">Please re-enter your password</label>
+                    </div>
+                  -->
+                    <!--div class="form-group float-label-control">
+                        <input type="password" class="form-control" placeholder="Password" name="login[username]"/>
+                        <label for="">Password</label>
+                    </div-->
+                    <p>By joining you agree to the <a href="#">Terms of Service</a>.</p>
+                    <input type="submit" class="btn btn-orange" value="JOIN FOR FREE!"></input>
+                    <br/>
+                    <p>You will receive emails periodically and can opt-out <br/> at any time.</p>
+                  </div>
+              </form>
+
+      </div>
+
+      <div class="modal-footer">
+          <div class="col-md-12">
+          <button id="changeSignUp" class="btn" aria-hidden="true">Don't have an account? SignUp!</button>
+          <p class="center">Already a member? <button id="changeLogin" class="btn btn-link" data-dismiss="modal" aria-hidden="true">Sign in</button></p>
+          <a href="http://www.trunited.com" class="gray-link">
+            <p class="center">No thanks, just take me to the site</p>
+          </a>
+          </div>  
+      </div>
+    </div>
+  </div>
+  </div>
+  <!--end of modal-->
+  <div id="trunited-text" class="floating-box">
+    <div class="vertical-center">
+    <h2><b>The Algorithm of Happiness</b></h2>
+    <h3>Purpose | Peace | Family</h3>
+    <br/>
+    <p>Helping someone earn a #FunRaise is our purpose.<br/>Impacting others is our peace. Being connected like <br/>family in our quest for purpose and peace is what<br/>makes us the Best Second Family in the world.<br/>Come join us. Admission is free.</p>
+    <h2 id="second-family"><b>#BestSecondFamily</b></h2>
+
+  </div>
+</div>
+</div>
+</div><!--End of the wrapper-->
+<script type="text/javascript">
+          //<![CDATA[
+              var dataForm = new VarienForm('form-validate', true);
+              <?php if($this->getShowAddressFields()): ?>
+              new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+              <?php endif; ?>
+          //]]>
+</script>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
+</div>

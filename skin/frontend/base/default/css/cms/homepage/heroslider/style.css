@@ -253,6 +253,10 @@ Slider navigation arrows
 Single slide style
 
 -------------------------------- */
+.cd-slider-arrows {
+  /* hide arrows on mobile device */
+  display: none;
+}
 .cd-hero-slider li {
   background-position: center center;
   background-size: cover;
@@ -290,7 +294,7 @@ Single slide style
   left: 0;
   top: 0;
   /* this padding is used to align the text */
-  padding-top: 100px;
+  padding-top: 50px;
   text-align: center;
   /* Force Hardware Acceleration in WebKit */
   -webkit-backface-visibility: hidden;
@@ -400,7 +404,7 @@ Single slide style
   }
   .cd-hero-slider .cd-full-width,
   .cd-hero-slider .cd-half-width {
-    padding-top: 150px;
+    padding-top: 120px;
   }
   .cd-hero-slider .cd-bg-video-wrapper {
     display: block;
@@ -428,11 +432,15 @@ Single slide style
   .cd-hero-slider .cd-btn {
     font-size: 1.4rem;
   }
+  .cd-slider-arrows {
+    /* show nav arrows on mobile device */
+    display: block;
+  }
 }
 @media only screen and (min-width: 1170px) {
   .cd-hero-slider .cd-full-width,
   .cd-hero-slider .cd-half-width {
-    padding-top: 220px;
+    padding-top: 200px;
   }
   .cd-hero-slider h2, .cd-hero-slider p {
     margin-bottom: 20px;
@@ -442,6 +450,10 @@ Single slide style
   }
   .cd-hero-slider p {
     font-size: 1.6rem;
+  }
+  .cd-slider-arrows {
+    /* show nav arrows on mobile device */
+    display: block;
   }
 }
 

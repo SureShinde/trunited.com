@@ -1,0 +1,221 @@
+
+@media (max-width:1600px){
+		
+	.container	{width:98%;}
+	.sidebar h6	{font-size:20px; padding:0 0 0 25px;}
+	.sub_blk ul li a	{font-size:20px; padding:9px 0 8px 25px;}
+	.product ul li	{margin:0 1.5px 0 0;}
+	.search_bar h3{font-size: 25px;line-height: 27px;}
+	.product_save_in h6{font-size: 13px;}
+	.latest_news_lft	{padding:0 20px 0 0;}
+	.news			{width:75%; padding:0 0 0 25px;}
+	.yahoo_logo		{width:25%;}
+	.latest_news_rgt p	{width:100%;}
+    
+    /*INNER PAGE NO 2 START HERE*/
+    .save_in ul li span{font-size: 35px;line-height: 35px;}
+    .why_putchase ul li{font-size: 26px;}
+    .why_putchase ul li h5{font-size: 26px;}
+    .card_middle ul li     {font-size: 23px;}
+    .card_middle ul li span{font-size: 23px;}
+    .card_middle ul        {padding: 0 0 0 45px;}
+}
+@media (max-width:1400px){
+	.sidebar h6		{font-size: 16px; padding: 0 0 0 20px;}
+	.search_bar h3  {display: block;text-align: center;padding: 0 0 15px 0;}
+	.sub_blk ul li a	{font-size:16px; padding:9px 0 8px 20px;}
+	.product em			{font-size:12px;}
+	.product h5 a{font-size:16px;}
+	.product .regular-price .price ,.product .special-price .price,.product .minimal-price .price{font-size:22px;}	
+	.product ul li a	{width:15px; display:block;}
+	.product small:after	{width:18px; height:17px; background-size:cover; top:0; left:-20px;}
+	.product_save_in ul li{padding: 0 3px !important;float: none;}
+    .product_save_in h6   {font-size: 12px;}
+	.prices_blk		{width:682px; margin:0 auto; float:none; display:block;}
+	.search_bar		{padding:10px 0 10px 0;}
+	.news p			{font-size:20px; line-height:22px;}
+	.latest_news_rgt p	{font-size:20px; line-height:22px; padding:17px 20px 45px 20px;}
+	.BaclToTop		{right:10px;}
+	.BaclToTop .btn-lg, .btn-group-lg > .btn	{font-size:30px;}
+	
+	/*INNER PAGE NO 2 START HERE*/
+    .save_in ul li span {font-size: 27px;line-height: 30px;}
+    .save_in ul li span small{font-size: 8px;margin: -4px 5px 1px 1px;}
+    .save_earn          {padding: 100px 0 0 0;}
+    .why_putchase       {padding: 48px 0 56px 0;}
+    .save_earn img      {width: 83%;height: auto;}
+    .why_putchase ul li{font-size: 20px;}
+    .why_putchase ul li h5{font-size: 20px;}
+    .card_middle ul li     {font-size: 19px;}
+    .card_middle ul li span{font-size: 19px;}
+    .unused_gifts_in h2 {font-size: 56px;line-height: 58px;}
+    .unused_gifts_in small{font-size: 30px;line-height: 32px;}
+	
+}
+@media (max-width:1200px){
+	.left_block		{width:25%; padding:0 15px 0 0}
+	.right_block	{width:75%;}
+	.direct_comsumer	{width:75%;}
+	.direct_comsumer h1	{font-size:32px; line-height:32px;}
+	.direct_comsumer h1	span	{font-size:25px;}
+	.direct_comsumer h1.inner_pad	{font-size:32px; line-height:32px;}
+	.product ul			{padding:3px 0 0 12px; width:70%;}
+	.product_blk ul li	{width:24%;}
+	.sidebar h6:after 	{width:14px; height:8px; background-size:100% 100%;}
+	.sidebar h6		{font-size:15px; padding:0 0 0 15px; line-height:45px;}
+	.sub_blk ul li a	{padding:7px 0 6px 15px;}
+	.sub_blk ul li a span	{padding:0 0 0 6px;}
+	.prices			{margin:0 6px 0 0;}
+	.product_blk .see_more	{font-size:32px; height:55px;}
+	.main_block	{padding:0 0 90px 0;}
+	.product_save_in ul {width: 100%;text-align: center;}
+	.BaclToTop .btn-lg, .btn-group-lg > .btn	{font-size:25px;}
+	.latest_news_rgt	{padding:0 0 0 22px;}
+	.news h3	{font-size:30px;}
+	.latest_news_rgt h3	{font-size:30px;}
+	.latest_news_rgt p {font-size: 18px;line-height: 20px; padding: 17px 20px 32px 20px;}
+	.news p		{font-size:18px; line-height:20px;}
+	   
+    /*INNER PAGE NO 2 START HERE*/
+    .save_in           {padding: 22px 12px 21px 16px;}
+    .save_in ul li span{font-size: 20px;line-height: 20px;}
+    .why_putchase h4   {font-size: 30px;line-height: 37px;}
+    .why_putchase ul   {padding: 4px 0 0 48px;}
+    .unused_gifts_in h2 {font-size: 46px;line-height: 48px;}
+    .unused_gifts_in small{font-size: 25px;line-height: 27px;}
+	
+	
+}
+@media (max-width:991px){
+	.shop_now ul li a	{font-size:20px;}
+	.shop_now ul li span	{font-size:20px;}
+	.left_block		{width:31%;}
+	.right_block	{width:69%;}
+	.direct_comsumer	{width:69%;}
+	.direct_comsumer h1	{font-size:30px; line-height:30px;}
+	.direct_comsumer h1	span	{font-size:20px;}
+	.direct_comsumer h1.inner_pad	{font-size:30px; line-height:30px;}
+	.product_blk ul	{margin:0 -1%;}
+	.product_blk ul li	{width:47.33%; margin:0 1% 15px 1%;}
+	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:165px;}
+	.dropdown-menu > li > a	{padding:3px 12px;}
+	.prices input,.prices select{width:165px;}
+	.prices label	{font-size:16px; padding:0 8px 0 0;}
+	.prices_blk		{width:486px;}
+	.BaclToTop .btn-lg, .btn-group-lg > .btn	{font-size:25px;}
+	.news h3	{font-size:25px; line-height:30px; padding:0 0 15px 0;}
+	.news p		{font-size:16px; line-height:18px; padding:0 0 20px 0;}
+	.news a		{border:2px solid #ffffff; font-size:18px;}
+	.latest_news_rgt h3 {font-size:25px; line-height:30px; padding:0 0 15px 0;}
+	.latest_news_rgt p	{font-size:16px; line-height:18px;}
+	.divided		{width:250px; bottom:-14px; left:0;}
+	
+	/*INNER PAGE NO 2 START HERE*/
+    .save_earn      {width: 380px;display: block;margin: 0 auto;float: none !important;}
+    .why_putchase   {width: 95%;display: block;margin: 3% auto 0 auto;float: none !important;}
+    .unused_gifts_in{padding: 48px 10px 37px 10px;}
+    .unused_gifts_in h2 {font-size: 36px;line-height: 38px;}
+    .unused_gifts_in small{font-size: 20px;line-height: 22px;}
+
+}
+
+@media (max-width:767px){
+	.left_block		{width:100%; padding:0 0 30px 0; position: relative; z-index: 9;}
+	.right_block	{width:100%;}
+	.direct_comsumer	{width:100%;}
+	.sidebar h6		{font-size:20px;}
+	.sub_blk ul li a	{font-size:20px;}
+	.sidebar h6:after	{width:18px; height:9px;}
+	.product ul		{width:70%;}
+	.product_blk ul li	{width:31.33%; margin:0 1% 15px 1%;}
+	.product_save_in ul {width: 100%;}
+	.BaclToTop .btn-lg, .btn-group-lg > .btn	{font-size:20px;}
+	.latest_news	{width:80%; margin:0 auto;}
+	.latest_news_lft	{padding:0;}
+	.yahoo_logo		{float:none; display:block; width:100%; margin:0 0 25px 0;}
+	.yahoo_logo a		{width:164px; margin:0 auto;}
+	.news			{width:100%; padding:0; float:none; margin:0 0 25px 0;}
+	.latest_news_rgt	{width:100%; padding:0;}
+	.divided		{width:250px; bottom:-14px; left:0;}
+    
+    /*INNER PAGE NO 2 START HERE*/
+    .why_putchase h4   {font-size: 27px;}
+    .card_middle       {padding: 25px 0;}
+}
+@media (max-width:599px){
+	.shop_now			{padding:14px 0 14px 8px;}
+	.shop_now ul li a	{font-size:17px;}
+	.shop_now ul li span	{font-size:17px;}
+	.product_blk ul li	{width:48%;}
+	.prices		{padding:0 0 10px 0; margin:0 auto; width:318px; float:none; display:block;}
+	.prices label	{font-size:18px;}
+	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:235px; float:right;}
+	.prices input,.prices select{width:235px; float:right;}
+	.search_bar		{padding:10px 0 0 0;}
+	.direct_comsumer h1	{font-size:25px; line-height:25px;}
+	.direct_comsumer h1	span	{font-size:16px;}
+	.direct_comsumer h1.inner_pad {padding: 15px 0 15px 0;font-size: 25px;line-height: 25px;}
+	.prices_blk		{width:100%;}
+	.BaclToTop .btn-lg, .btn-group-lg > .btn	{font-size:18px;}
+	/*INNER PAGE NO 2 START HERE*/
+    .why_putchase      {padding: 30px 0 30px 0;}
+    .why_putchase h4   {font-size: 21px;line-height: 27px;padding: 0 5px 15px 5px;}
+    .why_putchase ul   {padding: 4px 0 0 30px;}
+    .why_putchase ul li{font-size: 16px;line-height: 24px;}
+    .why_putchase ul li h5{font-size: 16px;line-height: 24px;}
+    .unused_gifts     {padding: 0 15px;}
+    .card_middle      {height: auto !important;}
+    .card_shop        {width: 100%;float: none;margin: 0 auto;height: auto !important;}
+    .card_middle ul li span{font-size: 16px;line-height: 24px;}
+    .unused_gifts_in{padding: 38px 10px 37px 10px;}
+    .unused_gifts_in h2 {font-size: 24px;line-height: 26px;}
+    .unused_gifts_in small{font-size: 16px;line-height: 22px;}
+    .gift_cards1 .container{padding: 0;}
+	.search_bar h3		{padding:0 0 10px 0; display:block; text-align:center; font-size:18px;}
+	.col-left.sidebar{margin-top:0px}	
+}
+@media (max-width:479px){
+	.shop_now ul li a	{font-size:13px; line-height:20px;}
+	.shop_now ul li span	{font-size:13px; line-height:20px;}
+	.direct_comsumer	{padding:10px 0;}
+	.direct_comsumer h1	{font-size:18px; line-height:20px;}
+	.direct_comsumer h1.inner_pad  {font-size: 18px;line-height: 20px;}
+	.direct_comsumer h1	span	{font-size:14px;}
+	.prices		{width:270px;}
+	.prices label	{font-size:16px;}
+	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:195px;}
+	.prices input,.prices select{width:195px;}
+	.product_blk	{width:80%; margin:0 auto;}
+	.product_blk ul li	{width:98%; margin:0 0 15px 0;}
+	.product_blk .see_more	{width:100%; font-size: 25px; height: 50px;}
+	.product_blk .see_more1	{width:100%; font-size: 25px; height: 50px;}
+	.product em	{font-size:13px;}
+	.product h5	a{font-size:18px;}
+	.product .regular-price .price ,.product .special-price .price,.product .minimal-price .price	{font-size:25px;}
+	.product ul			{padding:0 0 0 12px;}
+	.product ul li a	{width:22px;}
+	.product small:after	{width:25px; height:24px; left: -30px; top: -5px;}
+	
+	.latest_news	{width:95%;}
+	.latest_news_rgt h3	{font-size:20px;}
+	.news h3		{font-size:20px;}
+	.latest_news_rgt p		{padding:17px 20px 40px 20px;}
+	/*INNER PAGE NO 2 START HERE*/
+    .save_earn        {width: 95%;padding: 50px 0 0 0;}
+	.save_in		{padding:22px 10px 21px 10px;}
+	.card_bottom a		{width:90%; padding:14px 0;}
+	.why_putchase ul li h5	{font-size:14px;}
+	.unused_gifts_in small{font-size: 14px;}
+}
+@media (max-width:340px){
+	.prices input, .prices select{width: 190px;margin-right: 10px;}
+}
+
+
+
+
+
+
+
+
+

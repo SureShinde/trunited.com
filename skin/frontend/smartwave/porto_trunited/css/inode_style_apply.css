@@ -1,0 +1,143 @@
+      p.short {
+        font-size: .75em;
+        text-align: center;
+        color: #fff;
+          line-height: 0.5;
+      }
+
+      p.medium {
+        font-size: 1.45em;
+        text-align: center;
+        color: #fff;
+        font-weight: 900;
+      }
+
+      p.input_title {
+        font-size: 1em;
+        color: black;
+        font-weight: 900;
+        line-height: 0;
+        padding-top: 3%;
+      }
+
+      p.vertical-title { 
+        writing-mode: vertical-rl;
+        font-size: 3em;
+        color: gray;
+        font-weight: 900;
+         transform: rotate(-180deg);  
+
+      }
+
+      hr.orange{ 
+        height: 1px;
+        width: 70px;
+        border: 0;
+        border-top: 3px solid #F15B20;
+      }
+
+      a{
+        text-decoration: none;
+        color: #fff;
+      }
+
+      body{
+          background-color: #454543 !important;
+      }
+     
+      .div-inline-center{
+        display: inline-block;
+        width:50%;
+        height: 100%;
+        vertical-align: top;
+      }
+
+      .div-inline-left{
+        display: inline-block;
+        width: 20%;
+        height: 50%;
+        float:left;
+        text-align: center;
+        vertical-align: middle;
+        margin-top: 12%;
+        padding-left: 5%;
+      }
+
+      .div-inline-right{
+        display: inline-block;
+        width: 30%;
+        text-align: right;
+        float: right;
+        z-index: -1;
+      }
+
+      .btn-apply{
+        background: #f15b20 !important;
+        border: 2px solid #fff;
+        text-transform: uppercase;
+        border-radius: 0;
+        font-size: 1.3em;
+        text-align: center;
+        margin-left: 35%;
+        margin-right: 35%;
+        color: #fff;
+        cursor: pointer;
+
+      }
+      .textarea{
+        height: 7em;
+        vertical-align: top;
+      }
+
+      .left-inside{
+        text-transform: uppercase;
+        font-size: 1.3em;
+        text-align: center;
+        margin-left: 35%;
+        margin-right: 35%;
+      }
+      .boxhead a {
+          color: #FFFFFF !important;
+          text-decoration: none !important;
+      }
+      .form-box{
+        background-color: #fff;
+        border-radius: 25px;
+        padding: 20px;
+      }
+      .img-opacity{
+        opacity: .9;
+      }
+
+      .thank-img{
+        text-transform: uppercase;
+        font-size: 1.3em;
+        text-align: center;
+        background-color: #454543;
+        width: 100%;
+        height: 80%;
+      }
+
+      .title-inside{
+        text-transform: uppercase;
+        text-align: center;
+        width: 100%;
+      }
+
+      p.horizontal-title { 
+        font-size: 4em;
+        color: gray;
+        font-weight: 900;
+      }
+
+      .std {
+        background-color: #454543 !important;
+      }
+
+      .col-main{
+       background-color: #454543 !important;      }
+     }
+
+     .div-inline-right img{
+      width: 230%;
+     }
