@@ -377,7 +377,8 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
                         $client->messages->create(
                             $phone,
                             array(
-                                'from' => $from,
+                                /*'from' => $from,*/
+                                'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
                                 'body' => $message
                             )
                         );
@@ -402,7 +403,8 @@ class AW_Eventdiscount_Helper_Data extends Mage_Core_Helper_Abstract
                         $client->messages->create(
                             $phone_referrer,
                             array(
-                                'from' => $from,
+                                /*'from' => $from,*/
+                                'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
                                 'body' => $message_referrer
                             )
                         );

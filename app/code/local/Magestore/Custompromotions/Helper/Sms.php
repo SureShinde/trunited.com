@@ -29,7 +29,8 @@ class Magestore_Custompromotions_Helper_Sms extends Mage_Core_Helper_Abstract
                         $client->messages->create(
                             $phone,
                             array(
-                                'from' => $from,
+                                /*'from' => $from,*/
+                                'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
                                 'body' => $message
                             )
                         );

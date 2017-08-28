@@ -55,7 +55,8 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				$client->messages->create(
 					$phone,
 					array(
-						'from' => $from,
+						/*'from' => $from,*/
+						'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
 						'body' => $message
 					)
 				);
@@ -165,7 +166,8 @@ class Magestore_Custompromotions_CustomerController extends Mage_Core_Controller
 				$client->messages->create(
 					$phone,
 					array(
-						'from' => $from,
+						/*'from' => $from,*/
+						'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
 						'body' => $message
 					)
 				);
