@@ -24,10 +24,12 @@
             <action method="addItem"><type>js</type><name>smartwave/jquery/plugins/parallax/jquery.parallax.js</name><params/></action>
             <action method="addJs"><script>smartwave/jquery/jquery.cookie.js</script></action>
             <action method="addItem"><type>js</type><name>smartwave/respond.min.js</name><params/><if>lt IE 9</if></action>
+<!--
             <action method="addItem" ifconfig="porto_settings/general/rtl" condition="0"><type>js_css</type><name>smartwave/bootstrap/css/bootstrap.min.css</name></action>
             <action method="addItem" ifconfig="porto_settings/general/rtl" condition="1"><type>js_css</type><name>smartwave/bootstrap/css/bootstrap.rtl.min.css</name></action>
             <action method="addItem" ifconfig="porto_settings/general/rtl" condition="0"><type>js_css</type><name>smartwave/bootstrap/css/bootstrap-theme.min.css</name></action>
             <action method="addItem" ifconfig="porto_settings/general/rtl" condition="1"><type>js_css</type><name>smartwave/bootstrap/css/bootstrap-theme.rtl.min.css</name></action>
+-->
             <action method="addJs" ifconfig="porto_settings/general/rtl" condition="0"><script>smartwave/jquery/plugins/owl-carousel/owl.carousel.min.js</script></action>
             <action method="addJs" ifconfig="porto_settings/general/rtl" condition="1"><script>smartwave/jquery/plugins/owl-carousel/owl.carousel.rtl.min.js</script></action>
             <action method="addItem" ifconfig="porto_settings/general/rtl" condition="0"><type>js_css</type><name>smartwave/jquery/plugins/owl-carousel/owl.carousel.css</name></action>
@@ -37,7 +39,7 @@
             <action method="addItem"><type>js_css</type><name>smartwave/jquery/plugins/selectbox/selectbox.css</name></action>
             <action method="addCss"><stylesheet>css/animate.css</stylesheet></action>
             <action method="addItem"><type>skin_js</type><name>js/porto.js</name></action>
-            <action method="addJs"><script>smartwave/bootstrap/js/bootstrap.min.js</script></action>
+<!--            <action method="addJs"><script>smartwave/bootstrap/js/bootstrap.min.js</script></action>-->
             <action method="addJs"><script>smartwave/bootstrap/js/bootstrap-notify.min.js</script></action>
             <action method="addItem"><type>skin_js</type><name>js/lib/imagesloaded.js</name></action>
             
@@ -58,6 +60,15 @@
             <action method="addCss"><stylesheet helper="porto/cssconfig/getSettingsFile"/></action>
             <action method="addCss" ifconfig="porto_settings/general/rtl" condition="0"><stylesheet>css/custom.css</stylesheet></action>
             <action method="addCss" ifconfig="porto_settings/general/rtl" condition="1"><stylesheet>css/rtl-custom.css</stylesheet></action>
+            
+            <action method="addItem"><type>skin_css</type><name>css/cms/homepage/bootstrap.css</name><params/></action>
+            <action method="addItem"><type>skin_css</type><name>../../smartwave/porto_trunited/css/style2.css</name><params/></action>
+             <action method="addItem"><type>skin_css</type><name>css/cms/homepage/style.css</name><params/></action>
+            
+            
+              <action method="addItem"><type>skin_css</type><name>css/cms/homepage/responsive.css</name><params/></action>
+              <action method="addItem"><type>skin_css</type><name>css/cms/homepage/heroslider/reset.css</name><params/></action>
+<!--              <action method="addItem"><type>skin_css</type><name>css/cms/homepage/heroslider/style.css</name><params/></action>-->
         </reference>
         <reference name="header">
             <action method="setTemplate" ifconfig="porto_settings/header/type" condition="0"><template>page/html/header_type1.phtml</template></action>

@@ -1,0 +1,175 @@
+
+@media screen and (max-width: 1280px) {
+#reportcard_form_div {
+    left: 20% !important;
+}
+}
+@media screen and (max-width: 1024px) {
+#reportcard_form_div {
+    left: 15% !important;
+}
+}
+@media screen and (max-width: 960px) {
+#reportcard_form_div {
+    left: 5% !important;
+}
+}
+@media screen and (max-width: 780px) {
+#reportcard_form_div {
+    left: 30% !important;
+    padding: 5px !important;
+    position: absolute !important;
+    top: 25px !important;
+    width: 260px !important;
+}
+#reportcard_popup_main {
+    padding: 10px !important;
+    width: 234px !important;
+}
+
+
+#reportcard_main_div .new_account_create, #reportcard_main_div .return_login {
+    width: 210px !important;
+}
+#reportcard_main_div .socialpopup-input-box {
+    width: auto !important;
+}
+#reportcard_main_div .socialpopup-input-box input, .socialpopup-input-box input {
+    width: 220px !important;
+}
+#reportcard_bg {
+    position: fixed !important;
+}
+
+#reportcard_main_div #all_social_iconbtn {
+    clear: both !important;
+    float: none !important;
+    position: relative !important;
+    width: auto !important;
+}
+
+#reportcard_main_div .reportcard_form label {
+    width: auto !important;
+}
+
+}
+@media screen and (max-width: 500px) {
+#reportcard_form_div {
+    left: 20% !important;
+}
+}
+@media screen and (max-width: 400px) {
+#reportcard_form_div {
+    left: 14% !important;
+}
+}
+:first-child + html .sl_clearfix {
+    min-height: 1%;
+}
+:first-child + html .sl_clear {
+    min-height: 1%;
+}
+.sl_clear {
+    clear: both;
+    font-size: 0;
+    height: 0;
+}
+.sl_clearright {
+    clear: right;
+    font-size: 0;
+    height: 0;
+}
+.sl_clearleft {
+    clear: left;
+    font-size: 0;
+    height: 0;
+}
+.sl_clearfix:after {
+    clear: both;
+    content: " ";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.sl_clearfix {
+    display: block;
+}
+* html .sl_clearfix {
+    height: 1%;
+}
+li.sl_clearfix {
+    display: list-item;
+}
+#reportcard_bg {
+    background-color: #000000;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    visibility: hidden;
+    width: 100%;
+    z-index: 99999;
+}
+
+#reportcard_form_div {
+    background: #fff;
+    left: 25%;
+    padding: 0px;
+    position: fixed;
+    width: 580px;
+    z-index: 999991;
+}
+
+#closeLink {
+    background: url("../images/reportcard.png") no-repeat scroll -47px -148px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    height: 26px;
+    position: absolute;
+    right: -6px;
+    top: -6px;
+    width: 26px;
+    z-index: 9999;
+}
+
+#reportcard_popup_main {
+    background: none repeat scroll 0 0 #F5F5F5;
+    border: 3px solid #323232;
+    padding: 0px;
+    width: 580px;
+}
+#reportcard_main_div {
+    overflow: hidden;
+}
+#reportcard_main_div .reportcard_form label {
+    padding-top: 0px;
+    text-align: left;
+}
+#reportcard_main_div .reportcard_form em, .popup_error_msg {
+    color: #FF0000;
+}
+.reportcard-content {padding:20px}
+.reportcard-content h2{text-align: center;}
+.reportcard-content .input-box {width:200px}
+.reportcard-content .form-list {margin:10px 0px 0px; float: left;}
+.reportcard-content .form-list .field {
+    float: left;
+    width: 225px !important;
+}
+.reportcard-content .form-list input.input-text {
+    width: 200px !important;
+}
+
+.reportcard-content .form-list .form-list li.wide .input-box {
+    width: 525px;
+}
+.reportcard-content .form-list .control {margin-bottom: 0px; float: left;}
+.reportcard-content .buttons-set{
+    border: none !important;
+	margin: 20px 0 0;
+    padding: 0;
+}
+.availability.out-of-stock a {
+    color: #D83820;
+}

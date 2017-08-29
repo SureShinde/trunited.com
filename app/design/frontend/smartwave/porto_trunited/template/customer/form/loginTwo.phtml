@@ -1,0 +1,138 @@
+<!--Check if user is already logged in-->
+<?php
+    if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+        //not logged in
+    }else{
+        // logged in
+      header('Location: customer/account');
+      //header('Location: thank-you');
+    }
+    
+    $cookie = Mage::getSingleton('core/cookie');
+    //already_landed tells us if a customer already "landed" (has been) on the landing page
+    if($cookie->get('already_landed')){
+      $mageRunCode = $cookie->get('already_landed');
+      header('Location: home');
+      //header('Location: home_20170101');
+    }
+    $cookie->set('already_landed', 1, time() + 86400, '/');
+
+  /*these works well too
+    if(Mage::getSingleton('customer/session')){
+      header('Location: home_20170101');
+    }
+     if(Mage::getSingleton('core/session')->getCookie()){
+        header('Location: home_20170101');
+      }
+  */
+    
+
+?>
+ <!--login modal-->
+<div id="wrapper">
+<div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog floating-box">
+  <div class="modal-content">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="inner-box">
+      <div class="modal-header">
+          
+          <img class="img-responsive" src="<?php echo $this->getSkinUrl('images/logo2.png') ?>" alt="TRUNITED!">
+          <h2>Join The Trunited Nation!</h2>
+          <img class="img-responsive" src="<?php echo $this->getSkinUrl('images/shop.png') ?>" alt="Divided we fall, Trunited we stand">
+          <p class="small-text">By linking your account to Facebook <br/>you agree to our <a href="#">terms of service</a>.</p>
+          <?php echo $this->getLayout()->createBlock("fblogin/fblogin")->setTemplate("fblogin/bt_fblogin.phtml")->toHtml(); ?> 
+          <br/>
+          <div class="divider">
+            <span>or use email</span>
+          </div>
+      </div>
+      <div class="modal-body">
+          <form action="<?php echo Mage::helper('customer')->getLoginPostUrl() ?>" method="post" id="login-form" role="form">
+          <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />   
+                  <!--This is the login -->
+                  <div id="login">
+                    <div class="form-group float-label-control">
+                        <input type="" class="form-control" placeholder="UserName" name="login[username]"/>
+                        <label for="">User Name</label>
+                    </div>
+                    <div class="form-group float-label-control">
+                        <input type="password" class="form-control" placeholder="Password" name="login[password]"/>
+                        <label for="">Password</label>
+                    </div>
+                    <input type="submit" class="btn btn-orange" value="Submit for sign in!"></input>
+                  </div>
+          </form>
+
+          <!--form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate"-->
+          <!--form action="<?php echo Mage::helper('customer')->getRegisterPostUrl() ?>" method="post" id="form-validate"-->
+            <form action="/customer/account/create/" method="post" id="form-validate">
+            <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />     
+
+                <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
+                <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
+                <div id="signUp">
+                  <div class="row">
+                    <div class="form-group float-label-control col-md-8">
+                        <input type="text" class="form-control input-text" placeholder="First Name" name="login[firstname]"/>
+                        <label for="">First Name</label>
+                    </div>
+                    <div class="form-group float-label-control col-md-4">
+                        <input type="text" class="form-control input-text" placeholder="Last Name" name="login[lastname]"/>
+                        <label for="">Last Name</label>
+                    </div>
+                  </div>
+                    <div class="form-group float-label-control">
+                        <input type="email" class="form-control input-text required-entry validate-email" placeholder="Email Address" name="login[username]"/>
+                        <label for="">E-mail</label>
+                    </div>
+                    <p>By joining you agree to the <a href="#">Terms of Service</a>.</p>
+                    <input type="submit" class="btn btn-orange" value="JOIN FOR FREE!"></input>
+                    <br/>
+                    <p>You will receive emails periodically and can opt-out <br/> at any time.</p>
+                    <!--p class="center">Already a member? <button id="changeLogin" class="btn btn-link" data-dismiss="modal" aria-hidden="true">Sign in</button></p-->
+                  </div>
+              </form>
+              <p class="center">Already a member? <button id="changeLogin" class="btn btn-link" data-dismiss="modal" aria-hidden="true">Sign in</button></p>
+
+      </div>
+      </div> <!--End of inner box-->
+      <div class="modal-footer">
+          <div class="col-md-12">
+          <button id="changeSignUp" class="btn" aria-hidden="true">Don't have an account? SignUp!</button>
+          
+          <a href="http://dev.trunited.com/home" class="gray-link">
+            <p class="center">No thanks, just take me to the site</p>
+          </a>
+          </div>  
+      </div>
+    
+  </div>
+  </div>
+  <!--end of modal-->
+  <div id="trunited-text" class="floating-box">
+    <div class="vertical-center">
+    <h2><b>The Algorithm of Happiness</b></h2>
+    <h3>Purpose | Peace | Family</h3>
+    <br/>
+    <p>Helping someone earn a #FunRaise is our purpose.<br/>Impacting others is our peace. Being connected like <br/>family in our quest for purpose and peace is what<br/>makes us the Best Second Family in the world.<br/>Come join us. Admission is free.</p>
+    <h2 id="second-family"><b>#BestSecondFamilia</b></h2>
+
+  </div>
+</div>
+</div><!--End of loginModal-->
+</div><!--End of the wrapper-->
+<script type="text/javascript">
+          //<![CDATA[
+              var dataForm = new VarienForm('form-validate', true);
+              <?php if($this->getShowAddressFields()): ?>
+              new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+              <?php endif; ?>
+          //]]>
+</script>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
+</div>

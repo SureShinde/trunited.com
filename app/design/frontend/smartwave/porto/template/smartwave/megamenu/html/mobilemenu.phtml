@@ -5,6 +5,17 @@
         <ul class="menu">
         <?php if(!$menuHelper->getConfig('popup/ajax_load_popups')): ?>
             <?php echo $menuHelper->getMobileMenuContent($only_categories); ?>
+            
+            <?php if(!Mage::getSingleton('customer/session')->isLoggedIn()){ 
+                //not logged in
+                echo "<li class=\"menu-item\"><a href=\"/customer/account/login/\">Sign In</a></li>";
+                
+            }else{ 
+                // logged in
+                echo "<li class=\"menu-item\"><a href=\"/customer/account/\">My Account</a></li>";
+                echo "<li class=\"menu-item\"><a href=\"/customer/account/logout\">Sign Out</a></li>";
+            } ?> 
+            
         <?php else: ?>
             <li style="padding: 30px 0; text-align: center;"><i class="ajax-loader medium animate-spin"></i></li>
         <?php endif; ?>

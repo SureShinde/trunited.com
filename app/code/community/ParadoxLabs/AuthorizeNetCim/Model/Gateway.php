@@ -834,7 +834,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Gateway extends ParadoxLabs_TokenBase_Mo
 				),
 			);
 		}
-		
+
 		$result = $this->_runTransaction( 'createCustomerPaymentProfileRequest', $params );
 		
 		$paymentId = null;

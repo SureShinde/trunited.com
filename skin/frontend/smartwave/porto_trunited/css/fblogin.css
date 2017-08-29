@@ -1,0 +1,113 @@
+/*.account-login .fb-login h2 {
+	/*background-image:url("../../images/magestore/fblogin/fb.png");*/
+	/*background-repeat: no-repeat;
+	/* padding-left: 40px; */
+	/*padding-bottom: 5px
+}*/
+/*
+button.fb_button.fb_button_medium span {
+    min-width: 140px;
+}
+/*span.fb_button_text {
+	display: block;      
+	height: 35px;      
+	text-align: center;      
+	padding-left: 40px;      
+	padding-right: 10px;      
+	line-height: 33px;      
+	color: white;
+	background: url("fblogin/fb.png") no-repeat;
+	min-width:140px;
+	}*//*
+.col-1.new-users li.button {
+	min-width: 80px;
+	background: none;
+	display: block;
+	text-align: left;
+}	
+.fb-seprate{
+	margin-top:30px;
+}
+
+#connected{
+	text-align:center; 
+	margin-top:60px;
+}
+
+#connected #image{
+	margin-bottom:10px;
+}
+.span.fb_button_text {
+    display: block;
+}
+
+*/
+.account-login .fb-login h2 {
+	background-image:url("../images/magestore/fblogin/fb.png");
+	background-repeat: no-repeat;
+	/* padding-left: 40px; */
+	padding-bottom: 5px;
+	background-color: #3B5997;
+	
+}
+button.fb_button.fb_button_medium span {
+    min-width: 140px;
+    background-color: #3B5997;
+}
+span.fb_button_text {
+	display: block;      
+	background-color: #3B5997;
+	}
+.col-1.new-users li.button {
+	min-width: 80px;
+	background: none;
+	display: block;
+	text-align: left;
+}	
+.fb-seprate{
+	margin-top:30px;
+}
+
+
+
+#connected{
+	text-align:center; 
+	margin-top:60px;
+}
+
+#connected #image{
+	margin-bottom:10px;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../fonts/icomoon.eot?wggjux');
+  src:  url('../fonts/icomoon.eot?wggjux#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?wggjux') format('truetype'),
+    url('../fonts/icomoon.woff?wggjux') format('woff'),
+    url('../fonts/icomoon.svg?wggjux#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-facebook{
+	color: #fff;
+	margin: 5px;
+}
+.icon-facebook:before {
+  content: "\ea91";
+}

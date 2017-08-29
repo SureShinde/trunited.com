@@ -25,7 +25,7 @@ class Magestore_Custompromotions_Model_Observer
                 $mobile->setCustomerId($customer_reg->getId());
                 $mobile->setUpdatedTime(now());
                 $mobile->save();
-                
+
                 /** Send sms to affiliate mobile  **/
                 $data = Mage::app()->getRequest()->getParams();
                 if($data['affiliate_id'] != null)
@@ -42,20 +42,21 @@ class Magestore_Custompromotions_Model_Observer
                             $mobile_prefix = $verify_helper->getMobileCode();
                             $phone = $verify_helper->getPhoneNumberFormat($mobile_prefix, $affiliate_customer->getPhoneNumber());
                             $message = Mage::helper('custompromotions')->__('Congratulations! %s %s just completed registration as your new connection on Trunited.com.', $customer_reg->getFirstname(), $customer_reg->getLastname());
-							
-							try{
-								$client = new Client($sid, $token);
-								$client->messages->create(
-									$phone,
-									array(
-										'from' => $from,
-										'body' => $message
-									)
-								);
-							} catch (Exception $ex){
-								
-							}
-                            
+
+                            try{
+                                $client = new Client($sid, $token);
+                                $client->messages->create(
+                                    $phone,
+                                    array(
+                                        /*'from' => $from,*/
+                                        'messagingServiceSid' => "MGb9626abfac0e54ccc6b424dcd3dc325d",
+                                        'body' => $message
+                                    )
+                                );
+                            } catch (Exception $ex){
+
+                            }
+
                         }
 
                     }
@@ -95,44 +96,44 @@ class Magestore_Custompromotions_Model_Observer
         $quoteId = $order->getQuoteId();
         $quote = Mage::getModel('sales/quote')->load($quoteId);
         if($quote->getData('checkout_method') == Mage_Sales_Model_Quote::CHECKOUT_METHOD_REGISTER){
-			$no_refers_me = Mage::getSingleton('core/session')->getWRMNo();
-			$affiliateId = Mage::getSingleton('core/session')->getWRMId();
-			$affiliateName = Mage::getSingleton('core/session')->getWRMName();
-			$customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
-			
-			if(isset($no_refers_me) && $no_refers_me == 0){
-				if (!$affiliateId) {
-					$affiliateId = Mage::getModel('affiliateplus/account')->getCollection()
-						->addFieldToFilter('name', $affiliateName)
-						->getFirstItem()->getAccountId();
-				}
-				
-				if (isset($affiliateId) && $affiliateId) {
-					$collectionTracking = Mage::getModel('affiliateplus/tracking')->getCollection()
-						->addFieldToFilter('customer_id', $customer->getId())
-						->getFirstItem();
-					if (!$collectionTracking->getId()) {
-						$collectionTracking = Mage::getModel('affiliateplus/tracking');
-						$collectionTracking->setAccountId($affiliateId);
-						$collectionTracking->setCustomerId($customer->getId());
-						$collectionTracking->setCustomerEmail($customer->getEmail());
-						$collectionTracking->setCreatedTime(now());
-						try {
-							$collectionTracking->save();
-						} catch (Exception $e) {
-							Mage::log($e->getMessage(), null, 'affiliate.log');
-						}
-					}
-				}
-			}
-			
-			$customer->setData('referred_affiliate_name',$affiliateName);
-			$customer->setData('no_refers_me',$no_refers_me);
-			$customer->save();
-			Mage::getSingleton('core/session')->unsWRMNo();
-			Mage::getSingleton('core/session')->unsWRMId();
-			Mage::getSingleton('core/session')->unsWRMName();
-		}
+            $no_refers_me = Mage::getSingleton('core/session')->getWRMNo();
+            $affiliateId = Mage::getSingleton('core/session')->getWRMId();
+            $affiliateName = Mage::getSingleton('core/session')->getWRMName();
+            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+
+            if(isset($no_refers_me) && $no_refers_me == 0){
+                if (!$affiliateId) {
+                    $affiliateId = Mage::getModel('affiliateplus/account')->getCollection()
+                        ->addFieldToFilter('name', $affiliateName)
+                        ->getFirstItem()->getAccountId();
+                }
+
+                if (isset($affiliateId) && $affiliateId) {
+                    $collectionTracking = Mage::getModel('affiliateplus/tracking')->getCollection()
+                        ->addFieldToFilter('customer_id', $customer->getId())
+                        ->getFirstItem();
+                    if (!$collectionTracking->getId()) {
+                        $collectionTracking = Mage::getModel('affiliateplus/tracking');
+                        $collectionTracking->setAccountId($affiliateId);
+                        $collectionTracking->setCustomerId($customer->getId());
+                        $collectionTracking->setCustomerEmail($customer->getEmail());
+                        $collectionTracking->setCreatedTime(now());
+                        try {
+                            $collectionTracking->save();
+                        } catch (Exception $e) {
+                            Mage::log($e->getMessage(), null, 'affiliate.log');
+                        }
+                    }
+                }
+            }
+
+            $customer->setData('referred_affiliate_name',$affiliateName);
+            $customer->setData('no_refers_me',$no_refers_me);
+            $customer->save();
+            Mage::getSingleton('core/session')->unsWRMNo();
+            Mage::getSingleton('core/session')->unsWRMId();
+            Mage::getSingleton('core/session')->unsWRMName();
+        }
     }
 
     public function salesOrderSaveAfter($observer)

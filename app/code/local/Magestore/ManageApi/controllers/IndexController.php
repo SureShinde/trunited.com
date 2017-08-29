@@ -31,12 +31,14 @@
  * @package     Magestore_TruBox
  * @author      Magestore Developer
  */
-class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Action {
+class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Action
+{
 
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction()
+    {
 //        Mage::helper('manageapi/linkshare')->processCron();
 //        Mage::helper('manageapi/hotel')->processCron();
 //        Mage::helper('manageapi/flight')->processCron();
@@ -64,16 +66,16 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
 
     public function updateDb2Action()
     {
-      $setup = new Mage_Core_Model_Resource_Setup();
-      $installer = $setup;
-      $installer->startSetup();
-      $installer->run("
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
         ALTER TABLE {$setup->getTable('manageapi/linkshare')} MODIFY `order_id` VARCHAR(255) ;
       ");
-      $installer->endSetup();
-      echo "success";
+        $installer->endSetup();
+        echo "success";
     }
-        
+
 
     //ALTER TABLE {$setup->getTable('trubox/address')} ADD `address_type` int(10) DEFAULT 2;
     public function updateDbAction()
@@ -460,10 +462,10 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
 
     public function updateDb3Action()
     {
-      $setup = new Mage_Core_Model_Resource_Setup();
-      $installer = $setup;
-      $installer->startSetup();
-      $installer->run("
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
               DROP TABLE IF EXISTS {$setup->getTable('manageapi/shareasale')};
               CREATE TABLE {$setup->getTable('manageapi/shareasale')} (
                 `shareasale_id` int(11) unsigned NOT NULL auto_increment,
@@ -496,9 +498,74 @@ class Magestore_ManageApi_IndexController extends Mage_Core_Controller_Front_Act
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
           ");
-      $installer->endSetup();
-      echo "success";
+        $installer->endSetup();
+        echo "success";
     }
 
+    public function checkAction()
+    {
+        $rwd_transactions = Mage::getModel('rewardpoints/transaction')->getCollection()
+            ->addFieldToFilter('action', 'global_brand')
+            ->addFieldToFilter('is_on_hold', 1);
 
+        if (sizeof($rwd_transactions) > 0) {
+            $data = array();
+            $duplicates = array();
+            $i = 0;
+            foreach ($rwd_transactions as $rwd) {
+                if ($i == 0) {
+                    $data[$rwd->getCustomerId()] = $rwd->getOrderIncrementId();
+                } else {
+                    if (isset($data[$rwd->getCustomerId()]) && $data[$rwd->getCustomerId()] != null && $data[$rwd->getCustomerId()] == $rwd->getOrderIncrementId()) {
+                        $duplicates[] = array(
+                            'transaction_id' => $rwd->getId(),
+                            'customer_id' => $rwd->getCustomerId(),
+                            'order_increment_id' => $rwd->getOrderIncrementId(),
+                        );
+                    } else {
+                        $data[$rwd->getCustomerId()] = $rwd->getOrderIncrementId();
+                    }
+                }
+                $i++;
+            }
+
+            zend_debug::dump($duplicates);
+        }
+
+        echo 'success';
+    }
+
+    public function updateDb4Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+              DROP TABLE IF EXISTS {$setup->getTable('manageapi/linkshareadvertisers')};
+              CREATE TABLE {$setup->getTable('manageapi/linkshareadvertisers')} (
+                `linkshare_advertisers_id` int(11) unsigned NOT NULL auto_increment,
+                `etransaction_id` VARCHAR(255) NOT NULL,
+                `advertiser_id` VARCHAR(255) NOT NULL,
+                `sid` varchar(255) NOT NULL,
+                `order_id` varchar(255) NULL,
+                `offer_id` VARCHAR(255) NULL,
+                `sku_number` VARCHAR(255) NULL,
+                `sale_amount` VARCHAR(255) NULL,
+                `quantity` VARCHAR(255) NULL,
+                `commissions` VARCHAR(255) NULL,
+                `process_date` datetime NULL,
+                `transaction_date` datetime NULL,
+                `transaction_type` VARCHAR(255) NULL,
+                `product_name` VARCHAR(255) NULL,
+                `u1` VARCHAR(255) NULL,
+                `currency` VARCHAR(255) NULL,
+                `is_event` VARCHAR(255) NULL,
+                `created_time` datetime NULL,
+                PRIMARY KEY (`linkshare_advertisers_id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+          ");
+        $installer->endSetup();
+        echo "success";
+    }
 }

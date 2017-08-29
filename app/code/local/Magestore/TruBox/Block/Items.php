@@ -128,10 +128,20 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
     }
 
     public function getPaymentTruBox() {
-        $truBoxId = Mage::helper('trubox')->getCurrentTruBoxId();
-        $truBoxFilter = Mage::getModel('trubox/payment')->getCollection()
-            ->addFieldToFilter('trubox_id', $truBoxId)->getFirstItem();
-        return $truBoxFilter;
+        $cards = Mage::getModel('tokenbase/card')->getCollection()
+            ->addFieldToFilter( 'active', 1 )
+            ->addFieldToFilter( 'customer_id', $this->getCurrentCustomer()->getId())
+            ->addFieldToFilter( 'method', 'authnetcim')
+            ->setOrder('use_in_trubox', 'desc')
+            ->setOrder('id', 'desc')
+        ;
+
+        return $cards;
+    }
+
+    public function getCardUrl()
+    {
+        return $this->getUrl('customer/paymentinfo/');
     }
 
     public function getRate($product)
@@ -288,4 +298,18 @@ class Magestore_TruBox_Block_Items extends Mage_Core_Block_Template {
         return Mage::helper('trubox')->hasSaveCode(Mage::getSingleton('customer/session')->getCustomer()->getId());
     }
 
+    public function isShowCurrentMonth()
+    {
+        return Mage::helper('trubox')->isShowCurrentMonth();
+    }
+
+    public function getDataCurrentMonth()
+    {
+        return Mage::helper('trubox')->getDataCurrentMonth();
+    }
+
+    public function getDataNextMonth($month)
+    {
+        return Mage::helper('trubox')->getDataNextMonth($month);
+    }
 }

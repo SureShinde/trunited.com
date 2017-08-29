@@ -166,7 +166,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Card extends ParadoxLabs_TokenBase_Model
 		 */
 		if( $this->getPaymentId() == '' ) {
 			$address = $this->getAddressObject();
-			
+
 			$gateway->setParameter( 'customerProfileId', $this->getProfileId() );
 			
 			$gateway->setParameter( 'billToFirstName', $address->getFirstname() );
@@ -191,7 +191,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Card extends ParadoxLabs_TokenBase_Model
 		 */
 		else {
 			$address = $this->getAddressObject();
-			
+
 			$gateway->setParameter( 'customerProfileId', $this->getProfileId() );
 			$gateway->setParameter( 'customerPaymentProfileId', $this->getPaymentId() );
 			

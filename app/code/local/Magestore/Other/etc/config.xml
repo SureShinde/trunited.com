@@ -122,6 +122,11 @@
             <other>
                 <class>Magestore_Other_Block</class>
             </other>
+            <adminhtml>
+                <rewrite>
+                    <customer_grid>Magestore_Other_Block_Adminhtml_Customer_Grid</customer_grid>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <helpers>
             <other>

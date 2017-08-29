@@ -1,0 +1,189 @@
+<?php
+//In case we need to decide whether the answer was correct or not from the server side
+/*
+	$answer_one = $_POST['answer[0]'];
+	$answer_two = $_POST['answer[1]'];
+	$answer_three = $_POST['answer[2]'];
+	$answer_four = $_POST['answer[3]'];
+	$answer_five = $_POST['answer[4]'];
+	$answer_six = $_POST['answer[5]'];
+	$answer_seven = $_POST['answer[6]'];
+	$answer_eight = $_POST['answer[7]'];
+	$answer_nine = $_POST['answer[8]'];
+	$answer_ten*= $_POST['answer[9]'];
+	$result = 8;
+  print_r($_POST['answer[0]']);
+  print_r($_POST['
+    ']);
+	
+  echo htmlspecialchars($_POST['0']);
+  echo $_POST[0];
+  echo $_POST['0'];
+*/
+      if($_POST['result']){
+          $results = $_POST['result'];
+
+        }else{
+//In case we need the customer to sign in
+          /*
+          if(Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $customerData = Mage::getSingleton('customer/session')->getCustomer();
+            $connection = Mage::getModel('core/resource')->getConnection('core_read');
+            $customerId = $customerData->getId();
+            //INSERT INTO `trunited_dev_new`.`Scores` (`SCORE_ID`, `Score`, `FK_Customer_ID`, `FK_Quizz`) VALUES (NULL, '7', '2549', '1');
+            $sql = 'SELECT `Score` FROM  `Scores` INNER JOIN `Quizzes` WHERE `FK_Customer_ID` = ' .$customerId. ' AND `Quizz_Name` = "Daily Products"';
+            //$orders = $connection->fetchAll($sql);
+            $orders = $connection->fetchOne($sql);
+            //$writeConnection = $resource->getConnection('core_write');
+            if($results){
+                if($orders){
+                  //update
+                  //$sql = 'UPDATE `Score` FROM  `Scores` INNER JOIN `Quizzes` WHERE `FK_Customer_ID` = ' .$customerId. 'AND `Quizz_Name` = "Daily Products"';
+                  $sql =  'UPDATE `Scores` SET `Score` = 90 WHERE `FK_Customer_ID` = '.$customerId.' AND FK_Quizz = 1';
+                  $orders = $connection->fetchAll($sql);
+                }else{
+                  //insert
+                  $sql = 'INSERT INTO `trunited_dev_new`.`Scores` (`SCORE_ID`, `Score`, `FK_Customer_ID`, `FK_Quizz`) VALUES (NULL, "7", "'.$customerId.'", "1");';
+                //  $orders = $connection->fetchAll($sql);
+                }
+            }
+        //}else{
+          $orders = $orders[0];
+          $orders = $orders['Score'];
+          //echo $orders;
+          $results = $orders;
+
+
+        }else{
+          $results = "You haven't completed the quiz!";
+        }*/
+        $results = "You haven't completed the quiz!";
+      }
+
+
+?>
+
+<div class="bgimg">
+ 
+      <!--Left Text-->
+      <div class="div-score-right" style="vertical-align: top;  padding-right: 10%; margin-top: 10%;">
+        <div style="display: inline-block; top; padding-top: 40%; vertical-align: text-top;text-align: right;">
+          <p class="vertical-quiz-title-short">EVERYDAY PRODUCTS</p>
+        </div>
+        <div style="display: inline-block; vertical-align: top; padding-top: 20%;vertical-align: text-top; text-align: left;">
+          <p class="vertical-quiz-title-medium">YOUR SCORE</p>
+        </div> 
+      </div>
+<?php
+  if($_POST['result']){ ?>
+      <!--Scale Earning Table-->
+      <div class="div-score-center">
+        <div class="div-score-toptext">
+          <p class="title-score">CONGRATULATIONS</p>
+            <br>
+          <p class="short">YOUR DAILY PRODUCTS EARNING POTENTIAL</p>
+          <!--p class="score">90/100</p-->
+          <p class="score"><?php echo $results ?>/100</p>
+          <hr class="orange">
+        </div>
+        <div class="div-score-table">
+          <div class="orange-score">
+             <div class="div-score" style="width: 49%"><p class="score-category">CATEGORY</p></div>
+             <div class="div-score" style="width: 49%"><p class="score-category">SCORE</p></div>
+          </div>
+          <div class="incredible-score">
+             <div class="div-score"><p class="short">INCREDIBLE</p></div>
+             <div class="div-score"><p class="short">80 OR ABOVE</p></div>
+          </div>
+          <div class="great-score">
+             <div class="div-score"><p class="short">GREAT</p></div>
+             <div class="div-score"><p class="short">60-79</p></div>
+          </div>
+          <div class="good-score">
+             <div class="div-score"><p class="short">GOOD</p></div>
+             <div class="div-score"><p class="short">40-59</p></div>
+          </div>
+          <div class="average-score">
+             <div class="div-score"><p class="short">BELOW AVERAGE</p></div>
+             <div class="div-score"><p class="short">BELOW 40</p></div>
+          </div>
+        </div>
+        <br>
+        <div>&nbsp;</div>
+        <div class="div-bottom-buttons">
+        <!--SHOP And JOIN Now Buttons-->
+        <div style="" class="btn-shop-join-now">
+            <div class="btn-score-left">
+                <a  href="http://localhost/trunited/#.php">
+                  <input style="background-color:#f15b20; color: #fff; border: 0; font-size: 1.50em;" type="submit" value="SHOP NOW!" />
+                </a>
+            </div>
+            <div class="btn-score-right">
+                <a href="http://localhost/trunited/#.php">
+                  <input style="background-color:#f15b20; color: #fff; border: 0; font-size: 1.50em;" type="submit" value="JOIN NOW!" />
+                </a>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <!--Take Other Quizzes title-->
+        <div style="padding-left: 15%; padding-right: 15%;">
+           <div class="btn-other-quizz">
+             <p class="short-score">TAKE OTHER QUIZZES</p>
+           </div>
+        </div>
+        <br>
+        <br>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <!--Take Other Quizzes Buttons-->
+        <div style="text-align: center; " class="btn-other-quizzes">
+          
+          <div class="btn-quiz-landing">
+                <a href="/quiz-global">
+                 <img class="btn-quiz-img" align="right" src="<?php echo $this->getSkinUrl('images/inode/quizzes/scores/buttons/buttonGlobalBrands.png') ?>" alt="Divided we fall, Trunited we stand">
+                </a>
+          </div>
+
+          <div class="btn-quiz-landing">
+              <a href="/quiz-giftcards">
+               <img class="btn-quiz-img" align="right" src="<?php echo $this->getSkinUrl('images/inode/quizzes/scores/buttons/buttonGiftCards.png') ?>" alt="Divided we fall, Trunited we stand">
+              </a>
+          </div>
+          <div class="btn-quiz-landing">
+              <a href="quiz-monthly">
+               <img class="btn-quiz-img" align="right" src="<?php echo $this->getSkinUrl('images/inode/quizzes/scores/buttons/buttonMonthlyServices.png') ?>" alt="Divided we fall, Trunited we stand">
+              </a>
+          </div>
+        </div>
+        </div>
+      </div>   <!--End of content (table)-->
+<?php 
+}else{
+?>
+
+      <div class="div-score-center">
+        <div class="div-score-toptext">
+          <p class="score"><?php echo $results ?></p>
+          <br/><a href="quiz-D2C">Take me to the quiz</a>
+          <p class="score"></p>
+          <hr class="orange">
+        </div>
+        <div>&nbsp;</div>
+        <br>
+        <br>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <!--Take Other Quizzes Buttons-->
+        <div style="text-align: center; ">
+        </div> 
+      </div>   <!--End of content (table)-->
+<?php
+  }
+?>
+
+</div>

@@ -140,7 +140,7 @@ Product.Bundle.prototype = {
     },
 
     selectionPrice: function(optionId, selectionId) {
-        if (selectionId == '' || selectionId == 'none' || typeof(this.config.options[optionId].selections[selectionId]) == 'undefined') {
+        if (selectionId == '' || selectionId == 'none') {
             return 0;
         }
         var qty = null;
@@ -271,4 +271,4 @@ Product.Bundle.prototype = {
             }
         }
     }
-};
+}

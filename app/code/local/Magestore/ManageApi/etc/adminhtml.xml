@@ -8,7 +8,18 @@
 				<link_share module="manageapi" translate="title">
 					<title>Link Share API</title>
 					<sort_order>0</sort_order>
-					<action>manageapiadmin/adminhtml_linkshare</action>
+					<children>
+						<link_share_primary>
+							<title>LinkShare Actions</title>
+							<sort_order>1</sort_order>
+							<action>manageapiadmin/adminhtml_linkshare</action>
+						</link_share_primary>
+						<link_share_advertisers>
+							<title>LinkShare Advertisers</title>
+							<sort_order>2</sort_order>
+							<action>manageapiadmin/adminhtml_linkshareadvertisers</action>
+						</link_share_advertisers>
+					</children>
 				</link_share>
 				<price_line module="manageapi" translate="title">
 					<title>Price Line APIs</title>
@@ -90,7 +101,18 @@
 							<link_share module="manageapi" translate="title">
 								<title>Link Share API</title>
 								<sort_order>0</sort_order>
-								<action>manageapiadmin/adminhtml_linkshare</action>
+								<children>
+									<link_share_primary>
+										<title>LinkShare Actions</title>
+										<sort_order>1</sort_order>
+										<action>manageapiadmin/adminhtml_linkshare</action>
+									</link_share_primary>
+									<link_share_advertisers>
+										<title>LinkShare Advertisers</title>
+										<sort_order>2</sort_order>
+										<action>manageapiadmin/adminhtml_linkshareadvertisers</action>
+									</link_share_advertisers>
+								</children>
 							</link_share>
 							<price_line module="manageapi" translate="title">
 								<title>Price Line APIs</title>

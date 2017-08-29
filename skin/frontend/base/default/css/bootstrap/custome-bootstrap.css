@@ -127,12 +127,12 @@ and open the template in the editor.
 .navbar-hidden{
     display: none;
 }
-@media (min-width:2991px){
+@media (min-width:991px){
     #navi-bg{
         display: none !important;
     }
 }
-@media (max-width:2991px){
+@media (max-width:991px){
     .aff-mobile{
         position: fixed;
         transform: translate(-400%);
@@ -147,7 +147,6 @@ and open the template in the editor.
         -moz-transition: all 400ms ease-out;
         -o-transition: all 400ms ease-out;
         height: 100%;
-      width: 350px!important;
         margin-top: 0!important;
     }
     .aff-mobile .navbar-hidden{
@@ -155,9 +154,8 @@ and open the template in the editor.
         position: absolute;
         right: -300%;
         margin-right: -41px;
-         top: 50%;
+        top: 50%;
         margin-top: -25px;
-
         transition: all 400ms ease-out;
         -webkit-transition: all 400ms ease-out;
         -moz-transition: all 400ms ease-out;
@@ -673,8 +671,4 @@ ul.tab li a:focus, .active {
 .bonus-message{
     margin: 10px 0 0 0;
     color: green;
-}
- .aff-main-content{
-width:100% !important;
-
 }

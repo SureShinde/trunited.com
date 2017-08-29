@@ -18,6 +18,10 @@
     top: -20px;
 }
 
+h3.section-header {
+  font-weight: 100;
+}
+
 a.tooltip-icon {
     border: 1px solid #fff;
     color: #fff;

@@ -41,6 +41,8 @@ class Magestore_TruWallet_Model_Observer
         {
             Mage::log('Checking TGC at '.date('Y-m-d H:i:s', time()), null, 'check_expired_tgc.log');
             Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
+
+            Mage::helper('manageapi/linkshareadvertisers')->processCron();
         }
 			
 		/* CRON JOB for checking the expiration of truWallet transactions */
