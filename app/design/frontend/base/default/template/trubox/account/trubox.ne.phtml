@@ -1,0 +1,565 @@
+<?php
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/**
+ * Rewardpoints Account Dashboard
+ *
+ * @see Magestore_RewardPoints_Block_Account_Dashboard
+ */
+?>
+<?php
+$logo = $this->getLogo();
+$orders = $this->getCollection();
+?>
+
+<div class="right_block">
+    <div class="right_block_in">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="text-uppercase">Food and beverages</h3>
+            <div class="sort_by pad_last sort_rgt">
+                <label>SORT BY</label>
+                <select class="selectpicker">
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                </select>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="search_club">
+                <label>SEARCH</label>
+                <input name="name" type="text" value="Search Product"
+                       onClick="if(this.value=='Search Product'){this.value=''}"
+                       onBlur="if(this.value==''){this.value='Search Product'}">
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="food_beverages_main">
+            <div class="food_products">
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <h6>Products</h6>
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Orange 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <h6>Quantity</h6>
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Apple 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Strawberry 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Orange 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Apple 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Strawberry 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Orange 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Apple 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Strawberry 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Orange 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <ul>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><label><input name="name" type="checkbox">
+                                    <small></small>
+                                </label></li>
+                            <li><span>Vengo Apple 24-Pack </span></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <div class="increse">
+                            <input name="name" type="text" class="input-quantity" value="1">
+                            <span class="up">&nbsp;</span>
+                            <span class="down">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="onetime_sipping">
+                    <ul>
+                        <li>
+                            <label><input name="name" type="checkbox"><span>One Time Shipping</span></label>
+                        </li>
+                        <li>
+                            <label><input name="name" type="checkbox"><span>Every Month Shipping</span></label>
+                        </li>
+                        <li>
+                            <label><input name="name" type="checkbox"><span>Every 2 Month Shipping</span></label>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="month_tabs">
+                <div class="brd_line"></div>
+                <div class="receive_email">
+                    <small class="month_text">Month</small>
+                    <ul>
+                        <li class="col-xs-4">
+                            <span>1<sup>st</sup></span>
+                            <small>Receive Email</small>
+                            <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>5<sup>th</sup></span>
+                            <small>TruBox Processed</small>
+                            <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>10<sup>th</sup></span>
+                            <small>TruBox Shipped</small>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="current_mnthly">
+            <ul>
+                <li class="col-xs-4 col-sm-6 col-md-4">
+                    <h4>CURRENT</h4>
+                    <div class="curnt_mnth">
+                        <div class="curnt_mnth_in">
+                            <strong>88</strong>
+                            <small>your TRUBOX <br>points</small>
+                        </div>
+
+                        <div class="curnt_mnth_in">
+                            <strong>$178.18</strong>
+                            <small>your TRUBOX <br>cost</small>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn transition">save trubox</button>
+                </li>
+
+                <li class="col-xs-4 col-sm-6 col-md-4">
+                    <h4>MONTHLY</h4>
+                    <div class="curnt_mnth">
+                        <div class="curnt_mnth_in">
+                            <strong>71</strong>
+                            <small>your TRUBOX <br>points</small>
+                        </div>
+
+                        <div class="curnt_mnth_in">
+                            <strong>$136.18</strong>
+                            <small>your TRUBOX <br>cost</small>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn transition">What is trubox</button>
+                </li>
+
+                <li class="col-xs-4 col-sm-6 col-md-4">
+                    <h4>EVERY 2 MONTH</h4>
+                    <div class="curnt_mnth">
+                        <div class="curnt_mnth_in">
+                            <strong>74</strong>
+                            <small>your TRUBOX <br>points</small>
+                        </div>
+
+                        <div class="curnt_mnth_in">
+                            <strong>$138.29</strong>
+                            <small>your TRUBOX <br>cost</small>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn transition">clear trubox</button>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div class="trubox-page">
+    <?php echo $this->getChildHtml('global_messages'); ?>
+    <?php if (Mage::helper('core')->isModuleOutputEnabled('Magestore_TruWallet') && Mage::helper('truwallet')->isShowWarningMessage()) { ?>
+        <?php if (Mage::helper('truwallet')->getWarningMessage() != null) { ?>
+            <ul class="messages">
+                <li class="notice-msg">
+                    <ul>
+                        <li><span><?php echo Mage::helper('truwallet')->getWarningMessage(); ?></span></li>
+                    </ul>
+                </li>
+            </ul>
+
+        <?php } ?>
+    <?php } ?>
+    <div class="page-title" tabindex="1">
+        <h1><?php echo $this->__('My TruBox') ?></h1>
+    </div>
+
+    <div class="info-summary">
+        <?php if ($logo != null) { ?>
+            <img
+                    src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
+        <?php } else { ?>
+            <img src="<?php echo Mage::getBaseUrl('media') . 'trubox/no_image.png'; ?>">
+        <?php } ?>
+    </div>
+
+    <div class="page-description">
+        <?php
+        echo Mage::getModel('cms/block')->load('trubox_description')->getContent();
+        ?>
+    </div>
+    <br style="clear: both"/>
+    <?php if ($this->isEnableCouponCode()) { ?>
+        <hr class="share_separate"/>
+        <div class="trubox-coupon-code">
+            <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
+            <?php $code = $this->hasCouponCode(); ?>
+            <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
+                <?php if ($code == null) { ?>
+                    <div class="fieldsets">
+                        <ul class="form-list">
+                            <li class="fields">
+                                <div class="wide">
+                                    <label for="telephone" class="required"><em>*</em>
+                                        <?php echo $this->__('Enter promotion code') ?>
+                                    </label>
+
+                                    <div class="input-box">
+                                        <input type="text" name="coupon_code" value=""
+                                               title="<?php echo $this->__('The promotion code') ?>"
+                                               class="input-text required-entry"
+                                               id="coupon_code"
+                                               placeholder="<?php echo $this->__('Enter the promotion code') ?>">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="buttons-set">
+                        <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
+                        <button class="button btn-cart" type="submit">
+                            <span><span><?php echo $this->__('Save Promotion Code') ?></span></span>
+                        </button>
+                    </div>
+                <?php } else { ?>
+                    <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode())); ?></p>
+                <?php } ?>
+            </form>
+        </div>
+    <?php } ?>
+    <hr class="share_separate"/>
+    <?php if (Mage::helper('trubox')->isEnableOrdersSection()) { ?>
+        <div class="box-account box-info box-trubox-summary">
+            <div class="trubox-orders">
+                <h2 class="trubox-header"><?php echo $this->__('Trubox Orders') ?></h2>
+                <?php if (sizeof($orders) > 0) { ?>
+                    <form action="#" method="post">
+                        <?php echo $this->getPagerHtml() ?> <!--Add Paging-->
+                        <table id="trubox-orders" class="data-table">
+                            <colgroup>
+                                <col width="1">
+                                <col>
+                                <col width="1">
+                                <col width="1">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr class="first last">
+                                <th><?php echo $this->__('Order #') ?></th>
+                                <th><?php echo $this->__('Date') ?></th>
+                                <th><?php echo $this->__('Ship To') ?></th>
+                                <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
+                                <th><span class="nobr"><?php echo $this->__('Order Status') ?></span></th>
+                                <th><?php echo $this->__('Action') ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $_odd = ''; ?>
+                            <?php foreach ($orders as $_order): ?>
+                                <tr>
+                                    <td><?php echo $_order->getRealOrderId() ?></td>
+                                    <td><span class="nobr"><?php echo $_order->getCreatedAtStoreDate(); ?></span></td>
+                                    <td><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                                    <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                                    <td><em><?php echo $_order->getStatusLabel() ?></em></td>
+                                    <td class="a-center">
+                                        <span class="nobr">
+                                            <a href="<?php echo Mage::getUrl('sales/order/view', array('order_id' => $_order->getId())); ?>"><?php echo $this->__('View Order') ?></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <script type="text/javascript">decorateTable('trubox-orders')</script>
+                    </form>
+
+                <?php } else { ?>
+                    <p><?php echo $this->__('No orders found'); ?></p>
+                <?php } ?>
+            </div>
+        </div>
+        <hr class="share_separate">
+    <?php } ?>
+    <?php echo $this->getChildHtml('other') ?>
+</div>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block inn_pad main_bg2');
+</script>

@@ -178,6 +178,7 @@
                 <delay_second>1</delay_second>
                 <current_date>6</current_date>
                 <start_month>1</start_month>
+                <cms_trubox>61</cms_trubox>
             </general>
             <shipping>
                 <shipping_method>freeshipping_freeshipping</shipping_method>

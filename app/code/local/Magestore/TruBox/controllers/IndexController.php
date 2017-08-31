@@ -260,7 +260,7 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                     $_id = str_replace('type_', '', $id);
                     $item = Mage::getModel('trubox/item')->load($_id);
                     if ($item->getId()) {
-                        if ($data[$_id] == 0)
+                        if ($data[$_id] <= 0)
                             $item->delete();
                         else {
                             $item->setQty($data[$_id]);

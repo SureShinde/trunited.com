@@ -3,119 +3,137 @@ $category = $this->getCategory();
 $product_collection = $this->getProductCollection();
 $product_trubox = $this->getProductsFromTruBox();
 ?>
-<div class="block block-account">
-    <div class="block-title">
-        <strong><span><?php if ($category != null) {
+
+<div class="right_block">
+    <div class="right_block_in">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="text-uppercase"><?php if ($category != null) {
                     echo $category->getName();
                 } else {
                     echo $this->__('Category is not existed');
-                } ?></span></strong>
-    </div>
+                } ?></h3>
+            <div class="sort_by pad_last sort_rgt">
+                <label>SORT BY</label>
+                <select class="selectpicker">
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                    <option>Product Prices</option>
+                </select>
 
-    <div class="box-account box-info box-trubox-summary">
-        <div class="category-items">
-            <?php if (sizeof($product_collection) > 0) { ?>
-            <form class="items" action="<?php echo $this->addItemsToTruBox() ?>" method="POST" id="category-items">
-                <div class="table-responsive">
-                    <table id="shopping-cart-table" class="table table-condensed">
-                        <thead>
-                        <tr>
-                            <th><span class="nobr"><?php echo $this->__('') ?></span></th>
-                            <th><span class="nobr"><?php echo $this->__('Name') ?></span></th>
-                            <th>
-                                <?php echo $this->__('Qty') ?>
-                            </th>
-                            <th>
-                                <span class="nobr"><?php echo $this->__('Price') ?></span></span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <div class="clearfix"></div>
+            </div>
+            <div class="search_club">
+                <label>SEARCH</label>
+                <input name="name" type="text" value="Search Product"
+                       onClick="if(this.value=='Search Product'){this.value=''}"
+                       onBlur="if(this.value==''){this.value='Search Product'}">
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="food_beverages_main">
+            <div class="food_products trubox_list">
+                <div class="food_products_in">
+                    <div class="food_products_left">
+                        <h6><?php echo $this->__('Products') ?></h6>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="food_products_right">
+                        <h6><?php echo $this->__('Quantity') ?></h6>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <?php if (sizeof($product_collection) > 0) { ?>
+                    <form class="items" action="<?php echo $this->addItemsToTruBox() ?>" method="POST"
+                          id="category-items">
                         <?php
-                        foreach ($product_collection as $product) { ?>
-                            <?php
-                                $type = null;
-                                $qty = 1;
-                                if(sizeof($product_trubox) > 0 && isset($product_trubox[$product->getId()])){
-                                    $type = $product_trubox[$product->getId()]['type_item'];
-                                    $qty = $product_trubox[$product->getId()]['qty'];
-                                }
+                        foreach ($product_collection as $product) {
+                            $type = null;
+                            $qty = 1;
+                            if (sizeof($product_trubox) > 0 && isset($product_trubox[$product->getId()])) {
+                                $type = $product_trubox[$product->getId()]['type_item'];
+                                $qty = $product_trubox[$product->getId()]['qty'];
+                            }
+                            $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
                             ?>
-                            <?php $stock = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product); ?>
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
-                                           id="one_time_<?php echo $product->getId(); ?>"
-                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_ONE_TIME ?>"
-                                           class="item_<?php echo $product->getId(); ?>"
-                                           title="<?php echo Mage::helper('trubox')->__('One Time Shipment') ?>"
-                                           onchange="selectType(this, this.checked)"
-                                           <?php if($type != null && $type == Magestore_TruBox_Model_Type::TYPE_ONE_TIME){?>checked="checked"<?php }?>
-                                        />
-                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
-                                           id="every_month_<?php echo $product->getId(); ?>"
-                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH ?>"
-                                           class="item_<?php echo $product->getId(); ?>"
-                                           title="<?php echo Mage::helper('trubox')->__('Every Month') ?>"
-                                           onchange="selectType(this, this.checked)"
-                                           <?php if($type != null && $type == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH){?>checked="checked"<?php }?>
-                                        />
-                                    <input type="checkbox" name="type_<?php echo $product->getId(); ?>"
-                                           id="every_two_months_<?php echo $product->getId(); ?>"
-                                           value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS ?>"
-                                           class="item_<?php echo $product->getId(); ?>"
-                                           title="<?php echo Mage::helper('trubox')->__('Every Two Months') ?>"
-                                           onchange="selectType(this, this.checked)"
-                                           <?php if($type != null && $type == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS){?>checked="checked"<?php }?>
-                                        />
-                                </td>
-                                <td>
-                                    <a href="<?php echo $product->getProductUrl(true); ?>" class="preview">
-                                        <strong><?php echo $product->getName() ?></strong>
-                                        <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(200); ?>"  alt="gallery thumbnail"/>
-                                    </a>
-                                </td>
-                                <td class="a-center">
-                                    <input class="product-qty" id="item_<?php echo $product->getId(); ?>"
-                                           name="<?php echo $product->getId(); ?>"
-                                           value="<?php echo $qty;?>"/>
-                                    <input type="button" id="minus" value="-"
-                                           onClick="minusQty(item_<?php echo $product->getId(); ?>)">
-                                    <input type="button" value="+"
-                                           onClick="plusQty(item_<?php echo $product->getId(); ?>)"/>
-                                </td>
-                                <td class="a-center"><p
-                                        class="total-price"><?php echo Mage::helper('core')->currency($product->getPrice(), true, false); ?></p>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                        ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="buttons-set">
-                    <button class="button btn-cart" type="submit">
-                        <span><span><?php echo $this->__('SAVE TRUBOX') ?></span></span>
-                    </button>
-                </div>
+                            <div class="food_products_in">
+                                <div class="food_products_left">
+                                    <ul>
+                                        <li><label><input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                                          id="one_time_<?php echo $product->getId(); ?>"
+                                                          value="<?php echo Magestore_TruBox_Model_Type::TYPE_ONE_TIME ?>"
+                                                          class="item_<?php echo $product->getId(); ?>"
+                                                          title="<?php echo Mage::helper('trubox')->__('One Time Shipment') ?>"
+                                                          onchange="selectType(this, this.checked)"
+                                                          <?php if ($type != null && $type == Magestore_TruBox_Model_Type::TYPE_ONE_TIME){ ?>checked="checked"<?php } ?>
+                                                />
+                                                <small></small>
+                                            </label></li>
+                                        <li><label><input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                                          id="every_month_<?php echo $product->getId(); ?>"
+                                                          value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH ?>"
+                                                          class="item_<?php echo $product->getId(); ?>"
+                                                          title="<?php echo Mage::helper('trubox')->__('Every Month') ?>"
+                                                          onchange="selectType(this, this.checked)"
+                                                          <?php if ($type != null && $type == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH){ ?>checked="checked"<?php } ?>
+                                                />
+                                                <small></small>
+                                            </label></li>
+                                        <li><label><input type="checkbox" name="type_<?php echo $product->getId(); ?>"
+                                                          id="every_two_months_<?php echo $product->getId(); ?>"
+                                                          value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS ?>"
+                                                          class="item_<?php echo $product->getId(); ?>"
+                                                          title="<?php echo Mage::helper('trubox')->__('Every Two Months') ?>"
+                                                          onchange="selectType(this, this.checked)"
+                                                          <?php if ($type != null && $type == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS){ ?>checked="checked"<?php } ?>
+                                                />
+                                                <small></small>
+                                            </label></li>
+                                        <li><span><a href="<?php echo $product->getProductUrl(true); ?>" class="preview">
+                                                <?php echo $product->getName() ?>
+                                                <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(200); ?>"
+                                                     alt="gallery thumbnail"/>
+                                            </a></span></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="food_products_right">
+                                    <div class="increse">
+                                        <input class="product-qty input-quantity" id="item_<?php echo $product->getId(); ?>"
+                                               name="<?php echo $product->getId(); ?>"
+                                               value="<?php echo $qty; ?>"/>
+                                        <span class="up">&nbsp;</span>
+                                        <span class="down">&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        <?php } ?>
+                        <div class="buttons-set">
+                            <button class=" btn" type="submit">
+                                <?php echo $this->__('SAVE TRUBOX') ?>
+                            </button>
+                        </div>
+                    </form>
                 <?php } else { ?>
                     <p><?php echo $this->__('No products found'); ?></p>
                 <?php } ?>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+<div class="clearfix"></div>
 
 <style type="text/css">
-    #preview{
+    #preview {
         position: absolute;
         border: 1px solid #cac6c6;
         display: none;
         color: #fff;
     }
 
-    a.preview img{
+    a.preview img {
         display: none;
     }
 </style>
@@ -124,38 +142,57 @@ $product_trubox = $this->getProductsFromTruBox();
     $j = jQuery.noConflict();
     $j('.page-title').focus();
 
-    imagePreview = function(){
+    $j('.main-container').addClass('main_block inn_pad main_bg2');
+    $j('.direct_comsumer').html('<h1 class="inner_pad">The Trubox Club</h1>');
+
+    $j('.up').on('click',function(){
+        var num = $j(this).parent().find('.input-quantity').val();
+        $j(this).parent().find('.input-quantity').val(parseInt(num)+1);
+    });
+    $j('.down').on('click',function(){
+        var num = $j(this).parent().find('.input-quantity').val();
+        var new_qty = parseInt(num)-1;
+
+        if(new_qty > 0)
+            $j(this).parent().find('.input-quantity').val(new_qty);
+        else
+            $j(this).parent().find('.input-quantity').val(0);
+
+    });
+
+    imagePreview = function () {
         /* CONFIG */
         xOffset = 10;
         yOffset = 30;
         /* END CONFIG */
 
-        $j("a.preview").hover(function(e){
+        $j("a.preview").hover(function (e) {
                 this.t = this.title;
                 this.title = "";
                 var c = (this.t != "") ? "<br/>" + this.t : "";
                 var img_src = $j(this).children('img')[0].src;
-                $j("body").append("<p id='preview'><img src='"+ img_src +"' alt='Image preview' />"+ c +"</p>");
+                $j("body").append("<p id='preview'><img src='" + img_src + "' alt='Image preview' />" + c + "</p>");
                 $j("#preview")
-                    .css("top",(e.pageY - xOffset) + "px")
-                    .css("left",(e.pageX + yOffset) + "px")
+                    .css("top", (e.pageY - xOffset) + "px")
+                    .css("left", (e.pageX + yOffset) + "px")
                     .fadeIn("fast");
             },
-            function(){
+            function () {
                 this.title = this.t;
                 $j("#preview").remove();
             });
-        $j("a.preview").mousemove(function(e){
+        $j("a.preview").mousemove(function (e) {
             $j("#preview")
-                .css("top",(e.pageY - xOffset) + "px")
-                .css("left",(e.pageX + yOffset) + "px");
+                .css("top", (e.pageY - xOffset) + "px")
+                .css("left", (e.pageX + yOffset) + "px");
         });
     };
 
-
     // starting the script on page load
-    $j(document).ready(function(){
+    $j(document).ready(function () {
         imagePreview();
+        $j(".sidebar").removeClass('active');
+        $j(".sidebar.trubox_brands").addClass('active').show();
     });
 
     var category_items = new VarienForm('category-items', true);

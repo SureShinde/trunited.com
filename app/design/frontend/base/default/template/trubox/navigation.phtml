@@ -52,5 +52,16 @@
             $j(this).parent().find('.sub_blk').slideToggle();
             $j(this).parent().siblings().find('.sub_blk').slideUp();
         });
+
+
+
+        $j(window).scroll(function () {
+            if ($j(this).scrollTop() > 100) {
+                $j('.BaclToTop').fadeIn();
+            } else {
+                $j('.BaclToTop').fadeOut();
+            }
+        });
+
     } );
 </script>

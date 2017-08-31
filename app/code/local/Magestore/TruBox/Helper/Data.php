@@ -105,6 +105,11 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('trubox/general/coupon_code_amount');
     }
 
+    public function getCmsWhatIsTruBox()
+    {
+        return Mage::getStoreConfig('trubox/general/cms_trubox');
+    }
+
     public function getDelaySecond()
     {
         return Mage::getStoreConfig('trubox/general/delay_second') != null ? Mage::getStoreConfig('trubox/general/delay_second') : 1;
@@ -660,7 +665,10 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
 
         $start_month = Mage::getStoreConfig('trubox/general/start_month');
         $is_odd = $start_month % 2 == 0 ? true : false;
-        $next_month = strtotime("+$month month");
+        if($month == 1)
+            $next_month = strtotime("first day of +$month month");
+        else if ($month > 1)
+            $next_month = strtotime("first day of +$month months");
 
         if(sizeof($collection) > 0) {
             foreach ($collection as $item) {
@@ -891,7 +899,10 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
 
         $start_month = Mage::getStoreConfig('trubox/general/start_month');
         $is_odd = $start_month % 2 == 0 ? true : false;
-        $next_month = strtotime("+$month month");
+        if($month == 1)
+            $next_month = strtotime("first day of +$month month");
+        else if ($month > 1)
+            $next_month = strtotime("first day of +$month months");
 
         if(sizeof($collection) > 0) {
             foreach ($collection as $item) {

@@ -29,131 +29,133 @@
 $logo = $this->getLogo();
 $orders = $this->getCollection();
 ?>
-<div class="trubox-page">
-    <?php echo $this->getChildHtml('global_messages'); ?>
-    <?php if (Mage::helper('core')->isModuleOutputEnabled('Magestore_TruWallet') && Mage::helper('truwallet')->isShowWarningMessage()) { ?>
-        <?php if (Mage::helper('truwallet')->getWarningMessage() != null) { ?>
-            <ul class="messages">
-                <li class="notice-msg">
-                    <ul>
-                        <li><span><?php echo Mage::helper('truwallet')->getWarningMessage(); ?></span></li>
-                    </ul>
-                </li>
-            </ul>
 
-        <?php } ?>
-    <?php } ?>
-    <div class="page-title" tabindex="1">
-        <h1><?php echo $this->__('My TruBox') ?></h1>
-    </div>
-
-    <div class="info-summary">
-        <?php if ($logo != null) { ?>
-            <img
-                src="<?php echo Mage::getBaseUrl('media') . 'trubox' . DS . Mage::getStoreConfig('trubox/general/logo'); ?>">
-        <?php } else { ?>
-            <img src="<?php echo Mage::getBaseUrl('media') . 'trubox/no_image.png'; ?>">
-        <?php } ?>
-    </div>
-
-    <div class="page-description">
-        <?php
-        echo Mage::getModel('cms/block')->load('trubox_description')->getContent();
-        ?>
-    </div>
-    <br style="clear: both"/>
-    <?php if ($this->isEnableCouponCode()) { ?>
-        <hr class="share_separate"/>
-        <div class="trubox-coupon-code">
-            <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
-            <?php $code = $this->hasCouponCode(); ?>
-            <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
-                <?php if ($code == null) { ?>
-                    <div class="fieldsets">
-                        <ul class="form-list">
-                            <li class="fields">
-                                <div class="wide">
-                                    <label for="telephone" class="required"><em>*</em>
-                                        <?php echo $this->__('Enter promotion code') ?>
-                                    </label>
-
-                                    <div class="input-box">
-                                        <input type="text" name="coupon_code" value=""
-                                               title="<?php echo $this->__('The promotion code') ?>"
-                                               class="input-text required-entry"
-                                               id="coupon_code"
-                                               placeholder="<?php echo $this->__('Enter the promotion code') ?>">
-                                    </div>
-                                </div>
-                            </li>
+<div class="right_block">
+    <div class="right_block_in">
+        <?php echo $this->getChildHtml('global_messages'); ?>
+        <?php if (Mage::helper('core')->isModuleOutputEnabled('Magestore_TruWallet') && Mage::helper('truwallet')->isShowWarningMessage()) { ?>
+            <?php if (Mage::helper('truwallet')->getWarningMessage() != null) { ?>
+                <ul class="messages">
+                    <li class="notice-msg">
+                        <ul>
+                            <li><span><?php echo Mage::helper('truwallet')->getWarningMessage(); ?></span></li>
                         </ul>
-                    </div>
-                    <div class="buttons-set">
-                        <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
-                        <button class="button btn-cart" type="submit">
-                            <span><span><?php echo $this->__('Save Promotion Code') ?></span></span>
-                        </button>
-                    </div>
-                <?php } else { ?>
-                    <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode())); ?></p>
-                <?php } ?>
-            </form>
+                    </li>
+                </ul>
+
+            <?php } ?>
+        <?php } ?>
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="text-uppercase"><?php echo $this->__('My TruBox')?></h3>
+            <div class="clearfix"></div>
         </div>
-    <?php } ?>
-    <hr class="share_separate"/>
-    <?php if (Mage::helper('trubox')->isEnableOrdersSection()) { ?>
-        <div class="box-account box-info box-trubox-summary">
-            <div class="trubox-orders">
-                <h2 class="trubox-header"><?php echo $this->__('Trubox Orders') ?></h2>
-                <?php if (sizeof($orders) > 0) { ?>
-                    <form action="#" method="post">
-                        <?php echo $this->getPagerHtml() ?> <!--Add Paging-->
-                        <table id="trubox-orders" class="data-table">
-                            <colgroup>
-                                <col width="1">
-                                <col>
-                                <col width="1">
-                                <col width="1">
-                                <col>
-                            </colgroup>
-                            <thead>
-                            <tr class="first last">
-                                <th><?php echo $this->__('Order #') ?></th>
-                                <th><?php echo $this->__('Date') ?></th>
-                                <th><?php echo $this->__('Ship To') ?></th>
-                                <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
-                                <th><span class="nobr"><?php echo $this->__('Order Status') ?></span></th>
-                                <th><?php echo $this->__('Action') ?></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $_odd = ''; ?>
-                            <?php foreach ($orders as $_order): ?>
-                                <tr>
-                                    <td><?php echo $_order->getRealOrderId() ?></td>
-                                    <td><span class="nobr"><?php echo $_order->getCreatedAtStoreDate(); ?></span></td>
-                                    <td><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                                    <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-                                    <td><em><?php echo $_order->getStatusLabel() ?></em></td>
-                                    <td class="a-center">
+        <div class="food_beverages_main">
+            <div class="food_products trubox_index">
+                <?php
+                    echo Mage::getModel('cms/block')->load('trubox_description')->getContent();
+                ?>
+
+                <?php if ($this->isEnableCouponCode()) { ?>
+                    <hr class="share_separate"/>
+                    <div class="trubox-coupon-code">
+                        <h2 class="trubox-header"><?php echo $this->__('TruBox Promotion Code') ?></h2>
+                        <?php $code = $this->hasCouponCode(); ?>
+                        <form class="items" id="trubox-coupon-code" action="<?php echo $this->saveCouponCodeUrl() ?>" method="POST">
+                            <?php if ($code == null) { ?>
+                                <div class="fieldsets">
+                                    <ul class="form-list">
+                                        <li class="fields">
+                                            <div class="wide">
+                                                <label for="telephone" class="required"><em>*</em>
+                                                    <?php echo $this->__('Enter promotion code') ?>
+                                                </label>
+
+                                                <div class="input-box">
+                                                    <input type="text" name="coupon_code" value=""
+                                                           title="<?php echo $this->__('The promotion code') ?>"
+                                                           class="input-text required-entry"
+                                                           id="coupon_code"
+                                                           placeholder="<?php echo $this->__('Enter the promotion code') ?>">
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="buttons-set">
+                                    <p class="required"><?php echo $this->__('* Required Fields'); ?></p>
+                                    <button class="button btn-cart" type="submit">
+                                        <span><span><?php echo $this->__('Save Promotion Code') ?></span></span>
+                                    </button>
+                                </div>
+                            <?php } else { ?>
+                                <p><?php echo Mage::helper('trubox')->__('Your promotion code is: <b>%s</b>', strtoupper($code->getCouponCode())); ?></p>
+                            <?php } ?>
+                        </form>
+                    </div>
+                <?php } ?>
+                <hr class="share_separate"/>
+                <?php if (Mage::helper('trubox')->isEnableOrdersSection()) { ?>
+                    <div class="box-account box-info box-trubox-summary">
+                        <div class="trubox-orders">
+                            <h2 class="trubox-header"><?php echo $this->__('Trubox Orders') ?></h2>
+                            <?php if (sizeof($orders) > 0) { ?>
+                                <form action="#" method="post">
+                                    <?php echo $this->getPagerHtml() ?> <!--Add Paging-->
+                                    <table id="trubox-orders" class="data-table">
+                                        <colgroup>
+                                            <col width="1">
+                                            <col>
+                                            <col width="1">
+                                            <col width="1">
+                                            <col>
+                                        </colgroup>
+                                        <thead>
+                                        <tr class="first last">
+                                            <th><?php echo $this->__('Order #') ?></th>
+                                            <th><?php echo $this->__('Date') ?></th>
+                                            <th><?php echo $this->__('Ship To') ?></th>
+                                            <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
+                                            <th><span class="nobr"><?php echo $this->__('Order Status') ?></span></th>
+                                            <th><?php echo $this->__('Action') ?></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $_odd = ''; ?>
+                                        <?php foreach ($orders as $_order): ?>
+                                            <tr>
+                                                <td><?php echo $_order->getRealOrderId() ?></td>
+                                                <td><span class="nobr"><?php echo $_order->getCreatedAtStoreDate(); ?></span></td>
+                                                <td><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                                                <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                                                <td><em><?php echo $_order->getStatusLabel() ?></em></td>
+                                                <td class="a-center">
                                         <span class="nobr">
                                             <a href="<?php echo Mage::getUrl('sales/order/view', array('order_id' => $_order->getId())); ?>"><?php echo $this->__('View Order') ?></a>
                                         </span>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                        <script type="text/javascript">decorateTable('trubox-orders')</script>
-                    </form>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                    <script type="text/javascript">decorateTable('trubox-orders')</script>
+                                </form>
 
-                <?php } else { ?>
-                    <p><?php echo $this->__('No orders found'); ?></p>
+                            <?php } else { ?>
+                                <p><?php echo $this->__('No orders found'); ?></p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <hr class="share_separate">
                 <?php } ?>
+                <?php echo $this->getChildHtml('other') ?>
             </div>
         </div>
-        <hr class="share_separate">
-    <?php } ?>
-    <?php echo $this->getChildHtml('other') ?>
+    </div>
 </div>
+<div class="clearfix"></div>
 
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block inn_pad main_bg2');
+    $j('.direct_comsumer').html('<h1 class="inner_pad">The Trubox Club</h1>');
+</script>

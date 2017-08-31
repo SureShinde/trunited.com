@@ -418,3 +418,93 @@ ul.ui-widget-content.ui-autocomplete
     margin-left: 5px;
     width: auto !important;
 }
+
+.trubox_index{
+    padding: 0 0 100px 0 !important;
+    margin: 0 80px !important;
+}
+
+.btn-trubox{
+    background: #f15b20;
+    outline: none;
+    border-radius: 9px;
+    padding: 9px 50px !important;
+    width: auto;
+    font-size: 24px;
+    color: #ffffff;
+    text-transform: uppercase;
+    border: none !important;
+}
+
+.btn-trubox:hover{
+    background: #e84c0f !important;
+    color: white !important;
+}
+
+.trubox_index #use_trugiftcard{
+    width: 20px;
+    vertical-align: -webkit-baseline-middle;
+    height: 17px;
+}
+
+.trubox_index .apply_trugiftcard label{
+    font-size: 14px;
+    vertical-align: baseline;
+    display: inline-block !important;
+}
+
+.trubox_index .apply_trugiftcard img{
+    vertical-align: middle;
+}
+
+.trubox_index h5{
+    font-size: 24px;
+    line-height: 26px;
+    display: block;
+    color: #000000;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    position: relative;
+    cursor: pointer;
+    margin: 0 0 20px 0;
+}
+
+.trubox_index ul li input.city, .trubox_index ul li select, .trubox_index ul li .middle, .trubox_index ul li input{
+    margin: 0 0 10px 0 !important;
+}
+
+.trubox_index label{
+    color: #333 !important;
+    font-size: 16px !important;
+}
+
+.occasion_form_sec.trubox_index{
+    border-bottom: none !important;
+}
+
+.trubox_list {
+    padding: 0 20px !important;
+}
+
+.food_products_left ul li span a{
+    color: #000000;
+    font-size: 22px;
+}
+
+.food_products_left ul li span a:hover{
+    color: #428bca;
+    font-size: 22px;
+}
+
+.trubox_list .buttons-set .btn
+{
+    background: #f15b20;
+    outline: none;
+    border-radius: 9px;
+    padding: 6px 40px;
+    width: auto;
+    margin: 40px 0;
+    font-size: 24px;
+    color: #ffffff;
+    text-transform: uppercase;
+}

@@ -512,7 +512,7 @@ footer img		{width:100%; height:100%;}
 .search_club label	{font-family: 'Lato', sans-serif; font-size:18px; color:#ffffff; font-weight:700; float:left; display:inline-block; line-height:31px; padding:0 14px 0 0; margin:0;}
 .search_club input	{width:235px; height:31px; border:1px solid #00b5cb; font-family: 'Lato', sans-serif; font-size:18px; color:#454543; line-height:20px; font-weight:400; float:left; display:inline-block; border-radius:5px; padding:0 28px 0 12px; background:#ffffff url(../../images/search_icon.png) no-repeat 95% center; outline:none;}
 .food_beverages_main		{background:#fff; padding:50px 0 0 0;}
-.food_products				{padding:0 0 0 0; margin:0 auto; width:1024px;}
+.food_products				{padding:0 0 0 0; margin:0 auto;}
 .food_products_in			{padding:0; margin:0 0 12px 0;}
 .food_products_left			{padding:0 0 0 42px; margin:0; float:left; display:inline-block;}
 .food_products_left h6		{font-family: 'Lato', sans-serif; font-size:24px; color:#000000; line-height:27px; font-weight:700; padding:0 0 25px 135px;}
@@ -555,7 +555,7 @@ footer img		{width:100%; height:100%;}
 
 .month_tabs		{padding:0 0 132px 0; margin:0 0 45px 0;}
 .month_tabs	.brd_line	{width:100%; background:#acacac; height:3px;}
-.receive_email	{padding:0; margin:-44px auto 0 auto; width:1024px; position:relative;}
+.receive_email	{padding:0; margin:-44px auto 0 auto; position:relative;}
 .receive_email ul	{padding:0; margin:0;}
 .receive_email ul li {float:left; display:inline-block; position:relative;}
 .receive_email ul li span	{width:77px; height:77px; text-align:center; line-height:77px; background:#00b5cb; font-family: 'Lato', sans-serif; font-size:39px; color:#ffffff; font-weight:400; display:block; border-radius:100%; margin:0 auto;}
@@ -572,7 +572,7 @@ footer img		{width:100%; height:100%;}
 .curnt_mnth_in      {width: 70%;;margin: 0 auto 33px auto;background: #ffffff;border-radius: 12px 12px 0 0;}
 .curnt_mnth_in strong   {font-size: 56px;line-height: 58px;font-family: 'BebasNeueRegular';display: block;color: #484342;padding: 23px 0 10px 0; font-weight:normal;}
 .curnt_mnth_in small    {font-size: 23px;line-height: 25px;font-family: 'Lato', sans-serif;display: block;color: #ffffff;background: #454543;padding: 8px 10px 8px 10px;border-radius: 0 0 30px 30px;text-transform: uppercase;}
-.current_mnthly ul li .btn{background: #f15b20;outline: none;border-radius: 9px;padding: 9px 0;width: 90%;margin: 57px 0 0 0;font-size: 24px;color: #ffffff;text-transform: uppercase;}
+.current_mnthly ul li .btn{background: #f15b20;outline: none;border-radius: 9px;padding: 9px 0;width: 90%;margin: 57px 0 0,  0;font-size: 24px;color: #ffffff;text-transform: uppercase;}
 .current_mnthly ul li .btn:hover	{background:#e84c0f;}
 
 /*---------------Inner 10 Page Starts--------------*/
@@ -1260,7 +1260,7 @@ footer img		{width:100%; height:100%;}
 
 .never_forgot_under .apply_trugiftcard label{
     font-size: 12px;
-    vertical-align: text-bottom;
+    vertical-align: -webkit-baseline-middle;
     display: inline-block !important;
 }
 
