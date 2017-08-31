@@ -1,0 +1,191 @@
+<?php
+$helper = Mage::helper('specialoccasion');
+$occasions = $helper->getOccastions();
+$product_collection = $helper->getProductCollection();
+
+if($helper->isEnable() && $occasions != null && is_array($occasions) && sizeof($occasions) > 0 &&
+    $product_collection != null && sizeof($product_collection) > 0){
+    $regions = Mage::getModel('directory/country')->load('US')->getRegions();
+?>
+<div class="right_block ">
+    <div class="right_block_in">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="pad_last"><?php echo $this->__('SPECIAL OCCASION Flowers');?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="never_forgot">
+            <h4><?php echo $this->__('Never Forget');?><br><?php echo $this->__('To Send Flowers, Again!');?></h4>
+            <div class="never_forgot_under">
+                <form action="<?php echo $this->getAddNewAction();?>" id="add-new-occasion-form" method="post">
+                    <h5><?php echo $this->__('Add a special date');?></h5>
+                    <small><?php echo $this->__('Not Charged Until Product Ships');?></small>
+                    <div class="occasion_form_sec">
+                        <ul>
+                            <li class="col-md-4 col-xs-12">
+                                <label><?php echo $this->__('Occasion');?>:</label>
+                                <select class="required-entry" name="occasion">
+                                    <?php foreach ($occasions as $occasion) {
+                                        echo '<option value="'.$occasion.'">'.$occasion.'</option>';
+                                    }?>
+                                </select>
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <label><?php echo $this->__('To');?>:</label>
+                                <input name="name" type="text" value="" class="required-entry"
+                                       placeholder="<?php echo $this->__('To');?>">
+                            </li>
+                            <li class="col-md-4 col-xs-12 input-append date form_datetime">
+                                <label><?php echo $this->__('Date');?></label>
+                                <input type="text" name="occasion_date" id="occasion_date" class=" required-entry" value="" placeholder="Choose a date" autocomplete="off" readonly/>
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <label><?php echo $this->__('Address');?>:</label>
+                                <input name="street" type="text" value="" class="middle required-entry"
+                                       placeholder="Address">
+
+                                <label><?php echo $this->__('City');?>:</label>
+                                <input name="city" type="text" class="city  required-entry" value="" placeholder="City">
+
+                                <label><?php echo $this->__('State/Province');?>:</label>
+                                <select name="region" id="region" class="state input-text required-entry">
+                                    <option value=""><?php echo $this->__('Select');?></option>
+                                    <?php
+                                    foreach ($regions as $region) {
+                                        echo "<option value=" . $region['name'] . " title=" . $region->getId() . ">" . $region['name'] . "</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <input type="hidden" id="region_id" name="region_id" value=""/>
+
+
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <label><?php echo $this->__('Zip/Postal Code');?>:</label>
+                                <input name="zipcode" type="text" value="" class="middle required-entry"
+                                       placeholder="Zip/Postal Code">
+
+                                <label><?php echo $this->__('Country');?>:</label>
+                                <?php echo $this->getCountryHtmlSelect(); ?>
+
+                                <label><?php echo $this->__('Telephone');?>:</label>
+                                <input name="telephone" type="text" value="" class="middle required-entry"
+                                    placeholder="Telephone">
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <label><?php echo $this->__('Message');?>:</label>
+                                <textarea name="message" placeholder="Message" class=" required-entry"></textarea>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="select_gift">
+                        <div class="select_gift_lft col-sm-8 col-xs-12">
+                            <label><?php echo $this->__('Select Gift');?>:</label>
+                            <select class="selectpicker1 required-entry" name="product_id" id="product_gift">
+                                <option value=""><?php echo $this->__('Choose a gift')?></option>
+                                <?php foreach ($product_collection as $product) {
+                                    echo '<option value="'.$product->getId().'">'.$product->getName().'</option>';
+                                }?>
+                            </select>
+                            <?php foreach ($product_collection as $product) {
+                                echo '<input type="hidden" id="product_price_'.$product->getId().'" value="'.Mage::helper('core')->currency($product->getPrice(),true,false).'" />';
+                                echo '<input type="hidden" id="product_image_'.$product->getId().'" value="'.$this->helper('catalog/image')->init($product, 'small_image')->resize(180).'" />';
+                                echo '<input type="hidden" id="product_url_'.$product->getId().'" value="'.$product->getProductUrl().'" />';
+                            }?>
+                        </div>
+                        <div class="gift_info col-sm-4 col-xs-12">
+                            <div class="product_image" id="gift_image">
+                                <a href="<?php echo $product->getProductUrl();?>" title="<?php echo $product->getName();?>">
+                                    <img src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(180); ?>" title="<?php echo $product->getName();?>" alt="<?php echo $product->getName();?>" />
+                                </a>
+                            </div>
+                            <div class="product_price">
+                                <p class="price" id="pprice"></p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <p><?php echo $this->__('*Email Reminder Sent %s Days Priot To Shipping', Mage::helper('specialoccasion')->getConfigData('general', 'day_send_email'));?></p>
+                    <div class="orange_btn_blk pad12 last">
+                        <ul>
+                            <li class="col-xs-4">
+                                <button type="button" class="btn_blk transition"
+                                        onclick="window.location.href='<?php echo $this->getBackAction();?>'"><?php echo $this->__('Back');?></button>
+                            </li>
+                            <li class="col-xs-4">
+                                <button type="submit" class="btn_blk transition">
+                                    <?php echo $this->__('Save');?>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    /*Calendar.setup({
+        inputField: "occasion_date",
+        ifFormat: "%B %d",
+        showsTime: false,
+        button: "occasion_date",
+        align: "Bl",
+        singleClick: true,
+        disableFunc: function(date) {
+            var now= new Date();
+            if(date.getFullYear()<now.getFullYear()){ return true; }
+            if(date.getFullYear()==now.getFullYear()){ if(date.getMonth()<now.getMonth()){ return true; } }
+            if(date.getMonth()== now.getMonth()){ if(date.getDate()<now.getDate()){ return true; } }
+        },
+    });*/
+    $j = jQuery.noConflict();
+
+    $j("#occasion_date" ).datepicker({
+        dateFormat: "MM dd",
+        autoSize: true,
+        gotoCurrent: true,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+    });
+
+    $j('.datetimepicker-days .prev i').addClass('fa fa-arrow-left');
+    $j('.datetimepicker-days .prev i').removeClass('icon-arrow-left');
+
+    $j('.datetimepicker-days .next i').addClass('fa fa-arrow-right');
+    $j('.datetimepicker-days .next i').removeClass('icon-arrow-right');
+
+    $j('.main-container').addClass('main_block main_bg2');
+
+    var occasion_form = new VarienForm('add-new-occasion-form', true);
+
+    $j('#region').change(function () {
+        var opt = $j(this).find('option:selected');
+        $j('#region_id').val(opt.attr('title'));
+    });
+
+    $j('#product_gift').on('change', function (e) {
+        var optionSelected = $j("option:selected", this);
+        var idSelected = this.value;
+        var product_price = '#product_price_'+idSelected;
+        var product_image = '#product_image_'+idSelected;
+        var product_url = '#product_url_'+idSelected;
+
+        var html_product = '';
+        html_product += '<a href="'+$j(product_url).val()+'"><img src="'+$j(product_image).val()+'" /></a>';
+
+        $j('#gift_image').html(html_product);
+        $j('#pprice').html($j(product_price).val());
+    });
+
+    $j(document).ready(function(e) {
+        $j(".sidebar").removeClass('active');
+        $j(".sidebar.trubox_brands").addClass('active').show();
+    });
+    //]]>
+</script>
+<?php }?>

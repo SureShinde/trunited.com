@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Magestore_SpecialOccasion>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Magestore_SpecialOccasion>
+	</modules>
+</config>

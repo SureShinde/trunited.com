@@ -233,7 +233,7 @@ header img      {width:100%; height:auto;}
 
 .BaclToTop                  {position:fixed; bottom:0; right:65px; display:none; z-index:999;}
 .BaclToTop .btn-primary     {background: #1c1c1c;border: none;}               
-.BaclToTop .btn-primary:hover,.BaclToTop .btn-primary:focus {background: #1c1c1c;opacity: 0.7px;}
+.BaclToTop .btn-primary:hover,.BaclToTop .btn-primary:focus {background: #1c1c1c;opacity: 0.7;}
 .BaclToTop .btn-lg, .btn-group-lg > .btn    {font-size:38px; border-radius:10px 10px 0 0;}
 .BaclToTop .glyphicon-chevron-up:before {color:#5ac5d3;}
 

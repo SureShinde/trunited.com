@@ -89,4 +89,14 @@ class Magestore_TruBox_Block_Navigation extends Mage_Core_Block_Template
         }
         return $path;
     }
+
+
+    public function isSpecialOccasion()
+    {
+        $is_enable = false;
+        if (Mage::helper('core')->isModuleOutputEnabled('Magestore_SpecialOccasion')) {
+            $is_enable = Mage::helper('specialoccasion')->isEnable();
+        }
+        return $is_enable;
+    }
 }

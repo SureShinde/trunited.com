@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<specialoccasionadmin_adminhtml_specialoccasion_index>
+		<reference name="content">
+			<block type="specialoccasion/adminhtml_specialoccasion" name="specialoccasion" />
+		</reference>
+	</specialoccasionadmin_adminhtml_specialoccasion_index>
+	<specialoccasionadmin_adminhtml_item_index>
+		<reference name="content">
+			<block type="specialoccasion/adminhtml_item" name="specialoccasion.item" />
+		</reference>
+	</specialoccasionadmin_adminhtml_item_index>
+	<specialoccasionadmin_adminhtml_history_index>
+		<reference name="content">
+			<block type="specialoccasion/adminhtml_history" name="specialoccasion.history" />
+		</reference>
+	</specialoccasionadmin_adminhtml_history_index>
+</layout>

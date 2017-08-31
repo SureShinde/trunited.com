@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+			<action method="addItem">
+				<type>js_css</type>
+				<name>calendar/calendar-win2k-1.css</name><params/>
+			</action>
+			<action method="addItem">
+				<type>js</type>
+				<name>calendar/calendar.js</name><params/>
+			</action>
+			<action method="addItem">
+				<type>js</type>
+				<name>calendar/calendar-setup.js</name><params/>
+			</action>
+			<block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml" />
+		</reference>
+	</default>
+
+	<specialoccasion_index_index>
+		<update handle="trubox_default"/>
+		<reference name="content">
+			<block type="specialoccasion/specialoccasion" name="specialoccasion" template="specialoccasion/specialoccasion.phtml" />
+		</reference>
+	</specialoccasion_index_index>
+
+	<specialoccasion_index_add>
+		<update handle="trubox_default"/>
+		<reference name="content">
+			<block type="specialoccasion/add" name="specialoccasion.add" template="specialoccasion/add.phtml" />
+		</reference>
+	</specialoccasion_index_add>
+
+	<specialoccasion_index_update>
+		<update handle="trubox_default"/>
+		<reference name="content">
+			<block type="specialoccasion/update" name="specialoccasion.update" template="specialoccasion/update.phtml" />
+		</reference>
+	</specialoccasion_index_update>
+
+	<specialoccasion_index_view>
+		<update handle="trubox_default"/>
+		<reference name="content">
+			<block type="specialoccasion/view" name="specialoccasion.view" template="specialoccasion/view.phtml" />
+		</reference>
+	</specialoccasion_index_view>
+
+	<specialoccasion_index_payment>
+		<update handle="trubox_default"/>
+		<reference name="content">
+			<block type="specialoccasion/payment" name="specialoccasion.payment" template="specialoccasion/payment.phtml" />
+		</reference>
+	</specialoccasion_index_payment>
+</layout>

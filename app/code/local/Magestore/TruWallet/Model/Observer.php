@@ -43,8 +43,16 @@ class Magestore_TruWallet_Model_Observer
             Mage::helper('trugiftcard/transaction')->checkExpiryDateTransaction();
 
             Mage::helper('manageapi/linkshareadvertisers')->processCron();
+            Mage::log('Checking Link Share Advertisers at '.date('Y-m-d H:i:s', time()), null, 'check_linkshare_advertisers.log');
+
+            Mage::helper('specialoccasion/cron')->checkSendEmailRemind();
+            Mage::log('Checking Special Occasion at '.date('Y-m-d H:i:s', time()), null, 'check_special_occasion.log');
+
+            Mage::helper('specialoccasion/cron')->checkAndReset();
         }
-			
+
+        Mage::helper('specialoccasion/cron')->checkAndCreateOrder();
+
 		/* CRON JOB for checking the expiration of truWallet transactions */
         Mage::log('Check TruWallet - ' . date('d-m-Y H:i:s', time()), null, 'check_expired_truWallet.log');
         /*Mage::helper('truwallet/transaction')->checkExpiryDateTransaction();*/
