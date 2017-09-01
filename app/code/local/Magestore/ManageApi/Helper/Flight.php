@@ -53,11 +53,11 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                             $model->setData($_dt);
 
                             $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
-                            if($customer != null && $customer->getId() && floor($_dt['revenue']) > 0 && strcasecmp($_dt['status'],'Active') == 0){
+                            if($customer != null && $customer->getId() && $_dt['revenue'] > 0 && strcasecmp($_dt['status'],'Active') == 0){
                                 Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                         'product_credit_title' => 0,
                                         'product_credit' => 0,
-                                        'point_amount' => floor($_dt['revenue']),
+                                        'point_amount' => $_dt['revenue'],
                                         'title' => Mage::helper('manageapi')->__('Points awarded for Priceline Booking: %s on %s', $_dt['dest_Airport_name'], $start_date),
                                         'expiration_day' => 0,
                                         'expiration_day_credit' => 0,
@@ -86,11 +86,11 @@ class Magestore_ManageApi_Helper_Flight extends Mage_Core_Helper_Abstract
                             $model->setData($_dt);
 
                             $customer = Mage::getModel('customer/customer')->load($_dt['refclickid']);
-                            if($customer != null && $customer->getId() && floor($_dt['revenue']) > 0 && strcasecmp($_dt['status'],'Active') == 0){
+                            if($customer != null && $customer->getId() && $_dt['revenue'] > 0 && strcasecmp($_dt['status'],'Active') == 0){
                                 Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                         'product_credit_title' => 0,
                                         'product_credit' => 0,
-                                        'point_amount' => floor($_dt['revenue']),
+                                        'point_amount' => $_dt['revenue'],
                                         'title' => Mage::helper('manageapi')->__('Points awarded for Priceline Booking: %s on %s', $_dt['dest_Airport_name'], $start_date),
                                         'expiration_day' => 0,
                                         'expiration_day_credit' => 0,

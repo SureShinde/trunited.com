@@ -54,11 +54,11 @@ class Magestore_ManageApi_Helper_Linkshareadvertisers extends Mage_Core_Helper_A
                     $model->setData($sale);
 
                     $customer = Mage::getModel('customer/customer')->load($sale['u1']);
-                    if($customer != null && $customer->getId() && ceil($sale['commissions']) > 0){
+                    if($customer != null && $customer->getId() && $sale['commissions'] > 0){
                         Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                 'product_credit_title' => 0,
                                 'product_credit' => 0,
-                                'point_amount' =>ceil($sale['commission']),
+                                'point_amount' =>$sale['commission'],
                                 'title' => Mage::helper('manageapi')->__('Points awarded for LinkShare Advertisers: %s on %s', $sale['product_name'], $start_date),
                                 'expiration_day' => 0,
                                 'expiration_day_credit' => 0,

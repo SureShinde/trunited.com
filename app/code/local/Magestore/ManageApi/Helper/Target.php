@@ -31,11 +31,11 @@ class Magestore_ManageApi_Helper_Target extends Mage_Core_Helper_Abstract
                     $model->setData('created_time', now());
 
                     $customer = Mage::getModel('customer/customer')->load($_dt['subid1']);
-                    if($customer != null && $customer->getId() && floor($_dt['payout']) > 0){
+                    if($customer != null && $customer->getId() && $_dt['payout'] > 0){
                         Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                 'product_credit_title' => 0,
                                 'product_credit' => 0,
-                                'point_amount' => floor($_dt['payout']),
+                                'point_amount' => $_dt['payout'],
                                 'title' => Mage::helper('manageapi')->__('Points awarded for global brand Target.com order on %s. Action ID [%s]', $start_date, $_dt['action_id']),
                                 'expiration_day' => 0,
                                 'expiration_day_credit' => 0,

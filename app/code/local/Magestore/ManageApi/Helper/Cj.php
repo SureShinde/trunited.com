@@ -39,11 +39,11 @@ class Magestore_ManageApi_Helper_Cj extends Mage_Core_Helper_Abstract
                     $model->setData('created_time', now());
 
                     $customer = Mage::getModel('customer/customer')->load($_dt['sid']);
-                    if($customer != null && $customer->getId() && floor($_dt['commission_amount']) > 0){
+                    if($customer != null && $customer->getId() && $_dt['commission_amount'] > 0){
                         Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                 'product_credit_title' => 0,
                                 'product_credit' => 0,
-                                'point_amount' => floor($_dt['commission_amount']),
+                                'point_amount' => $_dt['commission_amount'],
                                 'title' => Mage::helper('manageapi')->__('Points awarded for global brand %s order %s on %s', $_dt['advertiser_name'], $_dt['order_id'], $start_date),
                                 'expiration_day' => 0,
                                 'expiration_day_credit' => 0,

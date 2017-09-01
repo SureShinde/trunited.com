@@ -72,11 +72,11 @@ class Magestore_ManageApi_Helper_Linkshare extends Mage_Core_Helper_Abstract
         {
             foreach ($results as $rs) {
                 $customer = Mage::getModel('customer/customer')->load($rs['customer_id']);
-                if($customer != null && $customer->getId() && floor($rs['on_hold_points']) > 0 && strcasecmp($rs['status'],'Active') == 0){
+                if($customer != null && $customer->getId() && $rs['on_hold_points'] > 0 && strcasecmp($rs['status'],'Active') == 0){
                     Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                             'product_credit_title' => 0,
                             'product_credit' => 0,
-                            'point_amount' => floor($rs['on_hold_points']),
+                            'point_amount' => $rs['on_hold_points'],
                             'title' => Mage::helper('manageapi')->__('Points awarded for global brand %s order %s on %s', $rs['advertiser_name'], $rs['order_id'], $start_date),
                             'expiration_day' => 0,
                             'expiration_day_credit' => 0,

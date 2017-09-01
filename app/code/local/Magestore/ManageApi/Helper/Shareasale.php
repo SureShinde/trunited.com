@@ -34,11 +34,11 @@ class Magestore_ManageApi_Helper_Shareasale extends Mage_Core_Helper_Abstract
                         $model->setData($_dt);
 
                         $customer = Mage::getModel('customer/customer')->load($_dt['affcomment']);
-                        if($customer != null && $customer->getId() && ceil($_dt['commission']) > 0){
+                        if($customer != null && $customer->getId() && $_dt['commission'] > 0){
                             Mage::helper('rewardpoints/action')->addTransaction('global_brand', $customer, new Varien_Object(array(
                                     'product_credit_title' => 0,
                                     'product_credit' => 0,
-                                    'point_amount' =>ceil($_dt['commission']),
+                                    'point_amount' =>$_dt['commission'],
                                     'title' => Mage::helper('manageapi')->__('Points awarded for Shareasale: %s on %s', $_dt['merchantorganization'], $start_date),
                                     'expiration_day' => 0,
                                     'expiration_day_credit' => 0,

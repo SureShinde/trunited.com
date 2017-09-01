@@ -508,3 +508,7 @@ ul.ui-widget-content.ui-autocomplete
     color: #ffffff;
     text-transform: uppercase;
 }
+
+.trubox_index input{
+    padding: 0 5px !important;
+}
