@@ -757,9 +757,9 @@ class Magestore_TruBox_Helper_Data extends Mage_Core_Helper_Abstract
                     if ($dt['is_remove'] === 'true' || $dt['item_qty'] == 0)
                         continue;
 
-                    if(($data['type_value'] == Magestore_TruBox_Model_Type::TYPE_ONE_TIME)
-                        || $data['type_value'] == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH
-                        ||($data['type_value'] == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS && (($is_odd && date('m', time()) % 2 == 0) || (!$is_odd && date('m', time()) % 2 != 0)))
+                    if(($dt['type_value'] == Magestore_TruBox_Model_Type::TYPE_ONE_TIME)
+                        || $dt['type_value'] == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH
+                        ||($dt['type_value'] == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS && (($is_odd && date('m', time()) % 2 == 0) || (!$is_odd && date('m', time()) % 2 != 0)))
                     ){
                         $product = Mage::getModel('catalog/product')->load($item->getProductId());
                         $pointEarn = $this->getPointEarning($product);
