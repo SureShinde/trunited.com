@@ -1254,13 +1254,13 @@ footer img		{width:100%; height:100%;}
 
 .never_forgot_under .apply_trugiftcard #use_trugiftcard{
     width: 20px;
-    vertical-align: middle;
-    height: 17px;
+    vertical-align: -webkit-baseline-middle;
+    height: 14px;
 }
 
 .never_forgot_under .apply_trugiftcard label{
-    font-size: 12px;
-    vertical-align: -webkit-baseline-middle;
+    font-size: 15px;
+    vertical-align: top;
     display: inline-block !important;
 }
 
