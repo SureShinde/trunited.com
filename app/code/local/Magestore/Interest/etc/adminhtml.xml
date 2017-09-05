@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<interest module="interest" translate="title">
+			<title>Interest</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<interest module="interest" translate="title">
+					<title>Manage Interests</title>
+					<sort_order>0</sort_order>
+					<action>interestadmin/adminhtml_interest</action>
+				</interest>
+				<customer module="interest" translate="title">
+					<title>Manage Customer's Interest</title>
+					<sort_order>0</sort_order>
+					<action>interestadmin/adminhtml_customer</action>
+				</customer>
+				<!--<settings module="interest" translate="title">-->
+					<!--<title>Settings</title>-->
+					<!--<sort_order>1000</sort_order>-->
+					<!--<action>adminhtml/system_config/edit/section/interest</action>-->
+				<!--</settings>-->
+			</children>
+		</interest>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<interest module="interest" translate="title">
+										<title>Interest</title>
+										<sort_order>71</sort_order>									
+									</interest>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<interest module="interest" translate="title">
+						<title>Interest</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<interest module="interest" translate="title">
+								<title>Manage Interest</title>
+								<sort_order>0</sort_order>
+								<action>interestadmin/adminhtml_interest</action>
+							</interest>
+							<customer module="interest" translate="title">
+								<title>Manage Customer's Interest</title>
+								<sort_order>0</sort_order>
+								<action>interestadmin/adminhtml_customer</action>
+							</customer>
+							<!--<settings module="interest" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/interest</action>
+							</settings>-->
+						</children>
+					</interest>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

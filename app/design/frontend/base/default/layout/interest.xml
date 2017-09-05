@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+	</default>
+	<interest_default>
+		<update handle="page_two_columns_left"/>
+		<reference name="left">
+			<block type="interest/navigation" before="-" name="interest.navigation"
+				   template="interest/navigation.phtml">
+				<action method="addLink" translate="label" module="interest">
+					<name>account_dashboard</name>
+					<path>customer/account</path>
+					<label>Account Information</label>
+					<enable>true</enable>
+				</action>
+				<action method="addLink" translate="label" module="interest">
+					<name>interest</name>
+					<path>interest/index/</path>
+					<label>Interests and Leisure</label>
+					<enable>true</enable>
+					<order>10</order>
+				</action>
+			</block>
+		</reference>
+	</interest_default>
+	<customer_account>
+		<reference name="customer_account_navigation">
+			<action method="addLink" translate="label" module="interest">
+				<name>interest</name>
+				<path>interest</path>
+				<label>Interests and Leisure</label>
+			</action>
+		</reference>
+	</customer_account>
+	<interest_index_index>
+		<update handle="interest_default"/>
+		<reference name="content">
+			<block type="interest/interest" name="interest" template="interest/interest.phtml" />
+		</reference>
+	</interest_index_index>
+</layout>

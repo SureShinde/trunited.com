@@ -1,0 +1,81 @@
+<?php 
+	/**
+	 * interest template
+	 */
+	$collection = $this->getCollectionInterest();
+	$current_interest = $this->getCurrentInterset();
+?>
+
+<div class="right_block">
+    <div class="right_block_in">
+        <div class="search_bar padd_bot text-center">
+            <h3 class="pad_last"><?php echo $this->__('INTEREST AND LEISURE');?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="your_intrest">
+            <div class="your_intrest_in">
+                <h4><?php echo $this->__('Your Interest');?></h4>
+                <form action="<?php echo $this->getActionUrl();?>" method="post" id="interest-form">
+                    <?php if(sizeof($collection) > 0){?>
+                        <ul>
+                            <?php if(sizeof($collection) <= 12) {?>
+                                <li class="col-xs-3">
+                                <?php foreach ($collection as $item) {?>
+                                    <div class="chek_box1">
+                                        <label>
+                                            <input type="checkbox" name="interest[]" value="<?php echo $item->getId()?>"
+                                                   <?php if($this->isInCurrent($item->getId())){?>checked="checked"<?php }?> />
+                                            <span><?php echo $item->getTitle();?></span>
+                                        </label>
+                                    </div>
+                                <?php }?>
+                                </li>
+                            <?php } else {?>
+                                <?php foreach ($collection as $item) {?>
+                                    <div class="col-xs-3">
+                                        <label>
+                                            <input type="checkbox" name="interest[]" value="<?php echo $item->getId()?>"
+                                                   <?php if($this->isInCurrent($item->getId())){?>checked="checked"<?php }?> />
+                                            <span><?php echo $item->getTitle();?></span>
+                                        </label>
+                                    </div>
+                                <?php }?>
+                            <?php }?>
+                        </ul>
+                    <div class="spl_dates">
+                        <div class="">
+                            <button type="submit" class="save_chnages transition"><?php echo $this->__('Save changes');?></button>
+                            <?php if($current_interest != null && sizeof($current_interest) > 0){?>
+                            <button type="button" class="save_chnages transition" id="clear_all"><?php echo $this->__('Clear All');?></button>
+                            <?php }?>
+                        </div>
+                    </div>
+                    <?php } else {?>
+                        <p><?php echo $this->__('No Interest and Leisure found')?></p>
+                    <?php }?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .your_intrest{
+        padding: 0 !important;
+    }
+</style>
+<script type="text/javascript">
+    var interest_form = new VarienForm('interest-form', true);
+
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block main_bg2');
+    
+    $j('#clear_all').click(function () {
+        var rs = confirm('<?php echo $this->__('Are you sure?');?>');
+        if (!rs)
+            return false;
+
+        window.location.href = '<?php echo $this->getUrl('*/*/clear');?>';
+        return false;
+    });
+</script>
