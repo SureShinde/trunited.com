@@ -129,10 +129,10 @@ if($enable_addtocart_sticky){
                 if (Mage::getStoreConfig("porto_settings/product_view/prev_next",$code)){
             ?>
                 <div class="prev-next-products">
-                    <?php $_prev = Mage::helper('porto')->getPreviousProduct(); ?>
-                    <?php $_next = Mage::helper('porto')->getNextProduct(); ?>
+                    <?php //$_prev = Mage::helper('porto')->getPreviousProduct(); ?>
+                    <?php //$_next = Mage::helper('porto')->getNextProduct(); ?>
                      
-                    <?php if($_prev): ?>
+                    <!-- <?php if($_prev): ?>
                     <div class="product-nav product-prev">
                         <a href="<?php echo $_prev->getProductUrl();?>" title="<?php echo $this->__("Previous Product"); ?>">
                             <?php echo Mage::getStoreConfig("porto_settings/product_view/prev_text",$code); ?>
@@ -157,7 +157,7 @@ if($enable_addtocart_sticky){
                             <h3 class="product-name"><?php echo $_helper->productAttribute($_next, $_next->getName(), 'name') ?></h3>
                         </div>
                     </div>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
                 </div>
             <?php
                 }
@@ -183,13 +183,14 @@ if($enable_addtocart_sticky){
                 <?php endif; ?>
                 <?php endif; ?>
 
-                <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
                 <?php if ($_product->getShortDescription()):?>
                     <div class="short-description">
                         <h2><?php echo $this->__('Quick Overview') ?></h2>
                         <div class="std" <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>>
                             <?php
-                            echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description'));
+                            // echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description'));
+                            echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description'));
                             ?>
                         </div>
                     </div>
@@ -452,7 +453,7 @@ if($enable_addtocart_sticky){
     </div>
 
     <div class="product-collateral">
-        <?php echo $this->getChildHtml('product_additional_data'); ?>
+        <?php //echo $this->getChildHtml('product_additional_data'); ?>
     </div>
     <?php echo $this->getChildHtml('upsell_products'); ?>
 </div>
@@ -501,3 +502,5 @@ if($enable_addtocart_sticky){
     ?>
     });
 </script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('new_design/style.css') ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('new_design/responsive.css');?>">

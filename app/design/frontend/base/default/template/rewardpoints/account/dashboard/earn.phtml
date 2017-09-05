@@ -27,10 +27,10 @@
 ?>
 
 <?php if ($this->getCanShow()): ?>
-    <!--<strong class="rewardpoints-title"><?php /*echo $this->__('How to earn points') */?></strong><br />
-    <span class="rewardpoints-title-content"><?php /*
+    <strong class="rewardpoints-title"><?php echo $this->__('How to earn points') ?></strong><br />
+    <span class="rewardpoints-title-content"><?php 
         echo $this->__('Points will be added to your reward balance after you take certain activities. For example, every time you make a purchase you will earn points based on the price of products purchased.');
-    */?></span><br />-->
-    <?php //$rate = $this->getEarningRate() ?>
+    ?></span><br />
+    <?php $rate = $this->getEarningRate() ?>
    
 <?php endif ?>

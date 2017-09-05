@@ -279,6 +279,7 @@ function infiniteAjax(url) {
             oldUrl = url;
             infinite_loaded_count++;
             $('.infinite-loader .btn-load-more').hide();
+            $('.infinite-loader .btn-load-less').hide();
             $('.infinite-loader .loading').fadeIn(300);
             url = url.replace("&ajaxcatalog=true","");
             url = url.replace("?ajaxcatalog=true&","?");
@@ -378,16 +379,11 @@ function infiniteAjax(url) {
                             next_page = $(this).attr("href");
                         });
 
-                        if(infinite_loaded_count >= 2){
+                        if(infinite_loaded_count >= 0){
                             $('.infinite-loader .loading').hide();
                             if(next_page){
                                 $('.infinite-loader .btn-load-more').show();
-                                $(".infinite-loader .btn-load-more").unbind("click").click(function(){
-                                    if(!loading && next_page && infinite_loaded_count >= 2){
-                                        loading = true;
-                                        infiniteAjax(next_page);
-                                    }
-                                });
+                                $('.infinite-loader .btn-load-less').show();
                             }
                         } else {
                             $('.infinite-loader .loading').fadeOut(300);
@@ -490,18 +486,37 @@ function infiniteAjax(url) {
 jQuery(function($){
     $(window).scroll(function(){
         if(!loading && next_page && $(window).scrollTop() >= $(".infinite-loader").offset().top-$(window).height()+100){
-            if(infinite_loaded_count < 2){
-                loading = true;
-                infiniteAjax(next_page);
-            }
+            $(".infinite-loader .btn-load-more").unbind("click").click(function(){
+                if(!loading && next_page){
+                    loadmore();
+                }
+            });
+            $(".infinite-loader .btn-load-less").unbind("click").click(function(){
+                showless();
+            });
         }
     });
     $(".infinite-loader .btn-load-more").click(function(){
-        if(!loading && next_page && infinite_loaded_count >= 2){
+        loadmore();
+    });
+    function loadmore(){
+        if($(".infinite-loader .btn-load-less").hasClass('show_less')){
+            $(".infinite-loader .btn-load-less").removeClass('show_less');
+        }
+        if(!loading && next_page && infinite_loaded_count >= 0){
             loading = true;
             infiniteAjax(next_page);
         }
-    });
+    }
+    function showless(){
+        var indexOf = next_page.indexOf('&p');
+        next_page = next_page.substring(0,indexOf) + '&p=2';
+        var x = 10 ;
+        $('.category-products > .products-grid > li').not(':lt('+x+')').hide();
+        $(".infinite-loader .btn-load-less").hide();
+        $('html,body').animate({scrollTop:0},'slow');
+        return false;
+    }
 });
 <?php endif; ?> 
 function callback(){

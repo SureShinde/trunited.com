@@ -1,0 +1,236 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2016 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+//<![CDATA[
+var Reportcard = Class.create({
+	openForm : function () {
+		this._centerWindow(this.container);
+		this._fade('open', this.container);
+	},
+
+	closeForm : function () {
+		this._fade('close', this.container);
+	},
+
+
+
+        _fade : function fadeBg(userAction,whichDiv){
+		if(userAction=='close'){
+			new Effect.Opacity('reportcard_bg',
+					   {duration:.1,
+					    from:0.4,
+					    to:0,
+					    afterFinish:this._makeInvisible,
+					    afterUpdate:this._hideLayer(whichDiv)});
+		}else{
+			new Effect.Opacity('reportcard_bg',
+					   {duration:.1,
+					    from:0,
+					    to:0.4,
+					    beforeUpdate:this._makeVisible,
+					    afterFinish:this._showLayer(whichDiv)});
+		}
+	},
+
+	_makeVisible : function makeVisible(){
+		$("reportcard_bg").style.visibility="visible";
+	},
+
+	_makeInvisible : function makeInvisible(){
+		$("reportcard_bg").style.visibility="hidden";
+	},
+
+	_showLayer : function showLayer(userAction){
+		$(userAction).style.display="block";
+	},
+
+	_hideLayer : function hideLayer(userAction){
+		$(userAction).style.display="none";
+	},
+
+	_centerWindow : function centerWindow(element) {
+		var windowHeight = parseFloat($(element).getHeight())/2;
+		var windowWidth = parseFloat($(element).getWidth())/2;
+
+		if(typeof window.innerHeight != 'undefined') {
+			$(element).style.top = Math.round(document.body.offsetTop + ((window.innerHeight - $(element).getHeight()))/2)+'px';
+			$(element).style.left = Math.round(document.body.offsetLeft + ((window.innerWidth - $(element).getWidth()))/2)+'px';
+		} else {
+			$(element).style.top = Math.round(document.body.offsetTop + ((document.documentElement.offsetHeight - $(element).getHeight()))/2)+'px';
+			$(element).style.left = Math.round(document.body.offsetLeft + ((document.documentElement.offsetWidth - $(element).getWidth()))/2)+'px';
+		}
+	},
+
+	initialize : function(containerDiv) {
+		this.container = containerDiv;
+		if($('reportcard_bg') == null) {
+			var screen = new Element('div', {'id': 'reportcard_bg'});
+			document.body.appendChild(screen);
+		}
+		this._hideLayer(this.container);
+	}
+});
+Event.observe(window, 'load', function () {
+	monyetRes = new Reportcard('reportcard_form_div'); 
+	Event.observe('reportcard_bg', 'click', function () {
+		monyetRes.closeForm();
+	});
+});
+
+Event.observe('closeLink', 'click', function () {
+	monyetRes.closeForm();
+});
+
+window.document.onkeydown = function (e)
+{
+	if (!e) e = event;
+	if (e.keyCode == 27) {
+		 monyetRes.closeForm();
+	}
+}
+
+function showReportcard(file, product, order)
+{
+	$("product_id").value = product;
+	$("order_id").value = order;
+	$("file").value = file;
+	monyetRes.openForm();
+}
+function closeForm()
+{
+	monyetRes.closeForm();
+}
+//]]>
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<?php $_orders = $this->getOrders(); ?>
+<div class="page-title">
+    <h1><?php echo $this->__('My Gift Cards') ?></h1>
+</div>
+<?php echo $this->getPagerHtml(); ?>
+<?php if($_orders->getSize()): ?>
+<table class="data-table" id="my-orders-table">
+    <col width="1" />
+    <col width="1" />
+	<col />
+    <col />
+    <thead>
+        <tr>
+            <th><?php echo $this->__('Order #') ?></th>
+            <th><?php echo $this->__('Date') ?></th>
+            <th><?php echo $this->__('Product Name') ?></th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $_odd = ''; ?>
+        <?php foreach ($_orders as $_order): ?>
+		<?php 
+		$_groupProduct = $this->getGropuedProduct($_order->getProductId());
+		$files = $this->getDownloadFile($_groupProduct, $_order->getSku(), $_order->getQtyOrdered(), $_order->getOrderId(), $_order->getProductId());
+		$pdfPath = $_groupProduct->getPdfPath();
+		$path = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . DIRECTORY_SEPARATOR . $pdfPath;
+		$soldFilePath = $path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $_order->getOrderId() . DIRECTORY_SEPARATOR . $_order->getProductId() . DIRECTORY_SEPARATOR .$file;
+		?>
+        <tr>
+            <td><?php echo $_order->getIncrementId() ?></td>
+            <td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAt()) ?></span></td>
+            <td><?php echo $this->escapeHtml($_order->getName())?></td>
+            <td class="a-center">
+				<ul>
+				<?php $pdfSaved = Mage::helper('core')->jsonDecode($_order->getPdfReport());?>
+					<?php foreach($files as $file):?>
+					<li><a href="<?php echo $path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $_order->getOrderId() . DIRECTORY_SEPARATOR . $_order->getProductId() . DIRECTORY_SEPARATOR .$file ?>" target="_blank">
+					<?php if(in_array($file, $pdfSaved)):?> <?php echo $this->__('View');?>
+					<?php else:?> <?php echo $this->__('View Replacement Card');?><?php endif;?>
+					</a> 
+					 | <a href="<?php echo $_groupProduct->getValidateUrl() ? $_groupProduct->getValidateUrl() : "#"; ?>" target="_blank"><?php echo $this->__('Check Balance') ?></a>
+					<?php if(in_array($file, $pdfSaved)):?> | <a href="javascript:void(0);<?php //echo $this->getUrl('easygiftcard/history/report', array('file' => base64_encode($pdfPath . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $_order->getOrderId() . DIRECTORY_SEPARATOR . $_order->getProductId() . DIRECTORY_SEPARATOR .$file), 'product_id'=>$_order->getProductId(), 'order_id'=>$_order->getIncrementId())); ?>" onclick="showReportcard('<?php echo base64_encode($pdfPath . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $_order->getOrderId() . DIRECTORY_SEPARATOR . $_order->getProductId() . DIRECTORY_SEPARATOR .$file);?>','<?php echo $_order->getProductId();?>','<?php echo $_order->getIncrementId();?>');"><?php echo $this->__('Report Problem With Card') ?></a><?php endif;?>
+					</li>
+					<?php endforeach;?>
+				</ul>		
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('my-orders-table');</script>
+<?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('Your digital gift cards will be listed here instead of being delivered as email attachments.'); ?></p>
+<?php endif ?>
+<div id="reportcard_form_div" style="display:none; background-color:white; margin-top:35px; "  >
+    <a id="closeLink" onclick="closeForm();" href="javascript:void(0);"></a> 
+    <div id="reportcard_popup_main" style="background:#fff;border:none; ">
+       <div id="reportcard_main_div">             
+			<form  class="reportcard_form" action="<?php echo $this->getUrl('easygiftcard/history/report'); ?>" id="reportcardForm" method="post">
+				<input type="hidden" name="file" id="file" value=""/>
+				<input type="hidden" name="product_id" id="product_id" value=""/>
+				<input type="hidden" name="order_id" id="order_id" value=""/>
+				<div class="reportcard-content">
+					<h2 class="legend"><?php echo $this->__('Report Invalid Card Survey') ?></h2>
+					<ul class="form-list">
+						<li class="fields">
+							<div class="">
+								<label for="name" class="required"><em>*</em><?php echo $this->__('Why are you reporting an invalid card?') ?></label>
+								<div class="input-box">
+									<ul class="form-list">
+										<li class="control">
+											<input type="radio" name="report_type" id="report_type_balance" value="$0 balance" checked="checked" class="radio"><label for="report_type_balance"><?php echo $this->__('$0 balance')?></label>
+										</li>
+										<li class="control">
+											<input type="radio" name="report_type" id="report_type_partial" value="Partially used card" class="radio">
+											<label for="report_type_partial"><?php echo $this->__('Partially used card')?></label>
+										</li>
+										<li class="control">
+											<input type="radio" name="report_type" id="report_type_used" value="Partially used card" class="radio">
+											<label for="report_type_used"><?php echo $this->__('Invalid card')?></label>
+										</li>
+									</ul>
+								</div>
+							</div>
+							
+						</li>
+						<li class="fields">
+							<div class="error">
+								Note: Every invalid card claim is researched by Trunited and the vendor. Any fraudulent activity will result in immediate loss of membership.
+							</div>
+							
+						</li>
+						
+					</ul>
+					<div class="buttons-set">
+						<button type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+					</div>
+				</div>
+			</form>
+       </div>
+       <div class="sl_clear"></div>
+    </div>
+    <div class="sl_clear"></div>
+</div>
+<!-- popup -->

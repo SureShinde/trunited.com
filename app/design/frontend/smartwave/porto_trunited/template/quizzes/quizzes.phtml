@@ -1,0 +1,90 @@
+<?php
+echo '<h1>Test0</h1>';
+/*
+Might become in handy when using Android or IOS
+function getSomeRandomCategory(&$categories, $targetLevel, $currentLevel = 0) {
+    if (count($categories)==0) {
+        echo 'There are not categories here';
+        return false;
+    }
+    if ($targetLevel == $currentLevel) {
+        return $categories[array_rand($categories)];
+    } else {
+        return getSomeRandomCategory($categories[array_rand($categories)]['children'], $targetLevel + 1);
+    }
+}
+
+$proxy = new SoapClient('http://magentohost/api/soap/?wsdl');
+$sessionId = $proxy->login('apiUser', 'apiKey');
+$allCategories = $proxy->call($sessionId, 'category.tree'); // Get all categories.
+
+// select random category from tree
+while (($selectedCategory = getSomeRandomCategory($allCategories, 3)) === false) {
+	echo 'TestWhile';
+}
+echo 'Test1';
+//echo getSomeRandomCategory();
+echo 'Test2';*/
+?>
+<?php /*
+$_helper = Mage::helper('catalog/category');
+$_categories = $_helper->getStoreCategories();
+if (count($_categories) > 0){
+    foreach($_categories as $_category){
+        $_category = Mage::getModel('catalog/category')->load($_category->getId());
+        $_subcategories = $_category->getChildrenCategories();
+        if (count($_subcategories) > 0){
+            echo $_category->getName();
+            echo $_category->getId();      
+            foreach($_subcategories as $_subcategory){
+                 echo "<h3>".$_subcategory->getName()."</h3><br/>";
+                 /*echo $_subcategory->getId();*/
+        /*    }
+        }
+    }
+}*/
+?>
+<!--Only one category-->
+<?php /*
+//41 is the ID of Global Brands
+$categoryFour = 41;
+$category = Mage::getModel('catalog/category')->load($categoryFour);
+$subcategories = $category->getChildrenCategories();
+if (count($subcategories) > 0){
+    echo $category->getName();
+    foreach($subcategories as $subcategory){
+         echo $subcategory->getName();
+    }
+}
+
+$categories = Mage::getResourceModel('catalog/category');
+foreach($categories as $cat) {
+    echo $cat->getName();
+}
+*/
+
+/*
+$helper = Mage::helper('catalog/category');
+
+// sorted by name, fetched as collection
+$categoriesCollection = $helper->getStoreCategories('name', true, false);
+
+// sorted by name, fetched as array
+$categoriesArray = $helper->getStoreCategories('name', false, false);
+foreach ($categoriesArray as $key) {
+	echo $key->getName();
+}*/
+
+
+
+//TODO: look for a way to improve performance by just getting Global Brands (ID 41) instead of the entire collection.
+/*$categories = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
+Zend_Debug::dump($categories) ;
+foreach($categories as $cat) {
+    echo $cat->getName();
+}*/
+
+//echo $categories['Global Brands'];
+//$categories = Mage::getModel('catalog/category')->load(41)->getValue('html');
+echo "<br/><h1>".$categories."</h1>";
+?>

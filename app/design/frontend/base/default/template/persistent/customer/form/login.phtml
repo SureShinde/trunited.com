@@ -65,6 +65,7 @@
                         </li>
                         <?php echo $this->getChildHtml('form.additional.info'); ?>
                         <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+                        <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />
                     </ul>
                     <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
                     <p class="required"><?php echo $this->__('* Required Fields') ?></p>

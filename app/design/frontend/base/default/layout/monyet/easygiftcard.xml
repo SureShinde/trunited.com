@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="monyet_easygiftcard"><name>easygiftcard</name><path>easygiftcard/history/</path><label>My Gift Cards</label></action>
+        </reference>
+    </customer_account>
+	<easygiftcard_history_index translate="label">
+        <label>Customer My Gift Cards</label>
+        <update handle="customer_account"/>
+		<reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/easygiftcard.css</name></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="monyet_easygiftcard/history" name="easygiftcard.order.history">
+            </block>
+            <block type="customer/account_dashboard" name="customer.account.link.back" template="customer/account/link/back.phtml"/>
+        </reference>
+    </easygiftcard_history_index>
+</layout> 

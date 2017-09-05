@@ -1,7 +1,7 @@
 <?php if ($this->canRefundTruWallet()): ?>
     <p>
         <label for="creditmemo_refund_truWallet">
-            <?php echo $this->__('Return spent TruWallet balances to customer’s balance (%s Funds)',
+            <?php echo $this->__('Return spent truWallet balances to customer’s balance (%s Funds)',
                 Mage::helper('core')->currency($this->getMaxTruWalletRefund(), true, false));
             ?>
         </label>

@@ -65,8 +65,13 @@ $check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_
                         </a>
                 </li>
                 <li>
-                        <a href="javascript:void(0)" id="tabTransfer" class="tablinks active" onclick="openTabContent(event, 'jan2017')">
+                        <a href="javascript:void(0)" id="tabTransfer" class="tablinks" onclick="openTabContent(event, 'jan2017')">
                                 <?php echo 'JAN 2017';?>
+                        </a>
+                </li>
+                <li>
+                        <a href="javascript:void(0)" id="tabTransfer" class="tablinks active" onclick="openTabContent(event, 'feb2017')">
+                                <?php echo 'FEB 2017';?>
                         </a>
                 </li>
         </ul>
@@ -81,12 +86,13 @@ if (Mage::getSingleton('customer/session')->isLoggedIn()) {
     // Get the customer object from customer session
     $customer = Mage::getSingleton('customer/session')->getCustomer();
     $custEmail = $customer->getEmail();//get customer email
+    $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
 }
 
 $servername = "localhost";
 $username = "root";
-$password = "root";
-$dbname = "trunited";
+$password = "CpEUQD3f";
+$dbname = "trunited_mage";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -98,7 +104,7 @@ if ($conn->connect_error) {
 $sql = "SELECT 'Closed' as payoutstatus, firstname, lastname, title, depthcredit, frontline, personalpoints, truwallet, connectionpoints, cash, totalvalue,
 LOWER(CONCAT(title, depthcredit, '.png')) as imagename
 FROM tr_Payout20161101 
-WHERE email = '$custEmail'";
+WHERE PersonID = '$customer_id'";
 $result1 = $conn->query($sql);
 
 if ($result1->num_rows > 0) {
@@ -194,6 +200,7 @@ if (Mage::getSingleton('customer/session')->isLoggedIn()) {
     // Get the customer object from customer session
     $customer = Mage::getSingleton('customer/session')->getCustomer();
     $custEmail = $customer->getEmail();//get customer email
+    $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
 }
 
 $sql = "SELECT 'Closed' payoutstatus, p.name, p.title, p.depthcredit, p.frontline, p.personalpts, p.truwallet, p.connectionpts, p.cash, p.totalvalue,
@@ -204,7 +211,7 @@ CASE  WHEN p.title = 'Customer' THEN 'Not Applicable'
 END as fee_message,
 CASE  WHEN p.title = 'Customer' THEN '' 
       WHEN IFNULL(f.increment_id, 0) = 0 THEN ''
-      WHEN IFNULL(f.increment_id, 0) > 0 THEN 'Jan 5, 2018'
+      WHEN IFNULL(f.increment_id, 0) > 0 THEN DATE_FORMAT(DATE_ADD(f.created_at, INTERVAL 1 YEAR), '%c/%e/%Y')
 END as fee_renewal
 FROM tr_Payout20170101 p
 LEFT JOIN (
@@ -212,7 +219,7 @@ LEFT JOIN (
   FROM trsales_flat_order_item oi JOIN trsales_flat_order o ON oi.order_id = o.entity_id 
   WHERE oi.SKU = '99AFFILIATE' AND o.status NOT IN ('Closed', 'Canceled')
 ) f ON p.email = f.email
-WHERE p.email =  '$custEmail'";
+WHERE p.PersonID = '$customer_id'";
 $result2 = $conn->query($sql);
 
 if ($result2->num_rows > 0) {
@@ -304,7 +311,7 @@ if ($result2->num_rows > 0) {
 ?>
         </div>
         
-       <div id="jan2017" class="tabcontent" style="display: block;">
+       <div id="jan2017" class="tabcontent">
 
 
                 <?php
@@ -313,6 +320,126 @@ if (Mage::getSingleton('customer/session')->isLoggedIn()) {
     // Get the customer object from customer session
     $customer = Mage::getSingleton('customer/session')->getCustomer();
     $custEmail = $customer->getEmail();//get customer email
+    $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
+}
+
+$sql = "SELECT 'Closed' payoutstatus, p.name, p.title, p.depthcredit, p.frontline, p.personalpts, p.truwallet, p.connectionpts, p.cash, p.totalvalue,
+LOWER(CONCAT(p.title, p.depthcredit, '.png')) as imagename, IFNULL(f.increment_id, 0) as fee_increment_id, DATE(f.created_at) as fee_date,
+CASE  WHEN IFNULL(f.increment_id, 0) > 0 THEN 'Yes'
+      WHEN IFNULL(f.increment_id, 0) = 0 THEN 'No'
+END as fee_message,
+CASE  WHEN IFNULL(f.increment_id, 0) > 0 THEN DATE_FORMAT(DATE_ADD(f.created_at, INTERVAL 1 YEAR), '%c/%e/%Y')
+      WHEN p.title = 'Customer' THEN '' 
+      WHEN IFNULL(f.increment_id, 0) = 0 THEN ''
+END as fee_renewal
+FROM tr_Payout20170201 p
+LEFT JOIN (
+  SELECT o.customer_id, o.customer_email as email, o.created_at, o.status, oi.name, o.increment_id
+  FROM trsales_flat_order_item oi JOIN trsales_flat_order o ON oi.order_id = o.entity_id 
+  WHERE oi.SKU = '99AFFILIATE' AND o.status NOT IN ('Closed', 'Canceled')
+) f ON p.PersonID = f.customer_id
+WHERE p.PersonID = '$customer_id'";
+$result2 = $conn->query($sql);
+
+if ($result2->num_rows > 0) {
+    // output data of each row ?>
+                <style>
+                        .com {
+                                text-align: right;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        .com1 {
+                                text-align: left;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        @media only screen and (max-width: 992px) {
+                                .com {
+                                        width: 60% !important;
+                                        float: left;
+                                }
+                                .com1 {
+                                        width: 40% !important;
+                                        float: left;
+                                }
+                        }
+                </style>
+                <div class="col-md-8"> <br />
+                        <?php
+    while($row = $result2->fetch_assoc()) {
+		
+		$truw = '$'.round($row['truwallet'],2);
+		$cash = '$'.round($row['cash'],2);
+		$total = '$'.round($row['totalvalue'],2);
+		
+		
+		
+		?>
+                        <div class="com col-md-6">Payout Period Status:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['payoutstatus']; ?> </div><br />
+                        <div class="com col-md-6">Earned Title:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['title']; ?> </div><br />
+                        <div class="com col-md-6">Depth Credit:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['depthcredit']; ?> </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">Personal Connections:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['frontline']; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Personal Points Contributed:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['personalpts']; ?>
+                        </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">truWallet Money:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $truw; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Qualified Connection Points:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['connectionpts']; ?> </div>
+                        <div class="com col-md-6">Affiliate Income Earnings:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $cash; ?>
+                        </div>
+                         <div class="com col-md-6">Affiliate Fee Paid:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['fee_message']; ?> </div><br />         
+                         <div class="com col-md-6" style="margin-bottom: 20px;">Renewal Due Date:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['fee_renewal']; ?> </div><br />                                                  
+                        <br /><br />
+
+                        <div class="com col-md-6"><b>Total Earnings Value:</b></div><b><div class="com1 col-md-6">  <?php echo $total; ?></div></b><br />
+                </div>
+                <div class="col-md-4" style="text-align: center;"> <img src="<?php echo Mage::getBaseUrl('media').'wysiwyg/porto/trudashboard/commissions/'.$row['imagename']; ?>" alt="" /> </div>
+
+                <?php
+    }
+	
+} else {
+     echo "<p>COMMISSION PERIOD ENDING JANUARY 31, 2017</p> ";
+}
+
+?>
+        </div>
+        
+               <div id="feb2017" class="tabcontent" style="display: block;">
+
+
+                <?php
+
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email
+    $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
 }
 
 $sql = "SELECT 'Open' as payoutstatus
@@ -325,8 +452,8 @@ $sql = "SELECT 'Open' as payoutstatus
 , connectionpts
 , LOWER(CONCAT(title, depthcredit, '.png')) as imagename
 FROM tr_PayoutSummary
-WHERE payout_period_id = 3
-AND email =  '$custEmail'";
+WHERE payout_period_id = 4
+AND PersonID = '$customer_id'";
 $result2 = $conn->query($sql);
 
 if ($result2->num_rows > 0) {
@@ -399,7 +526,7 @@ if ($result2->num_rows > 0) {
     }
 	
 } else {
-     echo "<p>COMMISSION PERIOD ENDING JANUARY 31, 2017</p> ";
+     echo "<p>COMMISSION PERIOD ENDING FEBRUARY 28, 2017</p> ";
 }
 $conn->close();
 

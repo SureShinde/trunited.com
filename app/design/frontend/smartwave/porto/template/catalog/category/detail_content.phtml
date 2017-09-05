@@ -1,0 +1,239 @@
+<?php 
+
+$_product = Mage::registry('current_product');
+if($_product){
+$_helper = $this->helper('catalog/output');
+$_image_helper = $this->helper('catalog/image');
+$store = Mage::app()->getStore();
+
+$code = $store->getCode();
+$is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+$login_url = Mage::helper('customproduct')->getLoginUrl();
+
+$aspect_ratio = $this->getData("aspect_ratio");
+if ($aspect_ratio == null) {
+    $aspect_ratio = Mage::getStoreConfig("porto_settings/category/aspect_ratio", $code);
+}
+$ratio_width = $this->getData("image_width");
+if (!$ratio_width) {
+    $ratio_width = Mage::getStoreConfig("porto_settings/category/ratio_width", $code);
+}
+$ratio_height = $this->getData("image_height");
+if (!$ratio_height) {
+    $ratio_height = Mage::getStoreConfig("porto_settings/category/ratio_height", $code);
+}
+
+if (!$ratio_width)
+    $ratio_width = 300;
+if (!$ratio_height)
+    $ratio_height = 400;
+
+$ids = Array();
+$idskey = Array();
+foreach ($_product->getRelatedLinkCollection() as $link) {
+	$ids[] = $link->getLinkedProductId();
+}
+
+if (count($ids) > 5){
+	$idskey = array_rand($ids,5);
+}
+
+foreach ($idskey as $key) {
+	$id = $ids[$key];
+	$dats[] = $id;
+	 
+}
+
+$reviews = Mage::getModel('review/review')->getCollection()
+    ->addStoreFilter(Mage::app()->getStore()->getId())
+    ->addEntityFilter('product', $_product->getId() )
+    ->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED)
+    ->setDateOrder()
+    ->addRateVotes();
+
+    $totalReviews = 0;
+ if($reviews){
+ 	$totalReviews = $reviews->count();
+ }
+
+?>
+<div class ='main_block'>
+	<div class = 'container'>
+		<div class="row">
+                	<div class="gift_card_blk">
+                    	<div class="gift_card_top">
+                        	<div class="gift_card_top_left col-sm-5">
+                            	<div class="save_earn vista">
+                                    <figure>
+
+                                     <img id="product-collection-image-<?php echo $_product->getId(); ?>"
+                                     src="<?php if ($aspect_ratio): ?><?php echo $_image_helper->init($_product, 'small_image')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($ratio_width); ?><?php else: ?><?php echo $_image_helper->init($_product, 'small_image')->resize($ratio_width, $ratio_height); ?><?php endif; ?>"
+                                     width="<?php echo $ratio_width; ?>"
+                                     <?php if (!$aspect_ratio): ?>height="<?php echo $ratio_height; ?>"<?php endif; ?>
+                                     alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/>
+
+                                    <!-- <img src="images/vistaprint_logo.jpg" width="584" height="474" alt="img"> -->
+
+
+                                    </figure>
+                                    <!-- <div class="save_in">
+                                      <ul>
+                                          <li><span><small>UP TO</small><b>16%</b> CASH BACK</span></li>
+                                      </ul>  
+                                    </div> -->
+                                </div>
+                                <!-- <div class="small_block">
+                                	<a href="#">
+                                		<figure>
+                                			<img src="images/printlogo_small.jpg" width="131" height="132" alt="img">
+                                		</figure>
+                                	</a>
+                                </div> -->
+                            </div>
+                            <div class="gift_card_top_right col-sm-7">
+                            	<div class="buffalo">
+                                	<h4><?php echo $_product->getName();?></h4>
+                                	<ul>
+                                		<li>
+                                		<?php if (Mage::getStoreConfig("porto_settings/category/rating_star", $code)){ ?>
+                                			<?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
+                            			<?php } ?>
+                            			</li>
+                            			<li><span><?php echo $totalReviews;?> Reviews</span></li>
+                            		</ul>
+
+                                   
+                                    <div class="clearfix"></div>
+                                    <small><?php echo $_product->getShortDescription();?></small>
+                                    <div class="giftcard_shop">
+                                    	<div class="giftcard_shop_lft fn_sz col-xs-5">
+                                            <!-- <button name="name" type="button" class="add_chart transition">SHOP NOW</button> -->
+                                            <?php $url = str_replace('{{customer_id}}','',$_product->getShopNow());?>
+                                            <a href='<?php echo $url;?>' class = "add_chart transition">SHOP NOW</a>
+                                            <div class="social_icons">
+                                            	<ul>
+                                                	<li><a href="#"><span><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>
+                                                    <li><a href="#"><span><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>
+                                                    <li><a href="#"><span><i class="fa fa-pinterest-p" aria-hidden="true"></i></span></a></li>
+                                                    <li><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i></span></a></li>
+                                                    <li class="last"><a href="#"><span><i class="fa fa-plus" aria-hidden="true"></i></span></a></li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="giftcard_shop_rgt pad1 col-xs-7">
+                                        	<div class="giftcard_shop_rgt_in print_bord">
+                                            	<h4>Shop | Earn | Repeat</h4>
+                                                <ul>
+                                                    <li><p>Brands You Know</p></li>
+                                                    <li><p>Prices You Expect</p></li>
+                                                    <li><p>Stuff You Buy Anyway</p></li>
+                                                    <li><p>Earn on Qualified Purchases</p></li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                                <h4>Helpful Hints 
+to Avoid Glitches</h4>
+                                                <ul>
+                                                    <li><p>Empty Global Brand Card and Sign Out</p></li>
+                                                    <li><p>SLog In to Trunited and Click Global Brand</p></li>
+                                                    <li><p>Add Items To Cart and Purchase At Same Visit</p></li>
+                                                    <li><p>Be Aware of Excluded Products</p></li>
+                                                    <li><p>Points On Hold Awarded Within 72 Hours</p></li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="gift_shop_bottom">
+                        	<div class="tabs_blk_main col-xs-12">
+                            	<div class="tabbs panel with-nav-tabs panel-default">
+                                    <div class="tabs_blk panel-heading" >
+                                        <ul class="nav nav-tabs">
+                                            <li><a  id ='tab_click1' href="#pd-tab1" data-toggle="tab">Descriptions</a></li>
+                                            <li><a id ='tab_click2' href="#pd-tab2" data-toggle="tab">Additional</a></li>
+                                        </ul><div class="panel-group visible-xs" id="myTab-accordion"></div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div id="myTabContent" class="tabs_content print_cnt tab-content panel-body hidden-xs">
+                                        <div class="tab-pane fade in active" id="pd-tab1">
+                                            <?php echo $_product->getShortDescription(); ?>
+                                        </div>
+                                        
+                                        <div class="tab-pane fade" id="pd-tab2">
+                                        Additional
+                                            <?php echo $_product->getDescription();?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="related_products">
+                        	<div class="search_bar">
+                        		<h3 class="text-uppercase">RELATED PRODUCTS</h3>
+                            </div>
+							<div class="product_blk">
+			                	<ul>
+			                		<?php
+									$model = Mage::getModel('catalog/product');
+			                		 if($dats){
+	                            		foreach($dats as $id){
+	                            			$product= $model->load($id);
+	                            	?>
+			                        	<li class="col-sm-3 col-xs-4" style="display:block">
+			                        		<div class="product">
+			                                    <img id="product-collection-image-<?php echo $product->getId(); ?>"
+			                                     src="<?php if ($aspect_ratio): ?><?php echo $_image_helper->init($product, 'small_image')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($ratio_width); ?><?php else: ?><?php echo $_image_helper->init($product, 'small_image')->resize($ratio_width, $ratio_height); ?><?php endif; ?>"
+			                                     width="<?php echo $ratio_width; ?>"
+			                                     <?php if (!$aspect_ratio): ?>height="<?php echo $ratio_height; ?>"<?php endif; ?>
+			                                     alt="<?php echo $this->stripTags($this->getImageLabel($product, 'small_image'), null, true) ?>"/>
+													<h5><?php echo $product->getName();?></h5>
+			                                        <ul>
+			                                            <li></li>
+			                                        </ul>
+			                                        <div class="clearfix"></div>
+			                                        <a href="<?php echo $product->getShopNow();?>" class="view_details transition">View Details</a>
+			                                    </div>
+			                                </li>
+	                            		<?php
+	                            		unset($product);
+	                            	}
+	                            }
+	                            ?>
+			                    </ul>
+                           		<div class="clearfix"></div>
+                          	</div>
+					</div>
+                    </div>
+                </div>
+	</div>
+</div>
+<style>
+.main-container {background: #f4f4f4;padding-top:0;}
+.main.container{
+    min-height: 400px;
+    padding: 0 20px 243px 20px;
+    margin: 0;
+    width: 100%;
+    background: url(http://localhost/magento_c/trunited/skin/frontend/smartwave/porto_trunited/images/main_bg.jpg) no-repeat left top;
+}
+.view_details{
+	display:block;
+
+	text-align: center;
+} 
+.add_chart{
+	display: block;
+	padding-top:10px;
+}   
+</style>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/new_design/bootstrap.min.js');?>"></script>
+<!-- <script type="text/javascript">
+jQuery( function() {
+    jQuery( "#tabs" ).tabs();
+});
+</script> -->
+<?php }

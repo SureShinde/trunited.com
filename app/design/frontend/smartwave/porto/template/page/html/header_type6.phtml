@@ -113,11 +113,12 @@
         </ul>        
       </div>
 -->
+        <div class="topmenu">
 <!--
  <div class="menu-icon"><a href="javascript:void(0)" title="<?php echo $this->__('Menu'); ?>"><i
                     class="fa fa-bars"></i></a></div>
 -->
-<?php echo $this->getChildHtml('topMenu'); ?>
+        <?php echo $this->getChildHtml('topMenu'); ?>
 <!--      <div class="mobile-cart">-->
 <!--        <div class="itmes-count">2</div>-->
         <?php echo $this->getChildHtml('minicart'); ?>
@@ -125,6 +126,7 @@
 
 
         <?php echo $this->getChildHtml('mobile.nav') ?>
+        </div>
     </div>
   </nav>
 </header>

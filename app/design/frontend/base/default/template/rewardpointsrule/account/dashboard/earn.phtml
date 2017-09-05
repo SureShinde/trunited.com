@@ -31,38 +31,36 @@
 
 <?php if (count($_catalogEarning) || count($_salesEarning)): ?>
 <?php $processor = Mage::helper('cms')->getBlockTemplateProcessor();?>
-<!--strong class="rewardpoints-money rewardpoints-title-rate"></strong><br /-->
-
-<!--    <?php /*echo $this->__('How to earn points:') */?>
+<!--strong class="rewardpoints-money rewardpoints-title-rate"><?php echo $this->__('How to earn points:') ?></strong><br /-->
 <ul class="rewardpoints-dashboard-ul">
-    <?php /*foreach ($_catalogEarning as $_rule){ */?>
+    <?php foreach ($_catalogEarning as $_rule){ ?>
     <li>
-        <span class="rewardpointsrule-rule-name-policy"><?php /*echo $_rule->getName() */?></span>
-        <?php /*if($_rule->getDescription()): */?>
-        <span class="rewardpointsrule-rule-description-policy"><?php /*echo ': '.$processor->filter($_rule->getDescription()) */?></span>
-        <?php /*endif; */?>
-        <?php /*if ($_rule->getToDate()): */?>
+        <span class="rewardpointsrule-rule-name-policy"><?php echo $_rule->getName() ?></span>
+        <?php if($_rule->getDescription()): ?>
+        <span class="rewardpointsrule-rule-description-policy"><?php echo ': '.$processor->filter($_rule->getDescription()) ?></span>
+        <?php endif; ?>
+        <?php if ($_rule->getToDate()): ?>
         <br/>
         <span class="rewardpointsrule-rule-date-policy">
-            <?php /*echo $this->__('It is valid until %s', $this->formatDate($_rule->getToDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)) */?>
+            <?php echo $this->__('It is valid until %s', $this->formatDate($_rule->getToDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)) ?>
         </span>
-        <?php /*endif */?>
+        <?php endif ?>
     </li>
-    <?php /*} */?>
+    <?php } ?>
         
-    <?php /*foreach ($_salesEarning as $_rule): */?>
+    <?php foreach ($_salesEarning as $_rule): ?>
     <li>
-        <span class="rewardpointsrule-rule-name-policy"><?php /*echo $_rule->getName() */?></span>
-        <?php /*if($_rule->getDescription()): */?>
-        <span class="rewardpointsrule-rule-description-policy"><?php /*echo ': '.$processor->filter($_rule->getDescription()) */?></span>
-        <?php /*endif; */?>
-        <?php /*if ($_rule->getToDate()): */?>
+        <span class="rewardpointsrule-rule-name-policy"><?php echo $_rule->getName() ?></span>
+        <?php if($_rule->getDescription()): ?>
+        <span class="rewardpointsrule-rule-description-policy"><?php echo ': '.$processor->filter($_rule->getDescription()) ?></span>
+        <?php endif; ?>
+        <?php if ($_rule->getToDate()): ?>
         <br/>
         <span class="rewardpointsrule-rule-date-policy">
-                <?php /*echo $this->__('It is valid until %s', $this->formatDate($_rule->getToDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)) */?>
+                <?php echo $this->__('It is valid until %s', $this->formatDate($_rule->getToDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)) ?>
         </span>
-        <?php /*endif */?>
+        <?php endif ?>
     </li>
-    <?php /*endforeach */?>
-</ul>-->
+    <?php endforeach ?>
+</ul>
 <?php endif ?>

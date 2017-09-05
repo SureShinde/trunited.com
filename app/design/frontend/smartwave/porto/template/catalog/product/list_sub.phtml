@@ -1,0 +1,57 @@
+<?php
+$category = Mage::registry('current_category');
+$childs = $category->getCollection()
+            ->addAttributeToSelect(array('name', 'thumbnail'))
+            ->addAttributeToFilter('is_active', 1)
+            ->addIdFilter($category->getChildren());
+$_helper = $this->helper('catalog/output');
+$_image_helper = $this->helper('catalog/image');
+$store = Mage::app()->getStore();
+$code = $store->getCode();
+$is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+$login_url = Mage::helper('customproduct')->getLoginUrl();
+
+$aspect_ratio = $this->getData("aspect_ratio");
+if ($aspect_ratio == null) {
+    $aspect_ratio = Mage::getStoreConfig("porto_settings/category/aspect_ratio", $code);
+}
+$ratio_width = $this->getData("image_width");
+if (!$ratio_width) {
+    $ratio_width = Mage::getStoreConfig("porto_settings/category/ratio_width", $code);
+}
+$ratio_height = $this->getData("image_height");
+if (!$ratio_height) {
+    $ratio_height = Mage::getStoreConfig("porto_settings/category/ratio_height", $code);
+}
+
+if (!$ratio_width)
+    $ratio_width = 300;
+if (!$ratio_height)
+    $ratio_height = 400;
+?>
+<?php
+$_coreHelper = $this->helper('core');
+?>
+<div class="product_blk" id="myList">
+<ul>
+    <?php foreach($childs as $cat) : ?>
+        <li class="col-sm-3 col-xs-4">
+            <div class="product">
+                <?php 
+                    $cat = Mage::getModel('catalog/category')->load($cat->getId());
+                    $img = $cat->getImageUrl();
+                ?>
+                <a href="<?php echo $cat->getURL() ?>" title="<?php echo $this->htmlEscape($cat->getName()) ?>">
+                    <img src="<?php echo $this->helper('timage')->init($cat->getImageUrl())->resize(null, 120) ?>" alt="<?php echo $this->htmlEscape($cat->getName()) ?>"/>
+                    <h5 style="color:#000;min-height: auto;text-align: center"><?php echo $cat->getName()?></h5>
+                </a>
+                <div class="clearfix"></div>
+                <button name="name" type="button" class="view_details transition"><a href="<?php echo $cat->getUrl();?>" style="color:#000;">View Details</a></button>
+            </div>
+        </li>
+    <?php endforeach;?>
+</ul>
+</div>
+<style>
+.search_bar {display: none;}
+</style>

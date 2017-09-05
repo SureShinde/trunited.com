@@ -1,0 +1,314 @@
+<?php
+$category = Mage::registry('current_category');
+// $_productCollection = Mage::getResourceModel('catalog/product_collection')
+// ->addAttributeToSelect('*');
+// if($category)
+// $_productCollection->addCategoryFilter($category);
+$_productCollection = $this->getLoadedProductCollection();
+$_helper = $this->helper('catalog/output');
+$_image_helper = $this->helper('catalog/image');
+$store = Mage::app()->getStore();
+$code = $store->getCode();
+$is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+$login_url = Mage::helper('customproduct')->getLoginUrl();
+
+$aspect_ratio = $this->getData("aspect_ratio");
+if ($aspect_ratio == null) {
+    $aspect_ratio = Mage::getStoreConfig("porto_settings/category/aspect_ratio", $code);
+}
+$ratio_width = $this->getData("image_width");
+if (!$ratio_width) {
+    $ratio_width = Mage::getStoreConfig("porto_settings/category/ratio_width", $code);
+}
+$ratio_height = $this->getData("image_height");
+if (!$ratio_height) {
+    $ratio_height = Mage::getStoreConfig("porto_settings/category/ratio_height", $code);
+}
+
+if (!$ratio_width)
+    $ratio_width = 300;
+if (!$ratio_height)
+    $ratio_height = 400;
+?>
+<?php
+$_coreHelper = $this->helper('core');
+?>
+<?php if ($_coreHelper->isModuleEnabled("Magegiant_Dailydeal")): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        var dailydealTimeCountersCategory = new Array();
+        var i = 0;
+        //]]>
+    </script>
+<?php endif; ?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="category-products">
+        <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+    </div>
+<?php else: ?>
+    <div class="category-products product_blk">
+        <?php // List mode ?>
+        <?php if ($this->getMode() == 'grid'): ?>
+        <?php // Grid Mode ?>
+        <?php $_collectionSize = $_productCollection->count() ?>
+        <?php $_columnCount = Mage::getStoreConfig("porto_settings/category_grid/columns", $code); ?>
+            <ul class="products-grid <?php if (Mage::getStoreConfig("porto_settings/category_grid/flex_grid", $code)): ?>flex-grid<?php endif; ?> columns<?php echo $_columnCount; ?><?php if (!Mage::getStoreConfig("porto_settings/category_grid/show_addtolinks", $code)): ?> hide-addtolinks<?php endif; ?><?php if (!Mage::getStoreConfig("porto_settings/category_grid/show_addtocart", $code)): ?> hide-addtocart<?php endif; ?><?php if (Mage::getStoreConfig("porto_settings/category_grid/move_actions", $code)): ?> move-action<?php endif; ?>">
+                <?php $i = 0; $flag_shop_now = false;
+                foreach ($_productCollection as $_product): ?>
+                    <?php $product = $_product;//Mage::getModel('catalog/product')->load($_product->getId()); ?>
+                    <li class="col-sm-3 col-xs-4">
+                        <div class="item-area product">
+                            <div class="product-image-area">
+                                <div class="loader-container">
+                                    <div class="loader">
+                                        <i class="ajax-loader medium animate-spin"></i>
+                                    </div>
+                                </div>
+                                <?php
+                                if (Mage::getStoreConfig("quickview/general/enableview", $code)) {
+                                    $base_url = $this->getUrl();
+                                    if (strpos($base_url, '?') !== false)
+                                        $base_url = explode("?", $this->getUrl());
+                                    if (is_array($base_url))
+                                        $base_url = $base_url[0];
+                                    $base_url .= "quickview/index/view/";
+                                    $quickview_url = $base_url . "id/" . $_product->getId();
+                                    ?>
+                                    <!--<a href="<?php /*echo $quickview_url; */?>" class="quickview-icon"><i
+                                                class="icon-export"></i><span><?php /*echo $this->__("Quick View"); */?></span></a>-->
+                                    <?php
+                                }
+                                ?>
+                                <a href="<?php echo $_product->getProductUrl() ?>"
+                                   title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"
+                                   class="product-image">
+                                    <img id="product-collection-image-<?php echo $_product->getId(); ?>"
+                                         src="<?php if ($aspect_ratio): ?><?php echo $_image_helper->init($_product, 'small_image')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($ratio_width); ?><?php else: ?><?php echo $_image_helper->init($_product, 'small_image')->resize($ratio_width, $ratio_height); ?><?php endif; ?>"
+                                         width="<?php echo $ratio_width; ?>"
+                                         <?php if (!$aspect_ratio): ?>height="<?php echo $ratio_height; ?>"<?php endif; ?>
+                                         alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>"/>
+                                    <?php if ($_coreHelper->isModuleEnabled("Magegiant_Dailydeal")): ?>
+                                        <?php
+                                        if (Mage::getStoreConfig("dailydeal/general/enable", $code)) {
+                                            $deal = Mage::getModel('dailydeal/dailydeal')->getDealByProduct($_product->getId());
+
+                                            if ($deal && ($deal->getQuantity() - $deal->getSold() > 0)) {
+                                                ?>
+                                                <?php $now = Mage::getModel('core/date')->timestamp(time()) ?>
+                                                <?php $endTime = Mage::getModel('core/date')->timestamp(strtotime($deal->getCloseTime())); ?>
+                                                <div class="deal-label">
+                                                    <i class="icon-clock"></i>
+                                                </div>
+                                                <div class="bottom-product-dailydeal bottom-home-dailydeal">
+                                                    <ul class="time-left">
+                                                        <div class="timeleft timeleft_<?php echo $_product->getId() ?>"></div>
+                                                    </ul>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    //<![CDATA[
+                                                    if (typeof dailydealTimeCountersCategory[<?php echo $deal->getId() ?>] == 'undefined') {
+                                                        dailydealTimeCountersCategory[<?php echo $deal->getId() ?>] = new DailydealTimeCounter('<?php echo $now ?>', '<?php echo $endTime ?>', '<?php echo $deal->getId() ?>');
+                                                        dailydealTimeCountersCategory[<?php echo $deal->getId() ?>].setTimeleft('timeleft_<?php echo $_product->getId() ?>');
+                                                    }
+                                                    //]]>
+                                                </script>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    <?php endif; ?>
+                                </a>
+                                <?php
+
+                                $sale_label = false;
+
+
+                                // Get the Special Price
+                                $specialprice = $product->getFinalPrice();
+                                $orgprice = $product->getPrice();
+                                // Get the Special Price FROM date
+                                $now = date("Y-m-d");
+                                $specialPriceFromDate = substr($product->getSpecialFromDate(), 0, 10);
+                                // Get the Special Price TO date
+                                $specialPriceToDate = substr($product->getSpecialToDate(), 0, 10);
+                                // Get Current date
+                                $today = time();
+
+                                if ($specialprice < $orgprice) {
+                                    $save_percent = 100 - round(($specialprice / $orgprice) * 100);
+                                    if ($specialPriceToDate != '' || $specialPriceFromDate != '') {
+                                        if (($specialPriceToDate != '' && $specialPriceFromDate != '' && $now >= $specialPriceFromDate && $now <= $specialPriceToDate) || ($specialPriceToDate == '' && $now >= $specialPriceFromDate) || ($specialPriceFromDate == '' && $now <= $specialPriceToDate)) {
+                                            if (Mage::getStoreConfig("porto_settings/product_label/sale", $code)) {
+                                                $sale_label = true;
+                                                ?>
+                                                <div class="product-label" style="right: 10px;"><span
+                                                            class="sale-product-icon"><?php if (Mage::getStoreConfig("porto_settings/product_label/sale_label_type", $code)): ?><?php echo "-" . $save_percent . "%"; ?><?php else: ?><?php echo Mage::getStoreConfig("porto_settings/product_label/sale_label_text", $code); ?><?php endif; ?></span>
+                                                </div>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                }
+                                ?>
+                                <?php
+                                $now = date("Y-m-d");
+                                $newsFrom = substr($_product->getData('news_from_date'), 0, 10);
+                                $newsTo = substr($_product->getData('news_to_date'), 0, 10);
+                                if ($newsTo != '' || $newsFrom != '') {
+                                    if (($newsTo != '' && $newsFrom != '' && $now >= $newsFrom && $now <= $newsTo) || ($newsTo == '' && $now >= $newsFrom) || ($newsFrom == '' && $now <= $newsTo)) {
+                                        if (Mage::getStoreConfig("porto_settings/product_label/new", $code)) {
+                                            ?>
+                                            <div class="product-label"
+                                                 style="right: 10px; <?php echo ($sale_label) ? "top: 40px;" : ""; ?>">
+                                                <span class="new-product-icon"><?php echo Mage::getStoreConfig("porto_settings/product_label/new_label_text", $code); ?></span>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <div class="details-area">
+                                <h5
+                                    <?php
+                                    if(Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())){
+                                        $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);
+
+                                    }?>
+                                    ><a href="<?php echo $_product->getProductUrl() ?>"
+                                        title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a>
+                                </h5>
+                                <?php if (Mage::getStoreConfig("porto_settings/category/product_price", $code) && !Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())): ?>
+                                    <?php echo $this->getPriceHtml($_product, true) ?>
+                                <?php endif; ?>
+                                <div class="rating_star">
+                                <?php if (Mage::getStoreConfig("porto_settings/category/rating_star", $code)): ?>
+                                    <?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
+                                <?php endif; ?>
+                                </div>
+                                <?php if (Mage::getStoreConfig("porto_settings/category/actions", $code)): ?>
+                                    <div class="actions">
+                                        <?php if(!Mage::helper('customproduct')->isAppliedToProductType($_product->getTypeId())){?>
+                                            <?php if (Mage::getStoreConfig("porto_settings/category/qty_field", $code)): ?>
+                                                <?php if ($product->isSaleable() && $_product->getTypeId() != 'grouped'): ?>
+                                                    <?php if (!($product->getTypeInstance(true)->hasOptions($product) || $product->isGrouped())) : ?>
+                                                        <?php if (!Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>
+                                                            <form id="addtocart_form_<?php echo $_product->getId(); ?>" action="<?php echo $this->getAddToCartUrl($_product) ?>" method="post">
+                                                            <input type="hidden" name="form_key"
+                                                                   value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>"/>
+                                                        <?php endif; ?>
+                                                        <div class="qty-field">
+                                                            <label for="qty"><?php echo $this->__('Qty:') ?></label>
+                                                            <div class="qty-holder">
+                                                                <input type="text" name="qty"
+                                                                       id="qty_<?php echo $_product->getId(); ?>"
+                                                                       maxlength="12"
+                                                                       value="<?php echo $product->getProductDefaultQty() * 1 ?>"
+                                                                       title="<?php echo $this->__('Qty') ?>"
+                                                                       class="input-text qty"/>
+                                                                <div class="qty-changer">
+                                                                    <a href="javascript:void(0)" class="qty_inc"><i
+                                                                                class="icon-up-dir"></i></a>
+                                                                    <a href="javascript:void(0)" class="qty_dec"><i
+                                                                                class="icon-down-dir"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php if (!Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                            <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                                                <a href="<?php if (Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)): ?>javascript:void(0)<?php else: ?><?php echo $this->helper('wishlist')->getAddUrl($_product) ?><?php endif; ?>"
+                                                   <?php if (Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)): ?>onclick="ajaxWishlist(this,'<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>','<?php echo $_product->getId() ?>');"<?php endif; ?>
+                                                   class="addtowishlist" title="<?php echo $this->__('Add to Wishlist') ?>"><i
+                                                            class="icon-wishlist"></i></a>
+                                            <?php endif; ?>
+                                            <?php if ($product->isSaleable() && $_product->getTypeId() != 'grouped'): ?>
+                                                <?php if (!($product->getTypeInstance(true)->hasOptions($product)/*$_product->getData('has_options')*/ || $product->isGrouped())) : ?>
+                                                    <?php if(!Mage::helper('trubox')->isInPhysicalList($_product)){?>
+                                                    <a href="<?php if (!Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code) && !Mage::getStoreConfig("porto_settings/category/qty_field", $code)): ?><?php echo $this->getAddToCartUrl($_product) ?><?php else: ?>javascript:void(0)<?php endif; ?>"
+                                                       class="addtocart view_details" title="<?php echo $this->__('Add to Cart') ?>"
+                                                       <?php if (Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>onclick="setLocationAjax(this,'<?php echo $this->getAddToCartUrl($_product) ?>','<?php echo $_product->getId(); ?>')"
+                                                       <?php elseif (Mage::getStoreConfig("porto_settings/category/qty_field", $code)): ?>onclick="document.getElementById('addtocart_form_<?php echo $_product->getId(); ?>').submit()"<?php endif; ?>><i
+                                                                class="icon-cart"></i><span>&nbsp;
+                                                            <?php if(strcasecmp($_product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0) echo $this->__('BUY NOW'); else echo $this->__('Add to Cart'); ?>
+                                                        </span></a>
+                                                    <?php } else {?>
+                                                        <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
+                                                            <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
+                                                                <small><a href="<?php echo Mage::getBaseUrl() . 'mytrubox/index/addTruBox?id=' . $_product->getId() ?>"
+                                                                   class="addtocart view_details"
+                                                                   title="<?php echo $this->__('Add to TruBox') ?>"><img src="<?php echo $this->getSkinUrl('images/like_icon.png');?>"/>
+                                                                </a></small>
+                                                            <?php }?>
+                                                        <?php }?>
+                                                    <?php }?>
+                                                <?php else : ?>
+                                                    <a href="<?php if (Mage::getStoreConfig("ajaxcart/addtocart/enablecategory", $code)): ?>javascript:showOptions('<?php echo $_product->getId() ?>')<?php else: ?><?php echo $this->getAddToCartUrl($_product) ?><?php endif; ?>"
+                                                       class="addtocart view_details" title="<?php echo $this->__('Add to Cart') ?>"><i
+                                                                class="icon-cart"></i><span>&nbsp;<?php echo $this->__('Add to Cart') ?></span></a>
+                                                    <a href='<?php echo $this->getUrl('ajaxcart/index/options', array('product_id' => $_product->getId())); ?>'
+                                                       class='fancybox' id='fancybox<?php echo $_product->getId() ?>'
+                                                       style='display:none'>Options</a>
+                                                <?php endif; ?>
+                                            <?php elseif ($_product->getTypeId() == 'grouped'): ?>
+                                                <a href="<?php echo $_product->getProductUrl(); ?>" class="addtocart view_details"
+                                                   title="<?php echo $this->__('View Details') ?>"><i class="icon-info"></i><span>&nbsp;<?php echo $this->__('View Details') ?></span></a>
+                                            <?php else: ?>
+                                                <a href="javascript:void(0);" class="addtocart outofstock view_details"
+                                                   title="<?php echo $this->__('Out of stock') ?>"><?php echo $this->__('Out of stock') ?></span></a>
+                                            <?php endif; ?>
+                                            <?php if (Mage::getStoreConfig("porto_settings/category/compare", $code) && $_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                <a href="<?php if (Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)): ?>javascript:void(0)<?php else: ?><?php echo $_compareUrl ?><?php endif; ?>"
+                                                   <?php if (Mage::getStoreConfig("ajaxcart/addtolinks/enablecategory", $code)): ?>onclick="ajaxCompare(this,'<?php echo $_compareUrl ?>','<?php echo $_product->getId() ?>');"<?php endif; ?>
+                                                   class="comparelink" title="<?php echo $this->__('Add to Compare') ?>"><i
+                                                            class="icon-compare"></i></a>
+                                            <?php endif; ?>
+                                            <?php if (Mage::helper('trubox')->isCurrentCheckingCustomer() && $_product->getTypeId() != 'grouped') { ?>
+                                                <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) { ?>
+                                                    <small>
+                                                    <a href="<?php echo Mage::getBaseUrl() . 'mytrubox/index/addTruBox?id=' . $_product->getId() ?>"
+                                                       class="trubox"
+                                                       title="<?php echo $this->__('Add to TruBox') ?>"><img src="<?php echo $this->getSkinUrl('images/like_icon.png');?>"/>
+                                                    </a>
+                                                    </small>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        <?php } else { $flag_shop_now = true;?>
+                                            <?php $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);
+                                            if($shop_now_url != null){
+                                                ?>
+                                                <div class="actions">
+                                                    <a href="<?php echo $shop_now_url;?>" class="view_details"
+                                                       rel="nofollow" class="addtocart custom-url">
+                                                        <span><?php echo $this->__('SHOP NOW');?></span></a>
+                                                    <div class="clearer"></div>
+                                                </div>
+                                            <?php }?>
+
+                                        <?php }?>
+                                        <div class="clearer"></div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        <?php endif; ?>
+        <?php if (Mage::getStoreConfig("ajax_catalog/price_slider_settings/infinitescroll", $code)): ?>
+            <div class="infinite-loader"><span class="loading"><i
+                            class="ajax-loader small animate-spin"></i><?php echo $this->__("Loading ..."); ?></span><button
+                        href="javascript:void(0)" class="btn-load-more see_more"><?php echo $this->__("SEE MORE"); ?></button>
+                        <button
+                        href="javascript:void(0)" class="btn-load-less see_more show_less"><?php echo $this->__("SHOW LESS"); ?></button>
+            </div>
+        <?php endif; ?>
+        <div class="toolbar-bottom">
+            <?php echo $this->getToolbarHtml() ?>
+        </div>
+    </div>
+<?php endif; ?>

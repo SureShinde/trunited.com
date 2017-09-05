@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<magestore translate="label">
+			<label>Magestore Extension</label>
+			<sort_order>400</sort_order>
+		</magestore>
+	</tabs>
+	<sections>
+		<trubox translate="label" module="trubox">
+			<class>separator-top</class>
+			<label>trubox</label>
+			<tab>magestore</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>299</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<general translate="label">
+					<label>General Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<general_separator translate="label comment">
+							<label>Description</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</general_separator>
+						<logo translate="label comment">
+							<label>Logo</label>
+							<comment>Allowed file types: jpeg, gif, png.</comment>
+							<frontend_type>image</frontend_type>
+							<backend_model>adminhtml/system_config_backend_image</backend_model>
+							<upload_dir config="system/filesystem/media" scope_info="1">trubox</upload_dir>
+							<base_url type="media" scope_info="1">trubox</base_url>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</logo>
+						<cms_description translate="label comment">
+							<label>CMS content for description</label>
+							<comment>The content of CMS page will be displayed as description on My TruBox page</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>trubox/cms</source_model>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</cms_description>
+
+						<testing_separator translate="label comment">
+							<label>Testing Mode</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</testing_separator>
+						<enable_testing_mode translate="label">
+							<label>Enable Testing Mode</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>5</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable_testing_mode>
+						<email_testing_mode>
+							<label>Email for testing mode</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</email_testing_mode>
+
+						<orders_separator translate="label comment">
+							<label>Orders</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</orders_separator>
+						<enable_orders_section translate="label">
+							<label>Enable Orders Section</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>8</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Enable / Disable list orders in TruBox page</comment>
+						</enable_orders_section>
+
+						<products_separator translate="label comment">
+							<label>Products</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</products_separator>
+						<product_exclusion_list  translate="label">
+							<label>TruBox Exclusion List</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>10</sort_order>
+							<!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Trubox exclusion list and hide the trubox icon from product list and product details page.</comment>
+						</product_exclusion_list>
+						<enable_product_listing translate="label">
+							<label>Enable Product Listing Page</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>11</sort_order>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</enable_product_listing>
+
+						<physical_products_separator translate="label comment">
+							<label>Physical Gift Card Products</label>
+							<frontend_type>label</frontend_type>
+							<frontend_model>trubox/adminhtml_system_config_form_field_separator</frontend_model>
+							<margin_top>10px</margin_top>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment></comment>
+						</physical_products_separator>
+						<physical_only_product  translate="label">
+							<label>TruBox Only Products</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Sku's that are "TruBox Only Products". Any sku added to this config textbox will only have the ADD TO TRUBOX button on product listing and product details pages.</comment>
+						</physical_only_product>
+					</fields>				
+				</general>
+				<shipping>
+					<label>Shipping Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>5</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<shipping_method translate="label">
+							<label>Shipping Method</label>
+							<frontend_type>select</frontend_type>
+							<source_model>truwallet/shipping</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</shipping_method>
+						<shipping_amount translate="label">
+							<label>Shipping Amount</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>This field is only used when shipping method is Flat_rate</comment>
+						</shipping_amount>
+					</fields>
+				</shipping>
+			</groups>
+		</trubox>
+	</sections>
+</config>

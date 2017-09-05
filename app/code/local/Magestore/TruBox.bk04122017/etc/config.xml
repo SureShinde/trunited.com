@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!--
+  ~ Magestore
+  ~
+  ~ NOTICE OF LICENSE
+  ~
+  ~ This source file is subject to the Magestore.com license that is
+  ~ available through the world-wide-web at this URL:
+  ~ http://www.magestore.com/license-agreement.html
+  ~
+  ~ DISCLAIMER
+  ~
+  ~ Do not edit or add to this file if you wish to upgrade this extension to newer
+  ~ version in the future.
+  ~
+  ~ @category    Magestore
+  ~ @package     Magestore_TruBox
+  ~ @module     TruBox
+  ~ @author      Magestore Developer
+  ~
+  ~ @copyright   Copyright (c) 2016 Magestore (http://www.magestore.com/)
+  ~ @license     http://www.magestore.com/license-agreement.html
+  ~
+  -->
+<config>
+    <modules>
+        <Magestore_TruBox>
+            <version>0.2.0</version>
+        </Magestore_TruBox>
+    </modules>
+    <frontend>
+        <secure_url>
+            <trubox_checkout>/trubox/checkout</trubox_checkout>
+        </secure_url>
+        <routers>
+            <trubox>
+                <use>standard</use>
+                <args>
+                    <module>Magestore_TruBox</module>
+                    <frontName>trubox</frontName>
+                </args>
+            </trubox>
+        </routers>
+        <layout>
+            <updates>
+                <trubox module="Magestore_TruBox">
+                    <file>trubox.xml</file>
+                </trubox>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_TruBox>
+                    <files>
+                        <default>Magestore_TruBox.csv</default>
+                    </files>
+                </Magestore_TruBox>
+            </modules>
+        </translate>
+    </frontend>
+    <admin>
+        <routers>
+            <truboxadmin>
+                <use>admin</use>
+                <args>
+                    <module>Magestore_TruBox</module>
+                    <frontName>truboxadmin</frontName>
+                </args>
+            </truboxadmin>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <trubox>
+                    <file>trubox.xml</file>
+                </trubox>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Magestore_TruBox>
+                    <files>
+                        <default>Magestore_TruBox.csv</default>
+                    </files>
+                </Magestore_TruBox>
+            </modules>
+        </translate>
+    </adminhtml>   
+    <global>
+        <models>
+            <trubox>
+                <class>Magestore_TruBox_Model</class>
+                <resourceModel>trubox_mysql4</resourceModel>
+            </trubox>
+            <trubox_mysql4>
+                <class>Magestore_TruBox_Model_Mysql4</class>
+                <entities>
+                    <trubox>
+                        <table>trubox</table>
+                    </trubox>
+                    <item>
+                        <table>trubox_item</table>
+                    </item>
+                    <address>
+                        <table>trubox_address</table>
+                    </address>
+                    <payment>
+                        <table>trubox_payment</table>
+                    </payment>
+                    <order>
+                        <table>trubox_order</table>
+                    </order>
+                </entities>
+            </trubox_mysql4>
+        </models>
+        <resources>
+            <trubox_setup>
+                <setup>
+                    <module>Magestore_TruBox</module>
+                    <class>Magestore_TruBox_Model_Mysql4_Setup</class>
+                </setup>
+            </trubox_setup>
+        </resources>
+        <blocks>
+            <trubox>
+                <class>Magestore_TruBox_Block</class>
+            </trubox>
+        </blocks>
+        <helpers>
+            <trubox>
+                <class>Magestore_TruBox_Helper</class>
+            </trubox>
+        </helpers>
+    </global>
+    <default>
+        <sales>
+            <totals_sort>
+                <trubox>34</trubox>
+                <trubox_after_tax>44</trubox_after_tax>
+            </totals_sort>
+        </sales>
+        <trubox>
+            <general>
+                <enable>1</enable>
+                <cms_description>trubox_description</cms_description>
+                <enable_testing_mode>0</enable_testing_mode>
+                <email_testing_mode>dev@trunited.vn</email_testing_mode>
+                <enable_orders_section>1</enable_orders_section>
+                <enable_product_listing>1</enable_product_listing>
+                <physical_only_product>GP588568-100,GP588568-50,GP588568-25,GP588568,GP348965-50,GP348965,GP183219-50,GP183219</physical_only_product>
+            </general>
+            <shipping>
+                <shipping_method>freeshipping_freeshipping</shipping_method>
+                <shipping_amount>5</shipping_amount>
+            </shipping>
+        </trubox>
+    </default>
+</config>

@@ -1,0 +1,8 @@
+<config>
+  <modules>
+    <Trunited_AdvertiserProductImport>
+        <active>true</active>
+        <codePool>community</codePool>
+    </Trunited_AdvertiserProductImport>
+  </modules>
+</config>

@@ -39,33 +39,33 @@
                 <action method="addLink" translate="label" module="trugiftcard">
                     <name>account_dashboard</name>
                     <path>customer/account</path>
-                    <label>Account Dashboard</label>
+                    <label>ACCOUNT DASHBOARD</label>
                     <enable>true</enable>
                 </action>
                 <action method="addLink" translate="label" module="trubox">
                     <name>trubox_index</name>
                     <path>mytrubox</path>
-                    <label>My TruBox</label>
+                    <label>MANAGE TRUBOX</label>
                     <enable>true</enable>
                 </action>
                 <action method="addLink" translate="label" module="trubox">
                     <name>trubox_items</name>
                     <path>mytrubox/index/items</path>
-                    <label>View My Items</label>
+                    <label>VIEW MY ITEMS</label>
                     <enable>true</enable>
                     <order>10</order>
                 </action>
                 <action method="addLink" translate="label" module="trubox">
                     <name>trubox_address</name>
                     <path>mytrubox/index/address</path>
-                    <label>Address</label>
+                    <label>ADDRESS</label>
                     <enable>1</enable>
                     <order>20</order>
                 </action>
                 <action method="addLink" translate="label" module="trubox">
                     <name>trubox_payment</name>
                     <path>mytrubox/index/payment</path>
-                    <label>Payment</label>
+                    <label>PAYMENT</label>
                     <enable>true</enable>
                     <order>30</order>
                 </action>

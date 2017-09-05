@@ -1,0 +1,409 @@
+<?php
+/**
+ * Sales transaction history template
+ * Updated by trunited on 20161104. Original backed up as sales.phtml.bak20161104
+ */
+?>
+<?php
+$store_id = Mage::app()->getStore()->getStoreId();
+$check_responsvie = Mage::getStoreConfig('affiliateplus/style_config/responsive_enable', $store_id);
+ if($check_responsvie)
+     $class_name = 'col-lg-9 col-md-9 col-sm-12 col-xs-12';
+ else
+     $class_name = 'col-lg-9 col-md-9 col-sm-9 col-xs-9';
+     
+     
+?>
+<div class="aff-main-content <?php echo $class_name; ?>">
+        <div class="aff-title">
+                <h2>
+                        <?php echo $this->__('Commissions') ?>
+                </h2>
+        </div>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <?php echo $this->getChildHtml('payment_miniform') ?>
+        <p>&nbsp;</p>
+
+
+
+        <script type="text/javascript">
+                function openTabContent(evt, cityName) {
+                        var i, tabcontent, tablinks;
+                        tabcontent = document.getElementsByClassName("tabcontent");
+                        for (i = 0; i < tabcontent.length; i++) {
+                                tabcontent[i].style.display = "none";
+                        }
+                        tablinks = document.getElementsByClassName("tablinks");
+                        for (i = 0; i < tablinks.length; i++) {
+                                tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+                        document.getElementById(cityName).style.display = "block";
+                        evt.currentTarget.className += " active";
+                }
+                if (localStorage.defaultTab == 'undefined') {
+                        localStorage.defaultTab = 1;
+                }
+
+                if (localStorage.defaultTab == 1) {
+                        document.getElementById("tabWithdrawals").click();
+                } else {
+                        document.getElementById("tabTransfer").click();
+                }
+        </script>
+
+
+        <div class="clear">&nbsp;</div>
+        <ul class="tab">
+                <li>
+                        <a href="javascript:void(0)" id="tabWithdrawals" class="tablinks" onclick="openTabContent(event, 'sep-oct2016')">
+                                <?php echo 'SEP-OCT 2016';?>
+                        </a>
+                </li>
+                <li>
+                        <a href="javascript:void(0)" id="tabTransfer" class="tablinks" onclick="openTabContent(event, 'nov-dec2016')">
+                                <?php echo 'NOV-DEC 2016';?>
+                        </a>
+                </li>
+                <li>
+                        <a href="javascript:void(0)" id="tabTransfer" class="tablinks active" onclick="openTabContent(event, 'jan2017')">
+                                <?php echo 'JAN 2017';?>
+                        </a>
+                </li>
+        </ul>
+
+        <div id="sep-oct2016" class="tabcontent">
+
+
+
+                <?php
+
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email
+}
+
+$servername = "localhost";
+$username = "root";
+$password = "CpEUQD3f";
+$dbname = "trunited_mage";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "SELECT 'Closed' as payoutstatus, firstname, lastname, title, depthcredit, frontline, personalpoints, truwallet, connectionpoints, cash, totalvalue,
+LOWER(CONCAT(title, depthcredit, '.png')) as imagename
+FROM tr_Payout20161101 
+WHERE email = '$custEmail'";
+$result1 = $conn->query($sql);
+
+if ($result1->num_rows > 0) {
+    // output data of each row ?>
+                <style>
+                        .com {
+                                text-align: right;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        .com1 {
+                                text-align: left;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        @media only screen and (max-width: 992px) {
+                                .com {
+                                        width: 60% !important;
+                                        float: left;
+                                }
+                                .com1 {
+                                        width: 40% !important;
+                                        float: left;
+                                }
+                        }
+                </style>
+                <div class="col-md-8"> <br />
+                        <?php
+    while($row = $result1->fetch_assoc()) {
+		
+		$truw = '$'.round($row['truwallet'],2);
+		$cash = '$'.round($row['cash'],2);
+		$total = '$'.round($row['totalvalue'],2);
+		
+		
+		
+		?>
+                        <div class="com col-md-6">Payout Period Status:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['payoutstatus']; ?> </div><br />
+                        <div class="com col-md-6">Earned Title:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['title']; ?> </div><br />
+                        <div class="com col-md-6">Depth Credit:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['depthcredit']; ?> </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">Personal Connections:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['frontline']; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Personal Points Contributed:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['personalpoints']; ?>
+                        </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">truWallet Money:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $truw; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Qualified Connection Points:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['connectionpoints']; ?> </div>
+                        <br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">Affiliate Income Earnings:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $cash; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6"><b>Total Earnings Value:</b></div><b><div class="com1 col-md-6">  <?php echo $total; ?></div></b><br />
+                </div>
+                <div class="col-md-4" style="text-align: center;"> <img src="<?php echo Mage::getBaseUrl('media').'wysiwyg/porto/trudashboard/commissions/'.$row['imagename']; ?>" alt="" /> </div>
+
+                <?php
+		
+    }
+	
+} else {
+     echo "<p>If you joined Trunited before November 1, 2016 and see this message, please let us know by sending an email to <b>jarvis@trunited.com</b>.</p> ";
+}
+
+?>
+        </div>
+
+        <div id="nov-dec2016" class="tabcontent">
+
+
+                <?php
+
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email
+}
+
+$sql = "SELECT 'Closed' payoutstatus, p.name, p.title, p.depthcredit, p.frontline, p.personalpts, p.truwallet, p.connectionpts, p.cash, p.totalvalue,
+LOWER(CONCAT(p.title, p.depthcredit, '.png')) as imagename, IFNULL(f.increment_id, 0) as fee_increment_id, DATE(f.created_at) as fee_date,
+CASE  WHEN p.title = 'Customer' THEN 'Not Applicable' 
+      WHEN IFNULL(f.increment_id, 0) = 0 THEN 'No'
+      WHEN IFNULL(f.increment_id, 0) > 0 THEN 'Yes'
+END as fee_message,
+CASE  WHEN p.title = 'Customer' THEN '' 
+      WHEN IFNULL(f.increment_id, 0) = 0 THEN ''
+      WHEN IFNULL(f.increment_id, 0) > 0 THEN 'Jan 5, 2018'
+END as fee_renewal
+FROM tr_Payout20170101 p
+LEFT JOIN (
+  SELECT o.customer_id, o.customer_email as email, o.created_at, o.status, oi.name, o.increment_id
+  FROM trsales_flat_order_item oi JOIN trsales_flat_order o ON oi.order_id = o.entity_id 
+  WHERE oi.SKU = '99AFFILIATE' AND o.status NOT IN ('Closed', 'Canceled')
+) f ON p.email = f.email
+WHERE p.email =  '$custEmail'";
+$result2 = $conn->query($sql);
+
+if ($result2->num_rows > 0) {
+    // output data of each row ?>
+                <style>
+                        .com {
+                                text-align: right;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        .com1 {
+                                text-align: left;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        @media only screen and (max-width: 992px) {
+                                .com {
+                                        width: 60% !important;
+                                        float: left;
+                                }
+                                .com1 {
+                                        width: 40% !important;
+                                        float: left;
+                                }
+                        }
+                </style>
+                <div class="col-md-8"> <br />
+                        <?php
+    while($row = $result2->fetch_assoc()) {
+		
+		$truw = '$'.round($row['truwallet'],2);
+		$cash = '$'.round($row['cash'],2);
+		$total = '$'.round($row['totalvalue'],2);
+		
+		
+		
+		?>
+                        <div class="com col-md-6">Payout Period Status:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['payoutstatus']; ?> </div><br />
+                        <div class="com col-md-6">Earned Title:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['title']; ?> </div><br />
+                        <div class="com col-md-6">Depth Credit:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['depthcredit']; ?> </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">Personal Connections:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['frontline']; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Personal Points Contributed:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['personalpts']; ?>
+                        </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">truWallet Money:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $truw; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Qualified Connection Points:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['connectionpts']; ?> </div>
+                        <div class="com col-md-6">Affiliate Income Earnings:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $cash; ?>
+                        </div>
+                         <div class="com col-md-6">Affiliate Fee Paid:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['fee_message']; ?> </div><br />         
+                         <div class="com col-md-6" style="margin-bottom: 20px;">Renewal Due Date:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['fee_renewal']; ?> </div><br />                                                  
+                        <br /><br />
+
+                        <div class="com col-md-6"><b>Total Earnings Value:</b></div><b><div class="com1 col-md-6">  <?php echo $total; ?></div></b><br />
+                </div>
+                <div class="col-md-4" style="text-align: center;"> <img src="<?php echo Mage::getBaseUrl('media').'wysiwyg/porto/trudashboard/commissions/'.$row['imagename']; ?>" alt="" /> </div>
+
+                <?php
+    }
+	
+} else {
+     echo "<p>COMMISSION PERIOD ENDING DECEMBER 31, 2016</p> ";
+}
+
+?>
+        </div>
+        
+       <div id="jan2017" class="tabcontent" style="display: block;">
+
+
+                <?php
+
+if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+    // Get the customer object from customer session
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $custEmail = $customer->getEmail();//get customer email
+}
+
+$sql = "SELECT 'Open' as payoutstatus
+, email
+, name
+, title
+, depthcredit
+, frontline
+, personalpts
+, connectionpts
+, LOWER(CONCAT(title, depthcredit, '.png')) as imagename
+FROM tr_PayoutSummary
+WHERE payout_period_id = 3
+AND email =  '$custEmail'";
+$result2 = $conn->query($sql);
+
+if ($result2->num_rows > 0) {
+    // output data of each row ?>
+                <style>
+                        .com {
+                                text-align: right;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        .com1 {
+                                text-align: left;
+                                font-size: 14px;
+                                margin: 5px 0px;
+                        }
+                        
+                        @media only screen and (max-width: 992px) {
+                                .com {
+                                        width: 60% !important;
+                                        float: left;
+                                }
+                                .com1 {
+                                        width: 40% !important;
+                                        float: left;
+                                }
+                        }
+                </style>
+                <div class="col-md-8"> <br />
+                        <?php
+    while($row = $result2->fetch_assoc()) {
+		
+		$truw = '$'.round($row['truwallet'],2);
+		$cash = '$'.round($row['cash'],2);
+		$total = '$'.round($row['totalvalue'],2);
+		
+		
+		
+		?>
+                        <div class="com col-md-6">Last Updated:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo date("m-d-Y"); ?> </div><br />
+                        <div class="com col-md-6">Payout Period Status:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['payoutstatus']; ?> </div><br />
+                        <div class="com col-md-6">Earned Title:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['title']; ?> </div><br />
+                        <div class="com col-md-6">Depth Credit:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['depthcredit']; ?> </div><br />
+                        <div class="com col-md-6" style="margin-bottom: 20px;">Personal Connections:</div>
+                        <div class="com1 col-md-6" style="margin-bottom: 20px;">
+                                <?php echo $row['frontline']; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Personal Points Contributed:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['personalpts']; ?>
+                        </div><br /><br />
+
+                        <div class="com col-md-6">Qualified Connection Points:</div>
+                        <div class="com1 col-md-6">
+                                <?php echo $row['connectionpts']; ?> </div><br />
+
+                </div>
+                <div class="col-md-4" style="text-align: center;"> <img src="<?php echo Mage::getBaseUrl('media').'wysiwyg/porto/trudashboard/commissions/'.$row['imagename']; ?>" alt="" /> </div>
+
+                <?php
+    }
+	
+} else {
+     echo "<p>COMMISSION PERIOD ENDING JANUARY 31, 2017</p> ";
+}
+$conn->close();
+
+?>
+        </div>
+ 
+</div>

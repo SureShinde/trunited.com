@@ -1,86 +1,31 @@
-<?php
-    $store = Mage::app()->getStore();
-    $code  = $store->getCode();
-    $display_subtotal_price = Mage::getStoreConfig("tax/cart_display/subtotal", $code);
-?>
-<?php $_cartQty = $this->getSummaryCount(); ?>
-<?php
-    if(!$_cartQty) $_cartQty = 0;
-    $_subtotal = $this->helper('checkout')->formatPrice(Mage::getSingleton('checkout/cart')->getQuote()->getGrandTotal())
-?>
-<?php $_items = $this->getRecentItems() ?>
-
-
 <?php $menuHelper = Mage::helper('megamenu'); ?>
 <?php $menuData = $menuHelper->getMenuData(); extract($menuData); ?>
  <div class="collapse navbar-collapse" id="main-menu">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right nav-right">
           <?php echo $menuHelper->getMenuContent(); ?>
           <?php if(Mage::getSingleton('customer/session')->isLoggedIn()){ 
                 //not logged in
-                    echo "<li><a href=".$this->getUrl('customer/account').">".$this->__('My Account')."</a></li>";
+                    echo "<li><a href=\"/customer/account/\">My Account</a></li>";
                 } 
             ?>
           <li class="sign-in-link">
           <?php if(!Mage::getSingleton('customer/session')->isLoggedIn()){ 
                 //not logged in
-                echo "<a href=".$this->getUrl('customer/account/login').">".$this->__('Sign In')."</a></li>";
+                echo "<a href=\"/customer/account/login/\">Sign In</a></li>";
                 
             }else{ 
                 // logged in
-                echo "<a href=".$this->getUrl('customer/account/logout').">".$this->__('Sign Out')."</a>";
+                echo "<a href=\"/customer/account/logout\">Sign Out</a>";
             } ?> 
           <li class="cart-wrapper hidden-xs">
+<!--
             <a href="#" class="desktop-cart-link">
               Cart
               <div class="desktop-cart">
-                <div class="itmes-count"><?php echo $_cartQty ?></div>
+                <div class="itmes-count"><?php //echo $_cartQty ?></div>
               </div>
             </a>
+-->
           </li>
         </ul>        
 </div>
- <div id="swCart" class="topCartContent block-content theme-border-color swCart-content">
-            <div class="inner-wrapper"><?php /*extra div to smooth slideUp and slideDown*/ ?>
-                <?php $_items = $this->getRecentItems() ?>
-                <?php if(count($_items)): ?>
-                    <ol class="mini-products-list">
-                        <?php foreach($_items as $_item): ?>
-                            <?php echo $this->getItemHtml($_item) ?>
-                        <?php endforeach; ?>
-                    </ol>
-                    <div class="totals">
-                        <span class="label"><?php echo $this->__('Total')?>: </span>
-                        <span class="price-total"><?php echo $_subtotal ?></span>
-                    </div>
-                    <div class="actions">
-                        <a class="btn btn-default" href="<?php echo $this->getUrl('checkout/cart'); ?>"><i class="icon-basket"></i><?php echo $this->__('View Cart') ?></a>
-            <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
-                    <a class="btn btn-default" href="<?php echo $this->getCheckoutUrl(); ?>"><i class="icon-right-thin"></i><?php echo $this->__('Checkout') ?></a>
-            <?php endif; ?>
-                <div class="clearer"></div>
-            </div>
-            <?php else: ?>
-            <p class="cart-empty">
-                <?php echo $this->__('You have no items in your shopping cart.'); ?>
-            </p>
-        <?php endif; ?>
-    </div>
-</div>
-<script type="text/javascript">
-var SW_MENU_POPUP_WIDTH = <?php echo $_popupWidth; ?>;
-jQuery(function($){
-     $('.desktop-cart-link').mouseover(function(e){
-            //alert("click");
-            $('.swCart-content').fadeIn(200);
-            return false;
-        }).mouseleave(function(e){
-            //alert("no click");
-         $('.swCart-content').fadeOut(200);
-            return false;
-        });
-    /*$(document).ready(function(){
-        //Hire javaScript
-    });*/
-});
-</script>

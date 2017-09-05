@@ -1,0 +1,338 @@
+/**
+ * Magestore
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magestore.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.magestore.com/license-agreement.html
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Magestore
+ * @package     Magestore_RewardPoints
+ * @copyright   Copyright (c) 2012 Magestore (http://www.magestore.com/)
+ * @license     http://www.magestore.com/license-agreement.html
+ */
+
+/* ============ Reward Points Stylesheets ============ */
+
+.trubox-address { clear:both; }
+.trubox-page h4 {
+
+}
+.trubox-page .product-qty { width: 35px; text-align: center; }
+.trubox-page .button { clear: both; display: block;}
+.trubox-address { margin-top: 25px; margin-bottom: 25px; }
+.trubox-page .product-image { float: left; display: block; }
+.trubox-page .product-name {
+    display: block;
+    float: left;
+    padding: 30px 10px;
+}
+
+.trubox-page .info-summary img
+{
+    width: 200px;
+}
+
+.trubox-page .share_separate
+{
+    clear: both;
+    padding: 10px 0;
+    /*margin-top: 80px;*/
+}
+
+.trubox-page .info-summary
+{
+    float: left;
+    margin-right: 20px;
+}
+
+.trubox-page .page-description
+{
+    margin: 0 0 10px 0;
+}
+
+.trubox-page .trubox-header
+{
+    color: #313131;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.trubox-page form
+{
+    display: block;
+    border: 1px solid #ececec;
+    border-radius: 0;
+    background: #fff;
+    padding: 35px 25px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    border-top: 4px solid #65829d;
+}
+
+.trubox-page form h2.legend
+{
+    color: #65829d;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    font-size: 16px;
+}
+
+.trubox-page form h2.shipping
+{
+    margin-top: 35px;
+}
+
+.trubox-page .cart-table tbody td
+{
+    padding: 5px;
+}
+
+.trubox-page form .product-image img
+{
+    min-width: 60px;
+    max-width: 60px;
+}
+
+.trubox-page .product-name
+{
+    padding: 15px 0 0 15px;
+}
+
+.trubox-page a:hover
+{
+    cursor: pointer;
+}
+
+.trubox-page .total-trubox
+{
+    margin: 20px 10px 0;
+    float: right;
+    text-align: right;
+    color: #313131;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.trubox-page .total-trubox p span
+{
+    min-width: 70px;
+    width: 70px;
+    display: inline-block;
+    font-weight: normal;
+}
+
+.trubox-page .name-firstname
+{
+    width: 48% !important;
+}
+
+.trubox-page .name-firstname .input-box input
+{
+    width: 100% !important;
+}
+
+.cvv-what-is-this:hover
+{
+    cursor: help !important;
+}
+
+.addtrubox img{
+    width: 32px;
+    height: 32px;
+}
+
+.actions .addtrubox, .trubox_detail {
+    right: 53px;
+    position: absolute;
+    margin-top: 2px;
+
+}
+
+.products-grid .actions .addtrubox{
+    border: 0;
+    margin-top: 1px !important;
+}
+
+.products-grid .actions .addtrubox img{
+    width: 36px;
+    height: 36px;
+}
+
+.trubox-page .item-options
+{
+    font-size: 10px;
+    /*margin: 33px 0 0 76px;*/
+}
+
+.trubox-page .pager .limiter
+{
+    float: left; !important;
+}
+
+a.addtrubox{
+    border: none !important;
+}
+
+.clear-trubox-items
+{
+    float: none !important;
+    display: inline-block !important;
+}
+
+.trubox-right
+{
+    float: right;
+}
+
+#my-orders-table tr.trubox_order
+{
+    background-color: #dddddd !important;
+}
+
+.shop-now a, .short-description a.custom-url, #tab_description_tabbed_contents a.custom-url{
+    font-size: 15px;
+    color: #ffffff;
+    /* font-family: 'Montserrat'; */
+    height: 43px;
+    width: 154px;
+    background: #00b5cb;
+    text-align: center;
+    display: inline-block;
+    text-transform: uppercase;
+    border-radius: 35px;
+    text-decoration: none;
+    padding-top: 12px;
+    -webkit-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+    border: none;
+    margin: 10px 0;
+}
+
+
+.shop-now a:hover, .short-description a.custom-url:hover, #tab_description_tabbed_contents a.custom-url:hover{
+    background: #ec7b42;
+    text-decoration: none;
+    color: white;
+}
+
+ul.view-mode-list-bot
+{
+    margin: 30px 0;
+    text-align: center;
+    padding-left: 3%;
+}
+
+ul.view-mode-list-bot > li
+{
+    display: inline;
+}
+
+ul.view-mode-list-bot > li:first-child > a
+{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+ul.view-mode-list-bot > li:last-child > a
+{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+ul.view-mode-list-bot>li>a
+{
+    border: 1px solid #2ac2ed;
+    color: #737478;
+    text-transform: uppercase;
+    background-color: transparent;
+    padding: 7px 10px;
+    margin-left: -1px;
+    float: left;
+}
+
+ul.view-mode-list-bot>li>a:hover
+{
+    background-color: #2ac2ed;
+    border-color: transparent;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+ul.view-mode-list-bot > li.active > a
+{
+    background-color: #808285;
+    border-color: #808285;
+    color: #fff;
+}
+
+@media (max-width: 1200px)
+{
+    ul.view-mode-list-bot>li>a {
+        font-size: 13px;
+        padding: 2px 7px;
+    }
+}
+
+div.alphabet
+{
+    padding-bottom: 40px;
+}
+
+.quick-icon button
+{
+    height: 31px;
+    width: 31px !important;
+    background-color: #00b5cb !important;
+    color: white;
+    position: absolute;
+}
+
+.quick-icon #tags{
+    height: 100%;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus{
+    font-weight: normal;
+    color: rgb(33, 33, 33);
+    border: 1px solid rgb(153, 153, 153);
+    border-image: initial;
+    background: url(https://www.cardcash.com/images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x rgb(218, 218, 218);
+}
+ul.ui-widget-content.ui-autocomplete
+{
+    border-radius: 4px;
+    color: rgb(34, 34, 34);
+    border: 1px solid rgba(102, 175, 233, 0.6);
+    border-image: initial;
+    max-width: none !important;
+    background: url(https://www.cardcash.com/images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x rgb(255, 255, 255);
+}
+
+.ui-menu .ui-menu-item
+{
+    padding: 6px .4em;
+}
+
+#search_header_form #search_header{
+    padding-right: 33px;
+    min-width: 30%;
+    margin-left: 10%;
+    height: 30px;
+}
+
+#search_header_form button
+{
+    height: 30px;
+    width: 40px;
+    background-color: transparent;
+    color: black;
+    position: absolute;
+    margin-left: -37px;
+}

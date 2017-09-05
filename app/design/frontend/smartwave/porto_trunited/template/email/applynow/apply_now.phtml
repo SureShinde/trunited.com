@@ -1,0 +1,38 @@
+<?php
+     
+     $service_input = $_POST['service-input'];
+     $about_input = $_POST['about-input'];
+     $website_input = $_POST['website-input'];
+     $contact_input = $_POST['contact-input'];
+     print_r($_POST['service_input']); 
+     $generic = 'Generic text';
+     sendMailAction();
+     function sendMailAction(){
+      $html="";
+      $mail = Mage::getModel('core/email');
+      $mail->setToName('Trunited Service');
+      //$mail->setToEmail('jose.portillo@inodesoft.com');
+      $mail->setToEmail('services@trunited.com');
+      $mail->setBody('Mail Text / Mail Content <br/>Greetings!!! We have a new apply-provider email from an appreciated provider!!! here is the details:<br/><b>Service: </b>'.htmlspecialchars($_POST["service-input"]).'<br/><b>About: </b>'.htmlspecialchars($_POST["about-input"]).'<br/><b>Website: </b>'.htmlspecialchars($_POST["website-input"]).'<br/><b>How to contact: </b>'.htmlspecialchars($_POST["contact-input"]));
+      $mail->setSubject('New Apply provider! ');
+      $mail->setFromEmail('services@trunited.com');
+      $mail->setFromName("Apply provider e-mailer");
+      $mail->setType('html');// You can use Html or text as Mail format
+
+      try {
+        $mail->send();
+        Mage::getSingleton('core/session')->addSuccess('Your request has been sent');
+        
+      } catch (Exception $e) {
+        Mage::getSingleton('core/session')->addError('Unable to send.');
+        
+      }
+    }
+?>
+<div class="title-inside">
+      <p class="horizontal-title">THANK YOU!</p>
+    </div>
+    <div class="thank-img">
+      <img class="img-opacity" src="/skin/frontend/smartwave/porto_trunited/images/TrunitedLogo.png" alt="" >
+    </div>
+

@@ -1,0 +1,30 @@
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('nav_custom')->toHtml();?>
+<script type="text/javascript">
+    jQuery(function($){
+        $(".sidebar.active .sub_blk").show();
+        $(".sidebar h6").click(function() {
+            $(this).parent().toggleClass('active');
+            $(this).parent().siblings().removeClass('active');
+            $(this).parent().find('.sub_blk').slideToggle();
+            $(this).parent().siblings().find('.sub_blk').slideUp();
+        });
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.BaclToTop').fadeIn();
+            } else {
+                $('.BaclToTop').fadeOut();
+            } 
+        });
+        $(".sidebar .sub_blk a.plus").click(function(){
+            if($(this).parent().hasClass("opened")){
+                $(this).parent().children("ul").slideUp();
+                $(this).parent().removeClass("opened");
+                $(this).children("i.icon-minus-squared").removeClass("icon-minus-squared").addClass("icon-plus-squared");
+            } else {
+                $(this).parent().children("ul").slideDown();
+                $(this).parent().addClass("opened");
+                $(this).children("i.icon-plus-squared").removeClass("icon-plus-squared").addClass("icon-minus-squared");
+            }
+        });
+    });
+</script>

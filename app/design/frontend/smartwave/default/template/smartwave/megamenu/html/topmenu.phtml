@@ -1,20 +1,22 @@
 <?php $menuHelper = Mage::helper('megamenu'); ?>
 <?php $menuData = $menuHelper->getMenuData(); extract($menuData); ?>
-<div class="header-wrapper">
-<div class="main-nav">
-    <div class="container">            
-        <div class="menu-wrapper">
-            <div class="menu-all-pages-container">
-                <ul class="menu">
-                    <?php echo $menuHelper->getMenuContent(); ?>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-</div>
-
+ <div class="collapse navbar-collapse" id="main-menu">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Global Brands</a></li>
+          <li><a href="#">Gift Card Shop</a></li>
+          <li class="sign-in-link"><a href="#">Sign In</a></li>
+          <li class="cart-wrapper hidden-xs">
+            <a href="#">
+              Cart 
+              <div class="desktop-cart">
+                <div class="itmes-count">2</div>
+              </div>
+            </a>
+          </li>
+        </ul>        
+      </div>
 <script type="text/javascript">
 var SW_MENU_POPUP_WIDTH = <?php echo $_popupWidth; ?>;
 jQuery(function($){

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Trunited_AdvertiserProductImport>
+            <version>1.0.0</version>
+        </Trunited_AdvertiserProductImport>
+    </modules>
+    <global>
+        <models>
+            <truinted_api>
+                <class>Trunited_AdvertiserProductImport_Model</class>
+                <resourceModel>truinted_api_resource</resourceModel>
+            </truinted_api>
+            <truinted_api_resource>
+                <class>Mage_Core_Model_Resource_Setup</class>
+                <entities>
+                    <map>
+                        <table>tr_linkshare_map</table>
+                    </map>
+                </entities>
+            </truinted_api_resource>
+        </models>
+
+        <resources>
+            <truinted_api_setup>
+                <setup>
+                    <module>Trunited_AdvertiserProductImport</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </truinted_api_setup>
+        </resources>
+
+        <helpers>
+            <truinted_api>
+                <class>Trunited_AdvertiserProductImport_Helper</class>
+            </truinted_api>
+        </helpers>
+
+        <blocks>
+            <truinted_api>
+                <class>Trunited_AdvertiserProductImport_Block</class>
+            </truinted_api>
+        </blocks>
+    </global>
+    <!--<crontab>-->
+        <!--<jobs>-->
+            <!--<truinted_advertiser_product_import>-->
+                <!--<schedule>-->
+                    <!--<cron_expr>* * * * *</cron_expr>-->
+                <!--</schedule>-->
+                <!--<run>-->
+                    <!--<model>truinted_api/import::run</model>-->
+                <!--</run>-->
+            <!--</truinted_advertiser_product_import>-->
+        <!--</jobs>-->
+    <!--</crontab>-->
+</config>
