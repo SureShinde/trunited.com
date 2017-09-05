@@ -1,0 +1,128 @@
+<?php 
+$_current_category=$this->getCurrentCategory();
+    $intRootCategoryId = Mage::app()->getStore()->getRootCategoryId();
+
+    $objCategories = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id',$intRootCategoryId)->addAttributeToSort('position', 'asc');
+function getChildrenCategoriesHtml($_category){
+        $children = explode( ",", $_category->getChildren());
+        //usort($children, 'cmpCatPosition');
+        $content = '';
+        $content .= '<li class="';
+        if(!$children[0])
+            $content .= 'has-no-children';
+        else
+            $content .= 'has-children';
+        $content .= '">';
+        $content .= '<a href="'.$_category->getUrl().'" ';
+        $content .= '>';
+        if($_category->getSwIconImage() !=null){
+            $content .= '<small><img src="'.Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$_category->getSwIconImage(). '"width="30" height="32" alt="icon"></small>';
+        }
+        $content .='<span>'.$_category->getName().'</span></a>';
+        if($children[0]){
+            $content .= '<a href="javascript:void(0)" class="plus"><i class="icon-plus-squared"></i></a>';
+            $content .= '<ul>';
+            foreach($children as $child){
+                $_subcat = Mage::getModel( 'catalog/category' )->load( $child );
+                $content .= getChildrenCategoriesHtml($_subcat);
+            }
+            $content .= '</ul>';
+        }
+        $content .= '</li>';
+        return $content;
+    }
+?>
+<?php 
+
+    if($objCategories->count())
+    {
+        $arrayCategories = Array();
+        foreach($objCategories as $key=>$objCategory){
+            $arrayCategories[] = $objCategory;
+        }
+        foreach($arrayCategories as $key=> $objCategory){
+            $children = $objCategory->getChildren();
+            
+            if($children){
+                $children = explode(',',$children);
+            }
+            $children = ($children) ? $children : array();         
+            if($objCategory->getId() == $_current_category->getId() || in_array($_current_category->getId(),$children)){
+                unset($arrayCategories[$key]);
+                array_unshift($arrayCategories, $objCategory);
+                break;
+            }
+            $children = '';
+        }
+        $children = '';
+        foreach($arrayCategories as $objCategory){
+            
+            $children = explode( ",", $objCategory->getChildren());
+            if($children){
+                $childrenArray = explode(',',$children);
+            }
+            $childrenArray = ($childrenArray) ? $childrenArray : array(); 
+            $_category = Mage::getModel('catalog/category')->load($objCategory->getId() );
+            if($_category->getIsActive()){
+                $html = '';
+                if($objCategory->getId() == $_current_category->getId() || in_array($_current_category->getId(),$children)){
+                    $html .= '<div class="sidebar active">';    
+                }else{
+                    $html .='<div class="sidebar">';
+                }
+                
+                $children = explode( ",", $_category->getChildren());
+                if($children[0]){
+                    $html .= '<h6>'.$_category->getName().'</h6>';
+                    $html .=    '<div class="sub_blk">';
+                    $html .=          '<ul>';
+                    foreach($children as $child){
+                        $_subcat = Mage::getModel( 'catalog/category' )->load( $child );
+                        $html .= getChildrenCategoriesHtml($_subcat);
+                    }
+                    $html .=           '</ul>';
+                    $html .=    '</div>';
+
+                    $html .= '</h6>';
+
+                }else{
+                    $html .='<h6 class="no-child">';
+                    $html .= '<a href="'.$_category->getUrl().'" ';
+                    $html .= '>'.$_category->getName().'</a></h6>';
+                }
+                $html .=  '</div>';
+                echo $html;
+            }
+            
+        }
+    }
+?>
+<script type="text/javascript">
+    jQuery(function($){
+        $(".sidebar.active .sub_blk").show();
+        $(".sidebar h6").click(function() {
+            $(this).parent().toggleClass('active');
+            $(this).parent().siblings().removeClass('active');
+            $(this).parent().find('.sub_blk').slideToggle();
+            $(this).parent().siblings().find('.sub_blk').slideUp();
+        });
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.BaclToTop').fadeIn();
+            } else {
+                $('.BaclToTop').fadeOut();
+            } 
+        });
+        $(".sidebar .sub_blk a.plus").click(function(){
+            if($(this).parent().hasClass("opened")){
+                $(this).parent().children("ul").slideUp();
+                $(this).parent().removeClass("opened");
+                $(this).children("i.icon-minus-squared").removeClass("icon-minus-squared").addClass("icon-plus-squared");
+            } else {
+                $(this).parent().children("ul").slideDown();
+                $(this).parent().addClass("opened");
+                $(this).children("i.icon-plus-squared").removeClass("icon-plus-squared").addClass("icon-minus-squared");
+            }
+        });
+    });
+</script>

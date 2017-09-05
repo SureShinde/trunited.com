@@ -1,0 +1,50 @@
+<?php
+$store = Mage::app()->getStore();
+$code = $store->getCode();
+
+$_helper = $this->helper('catalog/output');
+$_category = $this->getCurrentCategory();
+$_showcartbutton = Mage::getStoreConfig('porto_settings/category_grid/show_addtocart', $code);
+$_imgHtml = '';
+?>
+<div class="search_bar">
+    <div class="prices_blk">
+	<h3 class="text-uppercase">direct to consumer</h3>
+	 <div class="prices_blk">
+        <div class="prices">
+            <?php echo $this->getChildHtml('product_list_toolbar_new'); ?>
+            <div class="clearfix"></div>
+        </div>
+        <div class="prices">
+            <form action="<?php echo $this->helper('core/url')->getCurrentUrl(); ?>" method="post">
+                <label for="tags"><?php echo $this->__('SEARCH');?></label>
+                <input id="tags" name="quick_keyword" class="input-text" value="<?php echo $keywordData;?>" placeholder="<?php echo $this->__('Search Product');?>" />
+            </form>
+            <div class="clearfix"></div>
+        </div>
+		</div>
+    </div>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php if ($this->isContentMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+
+<?php elseif ($this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+    <?php echo $this->getProductListHtml() ?>
+<?php endif; ?>
+
+<style>
+.main-container {background: #f4f4f4;padding-top:0;}
+.main.container{
+    min-height: 400px;
+    padding: 0 20px 243px 20px;
+    margin: 0;
+    width: 100%;
+    background: url(<?php echo Mage::getDesign()->getSkinUrl('images/main_bg.jpg');?>) no-repeat left top;
+}    
+</style>

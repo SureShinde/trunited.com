@@ -65,6 +65,7 @@ Default layout, loads most of the pages
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
                 <label>Page Top</label>
             </block>
+             <block type="core/template" name="detail_content" template="page/detail_content.phtml"/>
 
             <block type="page/html_notices" name="global_notices" as="global_notices" template="page/html/notices.phtml" />
             <block type="core/template" name="custom_notice" template="page/html/custom_notice.phtml" />
@@ -97,6 +98,8 @@ Default layout, loads most of the pages
                 <label>Main Content Area</label>
             </block>
 
+            
+
             <block type="core/text_list" name="right" as="right" translate="label">
                 <label>Right Column</label>
             </block>
@@ -117,6 +120,8 @@ Default layout, loads most of the pages
         </block>
 
         <block type="core/profiler" output="toHtml" name="core_profiler"/>
+        
+       
     </default>
 
     <print translate="label" module="page">
