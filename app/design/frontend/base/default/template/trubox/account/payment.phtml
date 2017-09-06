@@ -31,68 +31,69 @@ if ($truBox != null)
 
 $cards = $this->getPaymentTruBox();
 ?>
-<div class="right_block">
-    <div class="right_block_in">
-        <?php echo $this->getChildHtml('global_messages'); ?>
-        <div class="search_bar last padd_bot text-center">
-            <h3 class="text-uppercase"><?php echo $this->__('My TruBox Payment')?></h3>
-            <div class="clearfix"></div>
-        </div>
-        <div class="food_beverages_main ">
-            <div class="occasion_form_sec trubox_index">
-                <form class="items" id="trubox-payment-information"
-                      action="<?php echo $this->savePaymentUrl() ?>"
-                      method="POST">
-                    <ul class="form-list" id="payment_form_ccsave">
-                        <?php if (sizeof($cards) > 0) { ?>
-                            <li>
-                                <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
-                                <select id="current_credit_card" name="current_credit_card" class="required-entry">
-                                    <option value=""><?php echo $this->__('Select');?></option>
-                                    <?php foreach ($cards as $card) { ?>
-                                        <option <?php if($card->getData('use_in_trubox')){?>selected="selected"<?php }?>
-                                                value="<?php echo $card->getId(); ?>"><?php echo $card->getLabel(); ?></option>
-                                    <?php } ?>
-                                </select>
-                                <a href="<?php echo $this->getCardUrl(); ?>"
-                                   title="<?php echo $this->__('Create, update or use a different card') ?>">
-                                    <?php echo $this->__('Create, update or use a different card') ?>
-                                </a>
-                            </li>
-                        <?php } else { ?>
-                            <input type="hidden" id="current_credit_card" name="current_credit_card" value=""/>
+<div class="right_block_in">
+    <?php echo $this->getChildHtml('global_messages'); ?>
+    <div class="search_bar last padd_bot text-center">
+        <h3 class="text-uppercase"><?php echo $this->__('My TruBox Payment')?></h3>
+        <div class="clearfix"></div>
+    </div>
+    <div class="food_beverages_main ">
+        <div class="trubox_payment trubox_index">
+            <form class="items" id="trubox-payment-information"
+                  action="<?php echo $this->savePaymentUrl() ?>"
+                  method="POST">
+                <ul class="form-list" id="payment_form_ccsave">
+                    <?php if (sizeof($cards) > 0) { ?>
+                        <li>
+                            <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
+                            <select id="current_credit_card" name="current_credit_card" class="required-entry">
+                                <option value=""><?php echo $this->__('Select');?></option>
+                                <?php foreach ($cards as $card) { ?>
+                                    <option <?php if($card->getData('use_in_trubox')){?>selected="selected"<?php }?>
+                                            value="<?php echo $card->getId(); ?>"><?php echo $card->getLabel(); ?></option>
+                                <?php } ?>
+                            </select>
                             <a href="<?php echo $this->getCardUrl(); ?>"
                                title="<?php echo $this->__('Create, update or use a different card') ?>">
                                 <?php echo $this->__('Create, update or use a different card') ?>
                             </a>
-                        <?php } ?>
+                        </li>
+                    <?php } else { ?>
+                        <input type="hidden" id="current_credit_card" name="current_credit_card" value=""/>
+                        <a href="<?php echo $this->getCardUrl(); ?>"
+                           title="<?php echo $this->__('Create, update or use a different card') ?>">
+                            <?php echo $this->__('Create, update or use a different card') ?>
+                        </a>
+                    <?php } ?>
 
-                        <li>
-                            <div class="input-box apply_trugiftcard">
+                    <li>
+                        <div class="input-box apply_trugiftcard">
+
+
+                            <label for="use_trugiftcard">
                                 <input type="checkbox" id="use_trugiftcard" name="use_trugiftcard"
                                        title="<?php echo $this->__('Use Trunited Gift Card') ?>"
                                        <?php if ($is_applied_tgc){ ?>checked="checked"<?php } ?>
                                        style="-webkit-appearance: checkbox !important; "
                                 />
+                                <span><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></span>
+                            </label>
 
-                                <label
-                                        for="use_trugiftcard"><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></label>
-                                <img
-                                        src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
-                                        title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="buttons-set">
-                        <button class="btn transition btn-trubox" type="submit">
-                            <?php echo $this->__('Save Payment') ?>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                            <img
+                                    src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
+                                    title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
+                        </div>
+                    </li>
+                </ul>
+                <div class="buttons-set">
+                    <button class="btn transition btn-trubox" type="submit">
+                        <?php echo $this->__('Save Payment') ?>
+                    </button>
+                </div>
+            </form>
         </div>
-        <?php echo $this->getChildHtml('other') ?>
     </div>
+    <?php echo $this->getChildHtml('other') ?>
 </div>
 <div class="clearfix"></div>
 
@@ -101,6 +102,9 @@ $cards = $this->getPaymentTruBox();
 
     $j = jQuery.noConflict();
     $j('.page-title').focus();
+
+    $j(".sidebar.active .sub_blk").show();
+    $j(".sidebar.active .sub_blk").slideDown();
 
     $j('.main-container').addClass('main_block inn_pad main_bg2');
     $j('.direct_comsumer').html('<h1 class="inner_pad">The Trubox Club</h1>');

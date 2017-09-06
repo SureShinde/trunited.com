@@ -1,51 +1,48 @@
-
-<div class="left_block">
-    <div class="sidebar active">
-        <h6><?php echo $this->__('Manage TruBox');?></h6>
-        <div class="sub_blk">
-            <ul>
-                <?php $_links = $this->getLinks() ?>
-                <?php foreach ($_links as $_link): ?>
-                    <?php if ($this->isActive($_link)): ?>
-                        <li><strong><?php echo $_link->getLabel() ?></strong></li>
-                    <?php else: ?>
-                        <li>
-                            <a href="<?php echo $_link->getUrl() ?>">
-                                <span><?php echo $_link->getLabel() ?></span>
-                            </a>
-                        </li>
-                    <?php endif ?>
-                <?php endforeach ?>
-            </ul>
-        </div>
-    </div>
-    <div class="sidebar trubox_brands">
-        <h6><?php echo $this->__('TruBox Brands');?></h6>
-        <div class="sub_blk">
-            <ul>
-                <?php if($this->isSpecialOccasion()){?>
-                    <li><a href="<?php echo $this->getUrl('specialoccasion');?>">
-                            <span><?php echo $this->__('Special Occasion');?></span>
-                        </a></li>
-                    <li><a href="<?php echo $this->getUrl('specialoccasion/index/payment');?>">
-                            <span><?php echo $this->__('Special Occasion Payment');?></span>
-                        </a></li>
-                <?php }?>
-                <?php $categories = $this->getCategories(); ?>
-                <?php foreach ($categories as $category): ?>
+<div class="sidebar active">
+    <h6><?php echo $this->__('Manage TruBox');?></h6>
+    <div class="sub_blk">
+        <ul>
+            <?php $_links = $this->getLinks() ?>
+            <?php foreach ($_links as $_link): ?>
+                <?php if ($this->isActive($_link)): ?>
+                    <li><strong><?php echo $_link->getLabel() ?></strong></li>
+                <?php else: ?>
                     <li>
-                        <a href="<?php echo $this->getCategoryLink($category->getId()); ?>">
-                            <span><?php echo $category->getName(); ?></span></a>
+                        <a href="<?php echo $_link->getUrl() ?>">
+                            <span><?php echo $_link->getLabel() ?></span>
+                        </a>
                     </li>
-                <?php endforeach ?>
-            </ul>
-        </div>
+                <?php endif ?>
+            <?php endforeach ?>
+        </ul>
+    </div>
+</div>
+<div class="sidebar trubox_brands">
+    <h6><?php echo $this->__('TruBox Brands');?></h6>
+    <div class="sub_blk">
+        <ul>
+            <?php if($this->isSpecialOccasion()){?>
+                <li><a href="<?php echo $this->getUrl('specialoccasion');?>">
+                        <span><?php echo $this->__('Special Occasion');?></span>
+                    </a></li>
+                <li><a href="<?php echo $this->getUrl('specialoccasion/index/payment');?>">
+                        <span><?php echo $this->__('Special Occasion Payment');?></span>
+                    </a></li>
+            <?php }?>
+            <?php $categories = $this->getCategories(); ?>
+            <?php foreach ($categories as $category): ?>
+                <li>
+                    <a href="<?php echo $this->getCategoryLink($category->getId()); ?>">
+                        <span><?php echo $category->getName(); ?></span></a>
+                </li>
+            <?php endforeach ?>
+        </ul>
     </div>
 </div>
 <script type="text/javascript">
     $j = jQuery.noConflict();
     $j(document).ready(function(e) {
-        $j(".sidebar.active .sub_blk").show();
+
         $j(".sidebar h6").click(function() {
             $j(this).parent().toggleClass('active');
             $j(this).parent().siblings().removeClass('active');

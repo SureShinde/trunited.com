@@ -25,47 +25,102 @@
  */
 
 /**
- * TruGiftCard Model
- *
+ * Trugiftcard Model
+ * 
  * @category    Magestore
  * @package     Magestore_TruGiftCard
  * @author      Magestore Developer
  */
-class Magestore_TruGiftCard_Model_Total_Quote_Discount extends Mage_Sales_Model_Quote_Address_Total_Abstract
+class Magestore_TruGiftCard_Model_Total_Order_Invoice_Discount extends Mage_Sales_Model_Order_Invoice_Total_Abstract
 {
-
-    /**
-     * Magestore_TruGiftCard_Model_Total_Quote_Discount constructor.
-     */
-    public function __construct()
+    public function collect(Mage_Sales_Model_Order_Invoice $invoice)
     {
-        $this->setCode('trugiftcard_after_tax');
-    }
-
-    /**
-     * @param Mage_Sales_Model_Quote_Address $address
-     * @return $this
-     */
-    public function fetch(Mage_Sales_Model_Quote_Address $address)
-    {
-        $quote = $address->getQuote();
-        if (Mage::getStoreConfig('trugiftcard/spend/tax', $quote->getStoreId()) == 0) {
-            return $this;
-        }
-        if (!$quote->isVirtual() && $address->getData('address_type') == 'billing')
-            return $this;
-        $session = Mage::getSingleton('checkout/session');
-        $customer_credit_discount = $address->getTruGiftCardDiscount();
-        if ($session->getBaseTrugiftcardCreditAmount())
-            $customer_credit_discount = $session->getBaseTrugiftcardCreditAmount();
-        if ($customer_credit_discount > 0) {
-            $address->addTotal(array(
-                'code' => $this->getCode(),
-                'title' => Mage::helper('trugiftcard')->getSpendConfig('discount_label'),
-                'value' => -Mage::helper('core')->currency($customer_credit_discount, false, false)
-            ));
+        $order = $invoice->getOrder();
+        if ($order->getTrugiftcardDiscount() < 0.0001) {
+            return;
         }
 
-        return $this;
+        $invoice->setBaseTrugiftcardDiscount(0);
+        $invoice->setTrugiftcardDiscount(0);
+
+        $totalDiscountInvoiced = 0;
+        $totalBaseDiscountInvoiced = 0;
+
+        $totalDiscountAmount = 0;
+        $totalBaseDiscountAmount = 0;
+
+        $totalHiddenTax = 0;
+        $totalBaseHiddenTax = 0;
+
+        $hiddenTaxInvoiced = 0;
+        $baseHiddenTaxInvoiced = 0;
+        $checkAddShipping = true;
+
+        foreach ($order->getInvoiceCollection() as $previousInvoice) {
+            if ($previousInvoice->getTrugiftcardDiscount()) {
+                $checkAddShipping = false;
+                $totalBaseDiscountInvoiced += $previousInvoice->getBaseTrugiftcardDiscount();
+                $totalDiscountInvoiced += $previousInvoice->getTrugiftcardDiscount();
+
+                $hiddenTaxInvoiced += $previousInvoice->getTrugiftcardHiddenTax();
+                $baseHiddenTaxInvoiced += $previousInvoice->getBaseTrugiftcardHiddenTax();
+            }
+        }
+
+        if ($checkAddShipping) {
+            $totalBaseDiscountAmount += $order->getBaseTrugiftcardDiscountForShipping();
+            $totalDiscountAmount += $order->getTrugiftcardDiscountForShipping();
+
+            $totalBaseHiddenTax += $order->getBaseTrugiftcardShippingHiddenTax();
+            $totalHiddenTax += $order->getTrugiftcardShippingHiddenTax();
+        }
+
+        if ($invoice->isLast()) {
+            $totalBaseDiscountAmount = $order->getBaseTrugiftcardDiscount() - $totalBaseDiscountInvoiced;
+            $totalDiscountAmount = $order->getTrugiftcardDiscount() - $totalDiscountInvoiced;
+
+            $totalHiddenTax = $order->getTrugiftcardHiddenTax() - $hiddenTaxInvoiced;
+            $totalBaseHiddenTax = $order->getBaseTrugiftcardHiddenTax() - $baseHiddenTaxInvoiced;
+        } else {
+            foreach ($invoice->getAllItems() as $item) {
+                $orderItem = $item->getOrderItem();
+                if ($orderItem->isDummy()) {
+                    continue;
+                }
+                $baseOrderItemTrugiftcardDiscount = (float) $orderItem->getBaseTrugiftcardDiscount();
+                $orderItemTrugiftcardDiscount = (float) $orderItem->getTrugiftcardDiscount();
+
+                $baseOrderItemHiddenTax = (float) $orderItem->getBaseTrugiftcardHiddenTax();
+                $orderItemHiddenTax = (float) $orderItem->getTrugiftcardHiddenTax();
+
+                $orderItemQty = $orderItem->getQtyOrdered();
+                $invoiceItemQty = $item->getQty();
+
+                if ($baseOrderItemTrugiftcardDiscount && $orderItemQty) {
+                    if (version_compare(Mage::getVersion(), '1.7.0.0', '>=')) {
+                        $totalBaseDiscountAmount += $invoice->roundPrice($baseOrderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty, 'base', true);
+                        $totalDiscountAmount += $invoice->roundPrice($orderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty, 'regular', true);
+
+                        $totalHiddenTax += $invoice->roundPrice($orderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'regular', true);
+                        $totalBaseHiddenTax += $invoice->roundPrice($baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'base', true);
+                    } else {
+                        $totalBaseDiscountAmount += $baseOrderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty;
+                        $totalDiscountAmount += $orderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty;
+
+                        $totalHiddenTax += $orderItemHiddenTax / $orderItemQty * $invoiceItemQty;
+                        $totalBaseHiddenTax += $baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty;
+                    }
+                }
+            }
+        }
+        $invoice->setBaseTrugiftcardDiscount($totalBaseDiscountAmount);
+        $invoice->setTrugiftcardDiscount($totalDiscountAmount);
+
+        $invoice->setBaseTrugiftcardHiddenTax($totalBaseHiddenTax);
+        $invoice->setTrugiftcardHiddenTax($totalHiddenTax);
+
+        // $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
+        // $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
     }
+
 }

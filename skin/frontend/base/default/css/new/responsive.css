@@ -1,7 +1,26 @@
-
 @media (max-width:1610px){
 		
 	.container	{width:98%;}
+	
+	/*HOME START HERE*/
+	.bluebar_nav ul li	{margin:0 0 0 48px;}
+	 nav ul li	{margin:0 28px 0 0;}
+	.sign_in	{margin:0 0 0 95px;}
+    
+    .paid_shop_text h2{font-size: 48px;line-height: 48px;}
+    .get_paid_up h2   {font-size: 58px;line-height: 62px;}
+    
+    .top_paying_in h3:before    {width: 27%;left: 10px;}
+    .top_paying_in h3:after     {width: 27%;right: 10px;}
+    .top_paying_in h4:before    {width: 18%;left: 10px;}
+    .top_paying_in h4:after     {width: 18%;right: 10px;}
+    .top_paying_info .slick-prev {left: -20px;}
+    .top_paying_info .slick-next {right: -20px;}
+    .top_paying_info    {padding: 0 10px;}
+    .top_slider_bottom h5{font-size: 14px;}
+    .top_slider_bottom h6{font-size: 14px;}
+	
+	/*INNER PAGE NO 37 START HERE*/
 	.sidebar h6	{font-size:20px; padding:0 0 0 25px;}
 	.sub_blk ul li a	{font-size:20px; padding:9px 0 8px 25px;}
 	.product ul li	{margin:0 1.5px 0 0;}
@@ -11,7 +30,7 @@
 	.news			{width:75%; padding:0 0 0 25px;}
 	.yahoo_logo		{width:25%;}
 	.latest_news_rgt p	{width:100%;}
-    
+
     /*INNER PAGE NO 2 START HERE*/
     .save_in ul li span{font-size: 35px;line-height: 35px;}
     .why_putchase ul li{font-size: 26px;}
@@ -36,14 +55,7 @@
 	.giftcard_shop_rgt.top_pad .giftcard_shop_rgt_in ul	{padding:30px 0 0 15%;}
 	.earn_points_left	{width:50%; padding:0 25px 0 0;}
     
-    /*INNER PAGE NO 10 START HERE*/
-    .end_right small{padding: 3px 6px;}
-    .end_right small:after{top: 6px;}
-    .end_right span {padding: 1px 10px 7px 40px;}
-    .end_right span:after{top: 1px;}
-    .end_left a{width: 100%;text-align: center;padding: 5px 0px}
-	
-	 /*INNER PAGE NO 12 START HERE*/
+	 /*INNER PAGE NO 13 START HERE*/
     .order_product  {width: 56%;}
     .order_qty      {width: 20%;}
     .order_subtotal {width: 24%;}
@@ -60,17 +72,63 @@
 	.nicolas_con			{padding:10px 12px 10px 12px;}
 	.nicolas_con input		{width:60%;}
 	.nicolas_con_btns ul li a	{font-size:9px;}
+	.monthly_status input	{width:40%;}
 	
-	/*INNER PAGE NO 17 START HERE*/
+	/*INNER PAGE NO 18 START HERE*/
     .your_intrest_in ul li span {font-size: 19px;line-height: 21px;}
 	
-	/*INNER PAGE NO 20 START HERE*/
+	/*INNER PAGE NO 23 START HERE*/
+	.money_movement h6	{font-size:20px;}
+	
+	/*INNER PAGE NO 24 START HERE*/
+	.choose_member .nicolas	{padding:15px 25px 15px 25px;}
+	.sort_by .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:200px;}
+	.search_club input	{width:200px;}
+	.choose_member .member_balance input	{width:58%;}
+	.choose_member .members_badges input	{width:68%;}
+	.trunited_gift_card	{width:85%;}
+	
+	/*INNER PAGE NO 27 START HERE*/
+    .money_movement_form_in ul {margin: 0;}
+	
+	/*INNER PAGE NO 30 START HERE*/
 	.customer_reports ul li p	{font-size:20px;}
 	.graph_sec		{padding:82px 30px 60px 30px;}
+    /*INNER PAGE NO 32 START HERE*/
+    .end_right small{padding: 3px 6px;}
+    .end_right small:after{top: 6px;}
+    .end_right span {padding: 1px 10px 7px 40px;}
+    .end_right span:after{top: 1px;}
+    .end_left a{width: 100%;text-align: center;padding: 5px 0px}
 	
 	
 }
 @media (max-width:1400px){
+	
+	/*HOME START HERE*/
+	.logo a	{width:300px;}
+	.bluebar_nav ul li ul li a	{font-size:18px;}
+	.bluebar_nav ul li a	{font-size:18px;}
+	nav ul li	{margin:0 48px 0 0;}
+	.orange_nav ul li	{margin:0 0 0 30px;}
+	nav ul li a		{font-size:16px;}
+	.sign_in ul li a	{font-size:16px;}
+	.orange_nav ul li a	{font-size:16px; line-height:42px;}
+	.orange_nav ul li:nth-child(4) a	{width:148px;}
+	.orange_nav ul li:nth-child(3) a	{width:130px;}
+	.orange_nav ul li a	{width:90px;}
+    
+    .paid_shop_text h2{font-size: 38px;line-height: 38px;}
+    .get_paid_up h2   {font-size: 50px;line-height: 55px;}
+    .get_paid_up_anchor a{font-size: 28px;line-height: 30px;}
+    .learn_more     {padding: 3px 15px;}
+    .learn_more1    {padding: 6px 21px;}
+    .top_paying_in h3:before    {width: 25%;}
+    .top_paying_in h3:after     {width: 25%;}
+    .top_paying_in h4           {font-size: 30px;line-height: 33px;}
+	
+		
+	/*INNER PAGE NO 37 START HERE*/
 	.sidebar h6		{font-size: 16px; padding: 0 0 0 20px;}
 	.search_bar h3  {display: block;text-align: center;padding: 0 0 15px 0;}
 	.sub_blk ul li a	{font-size:16px; padding:9px 0 8px 20px;}
@@ -125,15 +183,15 @@
 	.earn_points_left .add_cart	{width:205px; font-size:25px;}
 	.earn_points_left .trubox_btn	{font-size:25px;}
 	
-    /*INNER PAGE NO 10 START HERE*/
-    .end_left  {width: 58%;padding: 0 5px;}
-    .end_right {width: 42%; float:right;}
-	.end_right small	{padding:3px 4px;}
-	.end_right span		{padding:1px 0 7px 40px;}
-	.promo_lt	{width:45% !important;}
-	.promo_rt	{width:55% !important;}
-	
-	/*INNER PAGE NO 12 START HERE*/
+	/*INNER PAGE NO 10 START HERE*/
+	.food_products		{width:95%;}
+	.receive_email		{width:95%;}
+	/*INNER PAGE NO 11 START HERE*/
+    #no-more-tables{padding: 53px 0 30px 0;}
+	.sort_by.sort_rgt	{position:static; float:right; display:inline-block; width:auto; margin:0 15px 0 0;}
+	.search_club {float: left; display: inline-block; position: static; margin: 0 0 0 15px;}
+
+	/*INNER PAGE NO 13 START HERE*/
     .order_product  {width: 50%;}
     .order_qty      {width: 22%;}
     .order_subtotal {width: 28%;}
@@ -145,12 +203,11 @@
 	.progress_in a		{width:32%; float:right;}
 	.progress_in .btn	{width:100%;}
     
-    /*INNER PAGE NO 13 START HERE*/
+    /*INNER PAGE NO 14 START HERE*/
     .text_cen       {text-align: center;}
     .flt_none       {float: none;}
     .head_txt       {width: 100%;}
     
-	
 	/*INNER PAGE NO 16 START HERE*/
 	.dashboard ul li		{width:360px;}
 	.nicolas				{padding:30px 30px 30px 30px;}
@@ -177,23 +234,7 @@
 	/*INNER PAGE NO 17 START HERE*/
     .your_intrest            {padding: 13px 0 0 0;}
     .your_intrest_in         {width: 100%;padding: 20px 5% 0 5%;}
-	
-	/*INNER PAGE NO 20 START HERE*/
-	.available_cards_title ul li:nth-child(1)	{width:18%;}
-	.available_cards_title ul li:nth-child(4)	{width:26%;}
-	/*INNER PAGE NO 21 START HERE*/
-	.available_cards_title.order ul li:nth-child(1)		{width:30%;}
-	.available_cards_title.order ul li:nth-child(2)		{width:30%;}
-	
-	/*INNER PAGE NO 35 START HERE*/
-	.food_products		{width:95%;}
-	.receive_email		{width:95%;}
-	
-	/*INNER PAGE NO 36 START HERE*/
-    #no-more-tables{padding: 53px 0 30px 0;}
-	.sort_by.sort_rgt	{position:static; float:right; display:inline-block; width:auto; margin:0 15px 0 0;}
-	.search_club {float: left; display: inline-block; position: static; margin: 0 0 0 15px;}
-	
+			
 	/*INNER PAGE NO 20 START HERE*/
 	.graph_sec ul	{padding:35px 0 0 0;}
 	.customer_reports ul li p:after	{width:60px; height:42px; background-size:cover; top:18px; left:12px;}
@@ -208,10 +249,72 @@
 	.dashboard_top ul li span	{font-size:65px; line-height:75px;}
 	.dashboard_top ul li small	{font-size:22px; line-height:25px;}
 	
+    /*INNER PAGE NO 22 START HERE*/
+    .points_list        {width: 70%;}
+	.money_share_blk_in ul	{width:100%;}
+	.choose_member .nicolas_porter ul li	{width:50%;}
+	
+	/*INNER PAGE NO 23 START HERE*/
+	.money_movement h6	{font-size:17px;}
+	
+	/*INNER PAGE NO 24 START HERE*/
+	.choose_member .nation_passport_right.passport	{padding:0 25px 23px 25px;}
+	
+    /*INNER PAGE NO 27 START HERE*/
+    .movement_btn    {font-size: 20px;}
+	/*INNER PAGE NO 30 START HERE*/
+	.available_cards_title ul li:nth-child(1)	{width:18%;}
+	.available_cards_title ul li:nth-child(4)	{width:26%;}
+    
+	/*INNER PAGE NO31  START HERE*/
+	.available_cards_title.order ul li:nth-child(1)		{width:30%;}
+	.available_cards_title.order ul li:nth-child(2)		{width:30%;}
+	
+    /*INNER PAGE NO 32 START HERE*/
+    .end_left  {width: 58%;padding: 0 5px;}
+    .end_right {width: 42%; float:right;}
+	.end_right small	{padding:3px 4px;}
+	.end_right span		{padding:1px 0 7px 40px;}
+	.promo_lt	{width:45% !important;}
+	.promo_rt	{width:55% !important;}
+	
+	/*INNER PAGE NO 34 START HERE*/
+    .pdf_files_in span  {font-size: 16px;line-height: 18px;padding: 0 5px 18px 12px;width: 75%;}
+    .pdf_files_in em    {padding: 3px 12px 4px 2px;width: 25%;}
+	
+	/*INNER PAGE NO 35 START HERE*/
+	.videos_btn_blk ul li .download_btn	{font-size:16px;}
+	.videos_btn_blk ul li .download_btn img {margin:0 5px 0 0;} 
+	.videos_btn_blk ul li .watch_btn	{font-size:16px;}
+	.videos_btn_blk ul li .watch_btn img {margin:0 5px 0 0;}  
+    
+    /*footer*/
+    .copy_rights_left{width: 62%;}
+    .copy_rights_right{width: 38%;}
+    .footer_social_icons{padding: 0 10px;}
 
 	
 }
 @media (max-width:1200px){
+	
+	/*HOME START HERE*/
+	.sign_in	{margin:0 0 0 35px;}
+	.sign_in ul li	{margin:0 0 0 25px;}
+	nav ul li		{margin:0 25px 0 0;}
+	.logo a		{width:280px;}
+	.orange_nav	{margin:-8px 0px 15px 0;}
+	.head_bottom_in	{padding-bottom:15px;}	
+	.bluebar_nav ul li ul li span	{font-size:16px;}
+    
+    .paid_shop_text h2{font-size: 32px;line-height: 34px;}
+    .get_paid_up h2   {font-size: 45px;line-height: 50px;}
+    .get_paid_up_anchor a{font-size: 24px;line-height: 26px;}
+    .top_paying_in h3   {font-size: 31px;line-height: 33px;}
+    .top_paying_in h4:after  {width: 15%;}
+    .top_paying_in h4:before  {width: 15%;}
+	
+	
+	/*INNER PAGE NO 37 START HERE*/
 	.left_block		{width:25%; padding:0 15px 0 0}
 	.right_block	{width:75%;}
 	.direct_comsumer	{width:75%;}
@@ -242,7 +345,6 @@
     .why_putchase ul   {padding: 4px 0 0 48px;}
     .unused_gifts_in h2 {font-size: 46px;line-height: 48px;}
     .unused_gifts_in small{font-size: 25px;line-height: 27px;}
-    
     .save_earn.wild .save_in ul li span{font-size: 23px;}
     .save_earn.wild .save_in ul li span small{font-size: 8px;}
 	
@@ -273,11 +375,19 @@
 	.vengo_energy_right	{padding:0 0 0 20px;}
 	.vengo_right_top_lt	{padding:0 10px 0 0;}
 	.earn_points_left .add_cart	{width:182px;}
+	 /*INNER PAGE NO 10 START HERE*/
+	.onetime_sipping ul li	{margin:0 0 15px 40px;}
+	.curnt_mnth_in strong{font-size: 46px;line-height: 48px;}
+    .curnt_mnth_in       {width: 80%;}
+    .current_mnthly h4   {font-size: 20px;line-height: 22px;}
+    .curnt_mnth_in small {font-size: 18px;line-height: 22px;}
+    .current_mnthly ul li .btn{font-size: 18px;margin: 37px 0 0 0;}
+    .curnt_mnth         {padding: 40px 0 20px 0;}
+    .current_mnthly ul li{padding: 0 15px 15px 15px;}
 	
-	/*INNER PAGE NO 12 START HERE*/
+	/*INNER PAGE NO 13 START HERE*/
 	.order_middle h4		{font-size:20px;}
 	.radio_btn label		{font-size:18px;}
-	
 	/*INNER PAGE NO 16 START HERE*/
 	.dashboard h2		{font-size:40px; line-height:45px;}
 	.dashboard ul		{width:80%;}
@@ -290,7 +400,7 @@
 	.nicolas_right span	{font-size:20px;}
 	.nicolas_btns ul li a	{font-size:14px; line-height:40px;}
 	.members_badges	label	{font-size:18px;}
-	.nation_passport_right	{padding:0 0 0 30px;}
+	.nation_passport_right	{padding:0 10px 0 30px;}
 	.monthly_status label	{font-size:18px;}
 	.monthly_status input	{width:36%;}
 	.monthly_status ul li span	{font-size:35px;}
@@ -307,40 +417,66 @@
 	.nicolas_con_btns ul li a	{font-size:8px;}
 	.nicolas_con_left h3	{font-size:30px;}
 	
-	
-	
-	 /*INNER PAGE NO 16 START HERE*/
+	 /*INNER PAGE NO 17 START HERE*/
 	.acct_information_in	{width:90%;}
 	.form_block ul 			{margin:0 -20px;}
 	.form_block ul li		{padding:0 20px;}
 	
-	 /*INNER PAGE NO 17 START HERE*/
+	 /*INNER PAGE NO 18 START HERE*/
     .your_intrest_in ul li span{font-size: 18px; line-height: 20px;background-position: 0px 1px;}
     .your_intrest_in ul li input[type=checkbox]:checked + span{background-position: 0px 1px;}
     .your_intrest_in ul li{width: 32.3%;padding: 0 0 15px 0;float: none; display: inline-block;vertical-align: top;}
 	
-	 /*INNER PAGE NO 35 START HERE*/
-	.onetime_sipping ul li	{margin:0 0 15px 40px;}
+	 /*INNER PAGE NO 22 START HERE*/
+    .points_list        {width: 80%;}
+    .points_list small  {font-size: 24px;line-height: 26px;}
+    .points_list strong {font-size: 58px;line-height: 60px;}
 	
-	.curnt_mnth_in strong{font-size: 46px;line-height: 48px;}
-    .curnt_mnth_in       {width: 80%;}
-    .current_mnthly h4   {font-size: 20px;line-height: 22px;}
-    .curnt_mnth_in small {font-size: 18px;line-height: 22px;}
-    .current_mnthly ul li .btn{font-size: 18px;margin: 37px 0 0 0;}
-    .curnt_mnth         {padding: 40px 0 20px 0;}
-    .current_mnthly ul li{padding: 0 15px 15px 15px;}
 	
-	 /*INNER PAGE NO 36 START HERE*/
+    /*INNER PAGE NO 27 START HERE*/
+    .movement_btn    {font-size: 20px; line-height:20px;}
+    .movement_form_sec ul li label  {font-size: 20px;line-height: 22px;}
+    .movement_form_sec ul li:first-child {margin: 0 0 20px 0;}
+    .movement_form_sec ul li:nth-child(2){margin: 0 0 20px 0;padding: 0 60px 0 10px;}
+    .movement_form_sec ul li:nth-child(3){margin: 0 0 20px 0;}
+    .movement_form_sec ul li:nth-child(4){margin: 0 0 20px 0;}
+    .movement_form_sec ul li{padding: 0 30px 0 10px;}
+	
+	 /*INNER PAGE NO 11 START HERE*/
     .never_forgot_under ul li .btn_blk{font-size: 20px;line-height: 22px;}
-	
-	/*INNER PAGE NO 37 START HERE*/
+	/*INNER PAGE NO 12 START HERE*/
 	.occasion_form_sec ul 		{margin:0 -10px;}
 	.occasion_form_sec ul li	{padding:0 10px;}
 	.occasion_form_sec ul li input.city	{margin:0 0 13px 0;}
 	.occasion_form_sec ul li textarea	{height:125px;}
 	.select_gift_lft:after	{right:-220px;}
-	
-	/*INNER PAGE NO 20 START HERE*/
+			
+	/*INNER PAGE NO 23 START HERE*/
+	.money_balance ul li strong	{font-size:22px; line-height:28px;}
+	.money_balance ul li span	{font-size:18px; line-height:25px;}
+	.money_balance	{padding:112px 30px 94px 30px;}
+	.money_movement ul li span	{font-size:15px; padding:0 10px 0 72px;}
+	/*INNER PAGE NO 24 START HERE*/
+	.trunited strong	{font-size:24px;}
+	.dolar_blk img	{height:auto;}
+	.trunited_member h6	{font-size:22px;}
+	.choose_member .nation_passport_left	{width:100%;}
+	.choose_member .nation_passport_right	{width:100%;}
+	.choose_member .nicolas input	{width:75%;}
+	.choose_member .members_badges input	{width:75%;}
+	.choose_member .monthly_status input	{width:64%;}
+	.choose_member .member_balance input	{width:75%;}
+	.choose_member.selected	{padding:52px 20px 40px 20px;}
+	.trunited_gift_card	{width:100%;}
+	.orange_btn_blk ul li .buy_gift	{line-height:24px;}
+	.trunited_gift_card .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:70%;}
+	.sub_blk ul li label		{margin:0 0 0 15px;}
+	.sub_blk ul li label em	{font-size:18px;}
+	.main_bg2.bot_pad	{padding:0 0 50px 0;}
+	/*INNER PAGE NO 29 START HERE*/
+	.business_btns	{padding:0 0 0 0;}
+	.business_btns ul li {margin:0 0 20px 0;}
+	/*INNER PAGE NO 30 START HERE*/
 	.cust_rpt		{width:33%;}
 	.trend_chart	{width:67%;}
 	.customer_reports ul li p	{font-size:14px; line-height:18px;}
@@ -355,9 +491,58 @@
 	.customer_reports ul li p	{padding:15px 10px 15px 80px; font-size:13px;}
 	.customer_reports ul li:nth-child(5) p	{padding:22px 10px 22px 80px;}
 	
+    /*INNER PAGE NO 34 START HERE*/
+    .pdf_files_in img {width: 50%;height: auto;}
+	/*INNER PAGE NO 35 START HERE*/
+	.pdf_files_in a img	{width:100%;} 
+	.video_banner_in	{width:90%;}
+    
+    /*FOOTER*/
+    .footer_in h3         {font-size: 16px;line-height: 20px;}
+	.footer_in ul li span {font-size: 14px;line-height: 18px;}
+    .email_sub            {font-size: 15px;line-height: 17px;padding: 0 10px;}
+    .copy_rights          {text-align: center;}
+    .copy_rights_left{width:100%;}
+    .copy_rights_right{width: 100%;}
 	
 }
 @media (max-width:991px){
+	
+	/*HOME START HERE*/
+	.bluebar_nav ul li	{margin:0 0 0 30px;}
+	.orange_nav ul li	{margin:0 0 0 18px;}
+	.logo				{margin:-8px 0 0 0;}
+	.logo a				{width:200px;}
+	.sign_in			{float:none; display:block; text-align:right;}
+	.sign_in ul			{display:inline-block;}
+	nav					{float:none; display:block; text-align:right;}
+	nav	ul				{display:inline-block;}
+	.free_sipping span	{font-size:15px;}
+	.bluebar_nav ul li .search_blk input	{font-size:18px;}
+	
+    .paid_shop_text h2  {font-size: 24px;line-height: 26px;}
+    .get_paid_up h2     {font-size: 35px;line-height: 40px;}
+    .get_paid_in ul li  {border-right: 10px solid #ffffff;height: 650px !important;}
+    .get_paid_shop      {border-bottom: 10px solid #ffffff}
+    
+    
+    .get_paid_in1 ul li{height: 650px !important;border-right: 10px solid #ffffff;}
+    .get_paid_in2 ul li{height: 650px !important;border-right: 10px solid #ffffff;}
+    .get_paid_in3 ul li{height: 650px !important;border-right: 10px solid #ffffff;}
+    .get_paid_in4 ul li{height: 650px !important;border-right: 10px solid #ffffff;}
+    
+    .top_paying_in h3   {font-size: 26px;line-height: 30px;}
+    .top_paying_in h3:after{width: 20%;}
+    .top_paying_in h3:before{width: 20%;}
+    .top_paying_in h4       {padding: 0 15px;}
+    .top_paying_in h4:after  {display: none;}
+    .top_paying_in h4:before  {display: none;}
+    .top_paying_in1 h3  {font-size: 30px;line-height: 32px;}
+    .top_paying_in1 a   {font-size: 30px;line-height: 32px;}
+    .top_paying_info .slick-prev {left: -10px;}
+    .top_paying_info .slick-next {right: -10px;}
+	
+	/*INNER PAGE NO 37 START HERE*/
 	.shop_now ul li a	{font-size:20px;}
 	.shop_now ul li span	{font-size:20px;}
 	.left_block		{width:31%;}
@@ -379,7 +564,6 @@
 	.news a		{border:2px solid #ffffff; font-size:18px;}
 	.latest_news_rgt h3 {font-size:25px; line-height:30px; padding:0 0 15px 0;}
 	.latest_news_rgt p	{font-size:16px; line-height:18px;}
-	.divided		{width:250px; bottom:-14px; left:0;}
 	
 	/*INNER PAGE NO 2 START HERE*/
     .save_earn      {width: 380px;display: block;margin: 0 auto;float: none !important;}
@@ -398,7 +582,6 @@
 	.gift_card_top_left{width: 60%;padding: 0 0 30px 0; float:none; margin:0 auto;}
     .gift_card_top_right{width: 100%;}
 	.tabs_blk_main		{padding:0 0 30px 0;}
-
     .gift_card_top_left .save_earn.wild{width: 100%;padding: 0 0 0 0;}
 	.social_icons ul li			{margin:0 21px 0 0;}
 	.social_icons ul li a		{width:53px; height:49px;}
@@ -420,18 +603,37 @@
 	.earn_points_left .add_cart	{width:75%; font-size:30px;}
 	.earn_points_left .trubox_btn	{font-size:30px;}
 	.vengo_energy_right	{padding:0;}
-	
 	/*INNER PAGE NO 10 START HERE*/
-	.popular_deals	{padding:0 0 0 20px;}
-	.end_left		{width:55%;}
-	.end_right		{width:45%;}
+	.food_products_left	{padding:0;}
+	.food_products_left ul li	{margin:0 15px 0 0;}
+	.onetime_sipping ul li		{margin:0 20px 15px 0;}
+	.receive_email .month_text	{position:static; width:100%; display:block; text-align:center; padding:0 0 20px 0;}
+	.receive_email		{margin:-87px auto 0 auto;}
+	.receive_email ul li small	{font-size:16px;}
+	.receive_email ul li span	{font-size:30px; width:70px; height:70px; line-height:70px;}
+	.receive_email .rgt_arrow	{top:29px;}
+	.food_products_left h6	{padding:0 0 25px 0;}
+	.current_mnthly ul li{padding:0 15px 35px 15px;}
+	.current_mnthly ul	{margin:0 -15px;}
+	.food_products_left ul li span	{font-size:21px; padding:0;}
 	
-	/*INNER PAGE NO 12 START HERE*/
+	/*INNER PAGE NO 11 START HERE*/
+    .never_forgot               {padding: 2% 2%;}
+    .table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td{font-size: 20px;line-height: 22px;}
+    .never_forgot_under ul li .btn_blk{font-size: 16px;line-height: 20px;padding: 10px 0;}
+    .never_forgot_under         {background-size: 32% auto;}
+	.sort_by.sort_rgt		{float:none; display:block; width:100%; text-align:center; margin:0 0 12px 0;}
+	.search_club			{float:none; display:inline-block; width:100%; text-align:center; margin:0;}
+	.search_club label		{float:none; display:inline-block; margin:0;}
+	.search_club input		{float:none; display:inline-block;}	
+	.select_gift_lft:after	{width:100px; height:90px; background-size:cover; right:-130px;}
+	.occasion_form_sec ul	{margin:0;}	
+	/*INNER PAGE NO 13 START HERE*/
 	.order_middle .bootstrap-select.btn-group .dropdown-toggle .filter-option	{font-size:15px;}
 	.order_middle .bootstrap-select.btn-group .dropdown-menu li a span.text	{font-size:15px;}
 	.order_middle .bootstrap-select.btn-group .dropdown-menu li	{padding:0;}
 	.travel_in ul li	{padding:0 15px 20px 15px;}
-	/*INNER PAGE NO 13 START HERE*/
+	/*INNER PAGE NO 14 START HERE*/
     .cmap_right      {width: 49%;text-align: center;}
     .count           {width: 285px;height: 285px;}
     .count h2        {font-size: 107px;line-height: 107px;}
@@ -443,7 +645,6 @@
     .pop_up_trained {width: 400px;}
     .trained_middle_left{width: 100%;}
     .trained_middle_right{width: 100%;}
-		
 	/*INNER PAGE NO 16 START HERE*/
 	.dashboard			{padding:45px 0 60px 0;}
 	.dashboard h2		{font-size:35px; line-height:40px; margin:0 0 45px 0;}
@@ -476,18 +677,84 @@
 	.member_balance ul li .balance_con small	{font-size:16px; line-height:20px;}
 	.member_balance ul li .balance_con	{min-height:268px;}
 	
-	
-	/*INNER PAGE NO 16 START HERE*/
+	/*INNER PAGE NO 17 START HERE*/
 	.empty_blk				{display:none;}	
 	.form_block ul 			{margin:0;}
 	.form_block ul li		{padding:0;}
-
-	/*INNER PAGE NO 17 START HERE*/
+	/*INNER PAGE NO 18 START HERE*/
 	.your_intrest_in ul li		{width:50%;}
 	.your_intrest_in .bootstrap-select.btn-group .dropdown-menu li	{width:100%;}
 	.spl_dates_in		{width:49%; margin:0 1.5% 0 0;}
-	
 	/*INNER PAGE NO 20 START HERE*/
+	.cust_rpt		{width:100%; padding:0; margin:0 0 30px 0;}
+	.trend_chart	{width:100%;}
+	.product_blk ul li.dash	{width:31.33%;}
+	.dash_btns_blk	{width:100%;}
+	.dashboard_top	{padding:45px 30px 60px 30px}
+	.dashboard_top ul li span	{font-size:35px; line-height:50px;}
+	.dashboard_top ul li small	{font-size:17px; line-height:20px; border-radius:0 0 25px 25px;}
+	.dashboard_top ul li	{padding:0 10px;}
+	/*INNER PAGE NO 21 START HERE*/
+    .earning_points > ul > li {padding: 10px 10px 22px 10px;}
+    .earning_in strong        {font-size: 28px;line-height: 30px;}
+    .earning_in h3            {font-size: 17px;line-height: 19px;}
+	
+    /*INNER PAGE NO 22 START HERE*/
+    .points_list        {width: 85%;}
+    .points_list small  {font-size: 20px;line-height: 24px;}
+    .points_list strong {font-size: 48px;line-height: 50px;}
+    .your_starts_depth ul li h3{font-size: 20px;line-height: 24px;}
+	
+	/*INNER PAGE NO 23 START HERE*/
+	.money_movement h6	{line-height:20px; padding:8px 8px;}
+	.money_movement ul li span	{font-size:14px;}
+	.money_balance ul li	{width:50%; margin:0 0 30px 0; min-height:156px;}
+	/*INNER PAGE NO 24 START HERE*/
+	.trunited img		{height:auto; float:none !important; margin:0 auto;}
+	.trunited_member img	{height:auto;}
+	.money_share_blk_in ul li	{width:100%; text-align:center; margin:0 0 20px 0;}
+	.trunited	{text-align:center;}
+	.trunited_member img	{margin:0 auto;}
+	.trunited_member.lt_mrgn img	{margin:0 auto;}
+	.or_line:after	{width:40%;}
+	.or_line:before	{width:40%;}
+	.choose_member .nicolas_porter ul li	{width:100%;}
+	.choose_member .nicolas_con_btns ul li a	{padding:0 8px; font-size:13px;}
+	.choose_member .nicolas_con_btns ul li	{padding:0 8px;}
+	.choose_member .orange_btn_blk ul li	{margin:0 0 20px 0;}
+	.choose_member .top_bar	{padding:0;}
+	.choose_member .nicolas input	{width:66%;}
+	.choose_member .nicolas_left h3	{font-size:40px;}
+	.choose_member .nicolas_left p	{font-size:16px; line-height:18px;}
+	.choose_member .nicolas	{padding:15px 15px 15px 15px;}
+	.choose_member .members_badges input	{width:65%;}
+	.choose_member .members_badges	ul li a	{width:70px;}
+	.choose_member .nation_passport_right.passport	{padding:0 20px 23px 20px;}
+	.choose_member .monthly_status input	{width:54%;}
+	.choose_member .member_balance input	{width:66%;}
+	.trunited_gift_card ul li	{padding:0 10px;}
+	.trunited_gift_card ul li h6	{font-size:25px;}
+	.trunited_gift_card ul li strong	{font-size:20px;}
+	.choose_member .top_bar	{padding:0 0 10px 0;}
+	.choose_member .orange_btn_blk ul li .buy_gift	{font-size:24px;}
+	.choose_member.selected	{padding:52px 20px 0 20px;}
+	.choose_member .monthly_leaderboard	{padding:0 0 30px 0;}
+	.or_line h4	{font-size:45px;}
+	.dolar_blk		{padding:0;}
+	
+	/*INNER PAGE NO 26 START HERE*/
+	.trunited strong	{text-align:center;}
+	.trunited span		{text-align:center;}
+	.trunited_gift_card ul li	{width:50%;}
+	/*INNER PAGE NO 27 START HERE*/
+    .movement_btn       {font-size: 16px;}
+    .money_movement_top ul li h3{font-size: 20px;line-height: 24px;}
+    .money_movement_top ul li span{font-size: 16px;line-height: 20px;}
+	
+	/*INNER PAGE NO 29 START HERE*/
+	.business_block .your_starts_info ul li	{padding:0;}
+	.business_block .points_list small	{font-size:16px;}
+	/*INNER PAGE NO 30 START HERE*/
 	.available_cards_title ul li span	{font-size:17px; line-height:50px;}
 	.movie_ticket ul li em:after	{width:25px; height:14px; background-size:cover; left:10px; top:18px;}
 	.movie_ticket ul li em	{font-size:16px; line-height:50px; padding:0 0 0 37px; width:18%;}
@@ -497,32 +764,34 @@
 	.orange_btn_blk ul li	{padding:0 1%;}
 	.orange_btn_blk ul li .buy_gift	{font-size:18px;}
 	
+	/*INNER PAGE NO 32 START HERE*/
+	.popular_deals	{padding:0 0 0 20px;}
+	.end_left		{width:55%;}
+	.end_right		{width:45%;}
+	
+    /*INNER PAGE NO 34 START HERE*/
+    .search_bar    {text-align: center;}
+    .prices        {margin:0 0 2px 0;padding: 0 5px;float: none;}
+    .pdf_files_in em {font-size: 14px;line-height: 16px;}
+	.prices.language	{width:340px;}	
+	.prices.language .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:235px; float:right;}
+	.prices.language input {width:235px; float:right;}
+	
 	/*INNER PAGE NO 35 START HERE*/
-	.food_products_left	{padding:0;}
-	.food_products_left ul li	{margin:0 15px 0 0;}
-	.onetime_sipping ul li		{margin:0 20px 15px 0;}
-	.receive_email .month_text	{position:static; width:100%; display:block; text-align:center; padding:0 0 20px 0;}
-	.receive_email		{margin:-87px auto 0 auto;}
-	.receive_email ul li small	{font-size:16px;}
-	.receive_email ul li span	{font-size:30px; width:70px; height:70px; line-height:70px;}
-	.receive_email .rgt_arrow	{top:29px;}
-	.food_products_left h6	{padding:0 0 25px 0;}
-	.current_mnthly ul li{padding:0 15px 35px 15px;}
-	.current_mnthly ul	{margin:0 -15px;}
-	.food_products_left ul li span	{font-size:21px; padding:0;}
-	
-	/*INNER PAGE NO 36 START HERE*/
-    .never_forgot               {padding: 2% 2%;}
-    .table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td{font-size: 20px;line-height: 22px;}
-    .never_forgot_under ul li .btn_blk{font-size: 16px;line-height: 20px;padding: 10px 0;}
-    .never_forgot_under         {background-size: 32% auto;}
-	.sort_by.sort_rgt		{float:none; display:block; width:100%; text-align:center; margin:0 0 12px 0;}
-	.search_club			{float:none; display:inline-block; width:100%; text-align:center; margin:0;}
-	.search_club label		{float:none; display:inline-block; margin:0;}
-	.search_club input		{float:none; display:inline-block;}	
-	
-	.select_gift_lft:after	{width:100px; height:90px; background-size:cover; right:-130px;}
-	.occasion_form_sec ul	{margin:0;}	
+	.videos_btn_blk ul li .download_btn	{font-size:14px;}
+	.videos_btn_blk ul li .watch_btn	{font-size:14px;}
+	.videos_btn_blk ul li .download_btn img {margin:0 5px 0 0; width:17px !important; height:auto !important;} 
+	.videos_btn_blk ul li .watch_btn img {margin:0 5px 0 0; width:28px !important; height:auto !important;}  
+	.videos_btn_blk ul 	{margin:0 -5px;}
+	.videos_btn_blk ul li	{padding:0 5px !important;}
+	.video_banner_in	{width:100%;}
+	.video_banner_in a img {height:auto;}
+    
+    /*FOOTER*/
+    .footer_in h3         {font-size: 16px;line-height: 20px;}
+	.footer_in ul li span {font-size: 15px;line-height: 18px;}
+    .email_sub            {font-size: 15px;line-height: 17px;padding: 0 25px;}
+    .footer_updates       {margin: 0;}
 }
 
 @media only screen and (max-width: 800px) {
@@ -575,8 +844,70 @@
 	#no-more-tables td:before { content: attr(data-title); }
 }
 
-
 @media (max-width:767px){
+	
+	/*HOME START HERE*/
+	.menu_block			{display:block; padding:0; margin:0;}
+	.menu_icon			{display:block; float:right; margin:23px 10px 0 25px; cursor:pointer;}
+	.menu_icon span		{display:block; position:relative;}
+	.menu_icon .icon-bar + .icon-bar	{margin-top:6px;}
+	.menu_icon .icon-bar	{width:40px; height:4px; background:#000; margin:0 0 0 0; border-radius:2px;}
+	
+	.openclass .menu_icon span:nth-child(1){transform:rotate(45deg); top:10px;}
+	.openclass .menu_icon span:nth-child(2){opacity:0; }
+	.openclass .menu_icon span:nth-child(3){transform:rotate(-45deg); top:-10px;}
+	
+    .openclass .wrapper      {left: -240px;position: fixed;width: 100%;}      
+    .openclass .left_bar     {right: 0;}
+	
+	.sign_in		{padding:15px 0 0 0;}
+	.re_move		{display:none !important;}
+	
+	nav				{width:100%; text-align:center; padding:0;}
+	nav ul 			{display:block;}
+	nav ul li 		{float:none; display:block; margin:0; padding:8px 0;}
+	nav ul li a		{color:#fff; font-weight:700; line-height:25px;}
+	nav ul li:hover		{background:#ffffff;}
+	nav ul li:hover a	{color:#15b6cb;}
+	.orange_nav			{width:100%; padding:0; margin:0;}
+	.orange_nav ul		{display:block; width:100%;}
+	.orange_nav ul li 	{float:none; display:block; margin:0; padding:8px 0;}
+	.orange_nav	ul li a	{background:none; width:100% !important; line-height:25px; border-radius:0;}
+	.orange_nav ul li a:after	{display:none;}
+	.orange_nav	ul li:hover		{background:#ffffff;}
+	.orange_nav	ul li:hover a	{color:#15b6cb; background:none;}
+	.bluebar_nav			{width:100%; padding:0; margin:0; text-align:center;}
+	.bluebar_nav ul			{width:100%; float:none; display:block;}
+	.bluebar_nav ul li 		{float:none; display:block; padding:8px 0; margin:0;}
+	.bluebar_nav ul li a	{font-weight:700; color:#ffffff; line-height:25px;}
+	.bluebar_nav ul li ul li	{display:inline-block; padding:0; float:none; vertical-align:middle;}
+	.bluebar_nav ul li ul	{display:inline-block;}
+	.bluebar_nav ul li ul li a	{font-weight:700; color:#fff;}
+	.bluebar_nav ul li ul li span	{font-weight:700; line-height:25px;}
+	.bluebar_nav ul li:hover	{color:#15b6cb; background:#ffffff;}
+	.bluebar_nav ul li:hover a	{color:#15b6cb;}
+	.bluebar_nav ul li:hover span	{color:#15b6cb;}
+	
+	.head_top_in	{padding:20px 0;}
+	.free_sipping	{position:static; text-align:center; margin:20px 0 0 0;}
+    
+    .get_paid_up h2     {font-size: 30px;line-height: 34px;padding: 0 10px 15px 10px;}
+    .get_paid_up h2 br  {display: none;}
+    .paid_shop_text h2  {font-size: 20px;line-height: 22px;}
+    .get_paid_in ul li:nth-child(1) {width: 33.3%;}
+    .get_paid_in ul li:nth-child(2) {width: 33.3%;}
+    .get_paid_in ul li:nth-child(3) {width: 33.3%;}
+    
+    .top_paying_in h3:before    {width: 17%;}
+    .top_paying_in h3:after     {width: 17%;}
+    
+    .top_paying_in1 h3  {font-size: 24px;line-height: 26px;}
+    .top_paying_in1 h3 br{display: none;}
+    .top_paying_in1 a   {font-size: 24px;line-height: 26px;}
+    .footer_social_icons  {padding: 10px 10px;}
+    
+		
+	/*INNER PAGE NO 37 START HERE*/		
 	.left_block		{width:100%; padding:0 0 30px 0; position: relative; z-index: 9;}
 	.right_block	{width:100%;}
 	.direct_comsumer	{width:100%;}
@@ -593,7 +924,6 @@
 	.yahoo_logo a		{width:164px; margin:0 auto;}
 	.news			{width:100%; padding:0; float:none; margin:0 0 25px 0;}
 	.latest_news_rgt	{width:100%; padding:0;}
-	.divided		{width:250px; bottom:-14px; left:0;}
     
     /*INNER PAGE NO 2 START HERE*/
     .why_putchase h4   {font-size: 27px;}
@@ -623,33 +953,41 @@
 	.vengo_right_top_lt ul li a img	{height:auto;}
 	.vengo_right_top_lt ul li span	{padding:0 0 0 3px; font-size:23px; line-height:23px;}
 	
-    /*INNER PAGE NO 10 START HERE*/
-    .popular_deals{padding: 0;}
-    .end_right .product ul li{width: auto !important;}
-    .end_left a{width: 109px;}
-    
-    /*INNER PAGE NO 11 START HERE*/
-    .main_block.inn_pad1 {padding: 0 0 50px 0 !important}
-    
-    /*INNER PAGE NO 12 START HERE*/
+	/*INNER PAGE NO 10 START HERE*/
+	.current_mnthly ul	{margin:0 -10px;}
+	.current_mnthly ul li{padding: 0 10px 30px 10px;}
+    .curnt_mnth_in small{font-size: 15px;line-height: 20px;}
+	.curnt_mnth_in strong	{font-size:40px; padding:18px 0 5px 0;}
+	.current_mnthly	{padding:0;}
+	
+	/*INNER PAGE NO 12 START HERE*/
+	.select_gift_lft:after	{top:-65px; right:0;}
+	.select_gift		{padding:80px 0 65px 0;}
+	
+    /*INNER PAGE NO 13 START HERE*/
     .travel         {padding: 30px 0;}
     .travel_in ul li{padding: 5px 0 15px 0;}
     
-    /*INNER PAGE NO 13 START HERE*/
+    /*INNER PAGE NO 14 START HERE*/
     .cmap_bar       {width: 280px;margin: 0 0 0 15px;}
     .cmap_bar ul li span{font-size: 20px;line-height: 20px;}
     .cmap_right     {width:47%;}
     .count          {width: 250px;height: 250px;}
     .count h2       {font-size: 97px;line-height: 97px;}
-    	
 	/*INNER PAGE NO 15 START HERE*/
     .map_middle     {width: 76%;}
     .left_no        {padding: 10px 0 0 0;width: 12%;}
     .nicolas_in     {width: 75px;height: 75px;}
+    .nicolas_in_adjst{width: 69px;height: 69px;}
+    .wrap_click     {width: 31px !important;height: 31px;}
+    .nicolas_up h4  {margin: 15px 0 0 0;}
     .nicolas_in h2  {font-size: 71px;line-height: 71px;}
     .nicolas_up h4  {font-size: 30px;line-height: 32px;}
     .nicolas_up h6  {font-size: 18px;line-height: 20px;}
+    .wrap_blk       {width: 31px;height: 31px;}
+    .wrap_click_in  {width: 33px !important;height: 33px;}
     .pop_up_trained {left: -49px;}
+    pop_up_trained:after {left: 71px;}
     .red_slice      {background-position: 2px 38px;background-size: 36px 36px;}
 	
 	/*INNER PAGE NO 16 START HERE*/
@@ -673,26 +1011,76 @@
 	.nicolas_con_left h3	{font-size:25px;}
 	.nicolas_con_btns ul li		{padding:0 4px;}
 	.nicolas_con_btns ul li a	{font-size:7px;}
+	/*INNER PAGE NO 20 START HERE*/
+	.dashboard_top ul li	{margin:0 0 15px 0;}
+	/*INNER PAGE NO 22 START HERE*/
+    .points_list        {width: 90%;}
+    .points_list small  {font-size: 15px;line-height: 20px;}
+    .points_list strong {font-size: 38px;line-height: 40px;}
+    .your_starts_depth ul li h3{font-size: 16px;line-height: 20px;}
+    .your_starts_info   {padding: 35px 0;}
+    .depth_in           {padding: 20px 0 20px 0;}
+    .your_starts_depth  {padding: 0 0 35px 0;}
+    .your_starts_depth ul   {margin: 0;}
+	/*INNER PAGE NO 23 START HERE*/
+	.balance_blk	{padding:90px 0 0 0;}
+	.money_movement ul li span	{font-size:16px;}
 	
-	/*INNER PAGE NO 35 START HERE*/
-	.current_mnthly ul	{margin:0 -10px;}
-	.current_mnthly ul li{padding: 0 10px 30px 10px;}
-    .curnt_mnth_in small{font-size: 15px;line-height: 20px;}
-	.curnt_mnth_in strong	{font-size:40px; padding:18px 0 5px 0;}
-	.current_mnthly	{padding:0;}
+	/*INNER PAGE NO 24 START HERE*/
+	.choose_member .nicolas_porter ul li	{width:50%; padding:0 2px;}
+	.choose_member .nicolas_con_btns ul li a	{font-size:8px; padding:0 3px;}
 	
-	/*INNER PAGE NO 36 START HERE*/
-	.select_gift_lft:after	{top:-65px; right:0;}
-	.select_gift		{padding:80px 0 65px 0;}
+	/*INNER PAGE NO 29 START HERE*/
+	.your_starts_info ul li	{padding:0 10px;}
+	.business_block .points_list small	{font-size:18px;}
+	
+    /*INNER PAGE NO 32 START HERE*/
+    .popular_deals{padding: 0;}
+    .end_right .product ul li{width: auto !important;}
+    .end_left a{width: 109px;}
+	
+    /*INNER PAGE NO 12 START HERE*/
+    .main_block.inn_pad1 {padding: 0 0 50px 0 !important}
 	
 	
 }
+
 @media (max-width:599px){
+	
+	/*HOME START HERE*/
+	.sign_in ul li:nth-child(2) a	{font-size:0px; line-height:1px;}
+	.sign_in ul li a span	{margin:0;}
+   
+    .get_paid_up h2     {font-size: 30px;line-height: 34px;}
+    .paid_shop_text h2  {font-size: 24px;line-height: 26px;}
+    .get_paid_in ul li{border: none;}
+    .get_paid_shop  {border-bottom: 10px solid #ffffff !important;}
+    .get_paid_in ul li:nth-child(1) {width: 100%;}
+    .get_paid_in ul li:nth-child(2) {width: 100%;}
+    .get_paid_in ul li:nth-child(3) {width: 100%;}
+    .get_paid_in1 ul li             {width: 100%;}
+    .get_paid_in2 ul li             {width: 100%;}
+    .get_paid_in3 ul li             {width: 100%;}
+    .get_paid_in4 ul li             {width: 100%;}
+    .top_20per                      {top: 25% !important;}
+    .bottom_res                     {bottom: 70% !important;}
+    .top_paying_in h3           {font-size: 20px;line-height: 22px;}
+    .top_paying_in h3:before    {display: none;}
+    .top_paying_in h3:after     {display: none;}
+    .top_paying_in1 h3  {font-size: 20px;line-height: 22px;}
+    .top_paying_in1 a   {font-size: 20px;line-height: 22px;}
+    .top_paying_in h4   {font-size: 20px;line-height: 23px;margin: 0 0 10px 0;}
+    .top_paying         {padding: 30px 0 30px 0 !important;}
+    .pad_perfect        {padding: 30px 0 30px 0 !important;}
+    .pad_perfect1       {padding: 30px 0 30px 0 !important;}
+    .copy_rights_right p{font-size: 16px;line-height: 24px;}
+    .mar_perfect        {margin: 0 0 30px 0 !important}
+	/*INNER PAGE NO 37 START HERE*/
 	.shop_now			{padding:14px 0 14px 8px;}
 	.shop_now ul li a	{font-size:17px;}
 	.shop_now ul li span	{font-size:17px;}
 	.product_blk ul li	{width:48%;}
-	.prices		{padding:0 0 10px 0; margin:0 auto; width:318px; float:none; display:block;}
+	.prices		{padding:0 0 10px 0; margin:0 auto; width:340px; float:none; display:block;}
 	.prices label	{font-size:18px;}
 	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:235px; float:right;}
 	.prices input	{width:235px; float:right;}
@@ -717,7 +1105,7 @@
     .unused_gifts_in h2 {font-size: 24px;line-height: 26px;}
     .unused_gifts_in small{font-size: 16px;line-height: 22px;}
     .gift_cards1 .container{padding: 0;}
-	.search_bar h3		{padding:0 0 10px 0; display:block; text-align:center; font-size:18px;}
+	.search_bar h3		{padding:0 0 10px 0; display:block; text-align:center; font-size:17px; line-height:20px;}
     
 	/*INNER PAGE NO 4 START HERE*/
 	.banner			{min-height:650px; padding:50px 0 20px 25px;}
@@ -729,17 +1117,6 @@
 	
 	/*INNER PAGE NO 7 START HERE*/
 	.gift_card_top_left{width: 85%;}
-	/*INNER PAGE NO 9 START HERE*/
-	.vengo_energy_left		{width:98%;}
-	.vengo_right_top_lt		{width:100%;}
-	.vengo_right_top_lt ul li span	{padding:3px 0 0 3px;}
-	.tru_box		{width:100%; padding:0 0 30px 0;}
-	.tru_box_in		{width:281px;}
-	.earn_points_left		{width:100%; padding:0 0 30px 0;}
-	.giftcard_shop_rgt.top_pad	{width:100%; padding:0;}
-	.earn_points_left h3	{padding:0;}
-	
-    /*INNER PAGE NO 11 START HERE*/
     .right_block .direct_comsumer p{padding: 0px 15px 30px 15px;}
 	.tabs_content p		{font-size:16px;}
 	.buffalo h4		{font-size:30px; line-height:35px;}
@@ -752,11 +1129,26 @@
 	.social_icons ul li a span .fa	{padding:8px 0 0 0;}
 	.giftcard_shop_rgt		{width:100%; padding:0 0 0 0;}
 	.tabs_content		{padding:30px;}
-	
-	/*INNER PAGE NO 11 START HERE*/
-    .right_block .direct_comsumer p{padding: 0px 15px 30px 15px;}
-    
-    /*INNER PAGE NO 13 START HERE*/
+	/*INNER PAGE NO 9 START HERE*/
+	.vengo_energy_left		{width:98%;}
+	.vengo_right_top_lt		{width:100%;}
+	.vengo_right_top_lt ul li span	{padding:3px 0 0 3px;}
+	.tru_box		{width:100%; padding:0 0 30px 0;}
+	.tru_box_in		{width:281px;}
+	.earn_points_left		{width:100%; padding:0 0 30px 0;}
+	.giftcard_shop_rgt.top_pad	{width:100%; padding:0;}
+	.earn_points_left h3	{padding:0;}
+	 
+	 /*INNER PAGE NO 10 START HERE*/
+	 .food_products_left ul li span	{font-size:18px;}
+	 .receive_email ul li		{padding:0;}
+	 .current_mnthly ul li{width: 50%;}
+	 .never_forgot_under	{background-size:32% auto;}
+	 /*INNER PAGE NO 11 START HERE*/
+    .never_forgot_under ul li {padding: 0 5px;}
+	.select_gift_lft:after	{width:60px; height:52px; top:-25px;}
+	 
+    /*INNER PAGE NO 14 START HERE*/
     .cmap_bar       {width: 260px;margin: 0 0 0 10px;}
     .cmap_bar ul li span{font-size: 18px;line-height: 18px;}
     .cmap_right     {width:38%;}
@@ -819,33 +1211,100 @@
 	.members_badges	p		{padding:20px 10px 0 0;}
 	.nicolas_con_btns ul li a	{font-size:14px;}
 	.nicolas_con_btns ul li	{padding:0 5px;}
-	/*INNER PAGE NO 16 START HERE*/
+	
+	/*INNER PAGE NO 17 START HERE*/
 	.save_btn			{width:100%;}
 	.padd_bot			{padding:10px 0;}
-	 /*INNER PAGE NO 17 START HERE*/
+	
+	 /*INNER PAGE NO 18 START HERE*/
     .your_intrest_in ul li{width: 49.3%;}
 	.spl_dates_in			{margin:0 1% 0 0; padding:4px 0 50px 0;}
 	.save_chnages		{width:100%;}
+	/*INNER PAGE NO 20 START HERE*/
+	.dashboard_bar h3	{font-size:25px;}
+	.product_blk ul li.dash	{width:48%;}
+	.money_balance	{padding:80px 15px 60px 15px;}
 	
-	 /*INNER PAGE NO 20 START HERE*/
+	/*INNER PAGE NO 21 START HERE*/  
+     .earning_points > ul > li{padding: 10px 10px 10px 10px;margin: 0;}
+     .earning_points > ul > li > ul > li {width: 100%;border-bottom: 1px solid #c4c4c4;border-right: none;padding: 0 30px 15px 30px;}
+     .earning_points h2{padding: 0;text-align: center;}
+     /*INNER PAGE NO 22 START HERE*/
+     .your_starts_info ul li {width: 50%;}
+     .your_starts_depth ul li{width: 50%;margin: 0 0 25px 0;}
+	 
+	 /*INNER PAGE NO 24 START HERE*/
+	 .choose_member .nicolas_porter ul li	{width:100%; padding:0 5px;}
+	 .choose_member .nicolas_porter ul li a	{font-size:12px; padding:0 7px;}
+	 .choose_member h5	{font-size:24px; line-height:30px;}
+	 .choose_member .nicolas_left h3	{font-size:35px;}
+	 .choose_member .nicolas_left .pacesetter	{font-size:15px; height:30px; width:130px;}
+	 .choose_member .nicolas_left p	{font-size:15px;}
+	 .choose_member .nicolas_btns ul li a	{font-size:10px; line-height:25px;}
+     .choose_member .nicolas_right	{width:125px;}
+	 .choose_member .members_badges	p	{padding:40px 0 0 0;}
+	 .choose_member .monthly_status input	{width:48%;}
+	 .choose_member .member_balance input	{width:62%;}
+	 .trunited_gift_card ul li	{padding:0; width:100%; margin:0 0 10px 0;}
+	 .trunited_gift_card ul li img	{float:none;}
+	 .trunited_gift_card ul li strong	{text-align:left; line-height:28px;}
+	 .trunited_gift_card ul li h6	{min-height:inherit; line-height:28px;}
+	 .trunited_gift_card .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:100%;}
+	 .trunited_gift_card	{padding:50px 0 45px 0;}
+	 .choose_member .group_member	{margin:0 0 40px 0;}
+	 .choose_member	{padding:35px 10px 0 10px;}
+	 .money_share_blk h5	{font-size:22px; line-height:28px; padding:0 0 30px 0;}
+	 .money_share_blk_in .member_btn	{width:80%; height:50px;}
+	 .select_checkbox	{right:18px;} 
+	 
+     /*INNER PAGE NO 27 START HERE*/
+    .money_movement_form_in ul li {padding: 0 7px;}
+	
+	/*INNER PAGE NO 29 START HERE*/
+	.business_btns ul li	{width:50%; padding:0 12px;}
+	 
+	 /*INNER PAGE NO 30 START HERE*/
 	 .available_cards_title ul li span	{font-size:15px;}
 	 .movie_ticket ul li span			{font-size:15px;}
 	 .movie_ticket ul li em			{font-size:15px; width:20%;}
 	 .movie_ticket ul li span:nth-child(2)	{width:26%;}
 	 .orange_btn_blk ul li .buy_gift	{font-size:16px; height:50px; border-radius:10px;}
-	 
-	  /*INNER PAGE NO 35 START HERE*/
-	 .food_products_left ul li span	{font-size:18px;}
-	 .receive_email ul li		{padding:0;}
-	 .current_mnthly ul li{width: 50%;}
-	 .never_forgot_under	{background-size:32% auto;}
-	 
-	 /*INNER PAGE NO 36 START HERE*/
-    .never_forgot_under ul li {padding: 0 5px;}
-	.select_gift_lft:after	{width:60px; height:52px; top:-25px;}
+	 .back_btn	{font-size:17px; position:static;}	
 	
+     /*INNER PAGE NO 34 START HERE*/
+    .pad_in_blk    {padding: 0 7px !important;}
+    .pdf_files_sec ul{margin: 0 -7px;}
+    .pdf_files_sec ul li{padding: 0 7px 15px 7px;}
+	.video_banner	{margin:40px 0 30px 0;}
+	.prices.language	{width:340px;}	
+    
+    /*FOOTER*/
+    .footer_in h3         {font-size: 14px;line-height: 16px;padding: 0 0 25px 0;}
+    .footer_in ul li a    {font-size: 14px;line-height: 16px;}
+    .footer_in ul li span {font-size: 14px;line-height: 16px;}
+    .email_sub            {padding: 0 7px;}
+    .divided              {left: 10px;padding: 8px 13px;}
+    .divided h3           {font-size: 14px;line-height: 16px;}
+		
 }
+
 @media (max-width:479px){
+	
+	/*HOME START HERE*/
+	.head_bottom_in_rgt	{float:none !important; width:100%;}
+	.sign_in	{padding:10px 0 0 0; margin:0; text-align:center;}
+	.sign_in ul	{width:100%;}
+	.sign_in ul li	{float:none; vertical-align:middle;}
+	.head_top_in h6	{font-size:18px;}
+	.head_top_in h6 a	{font-size:18px;}
+    
+    .get_paid_up h2 {font-size: 20px;line-height: 22px;}
+    .get_paid_up_anchor a{width: 90%;margin: 0 0 10px 0;text-align: center;font-size: 20px;line-height: 22px;}
+    .footer_logo    {display: block;}
+    .footer_social_icons{display: block;}
+    .footer_social_icons ul li{width: 24%;}
+	
+	/*INNER PAGE NO 37 START HERE*/
 	.shop_now ul li a	{font-size:13px; line-height:20px;}
 	.shop_now ul li span	{font-size:13px; line-height:20px;}
 	.direct_comsumer	{padding:10px 0;}
@@ -854,8 +1313,8 @@
 	.direct_comsumer h1	span	{font-size:14px;}
 	.prices		{width:270px;}
 	.prices label	{font-size:16px;}
-	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:195px;}
-	.prices input	{width:195px;}
+	.prices .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:175px;}
+	.prices input	{width:175px;}
 	.product_blk	{width:80%; margin:0 auto;}
 	.product_blk ul li	{width:98%; margin:0 0 15px 0;}
 	.product_blk .see_more	{width:100%; font-size: 25px; height: 50px;}
@@ -927,11 +1386,24 @@
 	.vengo_right_top_lt ul li span	{font-size:22px; line-height:22px;}
 	.vengo_right_top_lt h4	{font-size:25px; line-height:30px;}
 	.earn_points_left h3	{font-size:28px;}
-    /*INNER PAGE NO 10 START HERE*/
-    .end_left         {width: 100%;display: block;padding: 0 0 15px 0}
-    .end_right        {width: 100%;display: block;}
+	/*INNER PAGE NO 11 START HERE*/
+    .table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td{font-size: 16px;line-height: 18px;}
+    .never_forgot_under ul li {display: block;width: 100%;padding: 0px 5px 5px 5px;}
+    .never_forgot_under         {background-size: 30% auto;}
+	.never_forgot h4	{font-size:22px; line-height:25px; padding:10px 0 0 0;}
+	.never_forgot_under h5	{font-size:22px;}
+	.never_forgot_under p	{font-size:18px;}
+	.search_club input		{width:185px;}
+	.search_club label		{font-size:16px;}
+	.select_gift		{padding:55px 0 30px 0;}
 	
+	.occasion_form_sec ul li	{margin:0 0 12px 0;}
+	.occasion_form_sec ul li input.city	{margin:0 0 20px 0;}
+	.occasion_form_sec ul li label	{font-size:20px;}
 	/*INNER PAGE NO 12 START HERE*/
+	.select_gift_lft .bootstrap-select.btn-group .dropdown-toggle .filter-option	{font-size:16px;}
+	.select_gift_lft .bootstrap-select.btn-group .dropdown-menu li a span.text	{font-size:16px;}
+	/*INNER PAGE NO 13 START HERE*/
 	.chek_box label		{font-size:16px;}
 	.radio_btn label	{font-size:16px;}
 	.order_middle		{padding:25px 15px 25px 15px;}
@@ -947,7 +1419,7 @@
 	.order_middle .bootstrap-select.btn-group .dropdown-toggle .filter-option	{font-size:14px;}
 	.order_middle .bootstrap-select.btn-group .dropdown-menu li a span.text	{font-size:14px;}
 	
-	/*INNER PAGE NO 13 START HERE*/
+	/*INNER PAGE NO 14 START HERE*/
     .margin_top     {margin: 30px 0 0 0 !important;}
     .connection_map {padding: 10px 0 0 0;}
     .cmap_bar       {width: 100%;margin: 0;}
@@ -958,7 +1430,7 @@
     .pop_up_trained:after   {left: 164px;}
 	.connection_map_in a	{width:240px;}
 	.connection_map_in a img	{height:auto;}
-	.connection_map_in a	{width:auto !important;}
+	.connection_map_in a	{width:auto;}
 	.trained_middle_top_bottom ul li a	{width:auto !important;}
 
 	
@@ -1007,12 +1479,77 @@
 	.form_block ul li input		{font-size:18px;}
 	.language ul li label span	{font-size:20px;}
 	.save_btn					{height:55px; font-size:22px;}
-	
-	/*INNER PAGE NO 17 START HERE*/
+	/*INNER PAGE NO 18 START HERE*/
     .your_intrest_in ul li{width: 100%;padding: 0;}
 	.save_chnages		{height:55px;}
 	
 	/*INNER PAGE NO 20 START HERE*/
+	.dashboard_bar h3	{font-size:18px; line-height:27px;}
+	.dashboard_top		{padding:45px 15px 60px 15px;}
+	.graph_sec ul li		{margin:0 0 15px 0; float:none; display:block;}
+	.product_blk ul li.dash	{width:100%;}
+	/*INNER PAGE NO 22 START HERE*/
+    .points_list            {width: 250px;}
+    .your_starts_info ul li {width: 100%;}
+    .your_starts_depth ul li{width: 100%;margin: 0 0 15px 0;}
+    
+	/*INNER PAGE NO 23 START HERE*/
+	.money_balance ul li	{width:100%; padding:0; float:none;}
+	.money_balance	{padding:50px 15px 35px 15px;}
+	.balance_blk	{padding:55px 0 0 0;}
+	
+	/*INNER PAGE NO 24 START HERE*/
+	.choose_member .top_bar		{padding:10px 0 10px 0;}
+	.choose_member .nicolas_con_left h3	{font-size:22px;}
+	.choose_member .nicolas_con_left h2	{font-size:35px; line-height:40px;}
+	.choose_member .nicolas_porter ul li a	{font-size:7px; padding:0 3px;}
+	.choose_member .nicolas_porter ul li	{padding:0 4px;}
+	.choose_member .orange_btn_blk ul li .buy_gift	{font-size:20px; height:45px;}
+	.choose_member h5	{font-size:18px; line-height:22px;}
+	.choose_member.selected	{padding:25px 10px 0 10px;}
+	.choose_member .nicolas label	{font-size:12px;}
+	.choose_member .nicolas input	{width:55%;}
+	.choose_member .nicolas_left h3	{font-size:24px; line-height:30px;}
+	.choose_member .nicolas_left .pacesetter	{font-size:12px; height:25px; width:100px;}
+	.choose_member .nicolas_left p	{font-size:11px; line-height:15px;}
+	.choose_member .nicolas_right	{width:75px;}
+	.choose_member .nicolas_btns ul li a	{font-size:7px;}
+	.choose_member .nicolas_btns ul li 	{padding:0 2px;}
+	.choose_member .nicolas	{padding:5px 15px 10px 15px;}
+	.choose_member .members_badges	label	{font-size:12px;}
+	.choose_member .members_badges input	{width:56%;}
+	.choose_member .members_badges	ul li a	{width:40px;}
+	.choose_member .monthly_status label	{font-size:12px;}
+	.choose_member .monthly_status input	{width:35%;}
+	.choose_member .member_balance label	{font-size:12px;}
+	.choose_member .member_balance input	{width:52%;}
+	.choose_member .member_balance ul li	{margin:0 0 20px 0;}
+	.choose_member .member_balance ul li .balance_con	{padding:10px 0 0 0; display:inline-block; width:100%;}
+	.money_share_blk_in .member_btn	{margin:15px auto 0 auto;}
+	.or_line h4	{font-size:30px;}
+	.or_line	{margin:0 0 10px 0;}
+	.trunited_gift_card	 h4	{font-size:22px;}
+    /*INNER PAGE NO 27 START HERE*/
+    .money_movement_top ul li{width: 100%;padding: 0 10px 20px 10px;text-align: center;}
+    .money_movement_form     {padding: 8px 0 8px 0;}
+    .movement_form_sec ul li {width: 100%;text-align: left;padding:  0 10px 0 10px;}
+    .movement_form_sec ul li:first-child {margin: 0 0 10px 0;}
+    .movement_form_sec ul li:nth-child(2){margin: 0 0 10px 0;padding: 0 10px 0 10px;}
+    .movement_form_sec ul li:nth-child(3){margin: 0 0 10px 0;}
+    .movement_form_sec ul li:nth-child(4){margin: 0 0 10px 0;}
+    .dsp_none                {display: none !important;}
+    .movement_form_sec ul li label{font-size: 16px;line-height: 18px;}
+    .money_movement_form h3  {font-size: 15px;line-height: 18px;}
+    .money_movement_form_in ul li{width: 100%;}
+    .movement_btn           {height: 45px;}
+	/*INNER PAGE NO 29 START HERE*/
+	.business_btns ul li	{width:100%; padding:0 20px; float:none;}
+	.business_btns ul li .train	{height:55px; font-size:20px;}
+	.your_starts .btn_back	{font-size:22px; height:55px; width:80%;}
+	.dashboard_top ul li span	{font-size:32px; line-height:40px;}
+	.dashboard_top ul li small	{font-size:16px; line-height:18px;}
+
+	/*INNER PAGE NO 30 START HERE*/
 	
 	.available_cards_title ul li span	{font-size:11px;}
 	.movie_ticket ul li span			{font-size:11px;}
@@ -1022,6 +1559,7 @@
 	.orange_btn_blk ul 	{margin:0;}
 	.orange_btn_blk ul li	{width:95%; padding:0; margin:0 auto 15px auto; float:none; display:block;}
 	.orange_btn_blk		{padding:50px 0 25px 0;}
+	.orange_back_btn	{width:100%; height:55px;}
 	
 	.food_products_left	{width:180px;}
 	.food_products_left h6	{font-size:20px; line-height:24px;}
@@ -1034,28 +1572,20 @@
 	.receive_email .rgt_arrow	{top:24px; right:-8px;}
 	.current_mnthly ul li{width: 90%; float:none; margin:0 auto; display:block;}
 	
-	/*INNER PAGE NO 36 START HERE*/
-    .table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td{font-size: 16px;line-height: 18px;}
-    .never_forgot_under ul li {display: block;width: 100%;padding: 0px 5px 5px 5px;}
-    .never_forgot_under         {background-size: 30% auto;}
-	.never_forgot h4	{font-size:22px; line-height:25px; padding:10px 0 0 0;}
-	.never_forgot_under h5	{font-size:22px;}
-	.never_forgot_under p	{font-size:18px;}
-	.search_club input		{width:185px;}
-	.search_club label		{font-size:16px;}
-	.select_gift		{padding:55px 0 30px 0;}
-	
-	.occasion_form_sec ul li	{margin:0 0 12px 0;}
-	.occasion_form_sec ul li input.city	{margin:0 0 20px 0;}
-	.occasion_form_sec ul li label	{font-size:20px;}
+		
+    /*INNER PAGE NO 32 START HERE*/
+    .end_left         {width: 100%;display: block;padding: 0 0 15px 0}
+    .end_right        {width: 100%;display: block;}
+	 /*INNER PAGE NO 34 START HERE*/
+    .pdf_files_sec ul li {width: 100%;}
+    .pdf_files_in        {max-width: 300px;margin: 0 auto;}
+	.prices.language	{width:270px;}
+	.prices.language .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)	{width:175px;}
+	.prices.language input	{width:175px;}	
+    
+     /*FOOTER*/
+    .footer_in      {width: 100%;display: block;padding: 0;}
+	.pad_footer_li  {padding: 0 0 25px 0 !important;}
 	
 }
-
-
-
-
-
-
-
-
 

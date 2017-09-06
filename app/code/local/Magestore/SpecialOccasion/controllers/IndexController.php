@@ -28,6 +28,24 @@ class Magestore_SpecialOccasion_IndexController extends Mage_Core_Controller_Fro
     {
         $this->loadLayout();
         $this->_title(Mage::helper('specialoccasion')->__('The Special Occasion'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+        ));
+
         $this->renderLayout();
     }
 
@@ -35,6 +53,29 @@ class Magestore_SpecialOccasion_IndexController extends Mage_Core_Controller_Fro
     {
         $this->loadLayout();
         $this->_title(Mage::helper('specialoccasion')->__('Create new Special Occasion'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("interest_create", array(
+            "label" => $this->__("Create"),
+            "title" => $this->__("Create"),
+        ));
         $this->renderLayout();
     }
 
@@ -42,6 +83,29 @@ class Magestore_SpecialOccasion_IndexController extends Mage_Core_Controller_Fro
     {
         $this->loadLayout();
         $this->_title(Mage::helper('specialoccasion')->__('Details Special Occasion'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("interest_view", array(
+            "label" => $this->__("Details"),
+            "title" => $this->__("Details"),
+        ));
         $this->renderLayout();
     }
 
@@ -147,6 +211,29 @@ class Magestore_SpecialOccasion_IndexController extends Mage_Core_Controller_Fro
     {
         $this->loadLayout();
         $this->_title(Mage::helper('specialoccasion')->__('Update The Special Occasion'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("interest_update", array(
+            "label" => $this->__("Update"),
+            "title" => $this->__("Update"),
+        ));
         $this->renderLayout();
     }
 
@@ -154,6 +241,29 @@ class Magestore_SpecialOccasion_IndexController extends Mage_Core_Controller_Fro
     {
         $this->loadLayout();
         $this->_title(Mage::helper('specialoccasion')->__('The Special Occasion Payment'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("interest_payment", array(
+            "label" => $this->__("Payment"),
+            "title" => $this->__("Payment"),
+        ));
         $this->renderLayout();
     }
 

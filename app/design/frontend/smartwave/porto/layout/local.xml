@@ -83,10 +83,13 @@
               <action method="addItem"><type>skin_css</type><name>css/cms/homepage/heroslider/reset.css</name><params/></action>
 
               <action method="addCss">
-                <stylesheet>css/new/bootstrap.min.css</stylesheet>
+                <stylesheet>css/new/bootstrap.css</stylesheet>
             </action>
             <action method="addCss">
                 <stylesheet>css/new/style.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/new/responsive.css</stylesheet>
             </action>
             <action method="addCss">
                 <stylesheet>css/new/bootstrap-select.min.css</stylesheet>
@@ -95,10 +98,13 @@
                 <stylesheet>css/new/font-awesome.css</stylesheet>
             </action>
             <action method="addCss">
-                <stylesheet>css/new/bootstrap-datetimepicker.min.css</stylesheet>
+                <stylesheet>css/new/bootstrap-datetimepicker.css</stylesheet>
             </action>
             <action method="addCss">
                 <stylesheet>css/new/datepicker.css</stylesheet>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/new/custom.css</stylesheet>
             </action>
 <!--              <action method="addItem"><type>skin_css</type><name>css/cms/homepage/heroslider/style.css</name><params/></action>-->
         </reference>

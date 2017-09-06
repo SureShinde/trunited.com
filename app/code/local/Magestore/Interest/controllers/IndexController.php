@@ -4,7 +4,28 @@ class Magestore_Interest_IndexController extends Mage_Core_Controller_Front_Acti
 {
 	public function indexAction(){
 		$this->loadLayout();
-		$this->renderLayout();
+
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("interest_leisure", array(
+            "label" => $this->__("Interest and Leisure"),
+            "title" => $this->__("Interest and Leisure"),
+        ));
+
+        $this->_title(Mage::helper('interest')->__('The Interest and Leisure'));
+
+        $this->renderLayout();
 	}
 
 	public function saveInterestAction()

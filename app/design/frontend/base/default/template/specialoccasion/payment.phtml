@@ -33,83 +33,80 @@ if ($occasion != null)
 $cards = $this->getPaymentOccasion();
 ?>
 
-<div class="right_block ">
-    <div class="right_block_in">
-        <div class="search_bar last padd_bot text-center">
-            <h3 class="pad_last"><?php echo $this->__('SPECIAL OCCASION PAYMENT');?></h3>
-            <div class="clearfix"></div>
-        </div>
-        <div class="never_forgot">
-            <h4><?php echo $this->__('Never Forget');?><br><?php echo $this->__('To Send Flowers, Again!');?></h4>
-            <div class="never_forgot_under">
-                <form id="occasion-payment-information" action="<?php echo $this->savePaymentUrl() ?>" method="post">
-                    <h5><?php echo $this->__('Update the Payment');?></h5>
-                    <small><?php echo $this->__('Not Charged Until Product Ships');?></small>
-                    <div class="occasion_form_sec">
-                        <ul>
-                            <?php if (sizeof($cards) > 0) { ?>
-                                <li class="col-md-12">
-                                    <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
-                                    <select id="current_credit_card" name="current_credit_card" class="required-entry">
-                                        <option value=""><?php echo $this->__('Select');?></option>
-                                        <?php foreach ($cards as $card) { ?>
-                                            <option <?php if($card->getData('use_in_occasion')){?>selected="selected"<?php }?>
-                                                    value="<?php echo $card->getId(); ?>"><?php echo $card->getLabel(); ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <a href="<?php echo $this->getCardUrl(); ?>"
-                                       title="<?php echo $this->__('Create, update or use a different card') ?>">
-                                        <?php echo $this->__('Create, update or use a different card') ?>
-                                    </a>
-                                </li>
-                            <?php } else { ?>
-                                <input type="hidden" id="current_credit_card" name="current_credit_card" value=""/>
+<div class="right_block_in">
+    <div class="search_bar last padd_bot text-center">
+        <h3 class="pad_last"><?php echo $this->__('SPECIAL OCCASION PAYMENT');?></h3>
+        <div class="clearfix"></div>
+    </div>
+    <div class="never_forgot">
+        <h4><?php echo $this->__('Never Forget');?><br><?php echo $this->__('To Send Flowers, Again!');?></h4>
+        <div class="never_forgot_under">
+            <form id="occasion-payment-information" action="<?php echo $this->savePaymentUrl() ?>" method="post">
+                <h5><?php echo $this->__('The Payment');?></h5>
+                <div class="trubox_index trubox_payment">
+                    <ul>
+                        <?php if (sizeof($cards) > 0) { ?>
+                            <li class="col-md-12">
+                                <label for="current_credit_card"><?php echo $this->__('Credit Card') ?></label>
+                                <select id="current_credit_card" name="current_credit_card" class="required-entry">
+                                    <option value=""><?php echo $this->__('Select');?></option>
+                                    <?php foreach ($cards as $card) { ?>
+                                        <option <?php if($card->getData('use_in_occasion')){?>selected="selected"<?php }?>
+                                                value="<?php echo $card->getId(); ?>"><?php echo $card->getLabel(); ?></option>
+                                    <?php } ?>
+                                </select>
                                 <a href="<?php echo $this->getCardUrl(); ?>"
                                    title="<?php echo $this->__('Create, update or use a different card') ?>">
                                     <?php echo $this->__('Create, update or use a different card') ?>
                                 </a>
-                            <?php } ?>
+                            </li>
+                        <?php } else { ?>
+                            <input type="hidden" id="current_credit_card" name="current_credit_card" value=""/>
+                            <a href="<?php echo $this->getCardUrl(); ?>"
+                               title="<?php echo $this->__('Create, update or use a different card') ?>">
+                                <?php echo $this->__('Create, update or use a different card') ?>
+                            </a>
+                        <?php } ?>
 
-                            <li class="col-md-12">
-                                <div class="input-box apply_trugiftcard">
+                        <li class="col-md-12">
+                            <div class="input-box apply_trugiftcard">
+                                <label for="use_trugiftcard">
                                     <input type="checkbox" id="use_trugiftcard" name="use_trugiftcard"
                                            title="<?php echo $this->__('Use Trunited Gift Card') ?>"
                                            <?php if ($is_applied_tgc){ ?>checked="checked"<?php } ?>
                                            style="-webkit-appearance: checkbox !important; "
                                     />
+                                    <span><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></span>
+                                </label>
+                                <img
+                                        src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
+                                        title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
+                            </div>
+                        </li>
 
-                                    <label
-                                            for="use_trugiftcard"><?php echo $this->__('Apply Trunited Gift Card balance when available') ?></label>
-                                    <img
-                                            src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/trugiftcard.png'); ?>"
-                                            title="<?php echo $this->__('Trunited Gift Card balance'); ?>"/>
-                                </div>
-                            </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
 
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div class="orange_btn_blk pad12 last">
-                        <ul>
-                            <li class="col-xs-4">
-                                <button type="button" class="btn_blk transition"
-                                        onclick="window.location.href='<?php echo $this->getBackAction();?>'"><?php echo $this->__('Back');?></button>
-                            </li>
-                            <li class="col-xs-4">
-                                <button type="submit" class="btn_blk transition">
-                                    <?php echo $this->__('Save');?>
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                </form>
-            </div>
+                <div class="orange_btn_blk pad12 last">
+                    <ul>
+                        <li class="col-xs-4">
+                            <button type="button" class="btn_blk transition"
+                                    onclick="window.location.href='<?php echo $this->getBackAction();?>'"><?php echo $this->__('Back');?></button>
+                        </li>
+                        <li class="col-xs-4">
+                            <button type="submit" class="btn_blk transition">
+                                <?php echo $this->__('Save');?>
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="clearfix"></div>
 </div>
+<div class="clearfix"></div>
 
 <script type="text/javascript">
     var occasion_payment_information = new VarienForm('occasion-payment-information', true);
@@ -126,6 +123,7 @@ $cards = $this->getPaymentOccasion();
     $j(document).ready(function(e) {
         $j(".sidebar").removeClass('active');
         $j(".sidebar.trubox_brands").addClass('active').show();
+        $j(".sidebar.trubox_brands .sub_blk").slideDown();
     });
 </script>
 

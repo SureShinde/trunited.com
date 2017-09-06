@@ -35,7 +35,7 @@ class Magestore_TruBox_Block_Navigation extends Mage_Core_Block_Template
 
     public function getCategoryLink($category_id)
     {
-        return $this->getUrl('*/*/category', array('id' => $category_id));
+        return $this->getUrl('mytrubox/*/category', array('id' => $category_id));
     }
     
     /**

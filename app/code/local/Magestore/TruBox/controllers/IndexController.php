@@ -74,6 +74,25 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         /* End check default address when trubox address is null */
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox'));
+
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("trubox", array(
+            "label" => $this->__("My TruBox"),
+            "title" => $this->__("My TruBox"),
+        ));
+
         $this->renderLayout();
     }
 
@@ -875,6 +894,30 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     {
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox Items'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("trubox", array(
+            "label" => $this->__("My TruBox"),
+            "title" => $this->__("My TruBox"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("trubox_items", array(
+            "label" => $this->__("View My Items"),
+            "title" => $this->__("View My Items"),
+        ));
+
         $this->renderLayout();
     }
 
@@ -885,6 +928,29 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
         /* End check default address when trubox address is null */
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox Address'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("trubox", array(
+            "label" => $this->__("My TruBox"),
+            "title" => $this->__("My TruBox"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("trubox_address", array(
+            "label" => $this->__("Address"),
+            "title" => $this->__("Address"),
+        ));
         $this->renderLayout();
     }
 
@@ -892,6 +958,29 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     {
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox Payment'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("trubox", array(
+            "label" => $this->__("My TruBox"),
+            "title" => $this->__("My TruBox"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("trubox_payment", array(
+            "label" => $this->__("Payment"),
+            "title" => $this->__("Payment"),
+        ));
         $this->renderLayout();
     }
 
@@ -899,6 +988,29 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
     {
         $this->loadLayout();
         $this->_title(Mage::helper('trubox')->__('My TruBox Category'));
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("my_account", array(
+            "label" => $this->__("My Account"),
+            "title" => $this->__("My Account"),
+            "link"  => Mage::getUrl('customer/account')
+        ));
+
+        $breadcrumbs->addCrumb("trubox", array(
+            "label" => $this->__("My TruBox"),
+            "title" => $this->__("My TruBox"),
+            "link"  => Mage::getUrl('*/*/')
+        ));
+
+        $breadcrumbs->addCrumb("trubox_category", array(
+            "label" => $this->__("Category"),
+            "title" => $this->__("Category"),
+        ));
         $this->renderLayout();
     }
 
@@ -1077,6 +1189,41 @@ class Magestore_TruBox_IndexController extends Mage_Core_Controller_Front_Action
                 Mage::helper('trubox')->__('%s were added to your TruBox.', $count)
             );
         $this->_redirectUrl(Mage::getUrl('*/*/items'));
+    }
+
+    public function searchTruBoxAction()
+    {
+        $sort_by = $this->getRequest()->getParam('sort');
+        $keyword = $this->getRequest()->getParam('keyword');
+
+        $categoryTableName = Mage::getSingleton('core/resource')->getTableName('catalog/category_product');
+
+        $sort = 'asc';
+        if(strcasecmp($sort_by, 'name_desc') == 0)
+            $sort = 'desc';
+
+        $categories = Mage::getModel('catalog/category')
+            ->getCollection()
+            ->addAttributeToFilter('display_trubox', 1)
+            ->addAttributeToFilter('is_active', 1)
+            ;
+
+        $catIds = $categories->getColumnValues('entity_id');
+
+        $products = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToSelect('*')
+            ->joinField('category_id', $categoryTableName, 'category_id', 'product_id = entity_id', null, 'left')
+            ->addAttributeToFilter('category_id', array('in' => $catIds))
+            ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('name', array('like' => '%'.$keyword.'%'))
+            ->addAttributeToFilter('visibility', 4)
+            ->setOrder('name', $sort)
+        ;
+
+        $html = $this->getLayout()->createBlock('trubox/search')->setData("products", $products)->setTemplate('trubox/search.phtml')->toHtml();
+
+        echo $html;
     }
 
 }

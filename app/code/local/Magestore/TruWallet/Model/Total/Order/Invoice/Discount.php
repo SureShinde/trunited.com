@@ -119,6 +119,14 @@ class Magestore_TruWallet_Model_Total_Order_Invoice_Discount extends Mage_Sales_
         $invoice->setBaseTruwalletHiddenTax($totalBaseHiddenTax);
         $invoice->setTruwalletHiddenTax($totalHiddenTax);
 
+        // if($_SERVER['REMOTE_ADDR'] == '42.112.152.68'){
+        //     zend_debug::dump($totalBaseDiscountAmount);
+        //     zend_debug::dump($totalBaseHiddenTax);
+        //     var_dump('aaaaa');
+
+        //     exit;
+        // }
+
         $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
         $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
     }

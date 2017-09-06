@@ -5,21 +5,19 @@
 	$collection = $this->getCollectionInterest();
 	$current_interest = $this->getCurrentInterset();
 ?>
-
-<div class="right_block">
-    <div class="right_block_in">
-        <div class="search_bar padd_bot text-center">
-            <h3 class="pad_last"><?php echo $this->__('INTEREST AND LEISURE');?></h3>
-            <div class="clearfix"></div>
-        </div>
-        <div class="your_intrest">
-            <div class="your_intrest_in">
-                <h4><?php echo $this->__('Your Interest');?></h4>
-                <form action="<?php echo $this->getActionUrl();?>" method="post" id="interest-form">
-                    <?php if(sizeof($collection) > 0){?>
-                        <ul>
-                            <?php if(sizeof($collection) <= 12) {?>
-                                <li class="col-xs-3">
+<div class="right_block_in">
+    <div class="search_bar padd_bot text-center">
+        <h3 class="pad_last"><?php echo $this->__('INTEREST AND LEISURE');?></h3>
+        <div class="clearfix"></div>
+    </div>
+    <div class="your_intrest">
+        <div class="your_intrest_in">
+            <h4><?php echo $this->__('Your Interest');?></h4>
+            <form action="<?php echo $this->getActionUrl();?>" method="post" id="interest-form">
+                <?php if(sizeof($collection) > 0){?>
+                    <ul>
+                        <?php if(sizeof($collection) <= 12) {?>
+                            <li class="col-xs-3">
                                 <?php foreach ($collection as $item) {?>
                                     <div class="chek_box1">
                                         <label>
@@ -29,36 +27,34 @@
                                         </label>
                                     </div>
                                 <?php }?>
-                                </li>
-                            <?php } else {?>
-                                <?php foreach ($collection as $item) {?>
-                                    <div class="col-xs-3">
-                                        <label>
-                                            <input type="checkbox" name="interest[]" value="<?php echo $item->getId()?>"
-                                                   <?php if($this->isInCurrent($item->getId())){?>checked="checked"<?php }?> />
-                                            <span><?php echo $item->getTitle();?></span>
-                                        </label>
-                                    </div>
-                                <?php }?>
+                            </li>
+                        <?php } else {?>
+                            <?php foreach ($collection as $item) {?>
+                                <div class="col-xs-3">
+                                    <label>
+                                        <input type="checkbox" name="interest[]" value="<?php echo $item->getId()?>"
+                                               <?php if($this->isInCurrent($item->getId())){?>checked="checked"<?php }?> />
+                                        <span><?php echo $item->getTitle();?></span>
+                                    </label>
+                                </div>
                             <?php }?>
-                        </ul>
+                        <?php }?>
+                    </ul>
                     <div class="spl_dates">
                         <div class="">
                             <button type="submit" class="save_chnages transition"><?php echo $this->__('Save changes');?></button>
                             <?php if($current_interest != null && sizeof($current_interest) > 0){?>
-                            <button type="button" class="save_chnages transition" id="clear_all"><?php echo $this->__('Clear All');?></button>
+                                <button type="button" class="save_chnages transition" id="clear_all"><?php echo $this->__('Clear All');?></button>
                             <?php }?>
                         </div>
                     </div>
-                    <?php } else {?>
-                        <p><?php echo $this->__('No Interest and Leisure found')?></p>
-                    <?php }?>
-                </form>
-            </div>
+                <?php } else {?>
+                    <p><?php echo $this->__('No Interest and Leisure found')?></p>
+                <?php }?>
+            </form>
         </div>
     </div>
 </div>
-
 <style type="text/css">
     .your_intrest{
         padding: 0 !important;

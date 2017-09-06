@@ -3,88 +3,86 @@ $helper = Mage::helper('specialoccasion');
 $collection = $this->getOccasionsCollection();
 
 if($helper->isEnable()){?>
-    <div class="right_block">
-        <div class="right_block_in">
-            <div class="search_bar last padd_bot text-center">
-                <h3 class="text-uppercase"><?php echo $this->__('SPECIAL OCCASION');?></h3>
-                <div class="clearfix"></div>
-            </div>
-            <div class="never_forgot">
-                <h4><?php echo $this->__('Never Forget');?><br><?php echo $this->__('To Send Flowers, Again!');?></h4>
-                <div class="never_forgot_under">
-                    <h5><a href="<?php echo $this->getAddNewAction();?>"><?php echo $this->__('Add Special Occasion'); ?></a></h5>
-                    <div id="no-more-tables">
-                        <table class="col-md-12 table-striped table-condensed cf">
-                            <thead class="cf">
-                            <tr>
-                                <th class="tb_th_width"><?php echo $this->__('Occasion');?></th>
-                                <th class="tb_th_width"><?php echo $this->__('Name');?></th>
-                                <th class="Date tb_th_width2"><?php echo $this->__('Date');?></th>
-                                <th class="Products tb_th_width3"><?php echo $this->__('Products');?></th>
-                                <th class="tb_th_width"><?php echo $this->__('Status');?></th>
-                                <th class="tb_th_width"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php if($collection != null && sizeof($collection) > 0){?>
-                                <?php $item_status = Magestore_SpecialOccasion_Model_Status::getOptionItemArray();?>
-                                <?php foreach ($collection as $item) {?>
-                                    <?php $p = Mage::getModel('catalog/product')->load($item->getProductId());?>
-                                    <tr>
-                                        <td data-title="Occasion"><?php echo $item->getOccasion();?></td>
-                                        <td data-title="Name"><?php echo $this->getShipName($item->getId());?></td>
-                                        <td data-title="Date" class="numeric"><?php echo date('F d', strtotime($item->getShipDate()));?></td>
-                                        <td data-title="Products" class="numeric">
-                                            <?php if($p != null && $p->getId()){?>
-                                                <?php echo $p->getName();?>
-                                            <?php }?>
-                                        </td>
-                                        <td>
-                                            <?php echo $item_status[$item->getStatus()];?>
-                                        </td>
-                                        <?php if($item->getStatus() == Magestore_SpecialOccasion_Model_Status::STATUS_ITEM_PENDING){?>
-                                            <td>
-                                                <a href="<?php echo $this->getUrl('*/*/update', array('id' => $item->getId()));?>">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </a>
-                                                <a href="<?php echo $this->getUrl('*/*/delete', array('id' => $item->getId()));?>" class="delete-items">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        <?php } else {?>
-                                            <td>
-                                                <a href="<?php echo $this->getUrl('*/*/view', array('id' => $item->getId()));?>">
-                                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        <?php }?>
-                                    </tr>
-                                <?php }?>
-                            <?php } else {?>
+    <div class="right_block_in">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="text-uppercase"><?php echo $this->__('SPECIAL OCCASION');?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="never_forgot">
+            <h4><?php echo $this->__('Never Forget');?><br><?php echo $this->__('To Send Flowers, Again!');?></h4>
+            <div class="never_forgot_under">
+                <h5><a href="<?php echo $this->getAddNewAction();?>"><?php echo $this->__('Add Special Occasion'); ?></a></h5>
+                <div id="no-more-tables">
+                    <table class="col-md-12 table-striped table-condensed cf">
+                        <thead class="cf">
+                        <tr>
+                            <th class="tb_th_width"><?php echo $this->__('Occasion');?></th>
+                            <th class="tb_th_width"><?php echo $this->__('Name');?></th>
+                            <th class="Date tb_th_width2"><?php echo $this->__('Date');?></th>
+                            <th class="Products tb_th_width3"><?php echo $this->__('Products');?></th>
+                            <th class="tb_th_width"><?php echo $this->__('Status');?></th>
+                            <th class="tb_th_width"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php if($collection != null && sizeof($collection) > 0){?>
+                            <?php $item_status = Magestore_SpecialOccasion_Model_Status::getOptionItemArray();?>
+                            <?php foreach ($collection as $item) {?>
+                                <?php $p = Mage::getModel('catalog/product')->load($item->getProductId());?>
                                 <tr>
-                                    <td colspan="5">
-                                        <p><?php echo $this->__('You haven\'t added any the Special Occasion');?></p>
+                                    <td data-title="Occasion"><?php echo $item->getOccasion();?></td>
+                                    <td data-title="Name"><?php echo $this->getShipName($item->getId());?></td>
+                                    <td data-title="Date" class="numeric"><?php echo date('F d', strtotime($item->getShipDate()));?></td>
+                                    <td data-title="Products" class="numeric">
+                                        <?php if($p != null && $p->getId()){?>
+                                            <?php echo $p->getName();?>
+                                        <?php }?>
                                     </td>
+                                    <td>
+                                        <?php echo $item_status[$item->getStatus()];?>
+                                    </td>
+                                    <?php if($item->getStatus() == Magestore_SpecialOccasion_Model_Status::STATUS_ITEM_PENDING){?>
+                                        <td>
+                                            <a href="<?php echo $this->getUrl('*/*/update', array('id' => $item->getId()));?>">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="<?php echo $this->getUrl('*/*/delete', array('id' => $item->getId()));?>" class="delete-items">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    <?php } else {?>
+                                        <td>
+                                            <a href="<?php echo $this->getUrl('*/*/view', array('id' => $item->getId()));?>">
+                                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    <?php }?>
                                 </tr>
                             <?php }?>
-                            </tbody>
-                        </table>
-                        <div class="clearfix"></div>
-                    </div>
-                    <p><?php echo $this->__('*Not Charged Until Product Ships');?></p>
-                    <p><?php echo $this->__('*Email Reminder Sent %s Days Priot To Shipping', Mage::helper('specialoccasion')->getConfigData('general', 'day_send_email'));?></p>
-                    <ul>
-                        <li class="col-xs-4">
-                            <button type="button" class="btn_blk transition"
-                                    onclick="window.location.href='<?php echo $this->getAddNewAction();?>'"><?php echo $this->__('Add New');?></button>
-                        </li>
-                    </ul>
+                        <?php } else {?>
+                            <tr>
+                                <td colspan="5">
+                                    <p><?php echo $this->__('You haven\'t added any the Special Occasion');?></p>
+                                </td>
+                            </tr>
+                        <?php }?>
+                        </tbody>
+                    </table>
                     <div class="clearfix"></div>
                 </div>
+                <p><?php echo $this->__('*Not Charged Until Product Ships');?></p>
+                <p><?php echo $this->__('*Email Reminder Sent %s Days Priot To Shipping', Mage::helper('specialoccasion')->getConfigData('general', 'day_send_email'));?></p>
+                <ul>
+                    <li class="col-xs-4">
+                        <button type="button" class="btn_blk transition"
+                                onclick="window.location.href='<?php echo $this->getAddNewAction();?>'"><?php echo $this->__('Add New');?></button>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
             </div>
         </div>
-        <div class="clearfix"></div>
     </div>
+    <div class="clearfix"></div>
     <script type="text/javascript">
         $j = jQuery.noConflict();
         $j('.main-container').addClass('main_block main_bg2');
@@ -98,6 +96,7 @@ if($helper->isEnable()){?>
         $j(document).ready(function(e) {
             $j(".sidebar").removeClass('active');
             $j(".sidebar.trubox_brands").addClass('active').show();
+            $j(".sidebar.trubox_brands .sub_blk").slideDown();
         });
     </script>
 <?php }?>

@@ -119,8 +119,21 @@ class Magestore_TruGiftCard_Model_Total_Order_Invoice_Discount extends Mage_Sale
         $invoice->setBaseTrugiftcardHiddenTax($totalBaseHiddenTax);
         $invoice->setTrugiftcardHiddenTax($totalHiddenTax);
 
-        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
-        $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
+        // if($_SERVER['REMOTE_ADDR'] == '42.112.152.68'){
+        //     zend_debug::dump($totalBaseDiscountAmount);
+        //     zend_debug::dump($totalBaseHiddenTax);
+        //     zend_debug::dump($order->debug());
+        //     var_dump('bbbbb');
+
+        //     exit;
+        // }
+
+        if($order->getTruwalletDiscount() == 0 && $order->getTrugiftcardDiscount() > 0){
+            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
+            $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
+        }
+
+        
     }
 
 }

@@ -95,4 +95,12 @@ class Magestore_TruBox_Block_Category extends Mage_Core_Block_Template {
 
         return $rs;
     }
+
+    public function displayName($name)
+    {
+        if(strlen($name) > 60)
+            return substr($name, 0, 60).'...';
+        else
+            return $name;
+    }
 }

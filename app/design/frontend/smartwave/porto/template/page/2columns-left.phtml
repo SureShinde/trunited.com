@@ -41,17 +41,17 @@
     <div class="page">
         <?php echo $this->getChildHtml('custom_notice') ?>
         <?php echo $this->getChildHtml('header') ?>
-        <?php //echo $this->getChildHtml('topContainer') ?>
+        <?php echo $this->getChildHtml('topContainer') ?>
         <div class="main-container col2-left-layout">
             <div class="main container">
                 <div class="row">
                     <div class="direct_comsumer"></div>
                     <div class="clearfix"></div>
-                    <div class="col-main col-sm-9 f-right">
+                    <div class="left_block col-sm-3 col-xs-12"><?php echo $this->getChildHtml('left') ?></div>
+                    <div class="right_block col-sm-9 col-xs-12">
                         <?php echo $this->getChildHtml('global_messages') ?>
                         <?php echo $this->getChildHtml('content') ?>
                     </div>
-                    <div class="col-left sidebar f-left col-sm-3"><?php echo $this->getChildHtml('left') ?></div>
                 </div>
             </div>
         </div>

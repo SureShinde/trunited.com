@@ -43,31 +43,30 @@ if ($this->isShowCurrentMonth()) {
 $cms_id = Mage::helper('trubox')->getCmsWhatIsTruBox();
 
 ?>
-<div class="right_block">
-    <div class="right_block_in">
-        <div class="search_bar last padd_bot text-center">
-            <h3 class="text-uppercase"><?php echo $this->__('Manage TruBox Items')?></h3>
-            <div class="clearfix"></div>
-        </div>
-        <div class="food_beverages_main">
-            <div class="food_products trubox_list">
-                <div class="food_products_in">
-                    <div class="food_products_left">
-                        <h6><?php echo $this->__('Products')?></h6>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="food_products_right">
-                        <h6><?php echo $this->__('Quantity')?></h6>
-                    </div>
+<div class="right_block_in">
+    <div class="search_bar last padd_bot text-center">
+        <h3 class="text-uppercase"><?php echo $this->__('Manage TruBox Items')?></h3>
+        <div class="clearfix"></div>
+    </div>
+    <div class="food_beverages_main">
+        <div class="food_products trubox_list">
+            <div class="food_products_in">
+                <div class="food_products_left">
+                    <h6><?php echo $this->__('Products')?></h6>
                     <div class="clearfix"></div>
                 </div>
-                <?php if (sizeof($collection) > 0) { ?>
-                    <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST" id="trubox-items">
-                        <?php
-                        $totalPointEarn = 0;
-                        $totalPrice = 0;
-                        $tax = 0;
-                        foreach ($collection as $item) {
+                <div class="food_products_right">
+                    <h6><?php echo $this->__('Quantity')?></h6>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <?php if (sizeof($collection) > 0) { ?>
+                <form class="items" action="<?php echo $this->saveItemsUrl() ?>" method="POST" id="trubox-items">
+                    <?php
+                    $totalPointEarn = 0;
+                    $totalPrice = 0;
+                    $tax = 0;
+                    foreach ($collection as $item) {
                         $product = Mage::getModel('catalog/product')->load($item->getProductId());
                         $pointEarn = $this->getPointEarning($product);
                         $option_params = json_decode($item->getOptionParams(), true);
@@ -94,160 +93,159 @@ $cms_id = Mage::helper('trubox')->getCmsWhatIsTruBox();
 
                         $price_options = 0;
                         ?>
-                            <div class="food_products_in">
-                                <div class="food_products_left">
-                                    <ul>
-                                        <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
-                                               id="one_time_<?php echo $item->getId(); ?>"
-                                               value="<?php echo Magestore_TruBox_Model_Type::TYPE_ONE_TIME ?>"
-                                               class="item_<?php echo $item->getId(); ?>"
-                                               title="<?php echo Mage::helper('trubox')->__('One Time Shipment') ?>"
-                                               onchange="selectType(this, this.checked)"
-                                                          <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_ONE_TIME){ ?>checked="checked"<?php } ?> /><small></small></label></li>
-                                        <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
-                                               id="every_month_<?php echo $item->getId(); ?>"
-                                               value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH ?>"
-                                               class="item_<?php echo $item->getId(); ?>"
-                                               title="<?php echo Mage::helper('trubox')->__('Every Month') ?>"
-                                               onchange="selectType(this, this.checked)"
-                                               <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH){ ?>checked="checked"<?php } ?> /><small></small></label></li>
-                                        <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
-                                               id="every_two_months_<?php echo $item->getId(); ?>"
-                                               value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS ?>"
-                                               class="item_<?php echo $item->getId(); ?>"
-                                               title="<?php echo Mage::helper('trubox')->__('Every Two Months') ?>"
-                                               onchange="selectType(this, this.checked)"
-                                               <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS){ ?>checked="checked"<?php } ?> /><small></small></label></li>
-                                        <li><span><a href="<?php echo $product->getProductUrl(true); ?>" class="">
-                                                <?php echo $product->getName() ?></span></a></li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="food_products_right">
-                                    <div class="increse">
-                                        <input class="product-qty input-quantity" id="item_<?php echo $item->getId(); ?>"
-                                               name="<?php echo $item->getId(); ?>" value="<?php echo $item->getQty() ?>"
-                                               />
-                                        <span class="up">&nbsp;</span>
-                                        <span class="down">&nbsp;</span>
-                                    </div>
-                                </div>
+                        <div class="food_products_in">
+                            <div class="food_products_left">
+                                <ul>
+                                    <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
+                                                      id="one_time_<?php echo $item->getId(); ?>"
+                                                      value="<?php echo Magestore_TruBox_Model_Type::TYPE_ONE_TIME ?>"
+                                                      class="item_<?php echo $item->getId(); ?>"
+                                                      title="<?php echo Mage::helper('trubox')->__('One Time Shipment') ?>"
+                                                      onchange="selectType(this, this.checked)"
+                                                      <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_ONE_TIME){ ?>checked="checked"<?php } ?> /><small></small></label></li>
+                                    <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
+                                                      id="every_month_<?php echo $item->getId(); ?>"
+                                                      value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH ?>"
+                                                      class="item_<?php echo $item->getId(); ?>"
+                                                      title="<?php echo Mage::helper('trubox')->__('Every Month') ?>"
+                                                      onchange="selectType(this, this.checked)"
+                                                      <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_EVERY_MONTH){ ?>checked="checked"<?php } ?> /><small></small></label></li>
+                                    <li><label><input type="checkbox" name="type_<?php echo $item->getId(); ?>"
+                                                      id="every_two_months_<?php echo $item->getId(); ?>"
+                                                      value="<?php echo Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS ?>"
+                                                      class="item_<?php echo $item->getId(); ?>"
+                                                      title="<?php echo Mage::helper('trubox')->__('Every Two Months') ?>"
+                                                      onchange="selectType(this, this.checked)"
+                                                      <?php if ($item->getTypeItem() == Magestore_TruBox_Model_Type::TYPE_EVERY_TWO_MONTHS){ ?>checked="checked"<?php } ?> /><small></small></label></li>
+                                    <li><span><a href="<?php echo $product->getProductUrl(true); ?>" class="">
+                                            <?php echo $product->getName() ?></span></a></li>
+                                </ul>
                                 <div class="clearfix"></div>
                             </div>
-                        <?php }?>
-                    </form>
-                <?php }  else { ?>
-                    <p><?php echo $this->__('No products found'); ?></p>
-                <?php } ?>
-                <div class="onetime_sipping">
-                    <ul>
-                        <li>
-                            <label><input type="checkbox" disabled><span><?php echo $this->__('One Time Shipping');?>g</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label><input type="checkbox" disabled=""><span><?php echo $this->__('Every Month Shipping');?></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label><input type="checkbox" disabled=""><span><?php echo $this->__('Every 2 Month Shipping');?></span>
-                            </label>
-                        </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <div class="month_tabs">
-                <div class="brd_line"></div>
-                <div class="receive_email">
-                    <small class="month_text"><?php echo $this->__('Month');?></small>
-                    <ul>
-                        <li class="col-xs-4">
-                            <span>1<sup><?php echo $this->__('st');?></sup></span>
-                            <small><?php echo $this->__('Receive Email');?></small>
-                            <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
-                        </li>
-                        <li class="col-xs-4">
-                            <span>5<sup><?php echo $this->__('th');?></sup></span>
-                            <small><?php echo $this->__('TruBox Processed');?></small>
-                            <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
-                        </li>
-                        <li class="col-xs-4">
-                            <span>10<sup><?php echo $this->__('th');?></sup></span>
-                            <small><?php echo $this->__('TruBox Shipped');?></small>
-                        </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
+                            <div class="food_products_right">
+                                <div class="increse">
+                                    <input class="product-qty input-quantity" id="item_<?php echo $item->getId(); ?>"
+                                           name="<?php echo $item->getId(); ?>" value="<?php echo $item->getQty() ?>"
+                                    />
+                                    <span class="up">&nbsp;</span>
+                                    <span class="down">&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    <?php }?>
+                </form>
+            <?php }  else { ?>
+                <p><?php echo $this->__('No products found'); ?></p>
+            <?php } ?>
+            <div class="onetime_sipping">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" disabled><span><?php echo $this->__('One Time Shipping');?>g</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" disabled=""><span><?php echo $this->__('Every Month Shipping');?></span>
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" disabled=""><span><?php echo $this->__('Every 2 Month Shipping');?></span>
+                        </label>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
             </div>
         </div>
-        <div class="current_mnthly">
-            <ul>
-                <li class="col-xs-4 col-sm-6 col-md-4">
-                    <h4><?php if ($is_current) {
-                            echo date('F', time());
-                        } else echo date('F', strtotime('first day of +1 month')); ?></h4>
-                    <div class="curnt_mnth">
-                        <div class="curnt_mnth_in">
-                            <strong id="current_month_points"><?php echo $data_first['points']; ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
-                        </div>
-
-                        <div class="curnt_mnth_in">
-                            <strong id="current_month_cost"><?php echo Mage::helper('core')->currency($data_first['cost'], true, false) ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
-                        </div>
-                    </div>
-
-                    <?php if (sizeof($collection) > 0) { ?>
-                        <button type="button" class="btn transition" id="btn-submit"><?php echo $this->__('Save TruBox')?></button>
-                    <?php }?>
-                </li>
-
-                <li class="col-xs-4 col-sm-6 col-md-4">
-                    <h4><?php if ($is_current) {
-                            echo date('F', strtotime('first day of +1 month'));
-                        } else echo date('F', strtotime('first day of +2 months')); ?></h4>
-                    <div class="curnt_mnth">
-                        <div class="curnt_mnth_in">
-                            <strong id="monthly_points"><?php echo $data_second['points']; ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
-                        </div>
-
-                        <div class="curnt_mnth_in">
-                            <strong id="monthly_cost"><?php echo Mage::helper('core')->currency($data_second['cost'], true, false) ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
-                        </div>
-                    </div>
-                    <?php if($cms_id != null){?>
-                        <button type="button" class="btn transition" id="what-is-trubox">
-                            <?php echo $this->__('What is TruBox')?>
-                        </button>
-                    <?php }?>
-                </li>
-
-                <li class="col-xs-4 col-sm-6 col-md-4">
-                    <h4><?php if ($is_current) {
-                            echo date('F', strtotime('first day of +2 months'));
-                        } else echo date('F', strtotime('first day of +3 months')); ?></h4>
-                    <div class="curnt_mnth">
-                        <div class="curnt_mnth_in">
-                            <strong id="two_month_points"><?php echo $data_third['points']; ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
-                        </div>
-
-                        <div class="curnt_mnth_in">
-                            <strong id="two_month_cost"><?php echo Mage::helper('core')->currency($data_third['cost'], true, false) ?></strong>
-                            <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
-                        </div>
-                    </div>
-                    <?php if (sizeof($collection) > 0) { ?>
-                        <button type="button" class="btn transition" id="clear-trubox-items"><?php echo $this->__('Clear TruBox')?></button>
-                    <?php }?>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
+        <div class="month_tabs">
+            <div class="brd_line"></div>
+            <div class="receive_email">
+                <small class="month_text"><?php echo $this->__('Month');?></small>
+                <ul>
+                    <li class="col-xs-4">
+                        <span>1<sup><?php echo $this->__('st');?></sup></span>
+                        <small><?php echo $this->__('Receive Email');?></small>
+                        <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
+                    </li>
+                    <li class="col-xs-4">
+                        <span>5<sup><?php echo $this->__('th');?></sup></span>
+                        <small><?php echo $this->__('TruBox Processed');?></small>
+                        <em class="rgt_arrow"><img src="<?php echo $this->getSkinUrl('images/right_arrow.png');?>" alt="arrow"></em>
+                    </li>
+                    <li class="col-xs-4">
+                        <span>10<sup><?php echo $this->__('th');?></sup></span>
+                        <small><?php echo $this->__('TruBox Shipped');?></small>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
         </div>
+    </div>
+    <div class="current_mnthly">
+        <ul>
+            <li class="col-xs-4 col-sm-6 col-md-4">
+                <h4><?php if ($is_current) {
+                        echo date('F', time());
+                    } else echo date('F', strtotime('first day of +1 month')); ?></h4>
+                <div class="curnt_mnth">
+                    <div class="curnt_mnth_in">
+                        <strong id="current_month_points"><?php echo $data_first['points']; ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
+                    </div>
+
+                    <div class="curnt_mnth_in">
+                        <strong id="current_month_cost"><?php echo Mage::helper('core')->currency($data_first['cost'], true, false) ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
+                    </div>
+                </div>
+
+                <?php if (sizeof($collection) > 0) { ?>
+                    <button type="button" class="btn transition" id="btn-submit"><?php echo $this->__('Save TruBox')?></button>
+                <?php }?>
+            </li>
+
+            <li class="col-xs-4 col-sm-6 col-md-4">
+                <h4><?php if ($is_current) {
+                        echo date('F', strtotime('first day of +1 month'));
+                    } else echo date('F', strtotime('first day of +2 months')); ?></h4>
+                <div class="curnt_mnth">
+                    <div class="curnt_mnth_in">
+                        <strong id="monthly_points"><?php echo $data_second['points']; ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
+                    </div>
+
+                    <div class="curnt_mnth_in">
+                        <strong id="monthly_cost"><?php echo Mage::helper('core')->currency($data_second['cost'], true, false) ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
+                    </div>
+                </div>
+                <?php if($cms_id != null){?>
+                    <button type="button" class="btn transition" id="what-is-trubox">
+                        <?php echo $this->__('What is TruBox')?>
+                    </button>
+                <?php }?>
+            </li>
+
+            <li class="col-xs-4 col-sm-6 col-md-4">
+                <h4><?php if ($is_current) {
+                        echo date('F', strtotime('first day of +2 months'));
+                    } else echo date('F', strtotime('first day of +3 months')); ?></h4>
+                <div class="curnt_mnth">
+                    <div class="curnt_mnth_in">
+                        <strong id="two_month_points"><?php echo $data_third['points']; ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('points');?></small>
+                    </div>
+
+                    <div class="curnt_mnth_in">
+                        <strong id="two_month_cost"><?php echo Mage::helper('core')->currency($data_third['cost'], true, false) ?></strong>
+                        <small><?php echo $this->__('your TRUBOX');?> <br><?php echo $this->__('cost');?></small>
+                    </div>
+                </div>
+                <?php if (sizeof($collection) > 0) { ?>
+                    <button type="button" class="btn transition" id="clear-trubox-items"><?php echo $this->__('Clear TruBox')?></button>
+                <?php }?>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -258,6 +256,9 @@ $cms_id = Mage::helper('trubox')->getCmsWhatIsTruBox();
 
     $j = jQuery.noConflict();
     $j('.page-title').focus();
+
+    $j(".sidebar.active .sub_blk").show();
+    $j(".sidebar.active .sub_blk").slideDown();
 
     $j('.main-container').addClass('main_block inn_pad main_bg2');
     $j('.direct_comsumer').html('<h1 class="inner_pad">The Trubox Club</h1>');

@@ -1,0 +1,103 @@
+.top-container >.breadcrumbs{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+header .navbar.navbar-default{
+    float: none;
+}
+
+#interest-form #clear_all{
+    margin-left: 20px;
+}
+nav ul li{
+    margin: 0 30px 0 0 !important;
+}
+
+.shop_now ul li{
+    float: none !important;
+}
+
+.breadcrumbs .shop_now{
+    text-align: left;
+}
+
+
+.trubox_payment ul li input[type="checkbox"]:checked + span {
+    background: url(../../images/cheak_box_cheak.png) no-repeat left top;
+    background-position-x: left;
+    background-position-y: top;
+    background-position: 0px 3px;
+}
+.trubox_payment ul li span {
+    font-size: 18px;
+    line-height: 24px;
+    color: #000000;
+    font-weight: 400;
+    padding: 3px 11px 3px 34px;
+    position: relative;
+    background: url(../../images/cheak_box1.png) no-repeat left top;
+    background-position: 0px 3px;
+    cursor: pointer;
+    display: block;
+}
+
+
+.sort_by label{
+    padding-right: 214px;
+}
+
+.sort_by select{
+    position: absolute;
+    top: 0;
+    margin: 0;
+    right: 0px;
+    vertical-align: middle;
+    width: 200px;
+    height: 31px;
+    border: 1px solid #00b5cb;
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    color: #454543;
+    line-height: 20px;
+    font-weight: 400;
+    float: left;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 0 28px 0 12px;
+}
+
+.never_forgot_under h5{
+    margin-bottom: 90px;
+}
+
+.never_forgot_under .trubox_payment label,.never_forgot_under .trubox_payment select{
+    width: 100%;
+}
+
+.never_forgot_under .trubox_payment select{
+    height: 38px;
+}
+.never_forgot_under small{
+    margin: -90px 0 90px 0;
+}
+
+.middle, #country-occasion{
+    margin: 0 0 25px 0;
+}
+
+.select_gift_lft::after{
+    background: none !important;
+}
+
+.gift_info{
+    text-align: center;
+}
+
+#add-new-occasion-form select, .trubox_index select{
+    width: 100%;
+    height: 40px;
+    border: 3px solid #a6a5a5;
+    font-size: 20px;
+    color: #a6a5a5;
+}
+
