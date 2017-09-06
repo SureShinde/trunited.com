@@ -5,6 +5,8 @@
     $footer_class = ($footer['fixed_position_footer_enabled'])?" fixed-position":"";
 ?>
 <div class="footer-container <?php echo $footer_class; ?>">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/cms/homepage/slick.css');?>" media="all" />
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('newsBlock')->toHtml();?>
     <div class="footer">
     <?php
         if( $footer['footer_top_enabled'] ){
@@ -148,6 +150,7 @@
     ?>
     </div>
 </div>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/cms/homepage/slick.js');?>"></script>
 <a href="#" id="totop"><i class="icon-up-open"></i></a>
 <script type="text/javascript">
     var windowScroll_t;

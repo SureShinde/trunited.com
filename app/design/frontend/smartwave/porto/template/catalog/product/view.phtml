@@ -1,4 +1,20 @@
 <?php
+$currentCategory = Mage::registry('current_category');
+$currentCategoryId = '';
+if ($currentCategory){
+    $currentCategoryId = $currentCategory->getId();
+}
+
+$directToConsumer = Mage::getModel('catalog/category')->load(42);
+$directToConsumerChildrens = $directToConsumer->getChildren();
+$directToConsumerChildrens = explode(',',$directToConsumerChildrens);
+$directToConsumerChildrens[] = 42;
+
+$globalBrand = Mage::getModel('catalog/category')->load(41);
+$globalBrandChildrens = $globalBrand->getChildren();
+$globalBrandChildrens = explode(',',$globalBrandChildrens);
+$globalBrandChildrens[] = 41;
+
     $_helper = $this->helper('catalog/output');
     $helper_richsnippets = $this->helper('porto/richsnippets');
     $store = Mage::app()->getStore();
@@ -7,7 +23,10 @@
     $customer_id = $is_logged ? Mage::getSingleton('customer/session')->getCustomer()->getId() : '#';
     $login_url = Mage::helper('customproduct')->getLoginUrl();
 ?>
-<?php $_product = $this->getProduct(); ?>
+<?php 
+        $_product = $this->getProduct(); 
+        $productType = ($_product) ? $_product->getTypeId() : '';
+?>
 <?php
     $product = Mage::getModel('catalog/product')->load($_product->getId());
     $product_type = $_product->getTypeId();
@@ -103,11 +122,11 @@ if($enable_addtocart_sticky){
                         </span>
                     <?php endif; ?>
                     <?php endif; ?>
-					<?php if ($_product->isAvailable()): ?>
-						<p class="availability in-stock"><span>(<?php echo $this->__('In stock') ?>)</span></p>
-					<?php else: ?>
-						<p class="availability out-of-stock"><span>(<?php echo $this->__('Out of stock') ?>)</span></p>
-					<?php endif; ?>
+                    <?php if ($_product->isAvailable()): ?>
+                        <p class="availability in-stock"><span>(<?php echo $this->__('In stock') ?>)</span></p>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span>(<?php echo $this->__('Out of stock') ?>)</span></p>
+                    <?php endif; ?>
                 </div>
                 <?php if($_product->isSaleable()): ?>
                 <?php $buttonTitle = $this->__('Add to Cart'); ?>
@@ -124,15 +143,17 @@ if($enable_addtocart_sticky){
             <div class="product-img-box col-sm-<?php echo Mage::getStoreConfig("porto_settings/product_view/product_image_size", $code); ?> <?php echo Mage::getStoreConfig("porto_settings/product_view/thumbnail_image_type", $code); ?>">
                 <?php echo $this->getChildHtml('media') ?>
             </div>
-            <div class="product-shop col-sm-<?php echo 12-Mage::getStoreConfig("porto_settings/product_view/product_image_size", $code); ?>">
+            <?php $class = ($productType == 'simple') ? 'gift_card_top_right' : 'product-shop'; ?>
+            <div class="<?php echo $class;?> col-sm-<?php echo 12-Mage::getStoreConfig("porto_settings/product_view/product_image_size", $code); ?>">
             <?php
+            /*
                 if (Mage::getStoreConfig("porto_settings/product_view/prev_next",$code)){
             ?>
                 <div class="prev-next-products">
-                    <?php //$_prev = Mage::helper('porto')->getPreviousProduct(); ?>
-                    <?php //$_next = Mage::helper('porto')->getNextProduct(); ?>
+                    <?php $_prev = Mage::helper('porto')->getPreviousProduct(); ?>
+                    <?php $_next = Mage::helper('porto')->getNextProduct(); ?>
                      
-                    <!-- <?php if($_prev): ?>
+                    <?php if($_prev): ?>
                     <div class="product-nav product-prev">
                         <a href="<?php echo $_prev->getProductUrl();?>" title="<?php echo $this->__("Previous Product"); ?>">
                             <?php echo Mage::getStoreConfig("porto_settings/product_view/prev_text",$code); ?>
@@ -157,17 +178,25 @@ if($enable_addtocart_sticky){
                             <h3 class="product-name"><?php echo $_helper->productAttribute($_next, $_next->getName(), 'name') ?></h3>
                         </div>
                     </div>
-                    <?php endif; ?> -->
+                    <?php endif; ?>
                 </div>
             <?php
                 }
+                */
             ?>
+                <?php if ($productType == 'simple'){
+                    echo '<div class = "buffalo">';
+                } ?>
+                <?php 
+                    if ($productType == 'simple' || $productType == 'customproduct'){ ?>
+                    <h4 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h4>
+                <?php }else{ ?>
                 <div class="product-name">
                     <h1 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
                 </div>
-				
-				<?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
-				
+                <?php } ?>
+                <?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
+                
                 <?php if($enabled_richsnippets): ?>
                 <?php
                     $storeId = Mage::app()->getStore()->getId();
@@ -183,20 +212,31 @@ if($enable_addtocart_sticky){
                 <?php endif; ?>
                 <?php endif; ?>
 
-                <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
                 <?php if ($_product->getShortDescription()):?>
                     <div class="short-description">
-                        <h2><?php echo $this->__('Quick Overview') ?></h2>
-                        <div class="std" <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>>
+                        <?php if ($productType != 'simple'){ ?>
+                            <h2><?php echo $this->__('Quick Overview') ?></h2>
+                        <?php } ?>
+
+                        <?php 
+                        $tag      = ( $productType == 'simple' ) ? '<p' : '<div class ="std"';
+                        $closeTag = ( $productType == 'simple' ) ? '</p>' : '</div>';
+                        ?>
+                        <?php echo $tag;?> <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>>
                             <?php
                             // echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description'));
                             echo str_replace('{{customer_id}}', $customer_id, $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description'));
                             ?>
-                        </div>
+                        <?php echo $closeTag;?>
                     </div>
                 <?php endif;?>
                 <?php if(!$is_applied_product_type){?>
                 <div class="product-info">
+                <?php if ($productType == 'simple'){
+                        echo '<div class = "giftcard_shop">';
+                        echo '<div class = "giftcard_shop_lft col-xs-5">';
+                    }?>
                     <div <?php if($enabled_richsnippets) echo $helper_richsnippets->getOfferItemscope(); ?>>
                         <?php echo $this->getChildHtml('product_type_data'); ?>
                         <?php echo $this->getTierPriceHtml(); ?>
@@ -211,9 +251,15 @@ if($enable_addtocart_sticky){
                     <?php endif; ?>
                     <?php echo $this->getChildHtml('alert_urls') ?>
                     <?php echo $this->getChildHtml('other');?>
-                </div>
+                <!-- </div> -->
                 <?php }?>
                 <?php if (!$this->hasOptions()):?>
+                    <?php
+                    if ($productType == 'customproduct'){
+                        echo '<div class = "giftcard_shop">';
+                        echo '<div class = "giftcard_shop_lft col-xs-5">';
+                    }
+                    ?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
                         <?php if($is_applied_product_type ){?>
@@ -224,16 +270,16 @@ if($enable_addtocart_sticky){
                                         <?php echo $this->__('SHOP NOW');?></a>
                                 </div>
                             <?php }?>
-                        <?php } else {?>
+                        <?php } else { ?>
                             <?php if($_product->isSaleable()): ?>
                                 <?php echo $this->getChildHtml('addtocart') ?>
                                 <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php echo $this->getChildHtml('addto') ?>
-                        <?php }?>
+                        <?php } ?>
                     </div>
-                    <?php echo $this->getChildHtml('extra_buttons') ?>
+                    <?php echo $this->getChildHtml('extra_buttons'); ?>
                 <?php elseif (!$_product->isSaleable()): ?>
                     <div class="clearer"></div>
                     <div class="add-to-box">
@@ -257,7 +303,29 @@ if($enable_addtocart_sticky){
                 <?php endif;?>
                 <div class="clearer"></div>
                 <?php echo $this->getChildHtml('addthis_sharetool'); ?>
+                <?php if ($productType == 'simple' || $productType == 'customproduct'){
+                    echo '</div>'; // giftcard_shop_left col-xs-5 div clsosed
+                    ?>
+                    <?php
+                    if (in_array($currentCategoryId,$directToConsumerChildrens)){
+                        echo $this->getLayout()->createBlock('cms/block')->setBlockId('direct-to-consumer-simple-static-content')->toHtml();
+                    }elseif(in_array($currentCategoryId,$globalBrandChildrens)){
+                        echo $this->getLayout()->createBlock('cms/block')->setBlockId('global-brand-static-detail-content')->toHtml();
+                    }else{
+                            echo $this->getLayout()->createBlock('cms/block')->setBlockId('simple-product-detail-static-content')->toHtml();
+                    }
+                
+                    echo '</div>'; //giftcard_shop div closed
+                } ?>
+            <?php 
+            if ($productType == 'simple'){
+                echo '</div>'; // buffallo div closed
+            }
+            ?>
             </div>
+            </div>
+
+
 
         </div>
         <?php if ($_product->isSaleable() && $this->hasOptions()):?>
@@ -321,9 +389,9 @@ if($enable_addtocart_sticky){
                                     if(window.parent.jQuery('.fixed-header .mini-cart')){
                                         window.parent.jQuery('.fixed-header .mini-cart').replaceWith(data.toplink);
                                     }
-									if(window.parent.jQuery('.sticky-header .mini-cart')){
-										window.parent.jQuery('.sticky-header .mini-cart').replaceWith(data.toplink);
-									}
+                                    if(window.parent.jQuery('.sticky-header .mini-cart')){
+                                        window.parent.jQuery('.sticky-header .mini-cart').replaceWith(data.toplink);
+                                    }
                                     if(window.parent.jQuery('.col-right .block.block-cart')){
                                         window.parent.jQuery('.col-right .block.block-cart').replaceWith(data.cart_sidebar);
                                     }
@@ -351,9 +419,9 @@ if($enable_addtocart_sticky){
                                     if(jQuery('.fixed-header .mini-cart')){
                                         jQuery('.fixed-header .mini-cart').replaceWith(data.toplink);
                                     }
-									if(jQuery('.sticky-header .mini-cart')){
-										jQuery('.sticky-header .mini-cart').replaceWith(data.toplink);
-									}
+                                    if(jQuery('.sticky-header .mini-cart')){
+                                        jQuery('.sticky-header .mini-cart').replaceWith(data.toplink);
+                                    }
                                     if(jQuery('.col-right .block.block-cart')){
                                         jQuery('.col-right .block.block-cart').replaceWith(data.cart_sidebar);
                                     }
@@ -453,7 +521,7 @@ if($enable_addtocart_sticky){
     </div>
 
     <div class="product-collateral">
-        <?php //echo $this->getChildHtml('product_additional_data'); ?>
+        <?php echo $this->getChildHtml('product_additional_data'); ?>
     </div>
     <?php echo $this->getChildHtml('upsell_products'); ?>
 </div>
@@ -471,6 +539,7 @@ if($enable_addtocart_sticky){
     </script>
 <?php }?>
 <script type="text/javascript">
+   
     jQuery(function($){
         $("body.quickview-index-view .no-rating a, body.quickview-index-view .ratings a").off('click').on("click",function(e){
             window.parent.location.href = $(this).attr("href");

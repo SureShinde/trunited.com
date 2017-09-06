@@ -1,4 +1,6 @@
-<?php $_product = $this->getProduct(); ?>
+<?php $_product = $this->getProduct();
+$productType = strtolower( $_product->getTypeId() );
+ ?>
 <?php
 if(strcasecmp($_product->getSku(), Mage::helper('truwallet')->getTruWalletSku()) == 0 && Mage::helper('truwallet')->isEnableModule())
     $buttonTitle = $this->__('BUY NOW');
@@ -26,19 +28,42 @@ else
 	</div>
 <?php endif; ?>
 <?php if($_product->isSaleable()): ?>
-    <div class="add-to-cart">
+    <?php 
+    $style = ($productType == 'simple') ? 'style="width:100%"' : '';?>
+    <div class="add-to-cart" <?php echo $style;?>>
+    <?php if ($productType == 'simple'){
+        echo '<div class = "value">';
+    }
+    ?>
         <?php if(!$_product->isGrouped()): ?>
-        <label for="qty"><?php echo $this->__('Qty:') ?></label>
-        <div class="qty-holder">
-            <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
-            <div class="qty-changer">
-                <a href="javascript:void(0)" class="qty_inc"><i class="icon-up-dir"></i></a>
-                <a href="javascript:void(0)" class="qty_dec"><i class="icon-down-dir"></i></a>
+            <?php if ($productType == 'simple'){ ?>
+                <label>Quantity</label>
+            <?php } else {?>
+                <label for="qty"><?php echo $this->__('Qty:') ?></label>
+            <?php } ?>
+            <?php $class = ($productType == 'simple') ? 'btn-group bootstrap-select quantity' : 'qty-holder'; ?>
+            <div class="<?php echo $class;?>">
+                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+                <div class="qty-changer">
+                    <a href="javascript:void(0)" class="qty_inc"><i class="icon-up-dir"></i></a>
+                    <a href="javascript:void(0)" class="qty_dec"><i class="icon-down-dir"></i></a>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
+
+        <?php if ($productType == 'simple'){
+            echo '</div>';
+        } ?>
+        <?php 
+        $class = ($productType == 'simple') ? 'add_chart transition' : 'button btn-cart'; ?>
         <?php if(!Mage::helper('trubox')->isInPhysicalList($_product)){?>
-        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span></button>
+        <button type="button" title="<?php echo $buttonTitle ?>" class="<?php echo $class;?>" onclick="productAddToCartForm.submit(this)">
+        <?php if ($productType != 'simple'){ ?>
+                <span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span>
+            <?php } else{ 
+                echo $buttonTitle;?>
+            <?php } ?>
+        </button>
         <?php } else {?>
             <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
                 <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
@@ -53,18 +78,21 @@ else
     </div>
 
 <?php endif; ?>
-<?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-    <?php if(!Mage::helper('trubox')->isInExclusionList($_product) && !Mage::helper('trubox')->isInPhysicalList($_product)){?>
-        <!--<a href="<?php /*echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));*/?>"
-           class="addtrubox trubox_btn button btn-cart trubox_detail" title="<?php /*echo $this->__('Add to TruBox') */?>">
-            <img src="<?php /*echo $this->getSkinUrl('images/trubox-icon.png'); */?>" alt="<?php /*echo $this->__('Add to TruBox') */?>" /></a>-->
+<?php 
+ if ($productType != 'simple' ){ ?>
+    <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
+        <?php if(!Mage::helper('trubox')->isInExclusionList($_product) && !Mage::helper('trubox')->isInPhysicalList($_product)){?>
+            <!--<a href="<?php /*echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));*/?>"
+               class="addtrubox trubox_btn button btn-cart trubox_detail" title="<?php /*echo $this->__('Add to TruBox') */?>">
+                <img src="<?php /*echo $this->getSkinUrl('images/trubox-icon.png'); */?>" alt="<?php /*echo $this->__('Add to TruBox') */?>" /></a>-->
 
-        <button type="button" title="<?php echo $this->__('Add to TruBox') ?>" class="addtrubox button btn-cart trubox-right"
-                data-url="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>">
-            <span><span><i class="icon-cart"></i><?php echo $this->__('Add to TruBox') ?></span></span>
-        </button>
-    <?php }?>
-<?php }?>
+            <button type="button" title="<?php echo $this->__('Add to TruBox') ?>" class="addtrubox button btn-cart trubox-right"
+                    data-url="<?php echo Mage::getUrl('trubox/index/addTruBox',array('id'=>$_product->getId()));?>">
+                <span><span><i class="icon-cart"></i><?php echo $this->__('Add to TruBox') ?></span></span>
+            </button>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>
 <script type="text/javascript">
     $j = jQuery.noConflict();
     $j(document).ready(function(){
