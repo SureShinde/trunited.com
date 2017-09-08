@@ -134,7 +134,7 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
             $no_truWallet = true;
         }
 		
-		if($account->getTruwalletCredit() == 0 && $account_giftCard->getTrugiftcardCredit() == 0)
+		if(($account == null ||  $account->getTruwalletCredit() == 0) && ($account_giftCard == null || $account_giftCard->getTrugiftcardCredit() == 0))
 			return $this;
 		
         if (!$creditAmountEntered && !$creditAmountEntered_giftCard)

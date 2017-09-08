@@ -75,44 +75,12 @@ class Magestore_TruGiftCard_Model_Total_Order_Invoice_Discount extends Mage_Sale
             $totalHiddenTax += $order->getTrugiftcardShippingHiddenTax();
         }
 
-        if ($invoice->isLast()) {
-            $totalBaseDiscountAmount = $order->getBaseTrugiftcardDiscount() - $totalBaseDiscountInvoiced;
-            $totalDiscountAmount = $order->getTrugiftcardDiscount() - $totalDiscountInvoiced;
+        $totalBaseDiscountAmount = $order->getBaseTrugiftcardDiscount() - $totalBaseDiscountInvoiced;
+        $totalDiscountAmount = $order->getTrugiftcardDiscount() - $totalDiscountInvoiced;
 
-            $totalHiddenTax = $order->getTrugiftcardHiddenTax() - $hiddenTaxInvoiced;
-            $totalBaseHiddenTax = $order->getBaseTrugiftcardHiddenTax() - $baseHiddenTaxInvoiced;
-        } else {
-            foreach ($invoice->getAllItems() as $item) {
-                $orderItem = $item->getOrderItem();
-                if ($orderItem->isDummy()) {
-                    continue;
-                }
-                $baseOrderItemTrugiftcardDiscount = (float) $orderItem->getBaseTrugiftcardDiscount();
-                $orderItemTrugiftcardDiscount = (float) $orderItem->getTrugiftcardDiscount();
+        $totalHiddenTax = $order->getTrugiftcardHiddenTax() - $hiddenTaxInvoiced;
+        $totalBaseHiddenTax = $order->getBaseTrugiftcardHiddenTax() - $baseHiddenTaxInvoiced;
 
-                $baseOrderItemHiddenTax = (float) $orderItem->getBaseTrugiftcardHiddenTax();
-                $orderItemHiddenTax = (float) $orderItem->getTrugiftcardHiddenTax();
-
-                $orderItemQty = $orderItem->getQtyOrdered();
-                $invoiceItemQty = $item->getQty();
-
-                if ($baseOrderItemTrugiftcardDiscount && $orderItemQty) {
-                    if (version_compare(Mage::getVersion(), '1.7.0.0', '>=')) {
-                        $totalBaseDiscountAmount += $invoice->roundPrice($baseOrderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty, 'base', true);
-                        $totalDiscountAmount += $invoice->roundPrice($orderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty, 'regular', true);
-
-                        $totalHiddenTax += $invoice->roundPrice($orderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'regular', true);
-                        $totalBaseHiddenTax += $invoice->roundPrice($baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'base', true);
-                    } else {
-                        $totalBaseDiscountAmount += $baseOrderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty;
-                        $totalDiscountAmount += $orderItemTrugiftcardDiscount / $orderItemQty * $invoiceItemQty;
-
-                        $totalHiddenTax += $orderItemHiddenTax / $orderItemQty * $invoiceItemQty;
-                        $totalBaseHiddenTax += $baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty;
-                    }
-                }
-            }
-        }
         $invoice->setBaseTrugiftcardDiscount($totalBaseDiscountAmount);
         $invoice->setTrugiftcardDiscount($totalDiscountAmount);
 
@@ -128,12 +96,10 @@ class Magestore_TruGiftCard_Model_Total_Order_Invoice_Discount extends Mage_Sale
         //     exit;
         // }
 
-        if($order->getTruwalletDiscount() == 0 && $order->getTrugiftcardDiscount() > 0){
-            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
-            $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
-        }
+        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $totalBaseDiscountAmount + $totalBaseHiddenTax);
+        $invoice->setGrandTotal($invoice->getGrandTotal() - $totalDiscountAmount + $totalHiddenTax);
 
-        
+
     }
 
 }

@@ -75,44 +75,13 @@ class Magestore_TruWallet_Model_Total_Order_Invoice_Discount extends Mage_Sales_
             $totalHiddenTax += $order->getTruwalletShippingHiddenTax();
         }
 
-        if ($invoice->isLast()) {
-            $totalBaseDiscountAmount = $order->getBaseTruwalletDiscount() - $totalBaseDiscountInvoiced;
-            $totalDiscountAmount = $order->getTruwalletDiscount() - $totalDiscountInvoiced;
 
-            $totalHiddenTax = $order->getTruwalletHiddenTax() - $hiddenTaxInvoiced;
-            $totalBaseHiddenTax = $order->getBaseTruwalletHiddenTax() - $baseHiddenTaxInvoiced;
-        } else {
-            foreach ($invoice->getAllItems() as $item) {
-                $orderItem = $item->getOrderItem();
-                if ($orderItem->isDummy()) {
-                    continue;
-                }
-                $baseOrderItemTruwalletDiscount = (float) $orderItem->getBaseTruwalletDiscount();
-                $orderItemTruwalletDiscount = (float) $orderItem->getTruwalletDiscount();
+        $totalBaseDiscountAmount = $order->getBaseTruwalletDiscount() - $totalBaseDiscountInvoiced;
+        $totalDiscountAmount = $order->getTruwalletDiscount() - $totalDiscountInvoiced;
 
-                $baseOrderItemHiddenTax = (float) $orderItem->getBaseTruwalletHiddenTax();
-                $orderItemHiddenTax = (float) $orderItem->getTruwalletHiddenTax();
+        $totalHiddenTax = $order->getTruwalletHiddenTax() - $hiddenTaxInvoiced;
+        $totalBaseHiddenTax = $order->getBaseTruwalletHiddenTax() - $baseHiddenTaxInvoiced;
 
-                $orderItemQty = $orderItem->getQtyOrdered();
-                $invoiceItemQty = $item->getQty();
-
-                if ($baseOrderItemTruwalletDiscount && $orderItemQty) {
-                    if (version_compare(Mage::getVersion(), '1.7.0.0', '>=')) {
-                        $totalBaseDiscountAmount += $invoice->roundPrice($baseOrderItemTruwalletDiscount / $orderItemQty * $invoiceItemQty, 'base', true);
-                        $totalDiscountAmount += $invoice->roundPrice($orderItemTruwalletDiscount / $orderItemQty * $invoiceItemQty, 'regular', true);
-
-                        $totalHiddenTax += $invoice->roundPrice($orderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'regular', true);
-                        $totalBaseHiddenTax += $invoice->roundPrice($baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty, 'base', true);
-                    } else {
-                        $totalBaseDiscountAmount += $baseOrderItemTruwalletDiscount / $orderItemQty * $invoiceItemQty;
-                        $totalDiscountAmount += $orderItemTruwalletDiscount / $orderItemQty * $invoiceItemQty;
-
-                        $totalHiddenTax += $orderItemHiddenTax / $orderItemQty * $invoiceItemQty;
-                        $totalBaseHiddenTax += $baseOrderItemHiddenTax / $orderItemQty * $invoiceItemQty;
-                    }
-                }
-            }
-        }
         $invoice->setBaseTruwalletDiscount($totalBaseDiscountAmount);
         $invoice->setTruwalletDiscount($totalDiscountAmount);
 
