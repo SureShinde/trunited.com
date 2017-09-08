@@ -485,7 +485,8 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 ->setCollectShippingRates(true)
                 ->setShippingMethod($this->_shippingMethod)
                 ->setPaymentMethod($this->_paymentMethod)
-                ->collectTotals();
+//                ->collectTotals()
+            ;
 
             /*Set Customer group As Guest*/
             $quote->setCustomer($customer);
@@ -638,7 +639,13 @@ class Magestore_TruBox_Helper_Order extends Mage_Core_Helper_Abstract
                 $total_discount += $account->getTrugiftcardCredit();
             }
 
-            if($total_discount >= floatval($grandTotal))
+            if(strcasecmp($this->_shippingMethod, 'flatrate_flatrate') == 0){
+                $_grandTotal = floatval($grandTotal) + floatval(Mage::helper('trubox')->getShippingAmount());
+            } else {
+                $_grandTotal = floatval($grandTotal);
+            }
+
+            if($total_discount >= $_grandTotal)
                 return true;
             else
                 return false;

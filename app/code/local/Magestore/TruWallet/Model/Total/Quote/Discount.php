@@ -247,8 +247,9 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
 
         $baseDiscount = $baseTruWalletDiscount + $baseTruGiftCardDiscount;
 
+        $ship_amount = 0;
         if ($this->checkIsAdmin() && strcasecmp(Mage::helper('trubox')->getShippingMethod(), 'flatrate_flatrate') == 0) {
-            $baseDiscount += Mage::helper('trubox')->getShippingAmount();
+            $ship_amount += Mage::helper('trubox')->getShippingAmount();
         }
 
         $truwalletDiscount = Mage::getModel('truwallet/customer')
@@ -262,12 +263,15 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
         }
 
         //update session
-
-
+//        zend_debug::dump($baseDiscount);
+//        zend_debug::dump($ship_amount);
 
         $address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
-        $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount + $wrapTotal);
-        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseDiscount + $wrapTotal);
+
+//        $ship_amount = 0;
+        $address->setGrandTotal($address->getGrandTotal() - $truwalletDiscount + $ship_amount + $wrapTotal);
+        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $baseDiscount + $ship_amount + $wrapTotal);
+
 
         if ($this->checkIsAdmin() && strcasecmp(Mage::helper('trubox')->getShippingMethod(), 'flatrate_flatrate') == 0) {
             $shipping_amount = Mage::helper('trubox')->getShippingAmount();
@@ -279,19 +283,39 @@ class Magestore_TruWallet_Model_Total_Quote_Discount extends Mage_Sales_Model_Qu
                 $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
                 $remaining_fee += $shipping_amount;
             } else if($baseTruWalletDiscount >= $shipping_amount) {
-                if(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance){
-                    $remaining_fee += ($baseTruWalletDiscount + $shipping_amount) - $truwalletBalance;
-                }
-                $address->setTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
-                $address->setBaseTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
-                $session->setBaseTruwalletCreditAmount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+
+//                if(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance){
+//                    $remaining_fee += ($baseTruWalletDiscount + $shipping_amount) - $truwalletBalance;
+//                }
+//
+//                $address->setTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+//                $address->setBaseTruwalletDiscount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+//                $session->setBaseTruwalletCreditAmount(($baseTruWalletDiscount + $shipping_amount) > $truwalletBalance ? $truwalletBalance : ($baseTruWalletDiscount + $shipping_amount));
+
+                $address->setTruwalletDiscount($baseTruWalletDiscount);
+                $address->setBaseTruwalletDiscount($baseTruWalletDiscount);
+                $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
+                
+//                zend_debug::dump($baseTruWalletDiscount);
+//                zend_debug::dump($address->getTruwalletDiscount());
+//                zend_debug::dump($shipping_amount);
+
             }
 
             if($this->isAppliedTGCToOrder($admin_session->getOrderCustomerId())){
-                $session->setBaseTrugiftcardCreditAmount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
-                $address->setTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
-                $address->setBaseTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+//                $session->setBaseTrugiftcardCreditAmount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+//                $address->setTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+//                $address->setBaseTrugiftcardDiscount(($baseTruGiftCardDiscount + $remaining_fee) > $trugiftcardBalance ? $trugiftcardBalance : ($baseTruGiftCardDiscount + $remaining_fee));
+
+                $session->setBaseTrugiftcardCreditAmount($baseTruGiftCardDiscount);
+                $address->setTrugiftcardDiscount($baseTruGiftCardDiscount);
+                $address->setBaseTrugiftcardDiscount($baseTruGiftCardDiscount);
             }
+
+//            zend_debug::dump($address->getGrandTotal());
+            $address->setGrandTotal($address->getGrandTotal() - $shipping_amount);
+            $address->setBaseGrandTotal($address->getBaseGrandTotal() - $shipping_amount);
+//            zend_debug::dump($address->getGrandTotal());
         } else {
             $session->setBaseTruwalletCreditAmount($baseTruWalletDiscount);
             $address->setTruwalletDiscount($baseTruWalletDiscount);
