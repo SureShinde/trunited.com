@@ -26,17 +26,17 @@
 			}
 		</style>
 	<?php endif;?>
-		<dt>
+		<dt <?php if($_code != 'free'){?>class="radio_btn"<?php }?>>
 		<?php if($is_zero){?>
 			<?php if(strcasecmp($_code, 'free') == 0){?>
-				<span class="no-display1"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" /></span>
+                <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" />
 				<label for="p_method_<?php echo $_code ?>"><?php echo $this->getMethodTitle($_method) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
 			<?php }?>
 		<?php } else {?>
 			<?php if( sizeof($size_methods) > 1): ?>	
 				<input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio validate-one-required-by-name" />
 			<?php else: ?>
-				<span class="no-display1"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" /></span>
+                <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio validate-one-required-by-name " onclick="save_shipping_method(shipping_method_url,0,update_payment_review);" />
 			<?php endif; ?>
 			<label for="p_method_<?php echo $_code ?>"><?php echo $this->getMethodTitle($_method) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
 		<?php }?>

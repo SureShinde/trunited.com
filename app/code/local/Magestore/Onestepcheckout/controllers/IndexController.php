@@ -98,6 +98,18 @@ class Magestore_Onestepcheckout_IndexController extends Mage_Core_Controller_Fro
         $this->_initLayoutMessages('checkout/session');
         $this->getLayout()->getBlock('head')->setTitle($this->__('One Step Checkout'));
 
+        $breadcrumbs = $this->getLayout()->getBlock("breadcrumbs");
+        $breadcrumbs->addCrumb("home", array(
+            "label" => $this->__("Home"),
+            "title" => $this->__("Home"),
+            "link"  => Mage::getBaseUrl()
+        ));
+
+        $breadcrumbs->addCrumb("checkout", array(
+            "label" => $this->__("Onestepcheckout"),
+            "title" => $this->__("Onestepcheckout"),
+        ));
+
         $this->renderLayout();
     }
 

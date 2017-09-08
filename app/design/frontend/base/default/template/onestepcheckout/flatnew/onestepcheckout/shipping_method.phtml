@@ -42,7 +42,7 @@ if (!($_shippingRateGroups = $this->getShippingRates())): ?>
                     <?php $_sole = $_sole && count($_rates) == 1;
                     foreach ($_rates as $_rate): ?>
                         <?php $j++; ?>
-                        <li>
+                        <li class="radio_btn">
                             <?php if ($_rate->getErrorMessage()): ?>
                                 <ul class="messages">
                                     <li class="error-msg">
@@ -213,7 +213,6 @@ if (!($_shippingRateGroups = $this->getShippingRates())): ?>
                     if ($('selected_st_info')) {
                         $('selected_st_info').innerHtml = '';
                         $('selected_st_info').remove();
-                        console.log('a');
                     }
 
                     if ($('s_method_storepickup_storepickup').up('li')) {
@@ -278,7 +277,7 @@ if (!($_shippingRateGroups = $this->getShippingRates())): ?>
                 $('select_box_store_pickup').remove();
 
             el.insert({
-                bottom: new Element('label', {
+                bottom: new Element('small', {
                     id: 'select_box_label',
                     class: 'required'
                 }).update(translateJson.Select_store)
@@ -295,7 +294,7 @@ if (!($_shippingRateGroups = $this->getShippingRates())): ?>
                     value: ''
                 }).update(translateJson.Select_a_store_to_pickup)
             });
-            console.log(_googleMap.listStore);
+
             _googleMap.listStore.each(function (el) {
                 $('select_box_store_pickup').insert({
                     bottom: new Element('option', {
@@ -314,6 +313,7 @@ if (!($_shippingRateGroups = $this->getShippingRates())): ?>
             } else {
                 console.log(_googleMap.listStore);
                 _googleMap.listStore.each(function (el) {
+                    console.log(_googleMap);
                     if (el.store_id == element.value) {
                         _googleMap.refreshAllMaker();
                         _googleMap.currentSystemValues.store = el;

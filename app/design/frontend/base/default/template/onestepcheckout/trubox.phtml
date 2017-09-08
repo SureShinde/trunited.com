@@ -5,15 +5,21 @@ $is_plastic = $this->isPlastic();
 ?>
 
 <ul>
-    <li>
-        <input  checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);"
-                name="delivery_type" type="radio" id="trubox" class="radio validate-one-required-by-name" />
-        <label for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
+    <li class="radio_btn">
+        <input checked
+               onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);"
+               name="delivery_type" type="radio" id="trubox"
+               class="radio validate-one-required-by-name">
+        <label
+                for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
     </li>
-    <li>
-        <input <?php if($is_plastic) echo 'checked="checked"';?> onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);"
-             name="delivery_type" type="radio" id="get_it_now" class="radio validate-one-required-by-name" />
-        <label for="get_it_now"><?php echo $this->__('Standard Shipping (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
+    <li class="radio_btn">
+        <input <?php if (Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"'; ?>
+                onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);"
+                name="delivery_type" type="radio" id="get_it_now"
+                class="radio validate-one-required-by-name">
+        <label
+                for="get_it_now"><?php echo $this->__('Ship It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
     </li>
 </ul>
 

@@ -83,15 +83,21 @@ $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER[
 			<?php /*endif;
 			 End: added by Daniel - 31/03/2015 - Qty increment */
 			?>
-			<span class="qty" id="qty-<?php echo $_item->getId() ?>"><?php echo $_item->getQty() ?></span>
-			<input type="hidden" value="<?php echo $_item->getQty() ?>" name="qty-item-<?php echo $_item->getId() ?>" id="qty-item-<?php echo $_item->getId() ?>" />
+
 			<?php 
 			/* Start: added by Daniel - 31/03/2015 - Qty increment 
 			if($qtyInCart < $maximumQty):
 			*/?>
-            <div class="control-qty">
-                <a  href="javascript:addproduct(<?php echo $_item->getId() ?>,'<?php echo $this->getUrl('onestepcheckout/index/add_product')?>')"><img  src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/add-icon3.png', array('_secure'=>$secure)) ?>" width="13" height="11"/></a>
-                <a  href="javascript:minusproduct(<?php echo $_item->getId() ?>,'<?php echo $this->getUrl('onestepcheckout/index/minus_product')?>')"><img  src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/minus-3.png', array('_secure'=>$secure)) ?>" width="13" height="11"/></a>
+            <div class="order_qty">
+<!--                <a  href="javascript:addproduct(--><?php //echo $_item->getId() ?><!--,'--><?php //echo $this->getUrl('onestepcheckout/index/add_product')?><!--')"><img  src="--><?php //echo $this->getSkinUrl('images/onestepcheckout/flatnew/add-icon3.png', array('_secure'=>$secure)) ?><!--" width="13" height="11"/></a>-->
+<!--                <a  href="javascript:minusproduct(--><?php //echo $_item->getId() ?><!--,'--><?php //echo $this->getUrl('onestepcheckout/index/minus_product')?><!--')"><img  src="--><?php //echo $this->getSkinUrl('images/onestepcheckout/flatnew/minus-3.png', array('_secure'=>$secure)) ?><!--" width="13" height="11"/></a>-->
+                <div class="increse">
+                    <span class="qty" id="qty-<?php echo $_item->getId() ?>"><?php echo $_item->getQty() ?></span>
+                    <input type="hidden" value="<?php echo $_item->getQty() ?>" name="qty-item-<?php echo $_item->getId() ?>" id="qty-item-<?php echo $_item->getId() ?>" />
+                    <span class="down" onclick="minusproduct(<?php echo $_item->getId() ?>,'<?php echo $this->getUrl('onestepcheckout/index/minus_product')?>')">&nbsp;</span>
+                    <span class="up" onclick="addproduct(<?php echo $_item->getId() ?>,'<?php echo $this->getUrl('onestepcheckout/index/add_product')?>')">&nbsp;</span>
+
+                </div>
             </div>
 			<?php /*endif;
 			 End: added by Daniel - 31/03/2015 - Qty increment */

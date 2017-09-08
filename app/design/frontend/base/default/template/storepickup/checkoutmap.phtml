@@ -167,14 +167,14 @@ $listStore = Mage::helper('storepickup')->echoAllStoreCheckoutToJson($storeViewI
     var selectTimeUrl = '<?php echo $this->getUrl('storepickup/index/changedate/', array('_secure' => true)); ?>';
     var changeTimeUrl = '<?php echo $this->getUrl('storepickup/index/changetime', array('_secure' => true)); ?>';
     var shipping_date_div = '<div id="shipping_date_div" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12">'
-            + '<label class="required" for="shipping_date"><?php echo $this->__('Shipping Date') ?> </label>'
+            + '<small class="required" for="shipping_date"><?php echo $this->__('Shipping Date') ?> </small>'
             + '<input name="shipping_date" id="shipping_date" value="" class="input-text required-entry form-control" readonly>'
     var time_box = '<div id="time-box" class="storepickup-box col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none;">'
-            + '<label class="required" for="shipping_time"><?php echo $this->__('Shipping Time') ?> </label>'
+            + '<small class="required" for="shipping_time"><?php echo $this->__('Shipping Time') ?> </small>'
             + '<select id="shipping_time" name="shipping_time" class="validate-select form-control"></select>'
             + '</div>';
     var select_box_html = '<div class="store_selector">'
-        +'<label><?php echo $this->__('Store:') ?> </label>'
+        +'<small><?php echo $this->__('Store:') ?> </small>'
         +'<select name="select_store_id" onchange="changestorebySelector()" id="select_store_id" class="required-entry validate-select">'
         +'<option value="" selected=""><?php echo $this->__('Select Store:') ?></option>'
         +'<option value="22">ABER HYDRO</option>'

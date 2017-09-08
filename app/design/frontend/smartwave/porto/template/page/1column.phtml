@@ -21,11 +21,13 @@
             <div class="main">
                 <div class="col-main">
                     <?php echo $this->getChildHtml('global_messages');
-                    if ( (strpos($current_url, '/home') !== false) || (strpos($current_url,'/customer') !== false)) {
-                        echo $this->getChildHtml('content');
-                    }else{
-                        echo $this->getChildHtml('detail_content');
-                    }
+//                    if ( (strpos($current_url, '/home') !== false) || (strpos($current_url,'/customer') !== false)) {
+//                        echo $this->getChildHtml('content');
+//                    }else{
+//                        echo $this->getChildHtml('detail_content');
+//                    }
+
+                    echo $this->getChildHtml('content');
                     ?>
                 </div>
             </div>

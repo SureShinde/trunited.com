@@ -15,7 +15,7 @@
                     <span><?php echo $this->getLabelApplied();?> : <?php echo Mage::helper('core')->currency($this->getCurrentCreditAmountLabel(), true, false);?></span>
                 </div>
                 <?php }?>
-                <div class="check_used">
+                <div class="check_used chek_box">
                     <input type="checkbox" id="used_trugiftcard" name="used_trugiftcard" title="<?php echo $this->getLabelApplied()?>"
                            onclick="updateCustomerCreditTGC('<?php echo $this->getUpdateUrl(); ?>', '<?php echo $this->getCustomerCredit()?>' , '<?php echo $state ?>' ); return false;"
                             <?php if($this->getCurrentCreditAmountLabel() > 0){?>checked="checked"<?php }?>

@@ -296,20 +296,13 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
         shipping_method: shipping_method,
         payment_method: payment_method
     };
-    //Find payment parameters and include 
-    /*var items = $$('input[name^=payment]', 'select[name^=payment]');
-    var names = items.pluck('name');
-    var values = items.pluck('value');
 
-    for (var x = 0; x < names.length; x++) {
-        if (names[x] != 'payment[method]') {
-            parameters[names[x]] = values[x];
-        }
-    }*/
     if ((update_shipping_payment == 1) || (update_shipping_review == 1)) {
-        $('onestepcheckout-button-place-order').disabled = true;
-        $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
-        $('onestepcheckout-button-place-order').addClassName('place-order-loader');
+        if($('onestepcheckout-button-place-order')) {
+            $('onestepcheckout-button-place-order').disabled = true;
+            $('onestepcheckout-button-place-order').removeClassName('onestepcheckout-btn-checkout');
+            $('onestepcheckout-button-place-order').addClassName('place-order-loader');
+        }
     }
     var request = new Ajax.Request(shipping_method_url, {
         method: 'post',
@@ -367,11 +360,6 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     });
                 }
 
-                if(response.text_button_payment)
-                {
-                    $('onestepcheckout-button-place-order-text').update(response.text_button_payment);
-                }
-
                 if(shipping_method != 'storepickup_storepickup'){
                     if($('shipping_date')){
                         $('shipping_date').removeClassName('required-entry');
@@ -403,9 +391,9 @@ function save_shipping_method(shipping_method_url, update_shipping_payment, upda
                     if($('select_box_store_pickup')){
                         $('select_box_store_pickup').addClassName('required-entry');
                         $('select_box_store_pickup').addClassName('validate-select');
-                        $('select_box_store_pickup').setValue('');
+                        /*$('select_box_store_pickup').setValue('');
                         if($('selected_st_info'))
-                            $('selected_st_info').update();
+                            $('selected_st_info').update();*/
                     }
                 }
             }
@@ -1360,10 +1348,6 @@ function addproduct(id, url) {
                             if (result.payment_method)
                                 payment_method.update(result.payment_method);
 
-                            if(result.text_button_payment)
-                            {
-                                $('onestepcheckout-button-place-order-text').update(result.text_button_payment);
-                            }
                             shippingShow();
                             reviewShow();
                             paymentShow();
@@ -1401,26 +1385,31 @@ function addproduct(id, url) {
 }
 
 function reviewShow() {
-    $('ajax-review').hide();
-    $('control_overlay_review').hide();
-    $('checkout-review-table-wrapper').setStyle({
-        'opacity': '1',
-        'filter': 'alpha(opacity=100)'
-    });
+
+    if($('control_overlay_review'))
+        $('control_overlay_review').hide();
+
+    if($('checkout-review-table-wrapper'))
+        $('checkout-review-table-wrapper').setStyle({
+            'opacity': '1',
+            'filter': 'alpha(opacity=100)'
+        });
 }
 
 function reviewLoad() {
-    $('ajax-review').show();
-    $('control_overlay_review').show();
-    $('checkout-review-table-wrapper').setStyle({
-        'opacity': '0.3',
-        'filter': 'alpha(opacity=30)'
-    });
+
+    if($('control_overlay_review'))
+        $('control_overlay_review').show();
+
+    if($('checkout-review-table-wrapper'))
+        $('checkout-review-table-wrapper').setStyle({
+            'opacity': '0.3',
+            'filter': 'alpha(opacity=30)'
+        });
 }
 
 function shippingShow() {
-    if ($('ajax-shipping'))
-        $('ajax-shipping').hide();
+
     if ($('control_overlay_shipping'))
         $('control_overlay_shipping').hide();
     if ($('onestepcheckout-shipping-method-section'))
@@ -1431,8 +1420,7 @@ function shippingShow() {
 }
 
 function shippingLoad() {
-    if ($('ajax-shipping'))
-        $('ajax-shipping').show();
+
     if ($('control_overlay_shipping'))
         $('control_overlay_shipping').show();
     if ($('onestepcheckout-shipping-method-section'))
@@ -1443,8 +1431,6 @@ function shippingLoad() {
 }
 
 function truboxShow() {
-    if ($('ajax-trubox'))
-        $('ajax-trubox').hide();
     if ($('control_overlay_trubox'))
         $('control_overlay_trubox').hide();
     if ($('onestepcheckout-trubox-method-section'))
@@ -1455,8 +1441,6 @@ function truboxShow() {
 }
 
 function truboxLoad() {
-    if ($('ajax-trubox'))
-        $('ajax-trubox').show();
     if ($('control_overlay_trubox'))
         $('control_overlay_shipping').show();
     if ($('onestepcheckout-trubox-method-section'))
@@ -1467,45 +1451,51 @@ function truboxLoad() {
 }
 
 function paymentShow() {
-    $('ajax-payment').hide();
-    $('control_overlay_payment').hide();
-    $('onestepcheckout-payment-methods').setStyle({
-        'opacity': '1',
-        'filter': 'alpha(opacity=100)'
-    });
+
+    if($('control_overlay_payment'))
+        $('control_overlay_payment').hide();
+
+    if($('onestepcheckout-payment-methods'))
+        $('onestepcheckout-payment-methods').setStyle({
+            'opacity': '1',
+            'filter': 'alpha(opacity=100)'
+        });
 }
 
 function paymentLoad() {
-    $('ajax-payment').show();
-    $('control_overlay_payment').show();
-    $('onestepcheckout-payment-methods').setStyle({
-        'opacity': '0.3',
-        'filter': 'alpha(opacity=30)'
-    });
+
+    if($('control_overlay_payment'))
+        $('control_overlay_payment').show();
+
+    if($('onestepcheckout-payment-methods'))
+        $('onestepcheckout-payment-methods').setStyle({
+            'opacity': '0.3',
+            'filter': 'alpha(opacity=30)'
+        });
 }
 
 function trunitedDiscountShow() {
-	if($('ajax-trunited-discounts'))
-	{
-		$('ajax-trunited-discounts').hide();
-		$('control_overlay_trunited_discounts').hide();
-		$('onestepcheckout-trunited-discounts').setStyle({
-			'opacity': '1',
-			'filter': 'alpha(opacity=100)'
-		});
-	}
+
+	if($('control_overlay_trunited_discounts'))
+        $('control_overlay_trunited_discounts').hide();
+
+    if($('onestepcheckout-trunited-discounts'))
+        $('onestepcheckout-trunited-discounts').setStyle({
+            'opacity': '1',
+            'filter': 'alpha(opacity=100)'
+        });
 }
 
 function trunitedDiscountLoad() {
-	if($('ajax-trunited-discounts'))
-	{
-		$('ajax-trunited-discounts').show();
-		$('control_overlay_trunited_discounts').show();
-		$('onestepcheckout-trunited-discounts').setStyle({
-			'opacity': '0.3',
-			'filter': 'alpha(opacity=30)'
-		});
-	}
+
+    if($('control_overlay_trunited_discounts'))
+        $('control_overlay_trunited_discounts').show();
+
+    if($('onestepcheckout-trunited-discounts'))
+        $('onestepcheckout-trunited-discounts').setStyle({
+            'opacity': '0.3',
+            'filter': 'alpha(opacity=30)'
+        });
 }
 
 Event.observe(window, 'resize', function() {

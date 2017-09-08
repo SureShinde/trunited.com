@@ -1,5 +1,5 @@
 <script
-        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->getGoogleMapApiKey(); ?>&v=3.exp&sensor=false&libraries=places&language=en"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo $this->getGoogleMapApiKey(); ?>&v=3.exp&sensor=false&libraries=places&language=en"></script>
 <script type="text/javascript">if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) {
         $$('.onestepcheckout-index-index')[0].addClassName('iphone');
     }</script>
@@ -16,6 +16,15 @@
 <?php $_helper = Mage::helper('onestepcheckout');
 ?>
 <style type="text/css">
+
+    .one-step-checkout h3 {
+        background-color: <?php echo $styleUse ?> !important;
+    }
+
+    button.onestepcheckout-btn-checkout {
+        background: <?php echo $background_button ?> !important;
+    }
+
     button.onestepcheckout-btn-checkout:hover {
         cursor: pointer;
     }
@@ -30,11 +39,18 @@
     #onestepcheckout-forgot-table li.last p a span,
     #onestepcheckout-register-table li.last p a span,
     p.forgot-link a span,
+    p.register-link a span {
+        background-color: <?php echo $styleUse ?> !important;
+
+    }
 
     .onestepcheckout-login-link a,
     p.forgot-link a,
     p.register-link a,
     #onestepcheckout-forgot-table li.last p a,
+    #onestepcheckout-register-table li.last p a {
+        color: <?php echo $styleUse ?> !important;
+    }
 
     button#add_coupon_code_button:hover {
         cursor: pointer;
@@ -42,6 +58,10 @@
 
     button#remove_coupon_code_button:hover {
         cursor: pointer;
+    }
+
+    button.place-order-loader span {
+        background: none !important;
     }
 
     #notify-email-invalid {
@@ -86,6 +106,13 @@
 </div>
 
 <ol class="one-step-checkout clearfix three-columns-flat">
+    <li>
+        <h1 class="checkout_header"><?php echo $this->getCheckoutTitle(); ?></h1>
+
+        <p class="subtitle">
+            <?php echo $this->configData['checkout_description'] ? $this->configData['checkout_description'] : 'Please fill in the fields below and click Place order to complete your purchase!'; ?>
+        </p>
+    </li>
     <?php if (($this->isShowLoginLink() || $this->isShowRegisterLink()) && !$this->isCustomerLoggedIn()): ?>
         <li id='onestepcheckout_login_link' class="onestepcheckout-login-link">
             <a href="javascript:void(0);" id="onestepcheckout-login-link"><span>&nbsp;</span>
@@ -115,472 +142,362 @@
         <?php if (Mage::helper('core')->isModuleEnabled('Amazon_Payments')) echo $this->getChildHtml('amazon_button'); ?>
     </li>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-</ol>
-
-<div class="container">
-    <div class="travel_in">
+    <li class="address-order">
         <form id="one-step-checkout-form" method="post" action="<?php echo $this->getCheckoutUrl(); ?>">
-            <ul>
-                <li class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="order_progress pad_last">
-                        <div class="odrer_top">
-                            <h5 class="text-uppercase"><?php echo $this->__('Billing address'); ?></h5>
-                        </div>
-                        <div class="order_middle">
-                            <div id='onestepcheckout-billing-section'>
-                                <?php echo $this->getChildHtml('onestepcheckout.billing'); ?>
-                            </div>
-                        </div>
-                        <div class="order_bottom" id="showhide_shipping" style="display: none">
-                            <h5 class="text-uppercase"><?php echo $this->__('Shipping address'); ?></h5>
-                        </div>
-                        <div class="order_middle" id="showhide_shipping_content" style="display: none">
-                            <div id='onestepcheckout-shipping-section'>
-                                <?php echo $this->getChildHtml('onestepcheckout.shipping'); ?>
-                            </div>
-                        </div>
+            <div class="address-information address-info-3-columns">
 
-                    </div>
-                </li>
+                <!-- Start: Modified by Daniel -01042015- Reload data after login -->
+                <div id='onestepcheckout-billing-section'>
+                    <?php echo $this->getChildHtml('onestepcheckout.billing'); ?>
+                </div>
+                <div id='onestepcheckout-shipping-section'>
+                    <?php echo $this->getChildHtml('onestepcheckout.shipping'); ?>
+                </div>
+                <!-- End: Modified by Daniel -01042015- Reload data after login -->
 
-                <li class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="order_progress onestepcheckout-shipping-payment-review">
-                        <?php if ($this->isVirtual() || !Mage::helper('onestepcheckout')->isHideShippingMethod() || $_helper->enabledDelivery()): ?>
-                            <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
-                                <div class="odrer_top">
-                                    <h5 class="text-uppercase"><?php echo $this->__('Shipping Method'); ?></h5>
-                                </div>
-                                <div id="shipping-method-container" class="order_middle"
-                                     <?php if (Mage::helper('truwallet/giftcard')->plasticInCart()){ ?>style="display: none"<?php } ?>>
-                                    <ol>
-                                        <li class="shipping-method">
-                                            <div class="clear"></div>
+            </div>
 
-                                            <div class="onestepcheckout-shipping-method-section"
-                                                 id="onestepcheckout-shipping-method-section">
-                                                <?php echo $this->getChildHtml('onestepcheckout.shipping_method'); ?>
-                                            </div>
-                                            <div id="control_overlay_shipping"
-                                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
-                                        </li>
-                                        <?php if ($_helper->enabledDelivery()): ?>
-                                            <li class="delivery">
-                                                <div class="delivery_time_date">
-                                                    <label for="delivery_date"><?php echo $this->__('Select a date') ?>
-                                                        : </label>
+            <div class="onestepcheckout-shipping-payment-review">
 
-                                                    <p class="datetime-delivery">
-                                                        <input readonly="readonly" id="delivery_date" type="text"
-                                                               size="7"
-                                                               style="background: none repeat scroll 0 center rgba(0, 0, 0, 0); border: medium none; box-shadow: none; cursor: default; font-weight: bold;"
-                                                               value="<?php echo date('m.d.Y') ?>"
-                                                               name="delivery[onestepcheckout-date]"/>
-                                                        <img
-                                                                src="<?php echo Mage::getBaseUrl('skin') ?>frontend/base/default/images/onestepcheckout/flatnew/calendar.png"
-                                                                alt="dateinput" class="v-middle" id="delivery_date_trig"
-                                                                title="dateinput" width="21" height="21"/>
-                                                    </p>
-                                                    <select name="delivery[onestepcheckout-time]"
-                                                            style="margin-left:6px;">
-                                                        <?php for ($i = 0; $i <= 23; $i++): if (!$this->isEnableHour($i)) continue; ?>
-                                                            <option
-                                                                    value="<?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>
-                                                                :00
-                                                            </option>
-                                                        <?php endfor; ?>
-                                                    </select>
-                                                </div>
-                                                <?php if ($this->enableDeliverySecurityCode()): ?>
-                                                    <div class="clear"></div>
-                                                    <div class="delivery-sercurity-box"
-                                                         style="padding: 0px 4%;margin-bottom:10px">
-                                                        <div class="input-box ">
-                                                            <label class="label"
-                                                                   for="delivery_security_code"><?php echo $this->__('Security access code (Buildings/gated communities)'); ?></label>
-                                                            <input id="delivery_security_code" class="input-text"
-                                                                   type="text" size="25" name="delivery_security_code"/>
-                                                        </div>
-                                                    </div>
-                                                <?php endif; ?>
-                                                <link rel="stylesheet" type="text/css"
-                                                      href="<?php echo Mage::getBaseUrl('js') ?>calendar/calendar-win2k-1.css"/>
+                <?php if ($this->isVirtual() || !Mage::helper('onestepcheckout')->isHideShippingMethod() || $_helper->enabledDelivery()): ?>
+                    <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
+                        <div id="shipping-method-container" class="order-information order-info-3-columns"
+                             <?php if (Mage::helper('truwallet/giftcard')->plasticInCart()){ ?>style="display: none"<?php } ?>>
+                            <ol>
+                                <li class="shipping-method">
+                                    <h3 style="float:left" id="shipping_method_step_header" class="step_2">
+                                        <?php echo $this->__('Shipping Method'); ?>
+                                    </h3>
 
-                                                <script type="text/javascript">
-                                                    //<![CDATA[
-                                                    enUS = {
-                                                        "m": {
-                                                            "wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-                                                            "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-                                                        }
-                                                    }; // en_US locale reference
-                                                    Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
-                                                    Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
-                                                    Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
-                                                    Calendar._MN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // full month names
-                                                    Calendar._SMN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // short month names
-                                                    Calendar._am = "AM"; // am/pm
-                                                    Calendar._pm = "PM";
-
-                                                    // tooltips
-                                                    Calendar._TT = {};
-                                                    Calendar._TT["INFO"] = "About the calendar";
-
-                                                    Calendar._TT["ABOUT"] =
-                                                        "DHTML Date/Time Selector\n" +
-                                                        "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
-                                                        "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
-                                                        "Distributed under GNU LGPL. See http://gnu.org/licenses/lgpl.html for details." +
-                                                        "\n\n" +
-                                                        "Date selection:\n" +
-                                                        "- Use the \xab, \xbb buttons to select year\n" +
-                                                        "- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
-                                                        "- Hold mouse button on any of the above buttons for faster selection.";
-                                                    Calendar._TT["ABOUT_TIME"] = "\n\n" +
-                                                        "Time selection:\n" +
-                                                        "- Click on any of the time parts to increase it\n" +
-                                                        "- or Shift-click to decrease it\n" +
-                                                        "- or click and drag for faster selection.";
-
-                                                    Calendar._TT["PREV_YEAR"] = "Prev. year (hold for menu)";
-                                                    Calendar._TT["PREV_MONTH"] = "Prev. month (hold for menu)";
-                                                    Calendar._TT["GO_TODAY"] = "Go Today";
-                                                    Calendar._TT["NEXT_MONTH"] = "Next month (hold for menu)";
-                                                    Calendar._TT["NEXT_YEAR"] = "Next year (hold for menu)";
-                                                    Calendar._TT["SEL_DATE"] = "Select date";
-                                                    Calendar._TT["DRAG_TO_MOVE"] = "Drag to move";
-                                                    Calendar._TT["PART_TODAY"] = ' (' + "Today" + ')';
-
-                                                    // the following is to inform that "%s" is to be the first day of week
-                                                    Calendar._TT["DAY_FIRST"] = "Display %s first";
-
-                                                    // This may be locale-dependent. It specifies the week-end days, as an array
-                                                    // of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
-                                                    // means Monday, etc.
-                                                    Calendar._TT["WEEKEND"] = "0,6";
-
-                                                    Calendar._TT["CLOSE"] = "Close";
-                                                    Calendar._TT["TODAY"] = "Today";
-                                                    Calendar._TT["TIME_PART"] = "(Shift-)Click or drag to change value";
-
-                                                    // date formats
-                                                    Calendar._TT["DEF_DATE_FORMAT"] = "%b %e, %Y";
-                                                    Calendar._TT["TT_DATE_FORMAT"] = "%B %e, %Y";
-
-                                                    Calendar._TT["WK"] = "Week";
-                                                    Calendar._TT["TIME"] = "Time:";
-
-                                                    CalendarDateObject._LOCAL_TIMZEONE_OFFSET_SECONDS = -28800;
-
-                                                    var disableDays = JSON.parse('<?php echo $this->getDisableDayJson();?>');
-
-                                                    Calendar.setup({
-                                                        inputField: "delivery_date",
-                                                        ifFormat: "%m.%d.%Y",
-                                                        showsTime: false,
-                                                        button: "delivery_date_trig",
-                                                        electric: false,
-                                                        singleClick: true,
-                                                        disableFunc: function (date) {
-                                                            var today = new Date();
-
-                                                            if (disableDays && disableDays.length > 0) {
-                                                                var day = date.getDay();
-                                                                if (disableDays.indexOf(day.toString()) >= 0) {
-                                                                    return true;
-                                                                }
-                                                            }
-
-                                                            if (date.getFullYear() < today.getFullYear()) {
-                                                                return true;
-                                                            } else if (date.getMonth() < today.getMonth() && date.getFullYear() <= today.getFullYear()) {
-                                                                return true;
-                                                            } else if (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth() && date.getFullYear() <= today.getFullYear()) {
-                                                                return true;
-                                                            }
-                                                            if (today.getDate() == date.getDate()) {
-                                                                return false;
-                                                            }
-
-                                                        }
-                                                    });
-                                                    //]]>
-                                                </script>
-
-                                            </li>
-                                        <?php endif; ?>
-                                    </ol>
-                                </div>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <!-- When do you want it -->
-                        <?php if (($_helper->enableGiftWrap() && !$this->isVirtual()) && !Mage::helper('other')->dropShipInCart()): ?>
-                            <?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap'); ?>
-                            <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount(); ?>
-                            <div id="delivery-type-container">
-                                <div class="order_bottom">
-                                    <h5 class="text-uppercase"><?php echo $this->__('When do you want it?'); ?></h5>
-                                </div>
-                                <div class="order_middle">
-                                    <ol>
-                                        <li class="shipping-method">
-                                            <div class="clear"></div>
-                                            <div class="onestepcheckout-trubox-method-section"
-                                                 id="onestepcheckout-trubox-method-section">
-                                                <ul>
-                                                    <li class="radio_btn">
-                                                        <input checked
-                                                               onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);"
-                                                               name="delivery_type" type="radio" id="trubox"
-                                                               class="radio validate-one-required-by-name">
-                                                        <label
-                                                                for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
-                                                    </li>
-                                                    <li class="radio_btn">
-                                                        <input <?php if (Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"'; ?>
-                                                                onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);"
-                                                                name="delivery_type" type="radio" id="get_it_now"
-                                                                class="radio validate-one-required-by-name">
-                                                        <label
-                                                                for="get_it_now"><?php echo $this->__('Ship It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div id="control_overlay_trubox"
-                                                 style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                        <!-- When do you want it -->
-
-                        <?php if (Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
-                            <?php $_shippingMethod = $this->hasOnlyOneShippingMethod(); ?>
-                            <span class="no-display">
-                                <input name="shipping_method" type="radio" value="<?php echo $_shippingMethod; ?>"
-                                       id="s_method_<?php echo $_shippingMethod; ?>" checked="checked"/>
-                            </span>
-                        <?php endif; ?>
-
-                        <!-- Trunited Discounts -->
-                        <?php if (Mage::helper('trugiftcard')->isShowTrunitedDiscountSection()) { ?>
-                            <?php
-                            $_notifyMessage = Mage::helper('custompromotions/configuration')->getNotifyMessage();
-                            ?>
-                            <div class="clear"></div>
-                            <div id="order-trunited-discounts-section" class="order-trunited-discounts-section">
-                                <div class="order_bottom" >
-                                    <h5 class="text-uppercase"><?php echo $this->__('Trunited Discounts'); ?></h5>
-                                </div>
-                                <div class="order_middle">
+                                    <div class="ajax-loader3" id="ajax-shipping"
+                                         style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
                                     <div class="clear"></div>
-                                    <div id="onestepcheckout-trunited-discounts"
-                                         class="onestepcheckout-trunited-discounts">
-                                        <?php if (Mage::helper('trugiftcard')->isShowTruWallet()) { ?>
-                                            <?php echo $this->getLayout()->createBlock('truwallet/payment_form')->renderView(); ?>
-                                        <?php } else if (Mage::helper('trugiftcard')->isShowWarningTruWallet()) { ?>
-                                            <div id="notify_message_truwallet" class="notice-msg"
-                                                 <?php if (false){ ?>style="display: none"<?php } ?>
-                                            ><?php echo $_notifyMessage; ?></div>
-                                        <?php } ?>
-                                        <?php if (Mage::helper('trugiftcard')->isShowTruGiftCard()) { ?>
-                                            <?php echo $this->getLayout()->createBlock('trugiftcard/payment_form')->renderView(); ?>
-                                        <?php } ?>
+
+                                    <div class="onestepcheckout-shipping-method-section"
+                                         id="onestepcheckout-shipping-method-section">
+                                        <?php echo $this->getChildHtml('onestepcheckout.shipping_method'); ?>
                                     </div>
-                                    <div id="control_overlay_trunited_discounts"
+                                    <div class="ajax-loader1" id="ajax-loader1" style="display:none;"></div>
+                                    <div id="control_overlay_shipping"
                                          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                        <!-- Trunited Discounts -->
+                                </li>
+                                <?php if ($_helper->enabledDelivery()): ?>
+                                    <li class="delivery">
+                                        <div class="delivery_time_date">
+                                            <label for="delivery_date"><?php echo $this->__('Select a date') ?>
+                                                : </label>
 
-                        <div class="order-review-section"
-                             style="<?php if (Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()) if ($this->hasOnlyOneShippingMethod()) echo 'width: 100% !important'; ?>">
-                            <div class="order_bottom" >
-                                <h5 class="text-uppercase"><?php echo $this->__('Payment Methods'); ?></h5>
-                            </div>
-                            <div class="order_middle">
+                                            <p class="datetime-delivery">
+                                                <input readonly="readonly" id="delivery_date" type="text" size="7"
+                                                       style="background: none repeat scroll 0 center rgba(0, 0, 0, 0); border: medium none; box-shadow: none; cursor: default; font-weight: bold;"
+                                                       value="<?php echo date('m.d.Y') ?>"
+                                                       name="delivery[onestepcheckout-date]"/>
+                                                <img
+                                                    src="<?php echo Mage::getBaseUrl('skin') ?>frontend/base/default/images/onestepcheckout/flatnew/calendar.png"
+                                                    alt="dateinput" class="v-middle" id="delivery_date_trig"
+                                                    title="dateinput" width="21" height="21"/>
+                                            </p>
+                                            <select name="delivery[onestepcheckout-time]" style="margin-left:6px;">
+                                                <?php for ($i = 0; $i <= 23; $i++): if (!$this->isEnableHour($i)) continue; ?>
+                                                    <option
+                                                        value="<?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00"><?php echo str_pad($i, 2, '0', STR_PAD_LEFT) ?>
+                                                        :00
+                                                    </option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        <?php if ($this->enableDeliverySecurityCode()): ?>
+                                            <div class="clear"></div>
+                                            <div class="delivery-sercurity-box"
+                                                 style="padding: 0px 4%;margin-bottom:10px">
+                                                <div class="input-box ">
+                                                    <label class="label"
+                                                           for="delivery_security_code"><?php echo $this->__('Security access code (Buildings/gated communities)'); ?></label>
+                                                    <input id="delivery_security_code" class="input-text"
+                                                           type="text" size="25" name="delivery_security_code"/>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                        <link rel="stylesheet" type="text/css"
+                                              href="<?php echo Mage::getBaseUrl('js') ?>calendar/calendar-win2k-1.css"/>
+
+                                        <script type="text/javascript">
+                                            //<![CDATA[
+                                            enUS = {
+                                                "m": {
+                                                    "wide": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                                                    "abbr": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                                                }
+                                            }; // en_US locale reference
+                                            Calendar._DN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; // full day names
+                                            Calendar._SDN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; // short day names
+                                            Calendar._FD = 0; // First day of the week. "0" means display Sunday first, "1" means display Monday first, etc.
+                                            Calendar._MN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; // full month names
+                                            Calendar._SMN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; // short month names
+                                            Calendar._am = "AM"; // am/pm
+                                            Calendar._pm = "PM";
+
+                                            // tooltips
+                                            Calendar._TT = {};
+                                            Calendar._TT["INFO"] = "About the calendar";
+
+                                            Calendar._TT["ABOUT"] =
+                                                "DHTML Date/Time Selector\n" +
+                                                "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
+                                                "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
+                                                "Distributed under GNU LGPL. See http://gnu.org/licenses/lgpl.html for details." +
+                                                "\n\n" +
+                                                "Date selection:\n" +
+                                                "- Use the \xab, \xbb buttons to select year\n" +
+                                                "- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
+                                                "- Hold mouse button on any of the above buttons for faster selection.";
+                                            Calendar._TT["ABOUT_TIME"] = "\n\n" +
+                                                "Time selection:\n" +
+                                                "- Click on any of the time parts to increase it\n" +
+                                                "- or Shift-click to decrease it\n" +
+                                                "- or click and drag for faster selection.";
+
+                                            Calendar._TT["PREV_YEAR"] = "Prev. year (hold for menu)";
+                                            Calendar._TT["PREV_MONTH"] = "Prev. month (hold for menu)";
+                                            Calendar._TT["GO_TODAY"] = "Go Today";
+                                            Calendar._TT["NEXT_MONTH"] = "Next month (hold for menu)";
+                                            Calendar._TT["NEXT_YEAR"] = "Next year (hold for menu)";
+                                            Calendar._TT["SEL_DATE"] = "Select date";
+                                            Calendar._TT["DRAG_TO_MOVE"] = "Drag to move";
+                                            Calendar._TT["PART_TODAY"] = ' (' + "Today" + ')';
+
+                                            // the following is to inform that "%s" is to be the first day of week
+                                            Calendar._TT["DAY_FIRST"] = "Display %s first";
+
+                                            // This may be locale-dependent. It specifies the week-end days, as an array
+                                            // of comma-separated numbers. The numbers are from 0 to 6: 0 means Sunday, 1
+                                            // means Monday, etc.
+                                            Calendar._TT["WEEKEND"] = "0,6";
+
+                                            Calendar._TT["CLOSE"] = "Close";
+                                            Calendar._TT["TODAY"] = "Today";
+                                            Calendar._TT["TIME_PART"] = "(Shift-)Click or drag to change value";
+
+                                            // date formats
+                                            Calendar._TT["DEF_DATE_FORMAT"] = "%b %e, %Y";
+                                            Calendar._TT["TT_DATE_FORMAT"] = "%B %e, %Y";
+
+                                            Calendar._TT["WK"] = "Week";
+                                            Calendar._TT["TIME"] = "Time:";
+
+                                            CalendarDateObject._LOCAL_TIMZEONE_OFFSET_SECONDS = -28800;
+
+                                            var disableDays = JSON.parse('<?php echo $this->getDisableDayJson();?>');
+
+                                            Calendar.setup({
+                                                inputField: "delivery_date",
+                                                ifFormat: "%m.%d.%Y",
+                                                showsTime: false,
+                                                button: "delivery_date_trig",
+                                                electric: false,
+                                                singleClick: true,
+                                                disableFunc: function (date) {
+                                                    var today = new Date();
+
+                                                    if (disableDays && disableDays.length > 0) {
+                                                        var day = date.getDay();
+                                                        if (disableDays.indexOf(day.toString()) >= 0) {
+                                                            return true;
+                                                        }
+                                                    }
+
+                                                    if (date.getFullYear() < today.getFullYear()) {
+                                                        return true;
+                                                    } else if (date.getMonth() < today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                                                        return true;
+                                                    } else if (date.getDate() < today.getDate() && date.getMonth() <= today.getMonth() && date.getFullYear() <= today.getFullYear()) {
+                                                        return true;
+                                                    }
+                                                    if (today.getDate() == date.getDate()) {
+                                                        return false;
+                                                    }
+
+                                                }
+                                            });
+                                            //]]>
+                                        </script>
+
+                                    </li>
+                                <?php endif; ?>
+                            </ol>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <!-- When do you want it -->
+                <?php if (($_helper->enableGiftWrap() && !$this->isVirtual()) && !Mage::helper('other')->dropShipInCart()): ?>
+                    <?php $addGiftwrapUrl = $this->getUrl('onestepcheckout/ajax/add_giftwrap'); ?>
+                    <?php $amt = Mage::helper('onestepcheckout')->getGiftwrapAmount(); ?>
+                    <div id="delivery-type-container" class="order-information order-info-3-columns">
+                        <ol>
+                            <li class="shipping-method">
+                                <h3 style="float:left" id="shipping_method_step_header" class="step_2">
+                                    <?php echo $this->__('When do you want it?'); ?>
+                                </h3>
+
+                                <div class="ajax-loader3" id="ajax-trubox"
+                                     style="float: left; margin-top: 14px; margin-left: 10px; display: none;"></div>
                                 <div class="clear"></div>
-                                <div id="onestepcheckout-payment-methods" class="onestepcheckout-payment-methods">
-                                    <?php echo $this->getChildHtml('onestepcheckout.payment_method'); ?>
+                                <div class="onestepcheckout-trubox-method-section"
+                                     id="onestepcheckout-trubox-method-section">
+                                    <ul>
+                                        <li>
+                                            <input checked onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',1);"
+                                                   name="delivery_type" type="radio" id="trubox"
+                                                   class="radio validate-one-required-by-name">
+                                            <label
+                                                for="trubox"><?php echo $this->__('My Next TruBox Order (10% Bonus Points)'); ?></label>
+                                        </li>
+                                        <li>
+                                            <input <?php if (Mage::getSingleton('checkout/session')->getData('delivery_type') == 2) echo 'checked="checked"'; ?>
+                                                onclick="addDeliveryFee('<?php echo $addGiftwrapUrl ?>',2);"
+                                                name="delivery_type" type="radio" id="get_it_now"
+                                                class="radio validate-one-required-by-name">
+                                            <label
+                                                for="get_it_now"><?php echo $this->__('Ship It Now (%s Expedited Cost)', Mage::helper('core')->currency($amt, true, false)); ?></label>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div id="control_overlay_payment"
+                                <div id="control_overlay_trubox"
                                      style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
-                            </div>
-                        </div>
-
+                            </li>
+                        </ol>
                     </div>
-                </li>
+                <?php endif; ?>
+                <!-- When do you want it -->
 
-                <li class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="order_progress onestepcheckout-review-info">
-                        <div class="odrer_top">
-                            <h5 class="text-uppercase"><?php echo $this->__('Order Review'); ?></h5>
-                        </div>
-                        <div class="progress_in order_middle">
-                            <div class="clearfix"></div>
-                            <!--<ul>
-                                <li class="col-xs-12">
-                                    <div class="order_product pull-left">
-                                        <h6>Product</h6>
-                                    </div>
-                                    <div class="order_qty pull-left">
-                                        <h6>Qty</h6>
-                                    </div>
-                                    <div class="order_subtotal pull-left">
-                                        <h6>Subtotal</h6>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
+                <?php if (Mage::helper('onestepcheckout')->isHideShippingMethod()): ?>
+                    <?php $_shippingMethod = $this->hasOnlyOneShippingMethod(); ?>
+                    <span class="no-display">
+                        <input name="shipping_method" type="radio" value="<?php echo $_shippingMethod; ?>"
+                               id="s_method_<?php echo $_shippingMethod; ?>" checked="checked"/>
+                    </span>
+                <?php endif; ?>
 
-                                <li class="col-xs-12">
-                                    <div class="order_product pull-left">
-                                        <span>Ciela Revitalizing Facial Cleanser</span>
-                                    </div>
-                                    <div class="order_qty pull-left">
-                                        <div class="increse">
-                                            <input name="name" type="text" class="input-quantity" value="1">
-                                            <span class="up">&nbsp;</span>
-                                            <span class="down">&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="order_subtotal pull-left">
-                                        <span>$29.99</span>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
+                <!-- Trunited Discounts -->
+                <?php if(Mage::helper('trugiftcard')->isShowTrunitedDiscountSection()){?>
+                    <?php
+                    $_notifyMessage = Mage::helper('custompromotions/configuration')->getNotifyMessage();
+                    ?>
+                <div class="clear"></div>
+                <div id="order-trunited-discounts-section" class="order-trunited-discounts-section" style="width: 100% !important">
+                    <ol>
+                        <li class="trunited-discounts">
+                            <h3 style="float:left"
+                                id="trunited_discounts_step_header" class="step_5">
+                                <?php echo $this->__('Trunited Discounts'); ?>
+                            </h3>
+                            <div class="ajax-loader5" id="ajax-trunited-discounts"
+                                 style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+                            <div class="clear"></div>
+                            <div id="onestepcheckout-trunited-discounts" class="onestepcheckout-trunited-discounts">
+                                <?php if(Mage::helper('trugiftcard')->isShowTruWallet()){?>
+                                    <?php echo $this->getLayout()->createBlock('truwallet/payment_form')->renderView();?>
+                                <?php } else if(Mage::helper('trugiftcard')->isShowWarningTruWallet()){?>
+                                    <div id="notify_message_truwallet" class="notice-msg"
+                                         <?php if(false){?>style="display: none"<?php }?>
+                                        ><?php echo $_notifyMessage;?></div>
+                                <?php }?>
+                                <?php if(Mage::helper('trugiftcard')->isShowTruGiftCard()){?>
+                                    <?php echo $this->getLayout()->createBlock('trugiftcard/payment_form')->renderView();?>
+                                <?php }?>
+                            </div>
+                            <div id="control_overlay_trunited_discounts"
+                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                        </li>
+                    </ol>
+                </div>
+                <?php }?>
+                <!-- Trunited Discounts -->
 
-                                <li class="col-xs-12">
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span>Subtotal</span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>$29.99</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
+                <div class="order-review-section"
+                     style="<?php if (Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()) if ($this->hasOnlyOneShippingMethod()) echo 'width: 100% !important'; ?>">
+                    <ol>
+                        <li class="payment-method">
+                            <h3 style="float:left"
+                                id="payment_method_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod() && $_helper->enabledDelivery()): ?> class="step_4"<?php elseif (!$this->isVirtual() && Mage::helper('onestepcheckout')->isHideShippingMethod() && !$_helper->enabledDelivery()): ?>class="step_2"<?php else: ?> class="step_3"<?php endif; ?>>
+                                <?php echo $this->__('Payment Method'); ?>
+                            </h3>
 
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span>Shipping &amp; Handling (StorePickup - Best Way Pickup Time: 08-09-2017)</span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>$0.00</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
+                            <div class="ajax-loader3" id="ajax-payment"
+                                 style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+                            <div class="clear"></div>
+                            <div id="onestepcheckout-payment-methods" class="onestepcheckout-payment-methods">
+                                <?php echo $this->getChildHtml('onestepcheckout.payment_method'); ?>
+                            </div>
+                            <div id="control_overlay_payment"
+                                 style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
+                        </li>
 
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span>Ship with My TruBox</span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>$0.00</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
+                    </ol>
+                </div>
+            </div>
 
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span><b>You will earn:</b></span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>1 Point</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
+            <div class="column-last">
+                <div class="onestepcheckout-review-info">
+                    <ol>
+                        <li class="order-review-info">
+                            <h3 style="float:left"
+                                id="review_step_header" <?php if (!$this->isVirtual() && !Mage::helper('onestepcheckout')->isHideShippingMethod()): ?> class="step_4" <?php else: ?> class="step_3"<?php endif ?>>
+                                <?php echo $this->__('Order Review'); ?>
+                            </h3>
 
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span><b>Bonus</b></span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>1 Point</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-
-                                    <div class="shipping">
-                                        <div class="shipping_left">
-                                            <span>TruWallet Rewards</span>
-                                        </div>
-                                        <div class="order_subtotal">
-                                            <span>-$3.30</span>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </li>
-
-                                <li class="col-xs-12">
-                                    <div class="grand_total">
-                                        <div class="shipping_left">
-                                            <h6>GRAND TOTAL</h6>
-                                        </div>
-
-                                        <div class="order_subtotal">
-                                            <h6>$26.69</h6>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </li>
-
-                                <li class="col-xs-12">
-                                    <span>Coupon Code:</span>
-                                    <input type="text" value="Enter Coupon Code"
-                                           onClick="if(this.value=='Enter Coupon Code'){this.value=''}"
-                                           onBlur="if(this.value==''){this.value='Enter Coupon Code'}">
-                                    <a href="javascript:void(0)">Apply</a>
-                                    <button type="button" class="btn transition text-uppercase">Continue Order</button>
-                                </li>
-                            </ul>-->
-
+                            <div class="ajax-loader3" id="ajax-review"
+                                 style="display:none; float: left; margin-top: 14px; margin-left: 10px;"></div>
+                            <div class="clear"></div>
                             <?php echo $this->getChildHtml('onestepcheckout.review') ?>
                             <div id="control_overlay_review"
                                  style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9998; display: none;"></div>
 
-                            <button onclick="oscPlaceOrder(this);" id="onestepcheckout-button-place-order"
-                                    type="button" title="<?php echo $this->__('Place Order') ?>"
-                                    class="btn">
-                                <?php
-                                $default_text = $this->__('Place order now');
+                        </li>
+                    </ol>
+                </div>
+                <div class="button-set clearfix button-onestepcheckout">
+                    <div class="clear"></div>
+                    <button style="float:left" onclick="oscPlaceOrder(this);" id="onestepcheckout-button-place-order"
+                            type="button" title="<?php echo $this->__('Place Order') ?>"
+                            class="btn-proceed-checkout onestepcheckout-btn-checkout onestepcheckout-place">
+                            <span>
+                                <span id="onestepcheckout-button-place-order-text">
+                                    <?php
+                                    $default_text = $this->__('Place order now');
 
-                                if (Mage::getModel('checkout/session')->getQuote()->getGrandTotal() > 0) {
-                                    if ($_helper->getTextButtGreaterZero() != '')
-                                        echo $_helper->getTextButtGreaterZero();
-                                    else
-                                        echo $default_text;
-                                } else {
-                                    if ($_helper->getTextButtonOnZero() != '')
-                                        echo $_helper->getTextButtonOnZero();
-                                    else
-                                        echo $default_text;
-                                }
+                                    if (Mage::getModel('checkout/session')->getQuote()->getGrandTotal() > 0) {
+                                        if ($_helper->getTextButtGreaterZero() != '')
+                                            echo $_helper->getTextButtGreaterZero();
+                                        else
+                                            echo $default_text;
+                                    } else {
+                                        if ($_helper->getTextButtonOnZero() != '')
+                                            echo $_helper->getTextButtonOnZero();
+                                        else
+                                            echo $default_text;
+                                    }
 
-                                ?>
-                            </button>
-                            <div id="onestepcheckout-place-order-loading" style="display:none;    margin: -35px 0 0 3px; ">
-                                <p style="float:left;padding-top:5px;">
-                                    &nbsp;&nbsp;<?php echo $this->__('Please wait, processing your order...') ?></p>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                </li>
-            </ul>
+                                    ?>
+                                </span>
+                            </span>
+                    </button>
+                </div>
+                <div id="onestepcheckout-place-order-loading" style="display:none;margin-top:10px; ">
+                    <p style="float:left;padding-top:5px;">
+                        &nbsp;&nbsp;<?php echo $this->__('Please wait, processing your order...') ?></p>
+                </div>
+            </div>
+            <?php if (!$_helper->isCustomerLoggedIn() && $_helper->showLoginLink()): ?>
+                <?php echo $this->getChildHtml('login-popup'); ?>
+            <?php endif; ?>
         </form>
-        <div class="clearfix"></div>
-    </div>
-</div>
-<div class="modal fade osc-modal" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel">
+    </li>
+</ol>
+<div class="modal fade osc-modal" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <iframe style="border:none; width:100%; height:1000px;" id="load-skrill-form"
+            <iframe style = "border:none; width:100%; height:1000px;" id="load-skrill-form"
                     src=""></iframe>
         </div>
     </div>
@@ -836,7 +753,6 @@
         }
         return true;
     }
-
     /* end */
 
     function checkpayment() {
@@ -853,7 +769,6 @@
         }
         return true;
     }
-
     function oscPlaceOrder(element) {
 
         var validator = new Validation('one-step-checkout-form');
@@ -947,7 +862,7 @@
                                         parameters: params
                                     });
                             }
-                            else if (options[i].id.indexOf("skrill") != -1 && is_skrill_lightbox > 0) {
+                            else if(options[i].id.indexOf("skrill") != -1 && is_skrill_lightbox > 0) {
                                 var params = Form.serialize('one-step-checkout-form');
 
                                 var request = new Ajax.Request(
@@ -959,7 +874,7 @@
                                             var response = JSON.parse(transport.responseText);
                                             if (response.url) {
                                                 var $jD = jQuery.noConflict();
-                                                $jD('#load-skrill-form').attr('src', response.url);
+                                                $jD('#load-skrill-form').attr('src',response.url);
                                                 $jD('#myModal').modal('show');
                                                 return false;
                                             }
@@ -975,13 +890,13 @@
 
                                     <?php
 
-                                    if (Mage::helper('core')->isModuleEnabled('Amazon_Payments')) {
-                                        $helperAmz = new Amazon_Payments_Helper_Data();
-                                        if (isset($helperAmz))
-                                            $checkoutUrl = $helperAmz->getCheckoutUrl(false);
-                                    }
+                                        if(Mage::helper('core')->isModuleEnabled('Amazon_Payments')){
+                                            $helperAmz = new Amazon_Payments_Helper_Data();
+                                            if(isset($helperAmz))
+                                                $checkoutUrl = $helperAmz->getCheckoutUrl(false);
+                                        }
                                     ?>
-                                    window.location.href = "<?php if (isset($checkoutUrl)) echo $checkoutUrl;?>";
+                                    window.location.href = "<?php if(isset($checkoutUrl)) echo $checkoutUrl;?>";
                                 }
 
                             }
@@ -993,7 +908,6 @@
             }
         }
     }
-
     function checkAjax(url) {
         var form = $('one-step-checkout-form');
         var payment_method = $RF(form, 'payment[method]');
@@ -1064,9 +978,9 @@
 <?php echo $this->getChildHtml('tco_iframe'); ?>
 <div id="notify-email-invalid" style="display:none;">
     <p style="float:left;padding-top:27px;color:#000;font-family:tahoma;margin-left:10px;"><span
-                style="display:block;float:left;margin-right:2px;"><?php echo $this->__('Email is ') ?></span><img
-                style="float:left;margin-right:2px;"
-                src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/invalidIcon.jpg'); ?>"/><?php echo $this->__(' please check it again!') ?>
+            style="display:block;float:left;margin-right:2px;"><?php echo $this->__('Email is ') ?></span><img
+            style="float:left;margin-right:2px;"
+            src="<?php echo $this->getSkinUrl('images/onestepcheckout/flatnew/invalidIcon.jpg'); ?>"/><?php echo $this->__(' please check it again!') ?>
     </p>
 </div>
 <div id="notify-email-invalid-overlay" style="display:none;"></div>
@@ -1076,7 +990,9 @@
 <?php $height = $_helper->getTermPopupHeight() ? $_helper->getTermPopupHeight() : 530; ?>
 
 <?php if ($_helper->enableTermsAndConditions()): ?>
-    <script type="text/javascript">
+
+
+    <script>
         //<![CDATA[
         Event.observe(window, 'load', function () {
 
@@ -1229,10 +1145,4 @@
         }
     }
 
-</script>
-
-<script type="text/javascript">
-    $j = jQuery.noConflict();
-    $j('.main-container.col1-layout').addClass(' main_content');
-    $j('.main').addClass(' travel');
 </script>

@@ -6,7 +6,7 @@
 
 <!-- Begin of Discount section -->
 <?php if ($_helper->showDiscount()):?>
-    <div class="onestepcheckout-discount">
+    <div class="onestepcheckout-discount col-xs-12">
         <?php $_couponCode = $this->getQuote()->getCouponCode(); ?>
         <label for="couponcode"><?php echo $this->__('Coupon code:') ?></label>
 
@@ -16,8 +16,8 @@
                 <input class="input-text" id="coupon_code_onestepcheckout" placeholder="<?php echo $this->__('Enter coupon code here')?>" autocomplete="off" name="coupon_code" value="<?php echo $this->htmlEscape($_couponCode) ?>" />
             </div>
             <div class="actions-button">
-                <button type="button" id="add_coupon_code_button" title="<?php echo $this->__('Apply Coupon') ?>" class="" value="<?php echo $this->__('Apply Coupon') ?>"><span><span><?php echo $this->__('Apply') ?></span></span></button>
-                <button type="button" id="remove_coupon_code_button" title="<?php echo $this->__('Cancel Coupon') ?>" class="" value="<?php echo $this->__('Cancel Coupon') ?>" <?php if(!strlen($_couponCode)): ?> style="display:none;"<?php endif?>><span><span><?php echo $this->__('Cancel') ?></span></span></button>
+                <button type="button" id="add_coupon_code_button" title="<?php echo $this->__('Apply Coupon') ?>" class="" value="<?php echo $this->__('Apply Coupon') ?>"><?php echo $this->__('Apply') ?></button>
+                <button type="button" id="remove_coupon_code_button" title="<?php echo $this->__('Cancel Coupon') ?>" class="" value="<?php echo $this->__('Cancel Coupon') ?>" <?php if(!strlen($_couponCode)): ?> style="display:none;"<?php endif?>><?php echo $this->__('Cancel') ?></button>
             </div>
         </div>
     </div>

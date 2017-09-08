@@ -137,7 +137,7 @@ function addStoreSelectBox(el) {
         $('select_box_store_pickup').remove();
 
     el.insert({
-        bottom: new Element('label', {
+        bottom: new Element('small', {
             id: 'select_box_label',
             class: 'required'
         }).update(translateJson.Select_store)

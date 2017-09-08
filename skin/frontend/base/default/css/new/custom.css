@@ -101,3 +101,233 @@ nav ul li{
     color: #a6a5a5;
 }
 
+.order_middle a{
+    color: #00b5cb !important;
+}
+
+.progress_in a{
+    color: #ffffff !important;
+}
+#news-and-testimonials{
+    margin-top: 0 !important;
+}
+
+.travel_in select{
+    width: 100% !important;
+    padding: 0 12px !important;
+    border: 2px solid #acacac !important;
+    height: 36px !important;
+    border-radius: 4px !important;
+}
+
+#billing-new-address-form ul li, #shipping-new-address-form ul li{
+    width: 100%;
+    margin: 0 0 25px 0;
+}
+
+#billing-new-address-form input, #billing-new-address-form select, #shipping-address-select,
+#shipping-new-address-form input, #shipping-new-address-form select, #shipping-address-select{
+    width: 100% !important;
+    line-height: 18px;
+    padding: 0px 12px;
+    font-size: 18px !important;
+}
+
+#billing-new-address-form input, #shipping-new-address-form input{
+    height: 36px;
+    border: 2px solid #acacac;
+    display: block;
+    color: #a6a5a5;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    padding: 0 13px;
+    border-radius: 4px;
+}
+
+.chek_box input[type="checkbox"]{
+    display: none !important;
+}
+
+.chek_box label{
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+.shipping_other_address.chek_box{
+    padding: 15px;
+}
+
+#billing-new-address-form, #shipping-new-address-form{
+    margin-top: 15px;
+}
+
+.control.shipping_other_address.chek_box{
+    margin: 0 0 0 15px !important;
+}
+
+.order_progress{
+    background: none !important;
+}
+
+.order_bottom, .order_middle, .order_top{
+    background: white;
+}
+
+.order_middle h5, .order_bottom h5{
+    color: #ffffff;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    border-radius: 20px 20px 0 0;
+    margin: 0;
+}
+
+.order_bottom{
+    margin: 25px 0 0 0;
+    padding: 0 !important;
+    border-radius: 20px 20px 0 0;
+}
+
+.lable1{
+    font-size: 20px;
+    line-height: 28px;
+    color: #454543;
+    font-weight: 400;
+    padding: 0px 0 10px 0;
+    display: block;
+    margin: 0;
+}
+
+#shipping-new-address-form ul {
+    padding-bottom: 0 !important;
+    margin: 0 -30px !important;
+}
+
+#onestepcheckout-trunited-discounts{
+    float: none !important;
+}
+
+.used{
+    margin-top: 5px;
+}
+
+.used span{
+    font-size: 15px !important;
+}
+
+#checkout-payment-method-load label{
+    font-size: 15px !important;
+}
+
+.progress_in .btn{
+    border: none !important;
+    margin: 20px 0 40px 15px;
+}
+
+.order_qty .increse .up, .order_qty .increse .down{
+    right: -22px !important;
+}
+
+#one-step-checkout-form .checkout-review-load .data-table td .qty{
+    text-align: center;
+    margin-right: 4px;
+    float: none !important;
+    height: auto !important;
+}
+
+#one-step-checkout-form .checkout-review-load .data-table td .box-qty{
+    text-align: left;
+}
+
+#one-step-checkout-form .checkout-review-load .data-table tfoot tr.last{
+    border-top: 1px solid #e0e0e0;
+}
+
+.onestepcheckout-discount{
+    margin-top: 10px;
+}
+
+.discount-form .input-box{
+    width: 50% !important;
+}
+
+.onestepcheckout-discount label{
+    font-size: 20px;
+    line-height: 22px;
+    color: #454543;
+    font-weight: 400;
+    padding: 0;
+    display: block;
+}
+
+.progress_in .btn:hover{
+    color: white;
+}
+
+.sp-methods .form-list li{
+    width: 100%;
+}
+
+#payment_form_authnetcim #authnetcim_add_new{
+    font-size: 15px !important;
+}
+
+#payment_form_authnetcim #authnetcim_cc_number, #payment_form_authnetcim #authnetcim_cc_cid{
+    width: 100% !important;
+    padding: 0 12px !important;
+    border: 2px solid #acacac !important;
+    height: 36px !important;
+    border-radius: 4px !important;
+}
+
+.cvv-what-is-this{
+    font-size: 15px !important;
+    vertical-align: middle;
+    margin: 7px 0 10px 10px !important;
+}
+
+.authnetcim_new{
+    font-size: 14px;
+}
+
+.tool-tip .btn-close a{
+    display: unset;
+    font-size: 15px;
+}
+
+#one-step-checkout-form #select_box_store_pickup, #one-step-checkout-form #shipping_time{
+    font-size: 18px !important;
+}
+
+#selected_st_info .store-address h3{
+    font-size: 24px !important;
+}
+
+#selected_st_info .store-address-info{
+    font-size: 18px;
+}
+
+#shipping_date{
+    width: 50% !important;
+    padding: 0 12px !important;
+    border: 2px solid #acacac !important;
+    border-radius: 4px !important;
+    height: 36px;
+    display: block;
+    color: #616161;
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 17px !important;
+    margin: 0 !important;
+}
+
+.calendar .button{
+    background: none !important;
+    color: black !important;
+    font-size: 12px !important;
+    float: none;
+    width: auto !important;
+    display: table-cell;
+}
