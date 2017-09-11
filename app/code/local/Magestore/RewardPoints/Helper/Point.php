@@ -119,9 +119,9 @@ class Magestore_RewardPoints_Helper_Point extends Mage_Core_Helper_Abstract
     {    
         $points = $points;
         if (abs($points) <= 1) {
-            return number_format($points) . ' ' . $this->getName($store);
+            return $points . ' ' . $this->getName($store);
         }
-        return number_format($points) . ' ' . $this->getPluralName($store);
+        return $points . ' ' . $this->getPluralName($store);
     }
 
     public function formatProductCredit($points, $store = null)

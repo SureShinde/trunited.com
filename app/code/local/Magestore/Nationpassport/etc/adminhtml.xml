@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<!--<nationpassport module="nationpassport" translate="title">
+			<title>Nation Passport</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<nationpassport module="nationpassport" translate="title">
+					<title>Manage Items</title>
+					<sort_order>0</sort_order>
+					<action>nationpassportadmin/adminhtml_nationpassport</action>
+				</nationpassport>
+				<settings module="nationpassport" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/nationpassport</action>
+				</settings>
+			</children>
+		</nationpassport>-->
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<nationpassport module="nationpassport" translate="title">
+										<title>Nationpassport</title>
+										<sort_order>71</sort_order>									
+									</nationpassport>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<nationpassport module="nationpassport" translate="title">
+						<title>Nationpassport</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<!--<nationpassport module="nationpassport" translate="title">-->
+								<!--<title>Manage Items</title>-->
+								<!--<sort_order>0</sort_order>-->
+								<!--<action>nationpassportadmin/adminhtml_nationpassport</action>-->
+							<!--</nationpassport>-->
+							<settings module="nationpassport" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/nationpassport</action>
+							</settings>
+						</children>
+					</nationpassport>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

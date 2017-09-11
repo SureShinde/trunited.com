@@ -1,0 +1,407 @@
+<?php
+$affiliates_tracking = $this->getAffiliatesFromCustomer();
+?>
+<form id="trugiftcard_share_truGiftCard" action="<?php echo $this->getActionForm(); ?>" method="post">
+    <div class="right_block_in" id="share_member">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="pad_last"><?php echo $this->__('MONEY MOVEMENT : SHARE MEMBER'); ?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="money_share_blk">
+            <h5><?php echo $this->__('Who Would <br>You Like to Share With?'); ?></h5>
+            <div class="money_share_blk_in">
+                <ul>
+                    <li class="col-sm-4">
+                        <div class="trunited">
+                            <img class="pull-right" src="<?php echo $this->getSkinUrl('images/icon_img7.png'); ?>"
+                                 width="155" height="95" alt="icon">
+                            <div class="clearfix"></div>
+                            <strong><?php echo $this->__('Trunited Gift Card'); ?></strong>
+                            <span><?php echo $this->__('Balance <b>%s</b>', $this->getFormatedBalance()); ?></span>
+                        </div>
+                    </li>
+                    <li class="col-sm-4">
+                        <div class="dolar_blk">
+                            <img src="<?php echo $this->getSkinUrl('images/dolar_icon_img.png'); ?>" width="237"
+                                 height="90"
+                                 alt="img">
+                        </div>
+                    </li>
+                    <li class="col-sm-4">
+                        <div class="trunited_member">
+                            <img src="<?php echo $this->getSkinUrl('images/trunited_img.jpg'); ?>" width="215"
+                                 height="101"
+                                 alt="img">
+                            <h6><?php echo $this->__('Share With Member'); ?></h6>
+                        </div>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <button name="name" type="button" class="member_btn transition"
+                        id="member"><?php echo $this->__('member'); ?></button>
+            </div>
+            <div class="or_line"><h4><?php echo $this->__('OR'); ?></h4></div>
+            <div class="money_share_blk_in">
+                <ul>
+                    <li class="col-sm-4">
+                        <div class="trunited">
+                            <img class="pull-right" src="<?php echo $this->getSkinUrl('images/icon_img7.png'); ?>"
+                                 width="155" height="95" alt="icon">
+                            <div class="clearfix"></div>
+                            <strong><?php echo $this->__('Trunited Gift Card'); ?></strong>
+                            <span><?php echo $this->__('Balance <b>%s</b>', $this->getTruGiftCardCredit()); ?></span>
+                        </div>
+                    </li>
+                    <li class="col-sm-4">
+                        <div class="dolar_blk">
+                            <img src="<?php echo $this->getSkinUrl('images/dolar_icon_img.png'); ?>" width="237"
+                                 height="90"
+                                 alt="img">
+                        </div>
+                    </li>
+                    <li class="col-sm-4">
+                        <div class="trunited_member lt_mrgn">
+                            <img src="<?php echo $this->getSkinUrl('images/members_img.png'); ?>" width="163"
+                                 height="123"
+                                 alt="img">
+                            <h6><?php echo $this->__('Share With Member'); ?></h6>
+                        </div>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                <button name="name" type="button" class="member_btn transition"
+                        id="non_member"><?php echo $this->__('non-member'); ?></button>
+            </div>
+        </div>
+    </div>
+    <div class="right_block_in search_memeber" id="search_member">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="pad_last"><?php echo $this->__('MONEY MOVEMENT : SHARE MEMBER'); ?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="choose_member">
+            <?php if (sizeof($affiliates_tracking) > 0) { ?>
+                <h5><?php echo $this->__('Find: Choose Member to Share With?'); ?></h5>
+                <div class="monthly_leaderboard">
+                    <div class="top_bar">
+                        <h4><?php echo $this->__('group member board'); ?></h4>
+                        <div class="sort_by pad_last sort_rgt">
+                            <label><?php echo $this->__('SORT BY'); ?></label>
+                            <select class="selectpicker" id="sort-by">
+                                <option value="name_asc"><?php echo $this->__('Name[A-Z]'); ?></option>
+                                <option value="name_desc"><?php echo $this->__('Name[Z-A]'); ?></option>
+                            </select>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="search_club">
+                            <label><?php echo $this->__('SEARCH'); ?></label>
+                            <input name="share_keyword" type="text" value="" id="share_keyword"
+                                   placeholder="<?php echo $this->__('Search Name'); ?>">
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="nicolas_porter group_member">
+                        <ul class="clearfix list_members" id="list_members">
+                            <?php foreach ($affiliates_tracking as $tracking) {?>
+                                <?php
+                                $account = Mage::getModel('affiliateplus/account')->load($tracking->getAccountId());
+                                    if($account != null && $account->getId()){
+                                ?>
+                                    <li>
+                                        <div class="nicolas_con bg_clr1">
+                                            <div class="nicolas_con_left">
+                                                <h3><?php echo $account->getName();?></h3>
+                                                <button name="name" type="button" class="pacesetter">customer</button>
+                                                <h2>1,500</h2>
+                                            </div>
+                                            <div class="nicolas_con_right">
+                                                <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo2.png'); ?>"
+                                                     alt="img">
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="nicolas_con_btns">
+                                                <ul>
+                                                    <li><a href="#">message</a></li>
+                                                    <li><a href="#">give</a></li>
+                                                    <li><a href="#">connect</a></li>
+                                                    <li><a href="#">recognize</a></li>
+                                                    <li><a href="#">Manage</a></li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="select_checkbox">
+                                            <label>
+                                                <input type="checkbox" name="member_select" class="member_select"
+                                                       id="<?php echo $account->getId()?>"
+                                                       onchange="selectType(this, this.checked)"><span>&nbsp;</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <?php }?>
+                            <?php }?>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="orange_btn_blk pad_last">
+                        <ul>
+                            <li class="col-md-4 col-xs-12">
+                                <button name="name" type="button" class="buy_gift transition btn_back" id="btn_back">
+                                    <?php echo $this->__('BACK'); ?></button>
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <button name="name" type="button" class="buy_gift transition btn_cancel">
+                                    <?php echo $this->__('cancel'); ?></button>
+                            </li>
+                            <li class="col-md-4 col-xs-12">
+                                <input type="hidden" id="account_selected" name="account_selected" value="" />
+                                <button name="name" type="button" class="buy_gift transition share_selected">
+                                    <?php echo $this->__('share with selected'); ?></button>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            <?php } else { ?>
+                <h5><?php echo $this->__('No Members to Share With'); ?></h5>
+                <div class="orange_btn_blk pad_last">
+                    <ul>
+                        <li class="col-md-4 col-xs-12">
+                            <button name="name" type="button" class="buy_gift transition btn_back" id="btn_back">
+                                <?php echo $this->__('BACK'); ?></button>
+                        </li>
+                        <li class="col-md-4 col-xs-12">
+                            <button name="name" type="button" class="buy_gift transition btn_cancel">
+                                <?php echo $this->__('cancel'); ?></button>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="right_block_in form_share" id="form_share">
+        <div class="search_bar last padd_bot text-center">
+            <h3 class="pad_last"><?php echo $this->__('MONEY MOVEMENT : SHARE MEMBER'); ?></h3>
+            <div class="clearfix"></div>
+        </div>
+        <div class="choose_member selected">
+            <h5><?php echo $this->__('Selected Member to Share With<br> #GiveToGrow'); ?></h5>
+            <div class="trunited_gift_card">
+                <ul>
+                    <li class="col-xs-6">
+                        <img src="<?php echo $this->getSkinUrl('images/icon_img9.png'); ?>" alt="img">
+                    </li>
+                    <li class="col-xs-6">
+                        <h6>
+                            <?php echo $this->__('Trunited Gift Card'); ?>
+                            <span><?php echo $this->__('Balance <b>%s</b>', $this->getTruGiftCardCredit()); ?></span>
+                        </h6>
+                    </li>
+                    <li class="col-xs-6"><strong><?php echo $this->__('How much to share'); ?></strong></li>
+                    <li class="col-xs-6">
+                        <input id="share_amount" name="share_amount" type="text" value=""
+                               class="required-entry validate-greater-than-zero validate-number"
+                               placeholder="<?php echo $this->__('Enter amount'); ?>"
+                               onchange="checkAmountBalance(this);"
+                        >
+                    </li>
+
+                    <li class="col-xs-6"><strong id="email_share"><?php echo $this->__('Email'); ?></strong></li>
+                    <li class="col-xs-6">
+                        <input id="share_email" name="share_email" type="text" value=""
+                               class="required-entry validate-email"
+                               placeholder="<?php echo $this->__('Enter email'); ?>"
+                        >
+                    </li>
+
+                    <li class="col-xs-6"><strong><?php echo $this->__('Time to Redem | Spend'); ?></strong></li>
+                    <li class="col-xs-6">
+                        <div class="no_limit">
+                            <select id="share_day_expiration" name="share_day_expiration"
+                                    class="selectpicker validate-number">
+                                <option value="0"><?php echo $this->__('No Limit') ?></option>
+                                <?php for ($i = 1; $i < 32; $i++) { ?>
+                                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </li>
+
+                    <li class="col-xs-6"><strong><?php echo $this->__('Message'); ?></strong></li>
+                    <li class="col-xs-6">
+                    <textarea class="form-control validate-length" rows="3" id="message" name="message"
+                              onkeyup="check(this);"
+                              placeholder="Enter message"></textarea>
+                        <small><?php echo $this->__('The message is limited to 150 characters') ?></small>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="orange_btn_blk pad_last">
+                <ul>
+                    <li class="col-md-4 col-xs-12">
+                        <button name="name" type="button" class="buy_gift transition btn_back" id="btn_back">
+                            <?php echo $this->__('BACK'); ?></button>
+                    </li>
+                    <li class="col-md-4 col-xs-12">
+                        <button name="name" type="button" class="buy_gift transition btn_cancel" id="btn_cancel">
+                            <?php echo $this->__('cancel'); ?></button>
+                    </li>
+                    <li class="col-md-4 col-xs-12">
+                        <button name="name" type="submit" class="buy_gift transition">
+                            <?php echo $this->__('submit your request'); ?></button>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    $j = jQuery.noConflict();
+
+    var load_member_hhtml_url = '<?php echo $this->getLoadMemberHtml()?>';
+    $j('.direct_comsumer').remove();
+    $j(document).ready(function () {
+        $j('.main.container .row').first().addClass('bt_padd');
+    });
+
+    var shareTruWalletForm = new VarienForm('trugiftcard_share_truGiftCard', true);
+
+    function check(Obj) {
+        var maxnum = Obj.value.length;
+        if (maxnum > 150) {
+            Obj.value = Obj.value.substring(0, 150);
+        }
+    }
+
+    function selectType(e, v) {
+        $j('.member_select').prop('checked', false);
+        $j(e).prop('checked', v);
+
+        if(v)
+            $j('#account_selected').val($j(e).attr('id'));
+        else
+            $j('#account_selected').val('');
+    }
+
+
+    Validation.add('validate-length', '<?php echo Mage::helper('nationpassport')->__('The message is limited to 150 characters')?>', function (v) {
+        var message = $('message') ? $('message') : $$('.validate-cemail')[0];
+        return message.value.length <= 150;
+    });
+
+    var request_amount_max = <?php echo $this->getMaxAmount() ?>;
+
+    function checkAmountBalance(el) {
+        el.value = parseFloat(el.value);
+        if (el.value < 0)
+            el.value = 0;
+        else if (el.value > request_amount_max || el.value == 'NaN')
+            el.value = request_amount_max;
+    }
+
+    $j.post(load_member_hhtml_url, function (result) {
+//        $j('.balance_blk.bt_padd').append(result);
+    });
+
+    $j('#non_member').click(function () {
+        $j('#form_share').show();
+        $j('#search_member').hide();
+        $j('#share_email').show();
+        $j('#email_share').show();
+        $j('html, body').animate({
+            scrollTop: parseInt($j("#form_share").offset().top)
+        }, 800);
+    });
+
+    $j('#member').click(function () {
+        $j('#form_share').hide();
+        $j('#search_member').show();
+        $j('#share_email').hide();
+        $j('#email_share').hide();
+        $j('html, body').animate({
+            scrollTop: parseInt($j("#search_member").offset().top)
+        }, 800);
+    });
+
+    $j(document).on('click', '.btn_back', function () {
+        window.location.href = '<?php echo $this->getBackUrl();?>';
+        return false;
+    });
+
+    $j(document).on('click', '.share_selected', function () {
+        console.log($j('#account_selected').val() == '');
+        if($j('#account_selected').val() == ''){
+            alert('<?php echo $this->__('You have to select the member to share first!');?>')
+        } else {
+            $j('#form_share').show();
+            $j('#share_email').hide();
+            $j('#email_share').hide();
+            $j('html, body').animate({
+                scrollTop: parseInt($j("#form_share").offset().top)
+            }, 800);
+        }
+
+        return false;
+    });
+
+    $j(document).on('click', '.btn_cancel', function () {
+        var rs = confirm('<?php echo $this->__('Are you sure?');?>');
+        if (!rs)
+            return false;
+        else {
+            $j('#share_amount').val('');
+            $j('#share_email').val('');
+            $j('#message').val('');
+            $j('#share_day_expiration').val(0);
+
+            $j('#form_share').hide();
+            $j('#search_member').hide();
+
+            $j('html, body').animate({
+                scrollTop: parseInt($j("#share_member").offset().top)
+            }, 800);
+        }
+    });
+
+    $j('#sort-by').on('change', function() {
+        search_member();
+        return false;
+    });
+
+    $j('#share_keyword').on('keypress', function (e) {
+        if(e.which === 13){
+            search_member();
+            return false;
+        }
+    });
+
+    var search_member_url = '<?php echo $this->getSearchMemberUrl();?>';
+    function search_member() {
+        $j('#search_member').css({opacity: '0.3'});
+
+        var sort_by = $j('#sort-by').val();
+        var keyword = $j('#share_keyword').val();
+        if(keyword == 'Search Product')
+            keyword = '';
+
+        $j.ajax({
+            url: search_member_url,
+            type: 'POST',
+            data: {keyword: keyword, sort: sort_by},
+            success: function (result) {
+                $j('#list_members').html(result);
+                $j('#search_member').css({opacity: '1'});
+            }
+        });
+    }
+
+
+    //]]>
+</script>

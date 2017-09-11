@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+<!--<link rel="stylesheet" href="http://dev.trunited.com/skin/frontend/base/default/css/cms/homepage/bootstrap.css" type="text/css"/>-->
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="wrapper">
+    <?php echo $this->getChildHtml('global_notices') ?>
+    <div class="page">
+        <?php echo $this->getChildHtml('custom_notice') ?>
+        <?php echo $this->getChildHtml('header') ?>
+        <?php 
+        $current_url = $this->helper('core/url')->getCurrentUrl();
+        if (strpos($current_url, 'home') == false) {
+            echo $this->getChildHtml('topContainer');
+        } ?>
+        <div class="main-container col1-layout">
+<!--            <div class="main container">-->
+            <div class="main">
+                <div class="col-main">
+                    <?php echo $this->getChildHtml('global_messages');
+//                    if ( (strpos($current_url, '/home') !== false) || (strpos($current_url,'/customer') !== false)) {
+//                        echo $this->getChildHtml('content');
+//                    }else{
+//                        echo $this->getChildHtml('detail_content');
+//                    }
+
+                    echo $this->getChildHtml('content');
+                    ?>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('global_cookie_notice') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    </div>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

@@ -331,3 +331,54 @@ nav ul li{
     width: auto !important;
     display: table-cell;
 }
+
+.dashboard_block .top_bar .sort_by label{
+    padding: 0 14px 0 0 !important;
+}
+
+.nicolas_con_btns ul li{
+    padding: 0 4px !important;
+}
+
+.bank-select{
+    width: 100%;
+    height: 40px;
+    border: 2px solid #a6a5a5;
+    font-size: 20px;
+    color: #a6a5a5;
+    border-radius: 5px;
+}
+
+.bank_li{
+    margin: 0px !important;
+}
+
+.monthly_leaderboard{
+    padding: 0px !important;
+}
+
+.monthly_leaderboard .sort_by label{
+    padding-right: 12px; !important;
+}
+
+.search_memeber, .form_share{
+    display: none;
+}
+
+.choose_member #message{
+    width: 100%;
+    border: 3px solid #acacac;
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    color: #8d8c8c;
+    line-height: 25px;
+    font-weight: 400;
+    margin-top: 0;
+}
+
+.choose_member small{
+    font-size: 13px;
+    color: #8d8c8c;
+    font-style: italic;
+
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="nationpassport" ifconfig="nationpassport/general/enable">
+                <name>nationpassport</name>
+                <path>nationpassport</path>
+                <label helper="nationpassport/getNationPassportLabel"/>
+            </action>
+        </reference>
+    </customer_account>
+
+    <nationpassport_default>
+        <update handle="page_two_columns_left"/>
+        <reference name="left">
+            <block type="nationpassport/account_navigation" before="-" name="nationpassport.navigation"
+                   template="nationpassport/account/navigation.phtml">
+                <action method="addLink" translate="label" module="nationpassport">
+                    <name>balance_dashboard</name>
+                    <path>nationpassport/balance</path>
+                    <label>BALANCE</label>
+                    <enable>true</enable>
+                </action>
+                <action method="addLink" translate="label" module="nationpassport">
+                    <name>transfer</name>
+                    <path>nationpassport/balance/transfer/</path>
+                    <label>TRANSFER</label>
+                    <enable>true</enable>
+                    <order>10</order>
+                </action>
+                <action method="addLink" translate="label" module="nationpassport">
+                    <name>withdrawal</name>
+                    <path>nationpassport/balance/withdrawal/</path>
+                    <label>WITHDRAWAL</label>
+                    <enable>true</enable>
+                    <order>20</order>
+                </action>
+                <action method="addLink" translate="label" module="nationpassport">
+                    <name>share</name>
+                    <path>nationpassport/balance/share/</path>
+                    <label>SHARE</label>
+                    <enable>true</enable>
+                    <order>30</order>
+                </action>
+            </block>
+        </reference>
+    </nationpassport_default>
+
+
+    <nationpassport_index_index>
+        <reference name="content">
+            <block type="nationpassport/nationpassport" name="nationpassport"
+                   template="nationpassport/nationpassport.phtml"/>
+        </reference>
+    </nationpassport_index_index>
+
+    <nationpassport_balance_index>
+        <update handle="nationpassport_default"/>
+        <reference name="content">
+            <block type="nationpassport/balance" name="nationpassport.balance" template="nationpassport/balance.phtml"/>
+        </reference>
+    </nationpassport_balance_index>
+
+    <nationpassport_balance_transfer>
+        <update handle="nationpassport_default"/>
+        <reference name="content">
+            <block type="nationpassport/transfer" name="nationpassport.transfer"
+                   template="nationpassport/account/transfer.phtml"/>
+        </reference>
+    </nationpassport_balance_transfer>
+
+    <nationpassport_balance_withdrawal>
+        <update handle="nationpassport_default"/>
+        <reference name="content">
+            <block type="nationpassport/withdrawal" name="nationpassport.withdrawal"
+                   template="nationpassport/account/withdrawal.phtml"/>
+        </reference>
+    </nationpassport_balance_withdrawal>
+
+    <nationpassport_balance_share>
+        <update handle="nationpassport_default"/>
+        <reference name="content">
+            <block type="nationpassport/share" name="nationpassport.share"
+                   template="nationpassport/account/share.phtml">
+                <block type="nationpassport/share_member" name="nationpassport.share.member"
+                       template="nationpassport/account/share/member.phtml"/>
+            </block>
+        </reference>
+    </nationpassport_balance_share>
+</layout>

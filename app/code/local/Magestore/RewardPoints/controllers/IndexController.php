@@ -351,4 +351,22 @@ class Magestore_RewardPoints_IndexController extends Mage_Core_Controller_Front_
         $installer->endSetup();
         echo "success";
     }
+
+    public function updateDb6Action()
+    {
+        $setup = new Mage_Core_Model_Resource_Setup();
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->run("
+              ALTER TABLE {$setup->getTable('rewardpoints/transaction')} MODIFY COLUMN point_amount FLOAT ;
+              ALTER TABLE {$setup->getTable('rewardpoints/transaction')} MODIFY COLUMN point_used  FLOAT ;
+              ALTER TABLE {$setup->getTable('rewardpoints/transaction')} MODIFY COLUMN real_point  FLOAT ;
+              
+              ALTER TABLE {$setup->getTable('rewardpoints/customer')} MODIFY COLUMN point_balance FLOAT ;
+              ALTER TABLE {$setup->getTable('rewardpoints/customer')} MODIFY COLUMN holding_balance   FLOAT ;
+              ALTER TABLE {$setup->getTable('rewardpoints/customer')} MODIFY COLUMN spent_balance   FLOAT ;
+        ");
+        $installer->endSetup();
+        echo "success";
+    }
 }

@@ -1,0 +1,25 @@
+<div class="money_movement">
+    <h6><?php echo $this->__('YOUR CUSTOMER REPORTS') ?></h6>
+    <ul>
+        <?php $_links = $this->getLinks() ?>
+        <?php foreach ($_links as $_link): ?>
+            <?php if ($this->isActive($_link)): ?>
+                <li class="current">
+                    <span><?php echo $_link->getLabel() ?></span>
+                </li>
+            <?php else: ?>
+                <li>
+                    <a href="<?php echo $_link->getUrl() ?>">
+                        <span><?php echo $_link->getLabel() ?></span>
+                    </a>
+                </li>
+            <?php endif ?>
+        <?php endforeach ?>
+    </ul>
+</div>
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block main_bg2');
+    $j('.main.container .row').first().addClass('balance_blk');
+    $j('.direct_comsumer').remove();
+</script>

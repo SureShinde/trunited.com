@@ -1,0 +1,552 @@
+<?php
+/**
+ * nationpassport template
+ */
+$is_paid_fee = $this->isPaidAffiliateFee();
+$paymentMethods = $this->getAllPaymentMethod();
+$bank = $this->getBank();
+?>
+<?php if (!$is_paid_fee) { ?>
+    <ul class="messages">
+        <li class="error-msg">
+            <ul>
+                <li>
+                    <span><?php echo $this->getErrorMessageFee(); ?></span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+<?php } ?>
+<div class="right_block_in">
+    <div class="search_bar last padd_bot text-center">
+        <h3 class="pad_last"><?php echo $this->__('MONEY MOVEMENT : WITHDRAWAL'); ?></h3>
+        <div class="clearfix"></div>
+    </div>
+    <div class="money_movement_blk">
+        <div class="money_movement_top">
+            <ul>
+                <li class="text-right">
+                    <a href="#">
+                        <figure>
+                            <img src="<?php echo $this->getSkinUrl('images/money_move1.png'); ?>" width="155"
+                                 height="95" alt="money_move"></figure>
+                    </a>
+                    <h3><?php echo $this->__('Affiliate Income'); ?></h3>
+                    <span><?php echo $this->__('Balance <b>%s</b>', $this->getFormatedBalance()); ?></span>
+                </li>
+                <li>
+                    <figure><img src="<?php echo $this->getSkinUrl('images/money_move3.png'); ?>" width="237"
+                                 height="90" alt="money_move"></figure>
+                </li>
+                <li class="text-left">
+                    <a href="#">
+                        <figure><img src="<?php echo $this->getSkinUrl('images/money_move2'); ?>.png" width="155"
+                                     height="95" alt="money_move"></figure>
+                    </a>
+                    <h3><?php echo $this->__('Bank Account'); ?></h3>
+                </li>
+            </ul>
+        </div>
+        <?php if ($this->canRequest()) { ?>
+            <div class="money_movement_form">
+                <form id="affiliateplus_payment_request_miniform" class="movement_form_sec"
+                      enctype="multipart/form-data"
+                      action="<?php if ($is_paid_fee) echo $this->getFormActionUrl(); ?>" method="post">
+                    <ul>
+                        <?php if ($this->getTaxRate()) { ?>
+                            <li class="text-right margin_botm">
+                                <label class="required"><?php echo $this->__('Request Amount'); ?><em>*</em></label>
+                            </li>
+                            <li class="margin_botm">
+                                <input type="text" value="" name="amount_incl_tax" id="amount_incl_tax"
+                                       class="required-entry validate-greater-than-zero form-control"
+                                       <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>
+                                       onchange="checkAmountBalance(this);"
+                                >
+                            </li>
+
+                            <li class="text-right margin_botm">
+                                <label class="required"><?php echo $this->__('Amount to Transfer (Excl. Tax)'); ?>
+                                    <em>*</em></label>
+                            </li>
+                            <li class="margin_botm">
+                                <input type="text" value="" name="amount" id="amount"
+                                       class="required-entry validate-greater-than-zero form-control"
+                                       <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>
+                                       onchange="changeRealAmount(this);"
+                                >
+                            </li>
+                        <?php } else { ?>
+                            <li class="text-right margin_botm">
+                                <label class="required"><?php echo $this->__('Amount to Transfer'); ?><em>*</em></label>
+                            </li>
+                            <li class="margin_botm">
+                                <input type="text" value="" name="amount" id="amount"
+                                       class="required-entry validate-greater-than-zero"
+                                       <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>
+                                       onchange="checkAmountBalance(this);"
+                                >
+                            </li>
+                        <?php } ?>
+
+                        <?php if ($this->hasBankAccount()) { ?>
+                            <li class="text-right margin_botm">
+                                <label><?php echo $this->__('Select an Existing Bank Account') ?></label>
+                            </li>
+                            <li class="margin_botm">
+                                <?php echo $this->getBankAccountHtmlSelect('payment') ?>
+                            </li>
+                        <?php } else { ?>
+
+                        <?php } ?>
+                    </ul>
+                    <ul id="account-new-bankaccount-form">
+                        <li class="text-right">
+                            <label><?php echo $this->__('New Bank Account') ?></label>
+                        </li>
+
+                        <li class="bank_li">
+                            <label for="bank:name" class="required"><?php echo $this->__('Bank name') ?>
+                                <sup>*</sup></label>
+                            <input type="text" title="<?php echo $this->__('Bank name') ?>" name="bank[name]"
+                                   id="bank:name" class="input-text required-entry"
+                                   value="<?php echo $bank->getName(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <li class="text-right dsp_none">
+                        </li>
+
+                        <li class="bank_li">
+                            <label for="bank:account_name" class="required"><?php echo $this->__('Bank account name') ?>
+                                <sup>*</sup></label>
+                            <input type="text" title="<?php echo $this->__('Bank account name') ?>"
+                                   name="bank[account_name]" id="bank:account_name" class="input-text required-entry "
+                                   value="<?php echo $bank->getAccountName(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <li class="text-right dsp_none">
+                        </li>
+
+                        <li>
+                            <label for="bank:account_number"
+                                   class="required"><?php echo $this->__('Bank account number') ?><sup>*</sup></label>
+                            <input type="text" title="<?php echo $this->__('Bank account number') ?>"
+                                   name="bank[account_number]" id="bank:account_number"
+                                   class="input-text required-entry " value="<?php echo $bank->getAccountNumber(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <li class="text-right dsp_none">
+                        </li>
+
+                        <li>
+                            <label for="bank:routing_code" class="required"><?php echo $this->__('Bank routing code') ?>
+                                <sup>*</sup></label>
+                            <input type="text" title="<?php echo $this->__('Bank routing code') ?>"
+                                   name="bank[routing_code]" id="bank:routing_code"
+                                   class="required-entry" value="<?php echo $bank->getRoutingCode(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <li class="text-right dsp_none">
+                        </li>
+
+                        <li>
+                            <label for="bank:swift_code"><?php echo $this->__('Bank SWIFT code') ?></label>
+                            <input type="text" title="<?php echo $this->__('Bank SWIFT code') ?>"
+                                   name="bank[swift_code]" id="bank:swift_code"
+                                   value="<?php echo $bank->getSwiftCode(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <li class="text-right dsp_none">
+                        </li>
+
+                        <li>
+                            <label for="bank:address"><?php echo $this->__('Bank address') ?></label>
+                            <input type="text" title="<?php echo $this->__('Bank address') ?>"
+                                   name="bank[address]" id="bank:address"
+                                   value="<?php echo $bank->getAddress(); ?>"
+                                   <?php if (!$is_paid_fee){ ?>disabled="disabled"<?php } ?>>
+                        </li>
+
+                        <?php if (count($paymentMethods) == 1) { ?>
+                            <?php foreach ($paymentMethods as $code => $method): ?>
+                                <li class="text-right margin_botm">
+                                </li>
+                                <li class=" margin_botm">
+                                    <input type="hidden" id="payment_method_<?php echo $code ?>"
+                                           value="<?php echo $code ?>" name="payment_method"/>
+                                    <div class="form-group" id="payment_method_<?php echo $code ?>_form">
+                                        <?php echo $this->getChildHtml("payment_method_form_$code") ?>
+                                    </div>
+                                </li>
+
+                            <?php endforeach ?>
+                        <?php } else { ?>
+                            <?php foreach ($paymentMethods as $code => $method) { ?>
+                                <li class="text-right margin_botm">
+                                    <label for="payment_method_<?php echo $code ?>">
+                                        <?php echo $method->getLabel() ?>
+                                    </label>
+                                </li>
+                                <li class=" margin_botm">
+                                    <input type="radio" id="payment_method_<?php echo $code ?>"
+                                           value="<?php echo $code ?>" name="payment_method"
+                                           title="<?php echo $method->getLabel() ?>" class="radio"
+                                           onchange="changeMethod();"
+                                    />
+                                </li>
+                                <div class="form-group payment_method_form"
+                                     id="payment_method_<?php echo $code ?>_form" <?php if ($data['payment_method'] != $code) echo 'style="display:none"'; ?>>
+                                    <?php echo $this->getChildHtml("payment_method_form_$code") ?>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+                    </ul>
+
+                    <!--                    <h3>Did you know you can earn 2% profit points ?</h3>-->
+                </form>
+                <div class="money_movement_form_in">
+                    <ul>
+                        <li class="col-xs-4">
+                            <button type="button" class="movement_btn transition" id="btn-back">
+                                <?php echo $this->__('Back'); ?></button>
+                        </li>
+
+                        <li class="col-xs-4">
+                            <button type="button" class="movement_btn transition">
+                                <?php echo $this->__('Find out how'); ?></button>
+                        </li>
+                        <?php if ($is_paid_fee) { ?>
+                            <li class="col-xs-4">
+                                <button type="button" class="movement_btn transition" id="btn-submit"
+                                        onclick="submitPayment(this);">
+                                    <?php echo $this->__('Submit your request'); ?></button>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        <?php } ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block main_bg2');
+    $j('.main').addClass('container');
+    $j('.main .col-main').addClass('row');
+
+    $j('#btn-back').click(function () {
+        window.location.href = '<?php echo $this->getBackUrl();?>';
+        return false;
+    });
+
+    $j(document).ready(function () {
+        <?php if ($this->hasBankAccount()) { ?>
+        $('account-new-bankaccount-form').hide();
+        <?php } else {?>
+        $('account-new-bankaccount-form').show();
+        <?php }?>
+    });
+
+    var request_amount_max = <?php echo $this->getMaxAmount() ?>;
+
+    function checkAmountBalance(el) {
+        el.value = parseFloat(el.value);
+
+        if (el.value < 0)
+            el.value = 0;
+        else if (el.value > request_amount_max || el.value == 'NaN')
+            el.value = request_amount_max;
+
+    }
+
+    <?php if ($this->getTaxRate()): ?>
+    function changeRealAmount(el) {
+        var taxRate = <?php echo $this->getTaxRate() ?>;
+        var maxRequestAmount = request_amount_max * 100 / (100 + taxRate);
+        maxRequestAmount = Math.round(maxRequestAmount * 100) / 100;
+
+        // Refine real amount
+        el.value = parseFloat(el.value);
+        if (el.value < 0)
+            el.value = 0;
+        else if (el.value > maxRequestAmount || el.value == 'NaN')
+            el.value = maxRequestAmount;
+
+        // update Tax Amount
+        var taxAmount = Math.round(el.value * taxRate) / 100;
+        $('withdrawal_tax').innerHTML = formatCurrency(taxAmount, <?php echo $this->getPriceFormatJs() ?>);
+
+        // update Amount
+        var totalAmount = parseFloat(el.value) + parseFloat(taxAmount);
+        totalAmount = Math.round(totalAmount * 100) / 100;
+        $('amount_incl_tax').value = totalAmount;
+    }
+    <?php endif ?>
+
+
+    var affiliateplusPaymentRequestForm = new VarienForm('affiliateplus_payment_request_miniform', true);
+
+    function checkVerify() {
+        var amount = $('amount').value;
+        $$('input[type="radio"][name="payment_method"]').each(function (el) {
+            if (el.checked) {
+                var payment_method = el.value;
+                if (payment_method == 'paypal' || payment_method == 'moneybooker') {
+                    var email = $(payment_method + '_email').value;
+                    var url = '<?php echo $this->getUrl('affiliateplus/index/checkVerify') ?>?payment_method=' + payment_method + '&email=' + email;
+                    var request = new Ajax.Request(url, {
+                        'onSuccess': function (response) {
+                            var result = response.responseText;
+                            if (result) {
+                                return true;
+                            } else {
+                                alert(result);
+                                showVerifyForm(payment_method, email, amount, null);
+                                return false;
+                            }
+
+                        }
+                    });
+                }
+            }
+        });
+        return false;
+    }
+
+
+    function submitPayment(element) {
+        var amount = $('amount').value;
+        if (affiliateplusPaymentRequestForm.validator.validate()) {
+            $$('input[type="radio"][name="payment_method"]').each(function (el) {
+                if (el.checked) {
+                    var payment_method = el.value;
+                    if (payment_method == 'paypal' || payment_method == 'moneybooker') {
+                        if (affiliateplusPaymentRequestForm.validator.validate()) {
+                            var email = $(payment_method + '_email').value;
+                            var url = '<?php echo $this->getUrl('affiliateplus/index/checkVerify') ?>?payment_method=' + payment_method + '&email=' + email + '&amount=' + amount;
+                            var request = new Ajax.Request(url, {
+                                'onSuccess': function (response) {
+                                    var result = response.responseText;
+                                    if (result) {
+                                        <?php if (count($paymentMethods) == 1): ?>
+                                        affiliateplusPaymentRequestForm.submit();
+                                        <?php else: ?>
+                                        if ($$('input:checked[type="radio"][name="payment_method"]').pluck('value')[0])
+                                            affiliateplusPaymentRequestForm.submit();
+                                        else
+                                            alert('<?php echo $this->__('Please specify a payment method') ?>');
+                                        <?php endif ?>
+                                    } else {
+                                        showVerifyForm(payment_method, email, amount, element);
+                                        return false;
+                                    }
+
+                                }
+                            });
+                        }
+                    } else {
+                        <?php if (count($paymentMethods) == 1): ?>
+                        affiliateplusPaymentRequestForm.submit();
+                        <?php else: ?>
+                        if ($$('input:checked[type="radio"][name="payment_method"]').pluck('value')[0])
+                            affiliateplusPaymentRequestForm.submit();
+                        else
+                            alert('<?php echo $this->__('Please specify a payment method') ?>');
+                        <?php endif ?>
+                    }
+                }
+            });
+            <?php if (count($paymentMethods) == 1): ?>
+            <?php // Change By Adam 23/10/2013 - hainh update 24-04-2014  ?>
+            <?php //check when select only bank payment - no need to check paypal anymore  ?>
+            <?php foreach ($paymentMethods as $code => $value): ?>
+            <?php if ($code == 'paypal' || $code == 'moneybooker'): ?>
+            var email = $('paypal_email').value;
+            if (affiliateplusPaymentRequestForm.validator.validate()) {
+                var url = '<?php echo $this->getUrl('affiliateplus/index/checkVerify') ?>?payment_method=paypal&email=' + email + '&amount=' + amount;
+                var request = new Ajax.Request(url, {
+                    'onSuccess': function (response) {
+                        var result = response.responseText;
+                        if (result) {
+                            <?php if (count($paymentMethods) == 1): ?>
+                            affiliateplusPaymentRequestForm.submit();
+                            <?php else: ?>
+                            if ($$('input:checked[type="radio"][name="payment_method"]').pluck('value')[0])
+                                affiliateplusPaymentRequestForm.submit();
+                            else
+                                alert('<?php echo $this->__('Please specify a payment method') ?>');
+                            <?php endif ?>
+                        } else {
+                            showVerifyForm('paypal', email, element);
+                            return false;
+                        }
+
+                    }
+                });
+            }
+            <?php else: ?>
+            affiliateplusPaymentRequestForm.submit();
+            <?php endif; ?>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <?php endif ?>
+        }
+    }
+
+    function showVerifyForm(method, email, amount, element) {
+        var url = '<?php echo $this->getUrl('affiliateplus/index/verifyPayment'); ?>' + '?method=' + method + '&email=' + email + '&amount=' + amount;
+
+        ajaxPopup(url, null, element);
+    }
+
+    function changeMethod() {
+        $$('input[type="radio"][name="payment_method"]').each(function (el) {
+            if (el.checked) {
+                $('payment_method_' + el.value + '_form').show();
+            } else {
+                $('payment_method_' + el.value + '_form').hide();
+            }
+        });
+    }
+
+    var request_amount_max = <?php echo $this->getBalance() ?>;
+
+    function checkAmountBalance(el) {
+        el.value = parseFloat(el.value);
+        if (el.value < 0)
+            el.value = 0;
+        else if (el.value > request_amount_max || el.value == 'NaN')
+            el.value = request_amount_max;
+
+        <?php if ($this->getTaxRate()): ?>
+        var taxRate = <?php echo $this->getTaxRate() ?>;
+        var taxAmount = el.value * taxRate / (100 + taxRate);
+        taxAmount = Math.round(taxAmount * 100) / 100;
+        $('withdrawal_tax').innerHTML = formatCurrency(taxAmount, <?php echo $this->getPriceFormatJs() ?>);
+        $('amount').value = el.value - taxAmount;
+        <?php endif ?>
+    }
+
+    <?php if ($this->getTaxRate()): ?>
+    function changeRealAmount(el) {
+        var taxRate = <?php echo $this->getTaxRate() ?>;
+        var maxRequestAmount = request_amount_max * 100 / (100 + taxRate);
+        maxRequestAmount = Math.round(maxRequestAmount * 100) / 100;
+
+        // Refine real amount
+        el.value = parseFloat(el.value);
+        if (el.value < 0)
+            el.value = 0;
+        else if (el.value > maxRequestAmount || el.value == 'NaN')
+            el.value = maxRequestAmount;
+
+        // update Tax Amount
+        var taxAmount = Math.round(el.value * taxRate) / 100;
+        $('withdrawal_tax').innerHTML = formatCurrency(taxAmount, <?php echo $this->getPriceFormatJs() ?>);
+
+        // update Amount
+        var totalAmount = parseFloat(el.value) + parseFloat(taxAmount);
+        totalAmount = Math.round(totalAmount * 100) / 100;
+        $('amount_incl_tax').value = totalAmount;
+    }
+    <?php endif ?>
+
+    function cancelRequest() {
+        var url = '<?php echo $this->getUrl('affiliateplus/index/index'); ?>';
+        window.location.href = url;
+    }
+
+    function submitForm() {
+        var verifyForm = new VarienForm('verify-email-form', true);
+        if (verifyForm.validator.validate())
+            $('verify-email-form').submit()
+    }
+
+    function notNow() {
+        closeAffPopup();
+    }
+
+    function sendMail() {
+        var method = $('payment_method').value;
+        var email = $('email').value;
+        var url = '<?php echo $this->getUrl('affiliateplus/index/sendVerifyEmail') ?>?payment_method=' + method + '&email=' + email;
+        var request = new Ajax.Request(url, {
+            onSuccess: function (response) {
+                if (response.responseText) {
+                    alert('An authentication code was sent to your email. Please check it again!');
+                } else {
+                    alert("Can\'t send email. Please check your email is right.");
+                }
+            }
+        });
+    }
+
+
+    var currentBankAccountId = $('payment-bank-select') ? $('payment-bank-select').value : false;
+
+    function lsRequestTrialNewAccount(bankAccountId) {
+        if (bankAccountId == "") {
+            $('account-new-bankaccount-form').show();
+            <?php if($require):?>
+            $('verify-li-bank').style.display = 'block';
+            <?php if($back): ?>
+            if (currentBankAccountId == bankAccountId) {
+                $$('#verify-li-bank .input-box a').each(function (el) {
+                    el.show();
+                });
+                $('bank_statement').removeClassName('required-entry');
+                $('bank_statement_em').hide();
+            } else {
+                $$('#verify-li-bank .input-box a').each(function (el) {
+                    el.hide();
+                });
+                $('bank_statement').addClassName('required-entry');
+                $('bank_statement_em').show();
+            }
+            <?php endif ?>
+            <?php endif;?>
+        } else {
+            $('account-new-bankaccount-form').hide();
+            <?php if($require):?>
+            var url = '<?php echo $this->getUrl('affiliateplus/index/checkVerify');?>?payment_method=bank&email=' + bankAccountId;
+            var request = new Ajax.Request(url,
+                {
+                    onSuccess: function (response) {
+                        if (response.responseText)
+                            $('verify-li-bank').style.display = 'none';
+                        else {
+                            $('verify-li-bank').style.display = 'block';
+                            <?php if($back): ?>
+                            if (currentBankAccountId == bankAccountId) {
+                                $$('#verify-li-bank .input-box a').each(function (el) {
+                                    el.show();
+                                });
+                                $('bank_statement').removeClassName('required-entry');
+                                $('bank_statement_em').hide();
+                            } else {
+                                $$('#verify-li-bank .input-box a').each(function (el) {
+                                    el.hide();
+                                });
+                                $('bank_statement').addClassName('required-entry');
+                                $('bank_statement_em').show();
+                            }
+                            <?php endif ?>
+                        }
+                    }
+                }
+            );
+            <?php endif;?>
+        }
+    }
+
+    //]]>
+</script>

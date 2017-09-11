@@ -1,0 +1,798 @@
+<?php 
+	/**
+	 * nationpassport template
+	 */
+	$customer = $this->getCurrentCustomer();
+	$refer_affiliate = $this->getAffiliateRefer();
+	$refer_affiliate_name = '';
+	if($refer_affiliate != null && $refer_affiliate->getId())
+	    $refer_affiliate_name = $refer_affiliate->getName();
+
+	$product_giftcard = $this->getTruGiftCardProduct();
+	$giftcard_url = '#';
+	if($product_giftcard != null && $product_giftcard->getId())
+	    $giftcard_url = $product_giftcard->getProductUrl();
+?>
+
+<div class="dashboard_block">
+    <div class="dashboard">
+        <h2><?php echo $this->__('What Can We<br> Help You With, Today');?>?</h2>
+        <ul>
+            <li><span><?php echo $this->__('Customer<br> Dashboard'); ?></span></li>
+            <li class="pull-right"><span><?php echo $this->__('Business<br> Dashboard'); ?></span></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="nation_passport">
+        <div class="top_bar">
+            <h4><?php echo $this->__('TRUNITED NATION PASSPORT'); ?></h4>
+            <div class="setting">
+                <a href="<?php echo $this->getBalanceDashboardUrl();?>">
+                    <?php echo $this->__('Account Setting'); ?>
+                </a>
+            </div>
+        </div>
+        <div class="nation_passport_bgr">
+            <div class="nation_passport_left col-md-7 col-xs-12">
+                <div class="nicolas">
+                    <label><?php echo $this->__('member profile'); ?></label>
+                    <input name="name" type="text" value="">
+                    <div class="clearfix"></div>
+                    <div class="nicolas_left">
+                        <h3><?php echo $customer->getName();?></h3>
+                        <button name="name" type="button" class="pacesetter">Pacesetter</button>
+                        <p><?php echo $this->__('Member Since: %s', date('m/d/Y', strtotime($customer->getCreatedAt()))); ?></p>
+                        <p>Affiliate Renewal: September 2017</p>
+                        <p><?php echo $this->__('Connected By: %s', $refer_affiliate_name);?></p>
+                        <p>District: 1</p>
+                    </div>
+                    <div class="nicolas_right">
+                        <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo.png');?>" alt="img">
+                        <span>Phoenix, Arizona</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="nicolas_btns">
+                        <ul>
+                            <li><a href="#">message</a></li>
+                            <li><a href="#">give</a></li>
+                            <li><a href="#">connect</a></li>
+                            <li><a href="#">recognize</a></li>
+                            <li><a href="#">Manage</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="members_badges">
+                    <label>member profile</label>
+                    <input name="name" type="text" value="">
+                    <div class="clearfix"></div>
+                    <ul>
+                        <li><a href="#"><img src="<?php echo $this->getSkinUrl('images/member_badges_img1.png');?>" alt="img"></a></li>
+                        <li><a href="#"><img src="<?php echo $this->getSkinUrl('images/member_badges_img2.png');?>" alt="img"></a></li>
+                        <li><a href="#"><img src="<?php echo $this->getSkinUrl('images/member_badges_img3.png');?>" alt="img"></a></li>
+                        <li><a href="#"><img src="<?php echo $this->getSkinUrl('images/member_badges_img4.png');?>" alt="img"></a></li>
+                        <li><a href="#"><img src="<?php echo $this->getSkinUrl('images/member_badges_img5.png');?>" alt="img"></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ut enim ad minim, quis nostrud exercition ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                </div>
+            </div>
+            <div class="nation_passport_right passport col-md-5 col-xs-12">
+                <div class="monthly_status">
+                    <label>Member Monthly Stats</label>
+                    <input name="name" type="text" value="">
+                    <div class="clearfix"></div>
+                    <ul>
+                        <li class="col-xs-4">
+                            <span>68</span>
+                            <small>personal<br> points</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>172</span>
+                            <small>connection<br> points</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>78</span>
+                            <small>affiliate<br> points</small>
+                        </li>
+
+                        <li class="col-xs-4">
+                            <span>172</span>
+                            <small>next level<br> points</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>168</span>
+                            <small>unearned <br> point</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>93</span>
+                            <small>your efficient<br> point match</small>
+                        </li>
+
+                        <li class="col-xs-4">
+                            <span>8%</span>
+                            <small>trubox<br> engagement</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>15%</span>
+                            <small>customer<br> engagement</small>
+                        </li>
+                        <li class="col-xs-4">
+                            <span>1,260</span>
+                            <small>points<br> on hold</small>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="member_balance">
+                    <label>member profile</label>
+                    <input name="name" type="text" value="">
+                    <div class="clearfix"></div>
+                    <ul>
+                        <li class="col-xs-4">
+                            <div class="balance_con">
+                                <img src="<?php echo $this->getSkinUrl('images/icon_img4.png');?>" alt="icon">
+                                <span><?php echo $this->getBalance();?></span>
+                                <small><?php echo $this->__('Income<br> Ballance');?></small>
+                                <button name="name" type="button" class="transfer transition" id="btn_transfer"><?php echo $this->__('transfer');?></button>
+                                <button name="name" type="button" class="transfer transition" id="btn_withdrawal"><?php echo $this->__('withdraw');?></button>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <div class="balance_con">
+                                <img src="<?php echo $this->getSkinUrl('images/icon_img5.png');?>" alt="icon">
+                                <span><?php echo $this->getTruWalletCredit();?></span>
+                                <small><?php echo $this->__('truwallet<br> earnings');?></small>
+                                <button name="name" type="button" class="transfer shop transition">SHOP</button>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <div class="balance_con">
+                                <img src="<?php echo $this->getSkinUrl('images/icon_img6.png');?>" alt="icon">
+                                <span><?php echo $this->getTruGiftCardCredit();?></span>
+                                <small><?php echo $this->__('trunited<br> gift card');?></small>
+                                <button name="name" type="button" class="transfer transition" id="trugiftcard_share"><?php echo $this->__('Share');?></button>
+                                <?php if($product_giftcard != null && $product_giftcard->getId()){?>
+                                <button name="name" type="button" class="transfer transition" id="trugiftcard_buy_more">
+                                    <?php echo $this->__('Buy more');?>
+                                </button>
+                                <?php }?>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <button name="name" type="button" class="customer_btn transition" id="customer_account">
+            <?php echo $this->__('Customer account');?></button>
+    </div>
+    <div class="monthly_leaderboard">
+        <div class="top_bar">
+            <h4>Trunited Monthly Leaderboard</h4>
+            <div class="sort_by">
+                <label>SORT BY</label>
+                <select class="selectpicker">
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                </select>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="nicolas_porter">
+            <ul>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr1">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">customer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr1">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">customer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr3">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">influencer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo4.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr3">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">influencer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo4.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="monthly_leaderboard pad_last">
+        <div class="top_bar">
+            <h4>Trunited Nation Recognition Board</h4>
+            <div class="sort_by">
+                <label>SORT BY</label>
+                <select class="selectpicker">
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                    <option>Personal Points</option>
+                </select>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="nicolas_porter">
+            <ul>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr1">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">customer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr1">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">customer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr3">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">influencer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo4.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">pacesetter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr3">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">influencer</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo4.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="nicolas_con bg_clr2">
+                        <div class="nicolas_con_left">
+                            <h3>Nicolas Porter</h3>
+                            <button name="name" type="button" class="pacesetter">promoter</button>
+                            <h2>1,500</h2>
+                        </div>
+                        <div class="nicolas_con_right">
+                            <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo1.png');?>" alt="img">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="nicolas_con_btns">
+                            <ul>
+                                <li><a href="#">message</a></li>
+                                <li><a href="#">give</a></li>
+                                <li><a href="#">connect</a></li>
+                                <li><a href="#">recognize</a></li>
+                                <li><a href="#">Manage</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <button name="name" type="button" class="customer_btn transition">manage business</button>
+</div>
+
+<script type="text/javascript">
+    $j = jQuery.noConflict();
+    $j('.main-container').addClass('main_block main_bg2');
+    $j('.main').addClass('container');
+    $j('.main .col-main').addClass('row');
+
+    $j('#customer_account').click(function(){
+       window.location.href = '<?php echo $this->getAccountDashboardUrl();?>';
+       return false;
+    });
+    
+    $j('#trugiftcard_buy_more').click(function () {
+        window.location.href = '<?php echo $giftcard_url;?>';
+        return false;
+    });
+    
+    $j('#trugiftcard_share').click(function () {
+        window.location.href = '<?php echo $this->getShareTruGiftCardUrl();?>';
+        return false;
+    });
+
+    $j('#btn_transfer').click(function () {
+        window.location.href = '<?php echo $this->getTransferUrl();?>';
+        return false;
+    });
+
+    $j('#btn_withdrawal').click(function () {
+        window.location.href = '<?php echo $this->getWithdrawalUrl();?>';
+        return false;
+    });
+
+
+</script>

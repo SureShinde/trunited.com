@@ -146,7 +146,6 @@ $product_trubox = $this->getProductsFromTruBox();
     $j('.direct_comsumer').html('<h1 class="inner_pad">The Trubox Club</h1>');
 
     $j('.increse').delegate('.up', 'click',function(){
-        console.log('aaaa');
         var num = $j(this).parent().find('.input-quantity').val();
         $j(this).parent().find('.input-quantity').val(parseInt(num)+1);
     });

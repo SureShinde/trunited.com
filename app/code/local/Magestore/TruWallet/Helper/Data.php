@@ -16,7 +16,7 @@ class Magestore_TruWallet_Helper_Data extends Mage_Core_Helper_Abstract
     public function getMyTruWalletLabel()
     {
         $image = '<img src="'.Mage::getDesign()->getSkinUrl('images/truwallet/truwallet.png').'" />';
-        return $this->__('My truWallet') . ' ' . $image;
+        return $this->__('My TruWallet') . ' ' . $image;
     }
 
     public function getShareTruWalletLabel()

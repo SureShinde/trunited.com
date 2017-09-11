@@ -1,0 +1,44 @@
+<?php
+$accounts = $this->getAccountCollection();
+?>
+<?php if (sizeof($accounts) > 0) { ?>
+    <?php foreach ($accounts as $account) {?>
+        <?php
+        if($account != null && $account->getId()){
+            ?>
+            <li>
+                <div class="nicolas_con bg_clr1">
+                    <div class="nicolas_con_left">
+                        <h3><?php echo $account->getName();?></h3>
+                        <button name="name" type="button" class="pacesetter">customer</button>
+                        <h2>1,500</h2>
+                    </div>
+                    <div class="nicolas_con_right">
+                        <img src="<?php echo $this->getSkinUrl('images/pacesetter_logo2.png'); ?>"
+                             alt="img">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="nicolas_con_btns">
+                        <ul>
+                            <li><a href="#">message</a></li>
+                            <li><a href="#">give</a></li>
+                            <li><a href="#">connect</a></li>
+                            <li><a href="#">recognize</a></li>
+                            <li><a href="#">Manage</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="select_checkbox">
+                    <label>
+                        <input type="checkbox" name="member_select" class="member_select"
+                               id="<?php echo $account->getId()?>"
+                               onchange="selectType(this, this.checked)"><span>&nbsp;</span>
+                    </label>
+                </div>
+            </li>
+        <?php }?>
+    <?php }?>
+<?php } else { ?>
+    <p><?php echo $this->__('No Members found'); ?></p>
+<?php } ?>
