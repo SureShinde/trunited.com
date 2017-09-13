@@ -29,19 +29,21 @@ else
 <?php endif; ?>
 <?php if($_product->isSaleable()): ?>
     <?php 
-    $style = ($productType == 'simple') ? 'style="width:100%"' : '';?>
+    $style = ( $productType =='gfitcardproduct' || $productType == 'virtual') ? 'style="width:100%"' : '';?>
     <div class="add-to-cart" <?php echo $style;?>>
-    <?php if ($productType == 'simple'){
+    <?php if ( $productType =='gfitcardproduct' || $productType == 'virtual'){
         echo '<div class = "value">';
     }
     ?>
         <?php if(!$_product->isGrouped()): ?>
-            <?php if ($productType == 'simple'){ ?>
+            <?php if ( $productType =='gfitcardproduct' || $productType == 'virtual'){ ?>
                 <label>Quantity</label>
-            <?php } else {?>
-                <label for="qty"><?php echo $this->__('Qty:') ?></label>
-            <?php } ?>
-            <?php $class = ($productType == 'simple') ? 'btn-group bootstrap-select quantity' : 'qty-holder'; ?>
+            <?php } else {
+                if ($productType != 'simple'){ ?>
+                    <label for="qty"><?php echo $this->__('Qty:') ?></label>
+            <?php }
+            } ?>
+            <?php $class = ( $productType =='gfitcardproduct' || $productType == 'virtual') ? 'btn-group bootstrap-select quantity' : 'qty-holder'; ?>
             <div class="<?php echo $class;?>">
                 <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
                 <div class="qty-changer">
@@ -51,14 +53,14 @@ else
             </div>
         <?php endif; ?>
 
-        <?php if ($productType == 'simple'){
-            echo '</div>';
+        <?php if ( $productType =='gfitcardproduct' || $productType == 'virtual'){
+            echo '</div>'; //value div closed
         } ?>
         <?php 
-        $class = ($productType == 'simple') ? 'add_chart transition' : 'button btn-cart'; ?>
+        $class = ( $productType =='gfitcardproduct' || $productType == 'virtual') ? 'add_chart transition' : 'button btn-cart'; ?>
         <?php if(!Mage::helper('trubox')->isInPhysicalList($_product)){?>
         <button type="button" title="<?php echo $buttonTitle ?>" class="<?php echo $class;?>" onclick="productAddToCartForm.submit(this)">
-        <?php if ($productType != 'simple'){ ?>
+        <?php if ($productType =='simple' || $productType =='gfitcardproduct' || $productType == 'virtual'){ ?>
                 <span><span><i class="icon-cart"></i><?php echo $buttonTitle ?></span></span>
             <?php } else{ 
                 echo $buttonTitle;?>

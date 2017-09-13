@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<config>
+	<modules>
+		<Smartwave_GiftCardView>
+			<version>0.1.0</version>
+		</Smartwave_GiftCardView>
+	</modules>
+
+	<frontend>
+		<routers>
+			<Smartwave_GiftCardView>
+				<use>standard</use>
+				<args>
+					<module>Smartwave_GiftCardView</module>
+					<frontName>giftcardview</frontName>
+				</args>
+			</Smartwave_GiftCardView>
+		</routers>
+	</frontend>
+</config>

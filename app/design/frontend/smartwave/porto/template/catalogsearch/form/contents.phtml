@@ -31,7 +31,9 @@
 
 <form id="search_header_form" action="<?php echo str_replace("https://","//",str_replace("http://","//",$this->helper('catalogsearch')->getResultUrl())) ?>" method="get">
     <div class="form-search  <?php if(!Mage::getStoreConfig("catalogcategorysearch/general/enabled", $code)): ?>no-padding<?php endif; ?>">
-        <button type="submit" title="<?php echo $this->__('Search')?>" class="button btn-search"><i class="icon-search"></i></button>
+        <button type="submit" title="<?php echo $this->__('Search')?>" class="button btn-search">
+        <!-- <i class="icon-search"></i> -->
+        </button>
         <input id="search" type="text" name="<?php echo $this->helper('catalogsearch')->getQueryParamName() ?>" class="input-text"
                title="" placeholder="<?php echo $this->__('Search trunited...');?>" autocomplete="off" />
         <?php if(Mage::getStoreConfig("catalogcategorysearch/general/enabled", $code)): ?>

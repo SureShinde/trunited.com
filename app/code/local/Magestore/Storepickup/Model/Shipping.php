@@ -48,6 +48,7 @@ class Magestore_Storepickup_Model_Shipping extends Mage_Shipping_Model_Shipping
             }
         } else  {
             $stores = Mage::helper('storepickup')->echoAllStoreCheckoutToJson(Mage::app()->getStore()->getId());
+			
             if(!$stores){
                 if ($carrierCode == 'storepickup') {
                     return false;

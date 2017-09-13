@@ -107,11 +107,9 @@ class Magestore_RewardPoints_Model_Total_Quote_Earning{
             $this->_updateEarningPoints($address);
         }
 
-//        zend_debug::dump('BEFORE: '.$address->getRewardpointsEarn());
         Mage::dispatchEvent('rewardpoints_collect_earning_total_points_after', array(
             'address' => $address,
         ));
-//        zend_debug::dump('AFTER: '.$address->getRewardpointsEarn());
 
         //Shopping Cart Earning Rule Points
         $shoppingCartRulePoints = Mage::helper('rewardpointsrule/calculation_earning')

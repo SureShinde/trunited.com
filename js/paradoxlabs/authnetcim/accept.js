@@ -182,12 +182,7 @@ pdlAcceptJs.prototype = {
                     messages += "\n";
                 }
                 
-                if (typeof Translator != 'undefined') {
-                    messages += Translator.translate( response.messages.message[i].text + ' (' + response.messages.message[i].code + ')' );
-                }
-                else {
-                    messages += response.messages.message[i].text + ' (' + response.messages.message[i].code + ')';
-                }
+                messages += Translator.translate( response.messages.message[i].text + ' (' + response.messages.message[i].code + ')' );
             }
             
             this.stopLoadWaiting(messages);

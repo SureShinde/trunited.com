@@ -21,7 +21,6 @@
 					<xsd:element name="cc_type" type="xsd:string" minOccurs="0" />
 					<xsd:element name="cc_last4" type="xsd:string" minOccurs="0" />
 					<xsd:element name="hash" type="xsd:string" minOccurs="0" />
-					<xsd:element name="active" type="xsd:string" minOccurs="0" />
 				</xsd:sequence>
 			</xsd:complexType>
 			<xsd:complexType name="tokenbaseCardAddressEntity">
@@ -62,11 +61,6 @@
 					<xsd:element name="echeck_account_type" type="xsd:string" minOccurs="0" />
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:complexType name="tokenbaseCardEntityArray">
-				<xsd:sequence>
-					<xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:tokenbaseCardEntity" />
-				</xsd:sequence>
-			</xsd:complexType>
 			
 			<xsd:complexType name="shoppingCartPaymentMethodEntity">
 				<xsd:sequence>
@@ -101,7 +95,7 @@
 			<xsd:element name="tokenbaseGetCardResponseParam">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:tokenbaseCardEntity" />
+						<xsd:element minOccurs="1" maxOccurs="1" name="tokenbaseCardEntity" type="typens:tokenbaseCardEntity" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -116,7 +110,7 @@
 			<xsd:element name="tokenbaseGetCardsByCustomerResponseParam">
 				<xsd:complexType>
 					<xsd:sequence>
-                        <xsd:element minOccurs="1" maxOccurs="1" name="result" type="typens:tokenbaseCardEntityArray" />
+						<xsd:element minOccurs="0" maxOccurs="unbounded" name="complexObjectArray" type="typens:tokenbaseCardEntity" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -151,7 +145,7 @@
 			<xsd:element name="tokenbaseUpdateCardResponseParam">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="result" type="xsd:string" />
+						<xsd:element minOccurs="1" maxOccurs="1" name="cardId" type="xsd:string" />
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>

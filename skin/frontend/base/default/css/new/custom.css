@@ -382,3 +382,7 @@ nav ul li{
     font-style: italic;
 
 }
+
+#form_share .trunited_gift_card .btn{
+	border: 3px solid #acacac;
+}

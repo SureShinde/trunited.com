@@ -1,0 +1,57 @@
+<?php
+/**
+ * Plumrocket Inc.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End-user License Agreement
+ * that is available through the world-wide-web at this URL:
+ * http://wiki.plumrocket.net/wiki/EULA
+ * If you are unable to obtain it through the world-wide-web, please
+ * send an email to support@plumrocket.com so we can send you a copy immediately.
+ *
+ * @package     Plumrocket_SocialLogin
+ * @copyright   Copyright (c) 2017 Plumrocket Inc. (http://www.plumrocket.com)
+ * @license     http://wiki.plumrocket.net/wiki/EULA  End-user License Agreement
+ */
+
+?>
+
+<?php if ($this->helper('pslogin')->isSocialLinkingEnabled()): ?>
+    <?php $accounts = $this->helper('pslogin')->getCustomerAccounts(); ?>
+    <?php if (count($accounts)): ?>
+        <div class="box-pslogin box-info">
+            <div class="box-head">
+                <h2><?php echo $this->__('My Social Accounts'); ?></h2>
+                <a href="<?php echo $this->getUrl('pslogin/account/view'); ?>"><?php echo $this->__('Manage Social Accounts'); ?></a>
+            </div>
+            <div class="pslogin-block">
+                <div class="linked-account pslogin-buttons">
+                    <?php foreach ($accounts as $account): ?>
+                        <?php $photo = $this->helper('pslogin')->getPhotoPath(true, $account->getCustomerId(), $account->getType()); ?>
+                        <?php if (!$photo) { ?>
+                            <?php $photo = $this->getSkinUrl('images/plumrocket/pslogin/man-icon.png'); ?>
+                        <?php } ?>
+                        <div class="custinfo social <?php echo $account->getType(); ?>" >
+                            <a href="<?php echo $account->getAccountUrl(); ?>" target="_blank">
+                                <div class="pslogin-button-auto">
+                                    <span class="user-photo" style="background-image:url('<?php echo $photo ?> '); ?>"></span>
+                                    <span class="pslogin-button-text"><?php echo $account->getType(); ?></span>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        //<![CDATA[
+           var showFullButtonsAfterViewMore = true;
+           var psloginUnlinkPath = "<?php echo $this->getUrl('pslogin/account/unlink'); ?>";
+        //]]>
+        </script>
+    <?php endif; ?>
+
+
+<?php endif;

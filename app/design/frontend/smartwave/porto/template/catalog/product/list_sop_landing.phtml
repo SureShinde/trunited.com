@@ -240,12 +240,15 @@ $_coreHelper = $this->helper('core');
                                                         </span></a>
                                                     <?php } else {?>
                                                         <?php if(Mage::helper('trubox')->isCurrentCheckingCustomer()){?>
-                                                            <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){?>
+                                                            <?php if(!Mage::helper('trubox')->isInExclusionList($_product)){
+                                                                /*?>
                                                                 <small><a href="<?php echo Mage::getBaseUrl() . 'mytrubox/index/addTruBox?id=' . $_product->getId() ?>"
                                                                    class="addtocart view_details"
                                                                    title="<?php echo $this->__('Add to TruBox') ?>"><img src="<?php echo $this->getSkinUrl('images/like_icon.png');?>"/>
                                                                 </a></small>
-                                                            <?php }?>
+                                                            <?php 
+                                                            */
+                                                           }?>
                                                         <?php }?>
                                                     <?php }?>
                                                 <?php else : ?>
@@ -270,14 +273,16 @@ $_coreHelper = $this->helper('core');
                                                             class="icon-compare"></i></a>
                                             <?php endif; ?>
                                             <?php if (Mage::helper('trubox')->isCurrentCheckingCustomer() && $_product->getTypeId() != 'grouped') { ?>
-                                                <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) { ?>
+                                                <?php if (!Mage::helper('trubox')->isInExclusionList($product) && Mage::helper('trubox')->getEnableProductListing() && !Mage::helper('trubox')->isInPhysicalList($_product)) {
+                                                /* ?>
                                                     <small>
                                                     <a href="<?php echo Mage::getBaseUrl() . 'mytrubox/index/addTruBox?id=' . $_product->getId() ?>"
                                                        class="trubox"
                                                        title="<?php echo $this->__('Add to TruBox') ?>"><img src="<?php echo $this->getSkinUrl('images/like_icon.png');?>"/>
                                                     </a>
                                                     </small>
-                                                <?php } ?>
+                                                <?php
+                                                */ } ?>
                                             <?php } ?>
                                         <?php } else { $flag_shop_now = true;?>
                                             <?php $shop_now_url = Mage::helper('customproduct')->getShopNowUrl($_product);

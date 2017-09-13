@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<placeholders>
+	    <plumrocket_social_login_hole>
+	        <block>pslogin/link</block>
+	        <name>pslogin.link.popup</name>
+	        <template>pslogin/linkpopup.phtml</template>
+	        <placeholder>plumrocket_social_login_placeholder</placeholder>
+	        <container>Plumrocket_SocialLogin_Model_Caching_Container_Link</container>
+	        <cache_lifetime>86400</cache_lifetime>
+	    </plumrocket_social_login_hole>
+	</placeholders>
+</config>

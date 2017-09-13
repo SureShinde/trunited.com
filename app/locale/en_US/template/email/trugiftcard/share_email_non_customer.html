@@ -1,4 +1,4 @@
-<!--@subject Wow, a friend just shared truWallet money with you @-->
+<!--@subject Wow, a friend just sent you a Trunited Gift Card @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
@@ -33,9 +33,9 @@ body,td { color:#2f2f2f; font:13px/1.35em Verdana, Arial, Helvetica, sans-serif;
                         <td valign="top">
                             <p><strong>Hi!</strong></p>
                             <p>{{htmlescape var=$message}}</p>
-                            <p>You have just received <b>{{htmlescape var=$amount}}</b> from {{htmlescape var=$sender_email}}. No catch, just free money to use on Trunited.com.  To redeem the money and begin shopping, simply register your free account <a href="{{htmlescape var=$register_link}}">using this link</a>.
+                            <p>You have just received <b>{{htmlescape var=$amount}}</b> from {{htmlescape var=$sender_email}}. No catch, just free money to use on Trunited.com.  To redeem the gift card and begin shopping, simply register your free account <a href="{{htmlescape var=$register_link}}">using this link</a>.
 
-                            <p>The offer will be pending for 7 days just in case you don't like free money :-)  After 7 days the <b>{{htmlescape var=$amount}}</b> will simply be returned to {{htmlescape var=$sender_email}}. If you have any questions, please feel free to <a href="https://trunited.com/contacts">contact us</a> anytime.</p>
+                            <p>The gift card expires in X days just in case you don't like free money :-)  After the expiration the <b>{{htmlescape var=$amount}}</b> will simply be returned to {{htmlescape var=$sender_email}}. If you have any questions, please feel free to <a href="https://trunited.com/contacts">contact us</a> anytime.</p>
                             <p>Enjoy!</p>
                                 <p><strong>{{var store.getFrontendName()}}</strong>
                             </p>

@@ -5,161 +5,157 @@
     $custom_block = Mage::getStoreConfig('porto_settings/header/static_block', $code);
 ?>
 <?php echo $this->getLayout()->createBlock('eventdiscount/init')->setTemplate('aw_eventdiscount/init.phtml')->toHtml();?>
-  <header>
-   <div class="top-notification">
-    <div class="container">
-      <p><a href="#">Click <b>HERE</b> <span>to See Daily Deals</span></a></p>
-      <div class="shipping-info">
-        <img src="http://dev.trunited.com/skin/frontend/smartwave/porto_trunited/images/icon-truck.png" class="img-responsive">
-        <span>$99 Free Shipping</span>
-      </div>
+<header>
+<link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <div class="head_top_bar">
+        	<div class="container">
+            	<div class="row">
+                	<div class="head_top_in">
+                    	<h6><a href="#">Click <b>HERE</b></a> to See Daily Deals</h6>
+                        <div class="free_sipping">
+						<!-- <img src="<?php echo $this->getSkinUrl('images/car_icon.png'); ?>" class="img-responsive" id="iconss_img"> -->
+                        	<span>$99 Free Shipping</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
-  </div>
-<div class="middle-bar hidden-xs hidden-sm">
-  <div class="container">
-    <ul>
-      <li>
-        <a href="#">
-            First Lady
-        </a>
-          <a href="#">
-           <div class="link-addon">
-            <span>blog</span>
-          </div>    
-        </a>
-      </li>
-      <li>
-        <a href="#">
-            Contact Us
-         </a>
-          <a href="#">
-           <div class="link-addon">
-            <span>live chat</span>
-          </div>    
-        </a>
-      </li>
-      <li>
-        <a href="#">
-            Shop | Earn 
-        </a>
-          <a href="#">
-           <div class="link-addon">
-            <span>join for free</span>
-          </div>    
-        </a>
-      </li>
-      <li>
-        <a href="#">
-            Share | Earn More 
-        </a>
-          <a href="#">
-           <div class="link-addon">
-            <span>learn how</span>
-          </div>    
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
-<div class="container">
-    <div class="searchForm">
-        <?php echo $this->getChildHtml('topSearch'); ?>
-    </div>
-</div>
-<nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-<!-- BOTON DE MENU
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
--->
-<!--
-        <a href="#"><img src="./images/logo.png" class="desktop-logo img-responsive"></a>
-        <a href="#"><img src="./images/logo-mobile.png" class="mobile-logo img-responsive"></a>
--->
-       <div class="mob-menu-bar">
-           <span class="glyphicon glyphicon-menu-hamburger"></span>
-       </div>
-        <?php if ($this->getIsHomePage()): ?>
-            <h1 class="logo"><a
-                    href="<?php echo $this->getUrl(''); ?>" title="<?php echo $this->getLogoAlt(); ?>" class="logo"><img class="desktop-logo img-responsive"
-                        src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>"/></a></h1>
-        <?php else: ?>
-            <h1><a href="<?php echo $this->getUrl(''); ?>" title="<?php echo $this->getLogoAlt(); ?>"
-               class="logo"><img class="desktop-logo img-responsive"
-                                 src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>"/><img src="skin/frontend/smartwave/porto_trunited/images/logo-mobile.png" class="mobile-logo img-responsive" alt="<?php echo $this->getLogoAlt(); ?>"/></a></h1>
-        <?php endif; ?>  
-      </div>
-<!--
-      <div class="collapse navbar-collapse" id="main-menu">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">Global Brands</a></li>
-          <li><a href="#">Gift Card Shop</a></li>
-          <li class="sign-in-link"><a href="#">Sign In</a></li>
-          <li class="cart-wrapper hidden-xs">
-            <a href="#">
-              Cart 
-              <div class="desktop-cart">
-                <div class="itmes-count">2</div>
-              </div>
-            </a>
-          </li>
-        </ul>        
-      </div>
--->
-        <div class="topmenu">
-<!--
- <div class="menu-icon"><a href="javascript:void(0)" title="<?php echo $this->__('Menu'); ?>"><i
-                    class="fa fa-bars"></i></a></div>
--->
-        <?php echo $this->getChildHtml('topMenu'); ?>
-<!--      <div class="mobile-cart">-->
-<!--        <div class="itmes-count">2</div>-->
-        <?php echo $this->getChildHtml('minicart'); ?>
-<!--      </div>-->
 
 
-        <?php echo $this->getChildHtml('mobile.nav') ?>
+<div class="head_middle_bar">
+        	<div class="container">
+            	<div class="row">
+                	<div class="bluebar_nav visible-lg visible-md visible-sm">
+                    	<ul>
+                        	<li class="re_move">
+                            	<div class="search_blk"><?php echo $this->getChildHtml('topSearch'); ?></div>
+                            </li>
+                        	<li><a href="#" class="active">First Lady</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li>
+                            	<ul>
+                                	<li><a href="#">Shop</a></li>
+                                    <li><span> | </span></li>
+                                    <li><a href="#">Earn</a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li>
+                            	<ul>
+                                	<li><a href="#">Share</a></li>
+                                    <li><span> | </span></li>
+                                    <li><a href="#">Earn More</a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-  </nav>
+		
+		    <div class="head_bottom_bar">
+        	<div class="container">
+            	<div class="row">
+                	<div class="head_bottom_in">
+                    	<div class="menu_block">
+                        	<!--<div class="mob-menu-bar">
+                            <span class="glyphicon glyphicon-menu-hamburger"></span>
+                             </div>-->
+							 <div class="menu_icon mob-menu-bar">
+                            	<span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </div>
+                        </div>
+                        
+                    		<div class="logo pull-left">
+						 <?php 
+						 //if ($this->getIsHomePage()):
+						 ?>
+							<h1 class="logo"><a
+									href="<?php echo $this->getUrl(''); ?>" title="<?php echo $this->getLogoAlt(); ?>" class="logo"><img class="desktop-logo img-responsive"
+										src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>"/></a></h1>
+						</div>
+						 <div class="mobile_logo">
+						<?php //else: ?>
+							 <a href="#"><img src="<?php echo $this->getSkinUrl('images/header/mobile_logo.png'); ?>" alt="logo"></a>
+						<?php //endif; ?> 
+						
+										
+						</div>
+                        <div class="head_bottom_in_rgt pull-right">
+                        	<div class="orange_nav visible-lg visible-md visible-sm">
+                            	<ul>
+                                	<li><a href="#">BLOG</a></li>
+                                    <li><a href="#">LIVE CHAT</a></li>
+                                    <li><a href="#">JOIN FOR FREE</a></li>
+                                    <li><a href="#">Learn How</a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="sign_in">
+                            	
+
+                            </div>
+                            <nav class="visible-lg visible-md visible-sm" id ='orgmenu'>
+                            	<div class = 'topMenu'><?php echo $this->getChildHtml('topMenu'); ?></div>
+                                <div class="clearfix"></div>
+                            </nav>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('mobile.nav') ?>
+     <?php echo $this->getChildHtml('minicart'); ?>
+	       <div class="mob_search">
+        	<?php echo $this->getChildHtml('topSearch'); ?>
+        </div>
 </header>
 <script>
 jQuery(function($){
-    $(document).ready(function(){
+    jQuery(document).ready(function(){
         var cont =1;
-        $('.mob-menu-bar').click(function(){
+        jQuery('.mob-menu-bar').click(function(){
 		    // $('nav').toggle(); 
             if(cont == 1){
-                $('.mobile-nav').animate({
+                jQuery('.mobile-nav').animate({
                     left: '0'
                 });
-                $('.page').animate({
+                jQuery('.page').animate({
                     left: '250px'
                 });
                 cont = 0;
             } else {
                 cont = 1;
-                $('.mobile-nav').animate({
+                jQuery('.mobile-nav').animate({
                     left: '-250px'
                 });
-                $('.page').animate({
+                jQuery('.page').animate({
                     left: '0'
                 });
             }
 
         });
+	
     });
-    $('.mobile-nav-overlay').click(function(){
+    jQuery('.mobile-nav-overlay').click(function(){
 		    // $('nav').toggle(); 
             alert("hola");
 
     });
+	jQuery('.menu_block').on('click',function(){
+			if(jQuery('body').hasClass('navmobileopen')){
+				jQuery('body').removeClass('navmobileopen');
+			}else{
+				jQuery('body').addClass('navmobileopen');
+			}
+	});
 });
 </script>

@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <config>
     <modules>
         <Monyet_Easygiftcard>
-            <version>0.1.2</version>
+            <version>0.1.8</version>
         </Monyet_Easygiftcard>
     </modules>
+	<frontend>
+        <routers>
+            <easygiftcard>
+                <use>standard</use>
+                <args>
+                    <module>Monyet_Easygiftcard</module>
+                    <frontName>easygiftcard</frontName>
+                </args>
+            </easygiftcard>
+        </routers>
+        <layout>
+            <updates>
+                <easygiftcard>
+                    <file>monyet/easygiftcard.xml</file>
+                </easygiftcard>
+            </updates>
+        </layout>
+		
+    </frontend>
 	<admin>
         <routers>
 			<easygiftcard>
@@ -31,7 +49,16 @@
         <models>
             <monyet_easygiftcard>
                 <class>Monyet_Easygiftcard_Model</class>
+				<resourceModel>monyet_easygiftcard_mysql4</resourceModel>
             </monyet_easygiftcard>
+			<monyet_easygiftcard_mysql4>
+                <class>Monyet_Easygiftcard_Model_Mysql4</class>
+                <entities>
+                    <reportcard>
+                        <table>easygiftcard_reportcard</table>
+                    </reportcard>
+                </entities>
+            </monyet_easygiftcard_mysql4>
 			<core>
                 <rewrite>
                     <email_template_mailer>Monyet_Easygiftcard_Model_Core_Email_Template_Mailer</email_template_mailer>
@@ -74,6 +101,30 @@
             </monyet_easygiftcard_before_send_order>
 
         </events>
+		<template>
+            <email>
+                <catalog_monyet_easygiftcard_storeowner_email_template translate="label" module="easygiftcard">
+                    <label>Email to Vendor</label>
+                    <file>easygiftcard/tovendor.html</file>
+                    <type>html</type>
+                </catalog_monyet_easygiftcard_storeowner_email_template>
+				<catalog_monyet_easygiftcard_storeownernocard_email_template translate="label" module="easygiftcard">
+                    <label>Email to Vendor No Cards</label>
+                    <file>easygiftcard/tovendor_nocard.html</file>
+                    <type>html</type>
+                </catalog_monyet_easygiftcard_storeownernocard_email_template>
+                <catalog_monyet_easygiftcard_shopadmin_email_template translate="label" module="easygiftcard">
+                    <label>Email to Administrator</label>
+                    <file>easygiftcard/toadministrator.html</file>
+                    <type>html</type>
+                </catalog_monyet_easygiftcard_shopadmin_email_template>
+                <catalog_monyet_easygiftcard_shopadminnocard_email_template translate="label" module="easygiftcard">
+                    <label>Email to Administrator No Cards</label>
+                    <file>easygiftcard/toadministrator_nocard.html</file>
+                    <type>html</type>
+                </catalog_monyet_easygiftcard_shopadminnocard_email_template>	
+			</email>
+		</template>	
     </global>
 	<adminhtml>
 		<menu>
@@ -118,4 +169,14 @@
             </controller_action_layout_render_before_adminhtml_catalog_product_edit>
         </events>
     </adminhtml>
+	<default>
+        <catalog>
+            <monyet_easygiftcard>
+                <storeowner_email_template>catalog_monyet_easygiftcard_storeowner_email_template</storeowner_email_template>
+                <storeownernocard_email_template>catalog_monyet_easygiftcard_storeownernocard_email_template</storeownernocard_email_template>
+                <shopadmin_email_template>catalog_monyet_easygiftcard_shopadmin_email_template</shopadmin_email_template>
+                <shopadminnocard_email_template>catalog_monyet_easygiftcard_shopadminnocard_email_template</shopadminnocard_email_template>
+            </monyet_easygiftcard>
+        </catalog>
+    </default>
 </config>

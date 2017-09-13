@@ -139,13 +139,11 @@ class Magestore_RewardPointsRule_Model_Frontend_Observer {
                 $html = $transport->getHtml(); 
             }
             $pointHtml = '';
-            if(Mage::helper('rewardpointsrule')->getCanShow(Mage::app()->getStore()))     
-            $pointHtml = '<div class="earning-product-list">' .
-                Mage::helper('rewardpoints')->__(' Earn %s Profit Points',$points) .
-                '</div>';
-            if($points && $points>0){
-                $html = $pointHtml.$html;
-            }
+            /*$pointHtml = '<div class="earning-product-list">';
+            if(Mage::helper('rewardpointsrule')->getCanShow(Mage::app()->getStore()) && $points>0)     
+            $pointHtml .= Mage::helper('rewardpoints')->__(' Earn %s Profit Points',$points);
+            $pointHtml .='</div>';*/
+            $html = $pointHtml.$html;
             $transport->setHtml($html);
         }
     }

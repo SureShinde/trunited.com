@@ -11,7 +11,7 @@ class Monyet_Easygiftcard_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return mixed
      */
-    public function addFileAttachment($_groupProduct, $sku, $qty, $mailObj, $order)
+    public function addFileAttachment($_groupProduct, $item, $qty, $mailObj, $order)
     {
 		$write = Mage::getSingleton('core/resource')->getConnection('core_write');
         try {
@@ -35,18 +35,23 @@ class Monyet_Easygiftcard_Helper_Data extends Mage_Core_Helper_Abstract
 					closedir($handle);
 				}
 				$i = 0;
+				$files = array();
 				foreach ($files_array as $filename) {
 					$data = explode('_', $filename);
 					$file = "";
 					if (count($data) > 1 && $i < $qty) { //Valid file name only
-						$prefile = str_replace($_groupProduct->getSku().'-', '', $sku);
+						$prefile = str_replace($_groupProduct->getSku().'-', '', $item->getSku());
 						if($prefile == $data[0]){
 							$file = $filename;
 							$filePath = $path . DIRECTORY_SEPARATOR . $file;
-							$soldFilePath = $path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $file;
+							$soldFilePath = $path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $order->getId() . DIRECTORY_SEPARATOR . $item->getProductId() . DIRECTORY_SEPARATOR . $file;
 							@mkdir($path . DIRECTORY_SEPARATOR . 'sold');
+							@mkdir($path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $order->getId());
+							@mkdir($path . DIRECTORY_SEPARATOR . 'sold' . DIRECTORY_SEPARATOR . $order->getId() . DIRECTORY_SEPARATOR . $item->getProductId());
 							if (file_exists($filePath)) {
+								$files[] = $file;
 								//Mage::log($filePath);
+								/*
 								$mailObj->createAttachment(
 									file_get_contents($filePath),
 									'application/pdf',
@@ -54,17 +59,28 @@ class Monyet_Easygiftcard_Helper_Data extends Mage_Core_Helper_Abstract
 									Zend_Mime::ENCODING_BASE64,
 									basename($filePath)
 								);
+								*/
 								if (copy($filePath,$soldFilePath)) {
 								    unlink($filePath);
+									
 								}
-								
+								$i++;
 								$orderTable = Mage::getSingleton('core/resource')->getTableName('sales_flat_order');
 								$write->query('UPDATE ' . $orderTable . ' SET pdf_sent = 1 WHERE entity_id=?', array($order->getId()));
-								$i++;
+								
 							}
 						}
 					}
 				}
+				$i = 1;
+				$giftcardPdf = array();
+				foreach($files as $file){
+					$giftcardPdf[$i] = $file;
+					$i++;
+				}
+				$data = Mage::helper('core')->jsonEncode($giftcardPdf);
+				$orderItemTable = Mage::getSingleton('core/resource')->getTableName('sales_flat_order_item');
+				$write->query("UPDATE " . $orderItemTable . " SET pdf_report = '".$data."' WHERE item_id=".$item->getId()."");
 				
 			}
             

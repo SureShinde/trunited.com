@@ -1,0 +1,271 @@
+<?php
+
+$_product = Mage::registry('current_product');
+if($_product ){
+
+    $_helper = $this->helper('catalog/output');
+    $_image_helper = $this->helper('catalog/image');
+    $store = Mage::app()->getStore();
+
+    $code = $store->getCode();
+    $is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+    $login_url = Mage::helper('customproduct')->getLoginUrl();
+
+    $aspect_ratio = $this->getData("aspect_ratio");
+    if ($aspect_ratio == null) {
+        $aspect_ratio = Mage::getStoreConfig("porto_settings/category/aspect_ratio", $code);
+    }
+
+    $ratio_width = $this->getData("image_width");
+    if (!$ratio_width) {
+        $ratio_width = Mage::getStoreConfig("porto_settings/category/ratio_width", $code);
+    }
+    $ratio_height = $this->getData("image_height");
+    if (!$ratio_height) {
+        $ratio_height = Mage::getStoreConfig("porto_settings/category/ratio_height", $code);
+    }
+
+    if (!$ratio_width)
+        $ratio_width = 600;
+    if (!$ratio_height)
+        $ratio_height = 400;
+
+    $small_aspect_ratio = $aspect_ratio;
+    $small_ratio_width = 150;
+    $small_ratio_width = 100;
+?>
+    <div class="main_block inn_pad">
+        <!--PURCHASE STARTS HERE-->
+        <div class="purchase">
+          <div class="container">
+            <div class="row">
+             <div class="save_earn pull-left">
+                <figure>
+                <img id="product-collection-image-<?php echo $_product->getId(); ?>"
+                    src="<?php if ($aspect_ratio): ?><?php echo $_image_helper->init($_product, 'image')->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($ratio_width); ?><?php else: ?><?php echo $_image_helper->init($_product, 'image')->resize($ratio_width, $ratio_height); ?><?php endif; ?>"
+                      width="<?php echo $ratio_width; ?>"
+                      <?php if (!$aspect_ratio): ?>height="<?php echo $ratio_height; ?>"<?php endif; ?>
+                      alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'image'), null, true) ?>">
+
+                </figure>
+                <!-- <div class="save_in">
+                  <ul>
+                      <li><span>SAVE<small>UP TO</small><b>12&#37;</b></span></li>
+                      <li><span>EARN<small>UP TO</small><b>2&#37;</b></span></li>
+                  </ul>  
+                </div> -->
+            </div>
+             <div class="why_putchase pull-left">
+                <h4>Why Purchase <br> Activated Discount Gift Cards?</h4>
+                <ul>
+                    <li><h5>Reputable Resellers With Thousands of Brands</h5></li>
+                    <li><h5>Up to 355 Instant Savings For Trunited Members</h5></li>
+                    <li><h5>2-10% Profit Points Earnings Within 72 Hours</h5></li>
+                    <li><h5>SAVE 5-6<span class="percentage"></span> IN MERCHANT FEES</h5></li>
+                    <li><h5>100% Replacement Promise For Invalid Cards</h5></li>
+                </ul>
+            </div>
+             <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!--GIFT CARDS STARTS HERE-->
+        <div class="gift_cards">
+            <div class="container">
+                <div class="row">
+                    <div class="card_shop col-xs-6 col-sm-6 col-md-4 ehgt">
+                        <div class="card_in">
+                          <div class="card_top">
+                            <figure><img src="<?php echo $this->getSkinUrl('images/new_design/gift_card.png');?>" width="243" height="102" alt="gift_card"></figure>
+                          </div>
+                          <div class="card_middle ehgt1">
+                             <ul>
+                                 <li><span>Limited Quantity</span></li>
+                                 <li><span>Save Up To 10% Instantly</span></li>
+                                 <li><span>Earn Up To 10% Points</span></li>
+                                 <li><span>Use TruWallet Rewards</span></li>
+                                 <li><span>100% Replacement Promise</span></li>
+                             </ul> 
+                          </div>
+                          <div class="card_bottom text-center">
+                          <?php if ( $_product->giftcardshop_url ){ ?>
+                                  <a href="<?php echo $_product->getProductUrl();?>"
+                                   class="text-uppercase">Shop now</a>
+                               <?php }else{ ?>
+                                  <a class="text-uppercase">NOT AVAILABLE</a>
+                               <?php } ?>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <div class="card_shop col-xs-6 col-sm-6 col-md-4 ehgt">
+                        <div class="card_in">
+                          <div class="card_top card_top_pad">
+                            <figure><img src="<?php echo $this->getSkinUrl('images/gift_card1.png');?>" width="206" height="114" alt="gift_card"></figure>
+                          </div>
+                          <div class="card_middle ehgt1">
+                             <ul>
+                                 <li><span>Largest Site For Pre-Owned Cards</span></li>
+                                 <li><span>Instant Savings Up To 40%</span></li>
+                                 <li><span>Earn Points On Hold Up To 2%</span></li>
+                                 <li><span>Thousands of Brands and Cards</span></li>
+                                 <li><span>1-Year Invalid Card Replacement</span></li>
+                             </ul> 
+                          </div>
+                          <div class="card_bottom text-center">
+                            <?php if($_product->raise_url){ ?>
+                                <a href="<?php echo $_product->raise_url;?>" class="text-uppercase">Shop now</a>
+                            <?php }else{ ?>
+                                <a class="text-uppercase">NOT AVAILABLE</a>
+                            <?php } ?>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card_shop col-xs-6 col-sm-6 col-md-4 ehgt">
+                        <div class="card_in">
+                          <div class="card_top card_top_pad1">
+                            <figure><img src="<?php echo $this->getSkinUrl('images/new_design/gift_card2.png');?>" width="198" height="66" alt="gift_card"></figure>
+                          </div>
+                          <div class="card_middle ehgt1">
+                             <ul>
+                                 <li><span>Pre-Owned Discount Gift Cards</span></li>
+                                 <li><span>Instant Savings Up To 45%</span></li>
+                                 <li><span>Earn Points On Hold Up To 1.5%</span></li>
+                                 <li><span>Stocked With Your Favorite Brands</span></li>
+                                 <li><span>60-Day Replacement Promise</span></li>
+                             </ul> 
+                          </div>
+                          <div class="card_bottom text-center">
+                            <?php if($_product->gcspread_url){?>
+                              <a href="<?php echo $_product->gcspread_url;?>" class="text-uppercase">Shop now</a>
+                            <?php }else{ ?>
+                              <a class="text-uppercase">NOT AVAILABLE</a>
+                            <?php } ?>
+                          </div>
+                         
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!--UN USED GIFTS STARTS HERE-->
+        <div class="unused_gifts">
+            <div class="container">
+                <div class="row">
+                   <div class="unused_gifts_in text-center">
+                       <h2>new unused gift card partners</h2>
+                       <small>Thousands of Brands and Cards You Get Paid to Buy</small>
+                   </div>
+                </div>
+            </div>
+        </div>
+          
+        <div class="gift_cards1">
+            <div class="container">
+               <div class="gift_cards1_in">
+                 <div class="card_shop col-xs-6 col-xs-6 col-sm-6 col-md-5">
+                    <div class="card_in">
+                      <div class="card_top">
+                        <figure><img src="<?php echo $this->getSkinUrl('images/new_design/gift_card3.png');?>" width="86" height="102" alt="gift_card"></figure>
+                      </div>
+                      <div class="card_middle ehgt">
+                         <ul>
+                             <li><span>Founded in 2001</span></li>
+                             <li><span>Sells Cards in 180,000 Stores</span></li>
+                             <li><span>Thousands of Brands and Cards</span></li>
+                             <li><span>Earn Up To 5% Profit Points</span></li>
+                             <li><span>100% Satisfaction Guaranteed</span></li>
+                         </ul> 
+                      </div>
+                      <div class="card_bottom text-center">
+                        <?php if($_product->giftcardmall_url){?>
+                          <a href="<?php echo $_product->giftcardmall_url;?>" class="text-uppercase">Shop now</a>
+                        <?php }else{ ?>
+                          <a class="text-uppercase">NOT AVAILABLE</a>
+                        <?php } ?>
+                      </div>
+                    </div>
+                 </div>
+                 <div class="card_shop col-xs-6 col-xs-6 col-sm-6 col-md-5 pull-right">
+                    <div class="card_in">
+                      <div class="card_top card_top_pad1">
+                        <figure><img src="<?php echo $this->getSkinUrl('images/new_design/gift_card5.png');?>" width="242" height="64" alt="gift_card"></figure>
+                      </div>
+                      <div class="card_middle ehgt">
+                         <ul>
+                             <li><span>Founded in 1999</span></li>
+                             <li><span>Most Visited Gift Card Site</span></li>
+                             <li><span>Earn Up To 2% Profit Points</span></li>
+                             <li><span>Thousands of Brands and Cards</span></li>
+                             <li><span>100% Satisfaction Guarantee</span></li>
+                         </ul> 
+                      </div>
+                      <div class="card_bottom text-center">
+                        <?php if ($_product->giftcardscom_url){?>
+                          <a href="<?php echo $_product->giftcardshop_url;?>" class="text-uppercase">Shop now</a>
+                        <?php }else{ ?>
+                          <a class="text-uppercase">NOT AVAILABLE</a>
+                        <?php } ?>
+                      </div>
+                    </div>
+                 </div>
+                 <div class="clearfix"></div>
+               </div>  
+            </div>
+        </div>
+    </div>  
+            
+    <script type="text/javascript">
+      $(document).ready(function(e){
+      // FOR Equalheight //
+      equalheight = function(container){
+      var currentTallest = 0,
+           currentRowStart = 0,
+           rowDivs = new Array(),
+           $el,
+           topPosition = 0;
+       $(container).each(function() {
+       
+         $el = $(this);
+         $($el).height('auto');
+         topPostion = $el.position().top;
+       
+         if (currentRowStart != topPostion) {
+           for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+             rowDivs[currentDiv].height(currentTallest);
+           }
+           rowDivs.length = 0; // empty the array
+           currentRowStart = topPostion;
+           currentTallest = $el.height();
+           rowDivs.push($el);
+         } else {
+           rowDivs.push($el);
+           currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+        }
+         for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+           rowDivs[currentDiv].height(currentTallest);
+         }
+       });
+      };
+       
+      $(window).load(function() {  equalheight('.ehgt'); });
+      $(window).resize(function(){  equalheight('.ehgt'); });
+      $(window).width(function(){  equalheight('.ehgt'); });
+          
+      $(window).load(function() {  equalheight('.ehgt1'); });
+      $(window).resize(function(){  equalheight('.ehgt1'); });
+      $(window).width(function(){  equalheight('.ehgt1'); });
+
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('new_design/style.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('new_design/responsive.css');?>">
+<?php 
+}else{
+
+  $page = Mage::getModel('cms/page')->load('no-route-2','identifier');
+  echo $page->getContent();
+  }

@@ -356,7 +356,7 @@
                 <enable_items_image>0</enable_items_image>
                 <!-- Start: added by Daniel - 31/03/2015 - Add product thumbnail in the order review section -->
                 <text_on_zero>PLACE ORDER NOW</text_on_zero>
-                <text_greater_zero>CONTINUE ORDER</text_greater_zero>
+                <text_greater_zero>PLACE ORDER NOW</text_greater_zero>
             </general>
             <field_management>
                 <show_city>1</show_city>

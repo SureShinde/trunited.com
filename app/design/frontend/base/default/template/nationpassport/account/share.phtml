@@ -267,6 +267,8 @@ $affiliates_tracking = $this->getAffiliatesFromCustomer();
 
     var load_member_hhtml_url = '<?php echo $this->getLoadMemberHtml()?>';
     $j('.direct_comsumer').remove();
+    $j('#search_member').hide();
+    $j('#form_share').hide();
     $j(document).ready(function () {
         $j('.main.container .row').first().addClass('bt_padd');
     });

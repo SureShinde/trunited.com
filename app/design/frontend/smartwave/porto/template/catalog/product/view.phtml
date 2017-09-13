@@ -1,5 +1,5 @@
 <?php
-$currentCategory = Mage::registry('current_category');
+/*$currentCategory = Mage::registry('current_category');
 $currentCategoryId = '';
 if ($currentCategory){
     $currentCategoryId = $currentCategory->getId();
@@ -13,7 +13,7 @@ $directToConsumerChildrens[] = 42;
 $globalBrand = Mage::getModel('catalog/category')->load(41);
 $globalBrandChildrens = $globalBrand->getChildren();
 $globalBrandChildrens = explode(',',$globalBrandChildrens);
-$globalBrandChildrens[] = 41;
+$globalBrandChildrens[] = 41;*/
 
     $_helper = $this->helper('catalog/output');
     $helper_richsnippets = $this->helper('porto/richsnippets');
@@ -26,6 +26,7 @@ $globalBrandChildrens[] = 41;
 <?php 
         $_product = $this->getProduct(); 
         $productType = ($_product) ? $_product->getTypeId() : '';
+        $productType = trim($productType);
 ?>
 <?php
     $product = Mage::getModel('catalog/product')->load($_product->getId());
@@ -143,7 +144,7 @@ if($enable_addtocart_sticky){
             <div class="product-img-box col-sm-<?php echo Mage::getStoreConfig("porto_settings/product_view/product_image_size", $code); ?> <?php echo Mage::getStoreConfig("porto_settings/product_view/thumbnail_image_type", $code); ?>">
                 <?php echo $this->getChildHtml('media') ?>
             </div>
-            <?php $class = ($productType == 'simple') ? 'gift_card_top_right' : 'product-shop'; ?>
+            <?php $class = ($productType == 'simple' || $productType == 'gfitcardproduct' || $productType == 'virtual') ? 'gift_card_top_right' : 'product-shop'; ?>
             <div class="<?php echo $class;?> col-sm-<?php echo 12-Mage::getStoreConfig("porto_settings/product_view/product_image_size", $code); ?>">
             <?php
             /*
@@ -184,16 +185,20 @@ if($enable_addtocart_sticky){
                 }
                 */
             ?>
-                <?php if ($productType == 'simple'){
+                <?php if ($productType == 'simple'|| $productType =='gfitcardproduct' || $productType == 'virtual'){
                     echo '<div class = "buffalo">';
-                } ?>
+                }
+                if ($productType == 'simple'){
+                    echo '<div class ="vengo_right_top">';
+                    echo '<div class ="vengo_right_top_lt col-xs-6">';
+                }?>
                 <?php 
-                    if ($productType == 'simple' || $productType == 'customproduct'){ ?>
+                if ($productType == 'simple' || $productType == 'customproduct' || $productType =='gfitcardproduct' || $productType == 'virtual'){ ?>
                     <h4 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h4>
                 <?php }else{ ?>
-                <div class="product-name">
-                    <h1 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                </div>
+                    <div class="product-name">
+                        <h1 <?php if($enabled_richsnippets): ?>itemprop="name"<?php endif; ?>><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                    </div>
                 <?php } ?>
                 <?php $this->helper('yotpo')->showBottomline($this, $_product); ?>
                 
@@ -215,13 +220,13 @@ if($enable_addtocart_sticky){
                 <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
                 <?php if ($_product->getShortDescription()):?>
                     <div class="short-description">
-                        <?php if ($productType != 'simple'){ ?>
-                            <h2><?php echo $this->__('Quick Overview') ?></h2>
+                        <?php if ($productType != 'simple' && $productType != 'gfitcardproduct' && $productType != 'virtual'){ ?>
+                            <h2><?php echo $this->__('Quick Overview')." ".$productType." product type"; ?></h2>
                         <?php } ?>
 
                         <?php 
-                        $tag      = ( $productType == 'simple' ) ? '<p' : '<div class ="std"';
-                        $closeTag = ( $productType == 'simple' ) ? '</p>' : '</div>';
+                        $tag      = ( $productType == 'simple' || $productType =='gfitcardproduct' || $productType == 'virtual' ) ? '<p' : '<div class ="std"';
+                        $closeTag = ( $productType == 'simple' || $productType == 'gfitcardproduct' || $productType == 'virtual' ) ? '</p>' : '</div>';
                         ?>
                         <?php echo $tag;?> <?php if($enabled_richsnippets): ?>itemprop="description"<?php endif; ?>>
                             <?php
@@ -231,9 +236,23 @@ if($enable_addtocart_sticky){
                         <?php echo $closeTag;?>
                     </div>
                 <?php endif;?>
+                <?php 
+                if ($productType == 'simple'){
+                    echo '</div>'; //vengo_right_top_lt col-xs-6 closed
+                    ?>
+                    <div class="tru_box col-xs-6">
+                        <div class="tru_box_in">
+                            <input name="check" type="checkbox" id="chk">
+                            <label for="chk">Add This Item To TruBox<br> And Earn 10% More</label> 
+                            <img src="<?php echo $this->getSkinUrl('images/new_design/tru_box.png');?>" alt="tru_box">
+                        </div>
+                    </div>
+                    <?php echo '</div>'; //vengo_right_top closed
+                } 
+                ?>
                 <?php if(!$is_applied_product_type){?>
-                <div class="product-info">
-                <?php if ($productType == 'simple'){
+                <div class="product-info" style="border:0px;">
+                <?php if ($productType == 'simple'|| $productType =='gfitcardproduct' || $productType == 'virtual'){
                         echo '<div class = "giftcard_shop">';
                         echo '<div class = "giftcard_shop_lft col-xs-5">';
                     }?>
@@ -255,7 +274,7 @@ if($enable_addtocart_sticky){
                 <?php }?>
                 <?php if (!$this->hasOptions()):?>
                     <?php
-                    if ($productType == 'customproduct'){
+                    if ($productType == 'customproduct'|| $productType =='gfitcardproduct' ){
                         echo '<div class = "giftcard_shop">';
                         echo '<div class = "giftcard_shop_lft col-xs-5">';
                     }
@@ -303,22 +322,24 @@ if($enable_addtocart_sticky){
                 <?php endif;?>
                 <div class="clearer"></div>
                 <?php echo $this->getChildHtml('addthis_sharetool'); ?>
-                <?php if ($productType == 'simple' || $productType == 'customproduct'){
+                <?php if ($productType == 'simple' || $productType == 'customproduct' || $productType == 'virtual' || $productType =='gfitcardproduct'){
                     echo '</div>'; // giftcard_shop_left col-xs-5 div clsosed
                     ?>
                     <?php
-                    if (in_array($currentCategoryId,$directToConsumerChildrens)){
+                    if ($productType == 'simple'){
                         echo $this->getLayout()->createBlock('cms/block')->setBlockId('direct-to-consumer-simple-static-content')->toHtml();
-                    }elseif(in_array($currentCategoryId,$globalBrandChildrens)){
+                    }elseif($productType =='customproduct'){
                         echo $this->getLayout()->createBlock('cms/block')->setBlockId('global-brand-static-detail-content')->toHtml();
-                    }else{
+                    }elseif($productType =='gfitcardproduct' || $productType == 'virtual'){
                             echo $this->getLayout()->createBlock('cms/block')->setBlockId('simple-product-detail-static-content')->toHtml();
+                    }else{
+                        echo $this->getLayout()->createBlock('cms/block')->setBlockId('direct-to-consumer-simple-static-content')->toHtml();
                     }
                 
                     echo '</div>'; //giftcard_shop div closed
                 } ?>
             <?php 
-            if ($productType == 'simple'){
+            if ($productType == 'simple' || $productType =='gfitcardproduct' || $productType == 'virtual'){
                 echo '</div>'; // buffallo div closed
             }
             ?>
@@ -521,7 +542,92 @@ if($enable_addtocart_sticky){
     </div>
 
     <div class="product-collateral">
-        <?php echo $this->getChildHtml('product_additional_data'); ?>
+    <?php if ($productType == 'gfitcardproduct' || $productType == 'virtual'){ 
+       echo '<div class="tabs_blk_main col-md-8 col-xs-12">';
+    } 
+    echo $this->getChildHtml('product_additional_data'); 
+    if ($productType == 'gfitcardproduct' || $productType == 'virtual'){ 
+        echo '</div>';
+    }
+    if ($productType == 'gfitcardproduct' || $productType == 'virtual'){ ?>
+        <div class="giftcard_partners col-md-4 col-xs-12">
+            <div class="giftcard_partners_in">
+                <h4>gift card PARTNER</h4>
+                <div class="partners">
+                    <div class="partners_left pull-left col-xs-4"><a><img src="<?php echo $this->getSkinUrl('images/new_design/partners_logo1.png');?>" alt="logo"></a></div>
+                    <div class="partners_right pull-right col-xs-8">
+                        <ul>
+                            <li><span>Largest Site For Pre-Owned Cards</span></li>
+                            <li><span>Instant Savings Up To 40%</span></li>
+                            <li><span>Thousand On Hold Up To 2%</span></li>
+                            <li><span>Thousands of Brands and Cards</span></li>
+                            <li><span>1-year Invalid Card Replacement</span></li>
+                        </ul>
+                        <?php if ($_product->raise_url){?>
+                            <a href="<?php echo $_product->raise_url;?>">Shop now</a>
+                        <?php }else{ ?>
+                            <a>NOT AVAILABLE</a>
+                        <?php } ?>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="partners">
+                    <div class="partners_left pull-left col-xs-4"><a href="#"><img src="<?php echo $this->getSkinUrl('images/new_design/partners_logo2.png');?>" alt="logo"></a></div>
+                    <div class="partners_right pull-right col-xs-8">
+                        <ul>
+                            <li><span>Pre-Owned Discount Gift Cards</span></li>
+                            <li><span>Instant Savings Up To 45%</span></li>
+                            <li><span>Earn Points On Hold Up To 1.5%</span></li>
+                            <li><span>Stocked With Your Favorite Brands</span></li>
+                            <li><span>60-Day Replacement Promise</span></li>
+                        </ul>
+                        <?php if ($_product->gcspread_url){?>
+                            <a href="<?php echo $_product->gcspread_url;?>">Shop now</a>
+                        <?php }else{ ?>
+                            <a>NOT AVAILABLE</a>
+                        <?php } ?>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="partners">
+                    <div class="partners_left pad_last pull-left col-xs-4"><a href="#"><img src="<?php echo $this->getSkinUrl('images/new_design/partners_logo3.png');?>" alt="logo"></a></div>
+                    <div class="partners_right pull-right col-xs-8">
+                        <ul>
+                            <li><span> Founded in 2001</span></li>
+                            <li><span>Sells Cards in 180,000 Stores</span></li>
+                            <li><span>Thousands of Brands and Cards</span></li>
+                            <li><span>Earn Up To 5% Profit Points</span></li>
+                            <li><span>100% Satisfaction Guaranteed</span></li>
+                        </ul>
+                        <?php if ($_product->giftcardmall_url) { ?>
+                            <a href="<?php echo $_product->giftcardmall_url;?>">Shop now</a>
+                        <?php }else{ ?>
+                            <a>NOT AVAILABLE</a>
+                        <?php } ?>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>                
+                <div class="partners">
+                    <div class="partners_left pull-left col-xs-4"><a href="#"><img src="<?php echo $this->getSkinUrl('images/new_design/partners_logo4.png');?>" alt="logo"></a></div>
+                    <div class="partners_right pull-right col-xs-8">
+                        <ul>
+                            <li><span>Founded in 1999</span></li>
+                            <li><span>Most Visited Gift Card Site</span></li>
+                            <li><span>Earn Up To 2% Profit Points</span></li>
+                            <li><span>Thousands of Brands and Cards</span></li>
+                            <li><span>100% Satisfaction Guarantee</span></li>
+                        </ul>
+                        <?php if ($_product->giftcardscom_url){ ?>
+                            <a href="<?php echo $_product->giftcardscom_url;?>">Shop now</a>
+                        <?php }else{ ?>
+                            <a>NOT AVAILABLE</a>
+                        <?php } ?>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     </div>
     <?php echo $this->getChildHtml('upsell_products'); ?>
 </div>

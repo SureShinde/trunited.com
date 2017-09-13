@@ -25,7 +25,7 @@ class Magestore_TruWallet_Helper_Account extends Mage_Core_Helper_Abstract
             return $account;
         else{
             $new_account = $this->createTruWalletCustomer($customer_id);
-            if($new_account != null && $new_account->getId())
+            if($new_account != null)
                 return $new_account;
             else
                 return null;

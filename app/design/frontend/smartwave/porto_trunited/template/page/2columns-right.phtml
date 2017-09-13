@@ -33,6 +33,15 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<style>
+.main{
+    background: #f4f4f4;
+}
+.giftcard_shop{
+    display: inline-block;
+    width:100%;
+}
+</style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
 <?php //echo $this->getChildHtml('after_body_start') ?>
@@ -46,7 +55,7 @@
         $_product = Mage::registry('current_product');
         $productType = ($_product) ? $_product->getTypeId() : '';
         echo "<!--<h1>$productType</h1>-->";
-        if ($productType == 'simple' or $productType =='customproduct' ){ ?>
+        if ($productType == 'simple' || $productType =='customproduct' || $productType =='gfitcardproduct' || $productType == 'virtual'){ ?>
 
         <div class="main-container">
             <div class = "main">

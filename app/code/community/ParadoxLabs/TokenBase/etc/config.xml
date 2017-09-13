@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<ParadoxLabs_TokenBase>
-			<version>2.3.4.20170303</version>
+			<version>2.3.3.20161118</version>
 		</ParadoxLabs_TokenBase>
 	</modules>
 	<global>

@@ -305,6 +305,7 @@ class Smartwave_Megamenu_Block_Navigation extends Mage_Catalog_Block_Navigation
                 if (Mage::getStoreConfig('megamenu/general/non_breaking_space'))
                     $name = str_replace(' ', '&nbsp;', $name);
                 $class = 'menu-item';
+                
                 if (count($activeChildren) > 0) {
                     $class .= ' menu-item-has-children menu-parent-item';
                 }
@@ -408,7 +409,8 @@ class Smartwave_Megamenu_Block_Navigation extends Mage_Catalog_Block_Navigation
             $childrenCount = count($children);
         }
         $hasChildren = $children && $childrenCount;
-        if ($hasChildren)
+        // block For mobile menu
+        /*if ($hasChildren)
         {
             foreach ($children as $child)
             {
@@ -417,7 +419,7 @@ class Smartwave_Megamenu_Block_Navigation extends Mage_Catalog_Block_Navigation
                     array_push($activeChildren, $child);
                 }
             }
-        }
+        }*/
         return $activeChildren;
     }
 

@@ -36,7 +36,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Observer_Legacy
 		}
 		
 		$profileId	= $customer->getAuthnetcimProfileId();
-
+		
 		if( $customer && $customer->getId() && !empty( $profileId ) && $customer->getAuthnetcimProfileVersion() < 200 ) {
 			/**
 			 * Update customer data from 1.x trunk to 2.x.

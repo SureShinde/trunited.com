@@ -1,0 +1,47 @@
+<?php
+$category = Mage::registry('current_category');
+// $_productCollection = Mage::getResourceModel('catalog/product_collection')
+// ->addAttributeToSelect('*');
+// if($category)
+// $_productCollection->addCategoryFilter($category);
+$_productCollection = $this->getLoadedProductCollection();
+$_helper = $this->helper('catalog/output');
+$_image_helper = $this->helper('catalog/image');
+$store = Mage::app()->getStore();
+$code = $store->getCode();
+$is_logged = Mage::getSingleton('customer/session')->isLoggedIn();
+$login_url = Mage::helper('customproduct')->getLoginUrl();
+
+$aspect_ratio = $this->getData("aspect_ratio");
+if ($aspect_ratio == null) {
+    $aspect_ratio = Mage::getStoreConfig("porto_settings/category/aspect_ratio", $code);
+}
+$ratio_width = $this->getData("image_width");
+if (!$ratio_width) {
+    $ratio_width = Mage::getStoreConfig("porto_settings/category/ratio_width", $code);
+}
+$ratio_height = $this->getData("image_height");
+if (!$ratio_height) {
+    $ratio_height = Mage::getStoreConfig("porto_settings/category/ratio_height", $code);
+}
+
+if (!$ratio_width)
+    $ratio_width = 300;
+if (!$ratio_height)
+    $ratio_height = 400;
+?>
+<?php
+$_coreHelper = $this->helper('core');
+?>
+<?php if ($_coreHelper->isModuleEnabled("Magegiant_Dailydeal")): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        var dailydealTimeCountersCategory = new Array();
+        var i = 0;
+        //]]>
+    </script>
+<?php endif; ?>
+<?php if (!$_productCollection->count()): ?>
+   
+       
+<?php endif; ?>

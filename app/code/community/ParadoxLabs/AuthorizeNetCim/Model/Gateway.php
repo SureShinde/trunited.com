@@ -68,7 +68,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Gateway extends ParadoxLabs_TokenBase_Mo
 		'customerShippingAddressId'	=> array(  ),
 		'customerType'				=> array( 'enum' => array( 'individual', 'business' ) ),
 		'dataDescriptor'			=> array( 'noSymbols' => true ),
-		'dataValue'					=> array( 'charMask' => 'a-zA-Z0-9+\/\\=' ),
+		'dataValue'					=> array( 'noSymbols' => true ),
 		'description'				=> array( 'maxLength' => 255 ),
 		'duplicateWindow'           => array( 'charMask' => '\d' ),
 		'dutyAmount'				=> array(  ),
@@ -335,8 +335,8 @@ class ParadoxLabs_AuthorizeNetCim_Model_Gateway extends ParadoxLabs_TokenBase_Mo
 		if( !in_array( $response->getResponseReasonCode() , array( 16, 54 ) ) ) { // Response 54 is 'can't refund; txn has not settled.' 16 is 'cannot find txn' (expired). We deal with them.
 			if( $transactionResult['messages']['resultCode'] != 'Ok' 							// Error result
 				|| in_array( $response->getResponseCode(), array( 2, 3 ) )						// OR error/decline response code
-				|| ( !in_array( $response->getTransactionType(), array( 'credit', 'void' ) )	// OR no transID or auth code on a non-held charge txn
-					&& ( $response->getTransactionId() == '' || ( $response->getAuthCode() == '' && $response->getMethod() != 'ECHECK' && $response->getResponseCode() != 4 ) ) ) ) {
+				|| ( !in_array( $response->getTransactionType(), array( 'credit', 'void' ) )	// OR no transID or auth code on a charge txn
+					&& ( $response->getTransactionId() == '' || ( $response->getAuthCode() == '' && $response->getMethod() != 'ECHECK' ) ) ) ) {
 				$response->setIsError( true );
 				
 				Mage::helper('tokenbase')->log( $this->_code, sprintf( "Transaction error: %s\n%s\n%s", $response->getResponseReasonText(), json_encode( $response->getData() ), $this->_log ) );
@@ -834,7 +834,7 @@ class ParadoxLabs_AuthorizeNetCim_Model_Gateway extends ParadoxLabs_TokenBase_Mo
 				),
 			);
 		}
-
+		
 		$result = $this->_runTransaction( 'createCustomerPaymentProfileRequest', $params );
 		
 		$paymentId = null;

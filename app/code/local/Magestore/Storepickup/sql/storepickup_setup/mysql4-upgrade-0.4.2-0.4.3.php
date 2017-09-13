@@ -71,5 +71,18 @@ CREATE TABLE {$this->getTable('storepickup_tag')} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE {$this->getTable('storepickup_store')} ADD `tag_ids` varchar(200) NOT NULL default '';
+
+DROP TABLE IF EXISTS {$this->getTable('storepickup/distance')};
+            CREATE TABLE {$this->getTable('storepickup/distance')} (
+              `distance_id` int(10) unsigned NOT NULL auto_increment,
+              `destination_addresses` varchar(255) NOT NULL,
+              `origin_addresses` varchar(255) NOT NULL,
+              `distance_value` FLOAT NOT NULL,
+              `unit` INT(5) NOT NULL,
+              `updated_time` datetime NULL,
+              `created_time` datetime NULL,
+              PRIMARY KEY (`distance_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ALTER TABLE {$this->getTable('storepickup/distance')} ADD UNIQUE `unique_index`(`destination_addresses`,`origin_addresses`);
     ");
 $installer->endSetup();

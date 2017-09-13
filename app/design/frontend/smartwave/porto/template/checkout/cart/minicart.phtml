@@ -52,11 +52,11 @@
         </div>
 <script type="text/javascript">
     jQuery(function($){
-        $('.mini-cart').mouseover(function(e){
-            $(this).children('.topCartContent').fadeIn(200);
+        jQuery('.mini-cart').mouseover(function(e){
+			jQuery(this).children('.topCartContent').fadeIn(200);
             return false;
         }).mouseleave(function(e){
-            $(this).children('.topCartContent').fadeOut(200);
+            jQuery(this).children('.topCartContent').fadeOut(200);
             return false;
         });
     });

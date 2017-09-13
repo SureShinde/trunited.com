@@ -19,15 +19,15 @@ function getChildrenCategoriesHtml($_category){
             $content .= '<small><img src="'.Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$_category->getSwIconImage(). '"width="30" height="32" alt="icon"></small>';
         }
         $content .='<span>'.$_category->getName().'</span></a>';
-        if($children[0]){
-            $content .= '<a href="javascript:void(0)" class="plus"><i class="icon-plus-squared"></i></a>';
-            $content .= '<ul>';
+        /*if($children[0]){
+             $content .= '<a href="javascript:void(0)" class="plus"><i class="icon-plus-squared"></i></a>';
+           $content .= '<ul id="ww">';
             foreach($children as $child){
                 $_subcat = Mage::getModel( 'catalog/category' )->load( $child );
                 $content .= getChildrenCategoriesHtml($_subcat);
             }
             $content .= '</ul>';
-        }
+        }*/
         $content .= '</li>';
         return $content;
     }
@@ -78,7 +78,11 @@ function getChildrenCategoriesHtml($_category){
                     $html .=          '<ul>';
                     foreach($children as $child){
                         $_subcat = Mage::getModel( 'catalog/category' )->load( $child );
+						if($_subcat['name']=="Brands"){
+							continue;
+						}else{
                         $html .= getChildrenCategoriesHtml($_subcat);
+						}
                     }
                     $html .=           '</ul>';
                     $html .=    '</div>';

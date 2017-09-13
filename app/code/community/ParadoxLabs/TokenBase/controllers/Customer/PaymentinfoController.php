@@ -191,7 +191,7 @@ class ParadoxLabs_TokenBase_Customer_PaymentinfoController extends Mage_Core_Con
 						$newAddr->setCustomerId( $customer->getId() );
 						
 						$data = Mage::app()->getRequest()->getPost( 'billing', array() );
-
+						
 						$addressForm    = Mage::getModel('customer/form');
 						$addressForm->setFormCode('customer_address_edit');
 						$addressForm->setEntity( $newAddr );
@@ -209,17 +209,18 @@ class ParadoxLabs_TokenBase_Customer_PaymentinfoController extends Mage_Core_Con
 						$newAddr->setSaveInAddressBook( false );
 						$newAddr->implodeStreetAddress();
 					}
+					
 					/**
 					 * Process payment data
 					 */
 					$cardData = Mage::app()->getRequest()->getParam('payment');
 					$cardData['method']		= $method;
 					$cardData['card_id']	= $card->getId();
-
+					
 					if( isset( $cardData['cc_number'] ) ) {
 						$cardData['cc_last4']	= substr( $cardData['cc_number'], -4 );
 					}
-
+					
 					$newPayment = Mage::getModel('sales/quote_payment');
 					$newPayment->setQuote( Mage::getSingleton('checkout/session')->getQuote() );
 					$newPayment->getQuote()->getBillingAddress()->setCountryId( $newAddr->getCountryId() );
@@ -233,7 +234,6 @@ class ParadoxLabs_TokenBase_Customer_PaymentinfoController extends Mage_Core_Con
 					$card->setCustomer( $customer );
 					$card->setAddress( $newAddr );
 					$card->importPaymentInfo( $newPayment );
-
 					$card->save();
 					
 					Mage::getSingleton('customer/session')->unsTokenbaseFormData();

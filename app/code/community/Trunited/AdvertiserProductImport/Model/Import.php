@@ -7,6 +7,7 @@ class Trunited_AdvertiserProductImport_Model_Import
     protected $connection;
     protected $magentoConnection;
     protected $table_map;
+	protected $manufacturer_id;
 
     const ADVERTISER_TABLE = 'tr_linkshare_advertisers';
     const PRODUCT_FEED_TABLE_PREFIX = 'tr_linkshare_feed_';
@@ -24,14 +25,15 @@ class Trunited_AdvertiserProductImport_Model_Import
         'short_description' => 'short_product_description',
         'external_url'      => 'product_url',
         'external_image_url'=> 'product_image_url',
-        'mpn'               => 'manufacturer_part_number'
+        'mpn'               => 'manufacturer_part_number',
+		//'brand'             => 'advertiser_name',
     );
     protected $website_ids = array(1);
     protected $attribute_set_id = 4;
 
 
     public function run()
-    {
+    {		
         $connection = $this->getConnection();
         if(!$connection){
             return false;
@@ -46,7 +48,7 @@ class Trunited_AdvertiserProductImport_Model_Import
         foreach($advertisers as $advertiser){
             $advertiser_id = $advertiser['id'];
             // set for test
-            if($advertiser_id != 1110){
+            if($advertiser_id != 147){
                 continue;
             }
             $this->importAdvertiser($advertiser_id);
@@ -137,11 +139,12 @@ class Trunited_AdvertiserProductImport_Model_Import
                 if($result_import){
                     $this->deleteAdvertiserFeed($advertiser_feed_table, $feed['product_id']);
                 } 
-				break; //limit 1
+				//break; //limit 1
             }	
+			
+            $feeds = $this->getAdvertiserFeed($advertiser_id);
 			// limit 1
-            //$feeds = $this->getAdvertiserFeed($advertiser_id);
-			$feeds = null;
+			//$feeds = null;
         }
     }
 
@@ -245,6 +248,84 @@ class Trunited_AdvertiserProductImport_Model_Import
         }
         $data['price'] = $feed['sale_price'] > 0 ? $feed['sale_price'] : $feed['retail_price'];
 		$data['first_period_price'] = $data['price'];
+		// manufacturer
+        $manufacturer_option_id = $this->getManufacturerOptionId($feed['advertiser_name']);
+        if($manufacturer_option_id){
+            $data['manufacturer'] = $manufacturer_option_id;
+        }
         return $data;
     }
+	
+	public function getManufacturerOptionId($value)
+    {
+        $option_id = null;
+        $manufacturer_id = $this->getManufacturerId();
+        if(!$manufacturer_id){
+            return $option_id;
+        }
+        $check_exist = $this->checkManufacturerOptionExists($value);
+        if ($check_exist['result'] == 'success') {
+            $option_id = $check_exist['mage_id'];
+        } else {
+            /* @var $setup Mage_Eav_Model_Entity_Setup */
+            $setup = Mage::getModel('eav/entity_setup', 'core_setup');
+            try{
+                $setup->addAttributeOption(array(
+                    'attribute_id' => $manufacturer_id,
+                    'value' => array(
+                        'option_0' => array(
+                            0 => $value
+                        ),
+                    ),
+                ));
+                $check_exist = $this->checkManufacturerOptionExists($value);
+                if ($check_exist['result'] == 'success') {
+                    $option_id = $check_exist['mage_id'];
+                }
+            } catch(Exception $e) {
+            }
+        }
+        return $option_id;
+    }
+
+    public function checkManufacturerOptionExists($value){
+        $response = array();
+        $check = false;
+        $options = Mage::getModel("eav/config")
+            ->getAttribute("catalog_product", 'manufacturer')
+            ->setStoreId(0)
+            ->getSource()
+            ->getAllOptions(false);
+        foreach($options as $option){
+            if($option['label'] == $value){
+                $check = true;
+                $response['result'] = 'success';
+                $response['mage_id'] = $option['value'];
+                break;
+            }
+        }
+        if($check == false){
+            $response['result'] = 'error';
+        }
+        return $response;
+    }
+
+    public function getManufacturerId(){
+        if($this->manufacturer_id){
+            return $this->manufacturer_id;
+        }
+        $id = null;
+        $entityTypeId = Mage::getModel('eav/entity')->setType('catalog_product')->getTypeId();
+        $manufacture = Mage::getModel('eav/entity_attribute')
+            ->getCollection()
+            ->addFieldToFilter('attribute_code', 'manufacturer')
+            ->addFieldToFilter('entity_type_id', $entityTypeId)
+            ->getFirstItem();
+        if($manufacture->getId()){
+            $id = $manufacture->getId();
+        }
+        $this->manufacturer_id = $id;
+        return $this->manufacturer_id;
+    }
+	
 }

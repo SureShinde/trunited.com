@@ -27,7 +27,7 @@ class Monyet_Easygiftcard_Model_Observer
 				$_groupedParentsId = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($item->getProductId());
 				foreach($_groupedParentsId as $_groupedId) {
 					$_groupProduct = Mage::getModel('catalog/product')->load($_groupedId);
-					Mage::helper('monyet_easygiftcard')->addFileAttachment($_groupProduct, $item->getSku(), $item->getQtyOrdered(), $mailTemplate, $order);
+					Mage::helper('monyet_easygiftcard')->addFileAttachment($_groupProduct, $item, $item->getQtyOrdered(), $mailTemplate, $order);
 					break;
 				}
 			}
@@ -46,7 +46,7 @@ class Monyet_Easygiftcard_Model_Observer
 					$_groupedParentsId = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($item->getProductId());
 					foreach($_groupedParentsId as $_groupedId) {
 						$_groupProduct = Mage::getModel('catalog/product')->load($_groupedId);
-						Mage::helper('monyet_easygiftcard')->addFileAttachment($_groupProduct, $item->getSku(), $item->getQtyOrdered(), $mailer, $order);
+						Mage::helper('monyet_easygiftcard')->addFileAttachment($_groupProduct, $item, $item->getQtyOrdered(), $mailer, $order);
 						break;
 					}
 				}

@@ -1,3 +1,4 @@
+<script src ="<?php echo $this->getSkinUrl('js/cms/homepage/slick.js');?>"></script>
 <?php
     $store = Mage::app()->getStore();
     $code  = $store->getCode();
@@ -34,17 +35,20 @@
         }
         if( $footer['footer_middle_enabled'] ){
     ?>
-        <div class="footer-middle">
+        <!-- <div class="footer-middle"> -->
             <div class="container">
-            <?php
+			
+              <?php
                 if( $footer['footer_ribbon_enabled'] ){
             ?>
-                <div class="footer-ribbon">
-                    <span><?php echo $footer['footer_ribbon_text'] ?></span>
-                </div>
+                 <div class="divided">
+                    <h3 class="text-uppercase"><?php echo $footer['footer_ribbon_text'] ?></h3>
+                 </div>
             <?php
                 }
             ?>
+                
+            
                 <div class="row">
                 <?php
                     for( $i = 1; $i <= 4; $i++ ){
@@ -78,7 +82,7 @@
                 </div>
                 <?php echo $this->getChildHtml("demo_footer_tooltip"); ?>
             </div>
-        </div>
+        <!-- </div> -->
     <?php
         }
         if( $footer['footer_middle_2_enabled'] ){
@@ -98,6 +102,7 @@
                         }
                         if( $type == 'newsletter' ){
                             echo $this->getChildHtml('footer.newsletter');
+							
                         }
                         if( $type== 'facebook' ){
                             echo $this->getChildHtml('facebook_fans');
@@ -119,17 +124,32 @@
         }
         if( $footer['footer_bottom_enabled'] ){
     ?>
-        <div class="footer-bottom">
-            <div class="container">
-                <?php
+	   <div class="copy_rights">
+        <div class="container">
+            <div class="copy_rights_left">
+			  <?php
                 if($footer['footer_logo']){
                 ?>
-                    <a href="<?php echo $this->getUrl('') ?>" class="logo"><img src="<?php echo $this->getSkinUrl($footer['footer_logo']); ?>" alt=""/></a>
-                <?php
+                <div class="footer_logo">
+                    <a href="<?php echo $this->getUrl('') ?>">
+                        <figure>
+                          <img src="<?php echo $this->getSkinUrl($footer['footer_logo']); ?>" width="209" height="60" alt="footer_logo">
+                        </figure>
+                    </a>
+                </div>
+                <div class="footer_social_icons">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+                <div class="footer_social_icons">
+                    <ul>
+                         <?php
                 }
                 if($footer['footer_bottom_socialicons']){
                 ?>
-                <?php echo $this->getChildHtml('socialicons'); ?>
+                <?php //echo $this->getChildHtml('socialicons'); ?>
                 <?php
                 }
                 if($footer['footer_bottom_custom_block'] && $footer['footer_bottom_custom_block_id']){
@@ -141,16 +161,30 @@
                     echo '<div class="custom-block f-right">'.$this->getLayout()->createBlock('cms/block')->setBlockId($footer['footer_bottom_custom_block_id_2'])->toHtml().'</div>';
                 }
                 ?>
-                <address><?php echo $footer['copyrights'] ?></address>
+             
                 <?php if(isset($footer['footer_bottom_store_switcher']) && $footer['footer_bottom_store_switcher']) echo $this->getChildHtml("store_switcher"); ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="copy_rights_right">
+                <p><?php echo $footer['copyrights'] ?></p>
+				  <?php if(isset($footer['footer_bottom_store_switcher']) && $footer['footer_bottom_store_switcher']) echo $this->getChildHtml("store_switcher"); ?>
             </div>
         </div>
-    <?php
-        }
-    ?>
     </div>
+		<?php  } ?>
+       
+	
 </div>
+<?php
+/*
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/header/jquery.js');?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/header/bootstrap.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/header/CustomScript.js');?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/header/bootstrap-select.min.js');?>"></script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl('js/cms/homepage/slick.js');?>"></script>
+*/
+?>
 <a href="#" id="totop"><i class="icon-up-open"></i></a>
 <script type="text/javascript">
     var windowScroll_t;
@@ -169,6 +203,6 @@
         return false;
     });
     jQuery(function($){
-        $(".cms-index-index .footer-container.fixed-position .footer-top,.cms-index-index .footer-container.fixed-position .footer-middle").remove();
+        jQuery(".cms-index-index .footer-container.fixed-position .footer-top,.cms-index-index .footer-container.fixed-position .footer-middle").remove();
     });
 </script>

@@ -34,8 +34,6 @@ $installer->run("
     `changed_credit` DECIMAL(10,2) NOT NULL default 0,
     `receiver_email` varchar(255) NULL,
     `receiver_customer_id` INT unsigned NULL,
-    `recipient_id` INT unsigned,
-    `point_back` FLOAT,
     PRIMARY KEY (`transaction_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

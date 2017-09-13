@@ -129,7 +129,7 @@ h3.section-header {
       padding-top: 10px;      
   }
   header .nav.nav-right{
-      margin-right: 80px;      
+     /* margin-right: 80px;       */
   }
     .nav > li > a{
         padding: 8px !important;
@@ -374,7 +374,7 @@ h3.section-header {
 
 .text-overlay>.medium-box{
   display: block;
-  max-width: 900px;
+  max-width: 905px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -397,7 +397,6 @@ h3.section-header {
 .images-container .row{
   /*background: rgba(0, 0, 0, 0.6); */
   background: rgba(0, 0, 0, 0.75); 
-  padding-top: 15px;
   padding-left: 7.5px;
   padding-right: 7.5px;
 }
@@ -428,7 +427,7 @@ h3.section-header {
   font-size: 40px;
   font-weight: 700;
   /*background: rgba(68, 86, 88, 0.75);*/
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.66);
   transition: background 0.4s;
 }
 
@@ -439,6 +438,7 @@ h3.section-header {
   transform: translateY(-50%);
   opacity: 0.4;
   transition: opacity 0.4s;
+  text-shadow: 1px 1px 3px #000000;
 }
 
 .image-with-caption .img-caption:hover {
@@ -794,7 +794,7 @@ h3.section-header {
   margin-top: 80px;
   font-size: 18px;
   font-weight: 300;
-  width: 99%;
+  width: 100%;
 }
 
 #news-and-testimonials h5{
@@ -1050,4 +1050,220 @@ a.btn-tru.btn-trunited-transparent.mob {
 
 .topmenu{
     position: relative;
+}
+
+/* 
+
+
+css changes by mohit 
+
+*/
+
+.icon-search{
+
+icon-search:right:137px;
+
+}
+
+
+/*#search_header_form .form-search #search{
+font-weight:400;
+padding:0 5px;
+line-height:28px;
+background:none;
+border:0 none;
+border-bottom:2px solid #FFFFFF;
+
+
+}*/
+
+
+
+
+.text-overlay> mediumbox p{
+
+font-size:46px;
+line-height:55px;
+font-weight:600;
+
+}
+
+
+.medium-box a.btn.btn-trunited-orange{
+
+
+width:22%;
+font-size:17px;
+padding:6px 21px;
+border-radius:0;
+font-size:25px;
+margin-left:26px;
+height:46px;
+
+
+}
+
+
+a.btn-tru.btn-trunited-transparent.mob{
+
+
+font-size:30px;
+border:4px solid #FFFFFF;
+padding:3px 15px;
+}
+
+.top_paying_in h3:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 43%;
+    background: #d2d2d2;
+    width: 30%;
+    height: 3px;
+}
+
+.text-overlay>.medium-box p{
+    font-size: 48px;
+    text-align: center;
+    line-height: 50px;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px #000000;
+}
+
+
+medium-box a.btn.btn-trunited-orange{
+  border:none;
+}
+
+
+.divided h3{
+
+font-weight:700;
+
+}
+
+
+.btn{
+
+margin-left:-75px;
+width:210px;
+border:4px solid;
+font-size:24px;
+
+}
+
+#news-and-testimonials .news-wrapper{
+font-size:20px;
+line-height:22px;
+padding-top:20px;
+padding-bottom:10px;
+
+}
+
+#news-and-testimonials h5{
+font-size:36px;
+text-align:left;
+}
+
+
+
+h3.section-header{
+font-size:41px;
+color:#4f4f4f;
+font-weight:700;
+position:relative;
+display:block;
+text-align:center;
+}
+#top_paying_in h3:before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 28%;
+  height: 3px;
+}
+#top_paying_in h3:after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 27%;
+  height: 3px;
+}
+
+#biggest_saving h3:before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 20%;
+  height: 3px;
+}
+#biggest_saving h3:after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 20%;
+  height: 3px;
+}
+#top_paying_direct_to_consumer_brands h3:before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 17%;
+  height: 3px;
+}
+#top_paying_direct_to_consumer_brands h3:after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 43%;
+  background: #d2d2d2;
+  width: 16%;
+  height: 3px;
+}
+
+@media (max-width: 1610px){
+  .top_paying_in h3:before {
+      width: 18%;
+      left: 10px;
+  }
+}
+
+@media (max-width: 1610px){
+  .top_paying_in h3:after {
+      width: 18%;
+      right: 10px;
+  }
+}
+    
+.copy_rights_left{
+    margin-left:-93px;
+}
+.block .links li a{
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 17px;
+  line-height: 19px;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0 0 0 20px;
+  position: relative;
+  text-transform: uppercase;
+}
+.block .block-title strong span{
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  line-height: 22px;
+  color: #ffffff;
+  font-weight: 900;
+  padding: 0 0 33px 0;
 }

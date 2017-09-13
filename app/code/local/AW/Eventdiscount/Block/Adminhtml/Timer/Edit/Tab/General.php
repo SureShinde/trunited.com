@@ -113,7 +113,11 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_General extends Mage_Admin
         ));
 
         $is_disable_duration = false;
-        if( strcasecmp($_data->getData('event'), AW_Eventdiscount_Model_Event::REGISTRATION) == 0 || !$this->getRequest()->getParam('id')){
+        if(in_array(strtolower($_data->getData('event')), array(
+               strtolower(AW_Eventdiscount_Model_Event::REGISTRATION),
+               strtolower(AW_Eventdiscount_Model_Event::LOGIN),
+            )) || !$this->getRequest()->getParam('id')){
+
             $is_disable_duration = $_data->getData('is_end_month') == 1;
             $_fieldset->addField('is_end_month', 'select', array(
                 'name'   => 'is_end_month',
@@ -121,7 +125,7 @@ class AW_Eventdiscount_Block_Adminhtml_Timer_Edit_Tab_General extends Mage_Admin
                 'title'  => $this->__('Duration to end of Current Month'),
                 'values' => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),
                 'onchange' => 'checkIsEndMonth(this)',
-                'note'  => $this->__('Its used when event is Registration')
+                'note'  => $this->__('Its used when event is Registration or Login')
             ));
         }
 

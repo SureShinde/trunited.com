@@ -5,6 +5,8 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 		if($address->getQuote()->isVirtual())
 			return $this;
 
+
+
 		$_helper = Mage::helper('onestepcheckout');
 		$active = $_helper->enableGiftWrap();
 		if (!$active)
@@ -26,8 +28,10 @@ class Magestore_Onestepcheckout_Model_Sales_Quote_Address_Total_Giftwrap extends
 		else
 			$wrapTotal = 0;
 
+	
 		$session->setData('onestepcheckout_giftwrap_amount', $wrapTotal);
-
+// var_dump($session->getData('onestepcheckout_giftwrap_amount'));
+		// exit;
 //		$address->setOnestepcheckoutGiftwrapAmount($wrapTotal);
 //		$address->setGrandTotal($address->getGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());
 //		$address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getOnestepcheckoutGiftwrapAmount());

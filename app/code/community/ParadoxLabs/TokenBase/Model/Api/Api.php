@@ -19,24 +19,22 @@
 
 class ParadoxLabs_TokenBase_Model_Api_Api extends Mage_Api_Model_Resource_Abstract
 {
-	protected $_cardMap	= array( 'id', 'customer_id', 'customer_email', 'customer_ip', 'profile_id', 'payment_id', 'method', 'created_at', 'updated_at', 'last_use', 'expires', 'additional', 'hash', 'active' );
+	protected $_cardMap	= array( 'id', 'customer_id', 'customer_email', 'customer_ip', 'profile_id', 'payment_id', 'method', 'created_at', 'updated_at', 'last_use', 'expires', 'additional', 'hash' );
 	protected $_addrMap	= array( 'firstname', 'lastname', 'street', 'city', 'region', 'postcode', 'country_id', 'telephone', 'fax', 'region_id' );
 	
 	/**
 	 * Fetch a card by ID.
 	 */
-	public function getCard( $cardId )
+	public function getCard( $tokenbaseId )
 	{
 		$card		= Mage::getModel('tokenbase/card');
-		$card->load( $cardId );
+		$card->load( $tokenbaseId );
 		
-		if( !$card || $card->getId() != $cardId || $card->getId() < 1 ) {
+		if( !$card || $card->getId() != $tokenbaseId || $card->getId() < 1 ) {
 			$this->_fault('tokenbase_id_invalid');
 		}
 		
-		$result = $this->_prepareCard( $card );
-		
-		return $result;
+		return $this->_prepareCard( $card );
 	}
 	
 	/**
@@ -48,12 +46,12 @@ class ParadoxLabs_TokenBase_Model_Api_Api extends Mage_Api_Model_Resource_Abstra
 						->addFieldToFilter( 'customer_id', (int)$customerId )
 						->addFieldToFilter( 'active', 1 );
 		
-		$result	= array();
+		$results	= array();
 		foreach( $cards as $card ) {
-			$result[] = $this->_prepareCard( $card );
+			$results[] = $this->_prepareCard( $card );
 		}
 		
-		return $result;
+		return $results;
 	}
 	
 	/**

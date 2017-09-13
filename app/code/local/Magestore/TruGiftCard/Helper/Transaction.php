@@ -12,7 +12,7 @@ class Magestore_TruGiftCard_Helper_Transaction extends Mage_Core_Helper_Abstract
     {
         $result = null;
         try {
-            if (!$account->getId())
+            if ($account == null || !$account->getId())
                 throw new Exception(
                     Mage::helper('trugiftcard')->__('Customer doesn\'t exist')
                 );

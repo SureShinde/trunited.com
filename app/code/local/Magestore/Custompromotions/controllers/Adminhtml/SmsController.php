@@ -41,16 +41,17 @@ class Magestore_Custompromotions_Adminhtml_SmsController extends Mage_Adminhtml_
             try {
                 $number = Mage::helper('custompromotions/sms')->import();
                 Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('custompromotions')->__('You\'ve successfully imported ') . $number . Mage::helper('custompromotions')->__(' new sms'));
+                    Mage::helper('rewardpoints')->__('You\'ve successfully imported ') . $number . Mage::helper('custompromotions')->__(' new sms'));
             } catch (Mage_Core_Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             } catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('custompromotions')->__('Invalid file upload attempt'));
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
             }
-            $this->_redirect('*/*/import');
+            $this->_redirect('*/*/');
         } else {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('custompromotions')->__('Invalid file upload attempt'));
-            $this->_redirect('*/*/import');
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('rewardpoints')->__('Invalid file upload attempt'));
+            $this->_redirect('*/*/importstore');
         }
+
     }
 }

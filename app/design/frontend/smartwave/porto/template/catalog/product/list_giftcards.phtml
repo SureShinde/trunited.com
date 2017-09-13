@@ -1,0 +1,63 @@
+<?php
+$_coreHelper = $this->helper('core');
+$_helper = Mage::helper('catalog/category'); 
+$currentCategory = Mage::registry('current_category'); 
+
+?>
+<?php if ($_coreHelper->isModuleEnabled("Magegiant_Dailydeal")): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        var dailydealTimeCountersCategory = new Array();
+        var i = 0;
+        //]]>
+    </script>
+<?php endif; ?>
+
+<?php if($currentCategory->children_count > 0): ?>
+    <div class="category-products product_blk">
+        <?php // List mode ?>
+        <?php if ($this->getMode() == 'grid'): ?>
+      <?php $cat = Mage::getModel('catalog/category')->load($currentCategory->entity_id);
+		$_categories = $cat->getChildrenCategories();
+	
+		if (count($_categories) > 0):  ?>
+        
+        <?php $_columnCount = Mage::getStoreConfig("porto_settings/category_grid/columns", $code); ?>
+            <ul class="products-grid <?php if (Mage::getStoreConfig("porto_settings/category_grid/flex_grid", $code)): ?>flex-grid<?php endif; ?> columns<?php echo $_columnCount; ?><?php if (!Mage::getStoreConfig("porto_settings/category_grid/show_addtolinks", $code)): ?> hide-addtolinks<?php endif; ?><?php if (!Mage::getStoreConfig("porto_settings/category_grid/show_addtocart", $code)): ?> hide-addtocart<?php endif; ?><?php if (Mage::getStoreConfig("porto_settings/category_grid/move_actions", $code)): ?> move-action<?php endif; ?>">
+                <?php $i = 0; $flag_shop_now = false; ?>
+				<?php foreach($_categories as $_category): 
+			   $imageurl=Mage::getModel('catalog/category')->load($_category->getId());
+				$newImageUrl2 = Mage::getBaseUrl('media')."catalog/category/".$imageurl->sw_icon_image; 
+	?>
+                                     <li class="col-sm-3 col-xs-4">
+                                        <div class="product">
+										
+                                            <img src="<?php echo $newImageUrl2?>" width="225" height="181" alt="img">
+                                            <div class="product_save_in">
+                                                <h6>EARN<span>UP TO</span><b>70&#37;</b> PROFIT POINTS</h6> 
+                                            </div>
+                                        <h5><?php echo $_category->getName() ?></h5>
+										<a href="<?php echo $_helper->getCategoryUrl($_category); ?>" class="addtocart view_details"
+                                               title=""<span>&nbsp;<?php echo $this->__('View Details') ?></span></a>
+                                            
+                                        </div>
+                                    </li>
+                                   
+                                   
+	
+	
+	<?php endforeach; ?>
+                                
+                
+            </ul>
+			 <?php endif; ?>
+        <?php endif; ?>
+        <?php if (Mage::getStoreConfig("ajax_catalog/price_slider_settings/infinitescroll", $code)): ?>
+            <div class="infinite-loader">
+            </div>
+        <?php endif; ?>
+        <div class="toolbar-bottom">
+            <?php echo $this->getToolbarHtml() ?>
+        </div>
+    </div>
+<?php endif; ?>

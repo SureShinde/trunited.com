@@ -1,0 +1,47 @@
+<?php
+/**
+ * Plumrocket Inc.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End-user License Agreement
+ * that is available through the world-wide-web at this URL:
+ * http://wiki.plumrocket.net/wiki/EULA
+ * If you are unable to obtain it through the world-wide-web, please
+ * send an email to support@plumrocket.com so we can send you a copy immediately.
+ *
+ * @package     Plumrocket_SocialLogin
+ * @copyright   Copyright (c) 2017 Plumrocket Inc. (http://www.plumrocket.com)
+ * @license     http://wiki.plumrocket.net/wiki/EULA  End-user License Agreement
+ */
+?>
+<?php if ($sAccounts = $this->getSocialAccounts()) { ?>
+	<div class="entry-edit pslogin-block" id="pslogin-links">
+	    <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo $this->__('Social Accounts'); ?></h4></div>
+	    <fieldset>
+
+				<?php foreach($sAccounts as $sAccount) { ?>
+					<div class="custinfo social <?php echo $sAccount->getType(); ?>">
+						<div class="soc-li-icon">
+							<?php if ($aUrl = $sAccount->getAccountUrl()) { ?>
+							<a href="<?php echo $aUrl; ?>" class="fcustinfo_acebook" target="_blank">
+							<?php } ?>
+								<span class="user-photo" style="background-image:url('<?php
+									echo $sAccount->getPhoto() ? $sAccount->getPhoto() : $this->getSkinUrl('images/plumrocket/pslogin/man-icon.png')
+								?> '); ?>"></span>
+								<?php echo $sAccount->getType(); ?>
+							<?php if ($aUrl) { ?>
+							</a>
+							<?php } ?>
+						</div>
+					</div>
+				<?php } ?>
+	    </fieldset>
+	</div>
+<?php } ?>
+
+<script>
+    var psBlock = document.getElementById('pslogin-links');
+    var leftBlocks = document.getElementsByClassName('entry-edit');
+     leftBlocks[0].appendChild(psBlock);
+</script>
